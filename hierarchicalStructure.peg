@@ -8,11 +8,12 @@ grammar hierarchicalStructure
   
   body              <- hier_element* <Body>
 
-  hier_element      <-
-    hier_element_name hier_element_num:hier_element_num? eol
-    indent
-    children:(hier_element / block_element)*
-    dedent <HierElement>
+  # hier elements
+
+  hier_element      <- hier_element_name hier_element_num:hier_element_num? eol
+                       indent
+                       children:(hier_element / block_element)*
+                       dedent <HierElement>
 
   hier_element_name <- ('CHAPTER' / 'PARA' / 'PART' / 'SUBPART' / 'SECTION' / 'SUBSECTION')
 
@@ -32,20 +33,21 @@ grammar hierarchicalStructure
   inline            <- ref / char
 
                      # [text](href)
+                     # TODO: nested inline elements
   ref               <- '[' content:[^\n\]]* '](' href:[^)\n]* ')' <Ref>
 
   # terminals
 
   char              <- [^\n] <Char>
 
-  indent            <- '{' eol
-
-  dedent            <- '}' eol
+  eol               <- newline empty_line*
 
   empty_line        <- space? newline
 
-  eol               <- newline empty_line*
-
-  space             <- [ \t]+
+  space             <- ' '+
 
   newline           <- "\n"
+
+  indent            <- '{' eol
+
+  dedent            <- '}' eol

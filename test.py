@@ -115,8 +115,10 @@ class Types:
 def pre_parse(lines):
     """ Pre-parse text, setting up indent and dedent markers.
 
-    After calling this, the text is guaranteed not to have whitespace at the start
-    of a line.
+    After calling this, the following are guaranteed:
+
+    1. no whitespace at the start of a line
+    2. no tab characters
     """
     indent = '\x0E'
     dedent = '\x0F'

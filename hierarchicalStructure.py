@@ -59,25 +59,25 @@ class TreeNode5(TreeNode):
 class TreeNode6(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode6, self).__init__(text, offset, elements)
-        self.eol = elements[1]
+        self.newline = elements[0]
 
 
 class TreeNode7(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode7, self).__init__(text, offset, elements)
-        self.eol = elements[1]
+        self.newline = elements[1]
 
 
 class TreeNode8(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode8, self).__init__(text, offset, elements)
-        self.newline = elements[1]
+        self.eol = elements[1]
 
 
 class TreeNode9(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode9, self).__init__(text, offset, elements)
-        self.newline = elements[0]
+        self.eol = elements[1]
 
 
 class ParseError(SyntaxError):
@@ -92,7 +92,6 @@ class Grammar(object):
     REGEX_2 = re.compile('^[^\\n\\]]')
     REGEX_3 = re.compile('^[^)\\n]')
     REGEX_4 = re.compile('^[^\\n]')
-    REGEX_5 = re.compile('^[ \\t]')
 
     def _read_root(self):
         address0, index0 = FAILURE, self._offset
@@ -661,6 +660,132 @@ class Grammar(object):
         self._cache['char'][index0] = (address0, self._offset)
         return address0
 
+    def _read_eol(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['eol'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        index1, elements0 = self._offset, []
+        address1 = FAILURE
+        address1 = self._read_newline()
+        if address1 is not FAILURE:
+            elements0.append(address1)
+            address2 = FAILURE
+            remaining0, index2, elements1, address3 = 0, self._offset, [], True
+            while address3 is not FAILURE:
+                address3 = self._read_empty_line()
+                if address3 is not FAILURE:
+                    elements1.append(address3)
+                    remaining0 -= 1
+            if remaining0 <= 0:
+                address2 = TreeNode(self._input[index2:self._offset], index2, elements1)
+                self._offset = self._offset
+            else:
+                address2 = FAILURE
+            if address2 is not FAILURE:
+                elements0.append(address2)
+            else:
+                elements0 = None
+                self._offset = index1
+        else:
+            elements0 = None
+            self._offset = index1
+        if elements0 is None:
+            address0 = FAILURE
+        else:
+            address0 = TreeNode6(self._input[index1:self._offset], index1, elements0)
+            self._offset = self._offset
+        self._cache['eol'][index0] = (address0, self._offset)
+        return address0
+
+    def _read_empty_line(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['empty_line'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        index1, elements0 = self._offset, []
+        address1 = FAILURE
+        index2 = self._offset
+        address1 = self._read_space()
+        if address1 is FAILURE:
+            address1 = TreeNode(self._input[index2:index2], index2)
+            self._offset = index2
+        if address1 is not FAILURE:
+            elements0.append(address1)
+            address2 = FAILURE
+            address2 = self._read_newline()
+            if address2 is not FAILURE:
+                elements0.append(address2)
+            else:
+                elements0 = None
+                self._offset = index1
+        else:
+            elements0 = None
+            self._offset = index1
+        if elements0 is None:
+            address0 = FAILURE
+        else:
+            address0 = TreeNode7(self._input[index1:self._offset], index1, elements0)
+            self._offset = self._offset
+        self._cache['empty_line'][index0] = (address0, self._offset)
+        return address0
+
+    def _read_space(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['space'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        remaining0, index1, elements0, address1 = 1, self._offset, [], True
+        while address1 is not FAILURE:
+            chunk0 = None
+            if self._offset < self._input_size:
+                chunk0 = self._input[self._offset:self._offset + 1]
+            if chunk0 == ' ':
+                address1 = TreeNode(self._input[self._offset:self._offset + 1], self._offset)
+                self._offset = self._offset + 1
+            else:
+                address1 = FAILURE
+                if self._offset > self._failure:
+                    self._failure = self._offset
+                    self._expected = []
+                if self._offset == self._failure:
+                    self._expected.append('\' \'')
+            if address1 is not FAILURE:
+                elements0.append(address1)
+                remaining0 -= 1
+        if remaining0 <= 0:
+            address0 = TreeNode(self._input[index1:self._offset], index1, elements0)
+            self._offset = self._offset
+        else:
+            address0 = FAILURE
+        self._cache['space'][index0] = (address0, self._offset)
+        return address0
+
+    def _read_newline(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['newline'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        chunk0 = None
+        if self._offset < self._input_size:
+            chunk0 = self._input[self._offset:self._offset + 1]
+        if chunk0 == '\n':
+            address0 = TreeNode(self._input[self._offset:self._offset + 1], self._offset)
+            self._offset = self._offset + 1
+        else:
+            address0 = FAILURE
+            if self._offset > self._failure:
+                self._failure = self._offset
+                self._expected = []
+            if self._offset == self._failure:
+                self._expected.append('"\\n"')
+        self._cache['newline'][index0] = (address0, self._offset)
+        return address0
+
     def _read_indent(self):
         address0, index0 = FAILURE, self._offset
         cached = self._cache['indent'].get(index0)
@@ -697,7 +822,7 @@ class Grammar(object):
         if elements0 is None:
             address0 = FAILURE
         else:
-            address0 = TreeNode6(self._input[index1:self._offset], index1, elements0)
+            address0 = TreeNode8(self._input[index1:self._offset], index1, elements0)
             self._offset = self._offset
         self._cache['indent'][index0] = (address0, self._offset)
         return address0
@@ -738,135 +863,9 @@ class Grammar(object):
         if elements0 is None:
             address0 = FAILURE
         else:
-            address0 = TreeNode7(self._input[index1:self._offset], index1, elements0)
-            self._offset = self._offset
-        self._cache['dedent'][index0] = (address0, self._offset)
-        return address0
-
-    def _read_empty_line(self):
-        address0, index0 = FAILURE, self._offset
-        cached = self._cache['empty_line'].get(index0)
-        if cached:
-            self._offset = cached[1]
-            return cached[0]
-        index1, elements0 = self._offset, []
-        address1 = FAILURE
-        index2 = self._offset
-        address1 = self._read_space()
-        if address1 is FAILURE:
-            address1 = TreeNode(self._input[index2:index2], index2)
-            self._offset = index2
-        if address1 is not FAILURE:
-            elements0.append(address1)
-            address2 = FAILURE
-            address2 = self._read_newline()
-            if address2 is not FAILURE:
-                elements0.append(address2)
-            else:
-                elements0 = None
-                self._offset = index1
-        else:
-            elements0 = None
-            self._offset = index1
-        if elements0 is None:
-            address0 = FAILURE
-        else:
-            address0 = TreeNode8(self._input[index1:self._offset], index1, elements0)
-            self._offset = self._offset
-        self._cache['empty_line'][index0] = (address0, self._offset)
-        return address0
-
-    def _read_eol(self):
-        address0, index0 = FAILURE, self._offset
-        cached = self._cache['eol'].get(index0)
-        if cached:
-            self._offset = cached[1]
-            return cached[0]
-        index1, elements0 = self._offset, []
-        address1 = FAILURE
-        address1 = self._read_newline()
-        if address1 is not FAILURE:
-            elements0.append(address1)
-            address2 = FAILURE
-            remaining0, index2, elements1, address3 = 0, self._offset, [], True
-            while address3 is not FAILURE:
-                address3 = self._read_empty_line()
-                if address3 is not FAILURE:
-                    elements1.append(address3)
-                    remaining0 -= 1
-            if remaining0 <= 0:
-                address2 = TreeNode(self._input[index2:self._offset], index2, elements1)
-                self._offset = self._offset
-            else:
-                address2 = FAILURE
-            if address2 is not FAILURE:
-                elements0.append(address2)
-            else:
-                elements0 = None
-                self._offset = index1
-        else:
-            elements0 = None
-            self._offset = index1
-        if elements0 is None:
-            address0 = FAILURE
-        else:
             address0 = TreeNode9(self._input[index1:self._offset], index1, elements0)
             self._offset = self._offset
-        self._cache['eol'][index0] = (address0, self._offset)
-        return address0
-
-    def _read_space(self):
-        address0, index0 = FAILURE, self._offset
-        cached = self._cache['space'].get(index0)
-        if cached:
-            self._offset = cached[1]
-            return cached[0]
-        remaining0, index1, elements0, address1 = 1, self._offset, [], True
-        while address1 is not FAILURE:
-            chunk0 = None
-            if self._offset < self._input_size:
-                chunk0 = self._input[self._offset:self._offset + 1]
-            if chunk0 is not None and Grammar.REGEX_5.search(chunk0):
-                address1 = TreeNode(self._input[self._offset:self._offset + 1], self._offset)
-                self._offset = self._offset + 1
-            else:
-                address1 = FAILURE
-                if self._offset > self._failure:
-                    self._failure = self._offset
-                    self._expected = []
-                if self._offset == self._failure:
-                    self._expected.append('[ \\t]')
-            if address1 is not FAILURE:
-                elements0.append(address1)
-                remaining0 -= 1
-        if remaining0 <= 0:
-            address0 = TreeNode(self._input[index1:self._offset], index1, elements0)
-            self._offset = self._offset
-        else:
-            address0 = FAILURE
-        self._cache['space'][index0] = (address0, self._offset)
-        return address0
-
-    def _read_newline(self):
-        address0, index0 = FAILURE, self._offset
-        cached = self._cache['newline'].get(index0)
-        if cached:
-            self._offset = cached[1]
-            return cached[0]
-        chunk0 = None
-        if self._offset < self._input_size:
-            chunk0 = self._input[self._offset:self._offset + 1]
-        if chunk0 == '\n':
-            address0 = TreeNode(self._input[self._offset:self._offset + 1], self._offset)
-            self._offset = self._offset + 1
-        else:
-            address0 = FAILURE
-            if self._offset > self._failure:
-                self._failure = self._offset
-                self._expected = []
-            if self._offset == self._failure:
-                self._expected.append('"\\n"')
-        self._cache['newline'][index0] = (address0, self._offset)
+        self._cache['dedent'][index0] = (address0, self._offset)
         return address0
 
 
