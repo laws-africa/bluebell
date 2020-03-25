@@ -32,11 +32,18 @@ grammar hierarchicalStructure
 
   inline            <- inline_marker / [^\n] <Inline>
 
-                     # TODO: image, bold, italic, others
-  inline_marker     <- remark / ref
+                     # TODO: image, others
+  inline_marker     <- bold / italics / remark / ref
 
   # inlines
 
+                     # **foo**
+  bold              <- '**' content:(!'**' inline)+ '**' <Bold>
+
+                     # //foo//
+  italics           <- '//' content:(!'//' inline)+ '//' <Italics>
+
+                     # [[remark]]
   remark            <- '[[' content:(!']]' inline)+ ']]' <Remark>
 
                      # [text](href)

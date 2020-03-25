@@ -92,6 +92,22 @@ class Types:
                 'children': Types.Inline.many_to_dict(x.inline for x in self.content.elements),
             }
 
+    class Bold:
+        def to_dict(self):
+            return {
+                'type': 'inline',
+                'name': 'b',
+                'children': Types.Inline.many_to_dict(x.inline for x in self.content.elements),
+            }
+
+    class Italics:
+        def to_dict(self):
+            return {
+                'type': 'inline',
+                'name': 'i',
+                'children': Types.Inline.many_to_dict(x.inline for x in self.content.elements),
+            }
+
     class Inline:
         @classmethod
         def many_to_dict(cls, items):
