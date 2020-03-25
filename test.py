@@ -8,6 +8,16 @@ from lxml import etree as ET
 
 from hierarchicalStructure import parse, ParseError
 
+# TODO: heading
+# TODO: num
+# TODO: block lists
+# TODO: nested block lists
+# TODO: arbitrary indents
+# TODO: schedules
+# TODO: tables
+# TODO: inlines (a, b, i, etc.)
+# TODO: markers (img, eol)
+
 
 class Types:
     class Root:
@@ -34,7 +44,7 @@ class Types:
 
             return {
                 'type': 'hier',
-                'name': self.hier_element_name.text,
+                'name': self.hier_element_name.text.lower(),
                 'num': num,
                 'children': [c.to_dict() for c in self.children]
             }
@@ -118,38 +128,17 @@ def pre_parse(lines):
 
 
 def make_akn(tree):
-    def merge_blocks(item):
-        """ blocks are just containers, merge adjacent ones together
-        """
-        prev = None
-        kids = []
-        for kid in item.get('children', []):
-            merge_blocks(kid)
-
-            if kid['type'] == 'block':
-                if prev:
-                    prev['children'].extend(kid['children'])
-                else:
-                    kids.append(kid)
-                    prev = kid
-            else:
-                kids.append(kid)
-                prev = None
-
-        if 'children' in item:
-            item['children'] = kids
-
     def to_akn(item):
         if item['type'] == 'hier':
             # if only hier elements, just add them
             if all(k['type'] == 'hier' for k in item['children']):
                 kids = (to_akn(k) for k in item['children'])
-                return E(item['name'].lower(), *(k for k in kids if k is not None))
+                return E(item['name'], *(k for k in kids if k is not None))
 
             # if no hierarchy elements, use content and then just add them
             if all(k['type'] != 'hier' for k in item['children']):
                 kids = (to_akn(k) for k in item['children'])
-                return E(item['name'].lower(), E.content(*(k for k in kids if k is not None)))
+                return E(item['name'], E.content(*(k for k in kids if k is not None)))
 
             # if block/content at start and end, use intro and wrapup
             # TODO
@@ -159,12 +148,10 @@ def make_akn(tree):
 
         if item['type'] == 'block':
             kids = (to_akn(k) for k in item.get('children', []))
-            return E(item['name'].lower(), *(k for k in kids if k is not None))
+            return E(item['name'], *(k for k in kids if k is not None))
 
         if item['type'] == 'content':
-            return E(item['name'].lower(), item['text'])
-
-    merge_blocks(tree['body'])
+            return E(item['name'], item['text'])
 
     return to_akn(tree['body'])
 
