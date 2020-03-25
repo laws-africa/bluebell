@@ -41,11 +41,7 @@ class Types:
 
     class Block:
         def to_dict(self):
-            # TODO: name?
-            return {
-                'type': 'block',
-                'children': [self.content.to_dict()],
-            }
+            return self.content.to_dict()
 
     class Table:
         def to_dict(self):
@@ -122,18 +118,53 @@ def pre_parse(lines):
 
 
 def make_akn(tree):
+    def merge_blocks(item):
+        """ blocks are just containers, merge adjacent ones together
+        """
+        prev = None
+        kids = []
+        for kid in item.get('children', []):
+            merge_blocks(kid)
+
+            if kid['type'] == 'block':
+                if prev:
+                    prev['children'].extend(kid['children'])
+                else:
+                    kids.append(kid)
+                    prev = kid
+            else:
+                kids.append(kid)
+                prev = None
+
+        if 'children' in item:
+            item['children'] = kids
+
     def to_akn(item):
         if item['type'] == 'hier':
-            # TODO: handle a mixture of hier and block/content children
-            kids = (to_akn(k) for k in item['children'])
-            return E(item['name'].lower(), *(k for k in kids if k is not None))
+            # if only hier elements, just add them
+            if all(k['type'] == 'hier' for k in item['children']):
+                kids = (to_akn(k) for k in item['children'])
+                return E(item['name'].lower(), *(k for k in kids if k is not None))
+
+            # if no hierarchy elements, use content and then just add them
+            if all(k['type'] != 'hier' for k in item['children']):
+                kids = (to_akn(k) for k in item['children'])
+                return E(item['name'].lower(), E.content(*(k for k in kids if k is not None)))
+
+            # if block/content at start and end, use intro and wrapup
+            # TODO
+
+            # otherwise, panic
+            # TODO
 
         if item['type'] == 'block':
-            kids = (to_akn(k) for k in item['children'])
-            return E.content(*(k for k in kids if k is not None))
+            kids = (to_akn(k) for k in item.get('children', []))
+            return E(item['name'].lower(), *(k for k in kids if k is not None))
 
         if item['type'] == 'content':
             return E(item['name'].lower(), item['text'])
+
+    merge_blocks(tree['body'])
 
     return to_akn(tree['body'])
 
@@ -155,9 +186,7 @@ if __name__ == '__main__':
         raise
 
     tree = tree.to_dict()
-
-    print(json.dumps(tree))
-
     xml = make_akn(tree)
 
+    print(json.dumps(tree))
     print(ET.tostring(xml, pretty_print=True, encoding='unicode'))
