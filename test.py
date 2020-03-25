@@ -15,7 +15,7 @@ from hierarchicalStructure import parse, ParseError
 # TODO: arbitrary indents
 # TODO: schedules
 # TODO: tables
-# TODO: inlines (a, b, i, etc.)
+# TODO: inlines (b, i, etc.)
 # TODO: markers (img, eol)
 
 
@@ -62,38 +62,11 @@ class Types:
 
     # TODO: document content and inline types
     class Line:
-        def children_to_dict(self):
-            """ Convert children, merging consecutive single characters.
-            """
-            kids = []
-            text = []
-
-            for kid in self:
-                if isinstance(kid, Types.Char):
-                    text.append(kid.text)
-
-                else:
-                    if text:
-                        kids.append({
-                            'type': 'text',
-                            'value': ''.join(text),
-                        })
-                        text = []
-                    kids.append(kid.to_dict())
-
-            if text:
-                kids.append({
-                    'type': 'text',
-                    'value': ''.join(text),
-                })
-
-            return kids
-
         def to_dict(self):
             return {
                 'type': 'content',
                 'name': 'p',
-                'children': self.children_to_dict(),
+                'children': Types.Inline.many_to_dict(self.elements),
             }
 
     class Ref:
@@ -104,12 +77,49 @@ class Types:
                 'attribs': {
                     'href': self.href.text,
                 },
-                # TODO: handle nested
-                'text': self.content.text,
+                'children': [{
+                    'type': 'text',
+                    'value': self.content.text,
+                }],
             }
 
-    class Char:
-        pass
+    class Remark:
+        def to_dict(self):
+            return {
+                'type': 'inline',
+                'name': 'remark',
+                'attribs': {'status': 'editorial'},
+                'children': Types.Inline.many_to_dict(x.inline for x in self.content.elements),
+            }
+
+    class Inline:
+        @classmethod
+        def many_to_dict(cls, items):
+            """ Convert adjacent inline items, merging consecutive single characters.
+            """
+            merged = []
+            text = []
+
+            for item in items:
+                if not hasattr(item, 'to_dict'):
+                    text.append(item.text)
+
+                else:
+                    if text:
+                        merged.append({
+                            'type': 'text',
+                            'value': ''.join(text),
+                        })
+                        text = []
+                    merged.append(item.to_dict())
+
+            if text:
+                merged.append({
+                    'type': 'text',
+                    'value': ''.join(text),
+                })
+
+            return merged
 
 
 def pre_parse(lines):
@@ -202,8 +212,8 @@ def make_akn(tree):
             return item['value']
 
         if item['type'] == 'inline':
-            # TODO: handle children
-            return E(item['name'], item['text'], **item['attribs'])
+            kids = (to_akn(k) for k in item.get('children', []))
+            return E(item['name'], *(k for k in kids if k is not None), **item.get('attribs', {}))
 
     return to_akn(tree['body'])
 

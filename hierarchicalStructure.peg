@@ -28,17 +28,21 @@ grammar hierarchicalStructure
 
   line              <- inline+ <Line>
   
-  # marker elements
+  # inline and marker elements
 
-  inline            <- ref / char
+  inline            <- inline_marker / [^\n] <Inline>
+
+                     # TODO: image, bold, italic, others
+  inline_marker     <- remark / ref
+
+  # inlines
+
+  remark            <- '[[' content:(!']]' inline)+ ']]' <Remark>
 
                      # [text](href)
-                     # TODO: nested inline elements
   ref               <- '[' content:(!'](' [^\n])* '](' href:[^)\n]* ')' <Ref>
 
   # terminals
-
-  char              <- [^\n] <Char>
 
   eol               <- newline empty_line*
 
