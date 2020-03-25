@@ -1,0 +1,37 @@
+grammar hierarchicalStructure
+  # TODO: coverpage
+  # TODO: preface
+  # TODO: preamble
+  # TODO: conclusions
+
+  root              <- indent body dedent <Root>
+  
+  body              <- hier_element* <Body>
+
+  hier_element      <-
+    space? hier_element_name hier_element_num:hier_element_num? eol
+    indent
+    children:(hier_element / block_element)*
+    dedent <HierElement>
+
+  hier_element_name <- ('CHAPTER' / 'PARA' / 'PART' / 'SUBPART' / 'SECTION' / 'SUBSECTION')
+
+  hier_element_num  <- space num:[^ \n]+
+
+  block_element     <- space? !dedent content:(table / line) eol <Block>
+
+  table             <- 'TABLE' <Table>
+
+  line              <- [^\n]+ <Line>
+
+  eol               <- newline empty_line*
+
+  newline           <- "\n"
+
+  empty_line        <- space? newline
+
+  space             <- [ \t]+
+
+  indent            <- space? '{' eol
+
+  dedent            <- space? '}' eol
