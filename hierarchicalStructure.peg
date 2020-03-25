@@ -34,7 +34,7 @@ grammar hierarchicalStructure
 
                      # [text](href)
                      # TODO: nested inline elements
-  ref               <- '[' content:[^\n\]]* '](' href:[^)\n]* ')' <Ref>
+  ref               <- '[' content:(!'](' [^\n])* '](' href:[^)\n]* ')' <Ref>
 
   # terminals
 
