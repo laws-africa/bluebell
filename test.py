@@ -60,14 +60,56 @@ class Types:
                 'name': 'table',
             }
 
+    # TODO: document content and inline types
     class Line:
+        def children_to_dict(self):
+            """ Convert children, merging consecutive single characters.
+            """
+            kids = []
+            text = []
+
+            for kid in self:
+                if isinstance(kid, Types.Char):
+                    text.append(kid.text)
+
+                else:
+                    if text:
+                        kids.append({
+                            'type': 'text',
+                            'value': ''.join(text),
+                        })
+                        text = []
+                    kids.append(kid.to_dict())
+
+            if text:
+                kids.append({
+                    'type': 'text',
+                    'value': ''.join(text),
+                })
+
+            return kids
+
         def to_dict(self):
-            # TODO: document content and inline types
             return {
                 'type': 'content',
                 'name': 'p',
-                'text': self.text,
+                'children': self.children_to_dict(),
             }
+
+    class Ref:
+        def to_dict(self):
+            return {
+                'type': 'inline',
+                'name': 'ref',
+                'attribs': {
+                    'href': self.href.text,
+                },
+                # TODO: handle nested
+                'text': self.content.text,
+            }
+
+    class Char:
+        pass
 
 
 def pre_parse(lines):
@@ -151,7 +193,15 @@ def make_akn(tree):
             return E(item['name'], *(k for k in kids if k is not None))
 
         if item['type'] == 'content':
-            return E(item['name'], item['text'])
+            kids = (to_akn(k) for k in item.get('children', []))
+            return E(item['name'], *(k for k in kids if k is not None))
+
+        if item['type'] == 'text':
+            return item['value']
+
+        if item['type'] == 'inline':
+            # TODO: handle children
+            return E(item['name'], item['text'], **item['attribs'])
 
     return to_akn(tree['body'])
 
@@ -173,7 +223,7 @@ if __name__ == '__main__':
         raise
 
     tree = tree.to_dict()
-    xml = make_akn(tree)
-
     print(json.dumps(tree))
+
+    xml = make_akn(tree)
     print(ET.tostring(xml, pretty_print=True, encoding='unicode'))

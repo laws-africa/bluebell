@@ -9,7 +9,7 @@ grammar hierarchicalStructure
   body              <- hier_element* <Body>
 
   hier_element      <-
-    space? hier_element_name hier_element_num:hier_element_num? eol
+    hier_element_name hier_element_num:hier_element_num? eol
     indent
     children:(hier_element / block_element)*
     dedent <HierElement>
@@ -18,20 +18,34 @@ grammar hierarchicalStructure
 
   hier_element_num  <- space num:[^ \n]+
 
-  block_element     <- space? !dedent content:(table / line) eol <Block>
+  # block elements
 
+  block_element     <- !dedent content:(table / line) eol <Block>
+
+                     # TODO
   table             <- 'TABLE' <Table>
 
-  line              <- [^\n]+ <Line>
+  line              <- inline+ <Line>
+  
+  # marker elements
 
-  eol               <- newline empty_line*
+  inline            <- ref / char
 
-  newline           <- "\n"
+                     # [text](href)
+  ref               <- '[' content:[^\n\]]* '](' href:[^)\n]* ')' <Ref>
+
+  # terminals
+
+  char              <- [^\n] <Char>
+
+  indent            <- '{' eol
+
+  dedent            <- '}' eol
 
   empty_line        <- space? newline
 
+  eol               <- newline empty_line*
+
   space             <- [ \t]+
 
-  indent            <- space? '{' eol
-
-  dedent            <- space? '}' eol
+  newline           <- "\n"
