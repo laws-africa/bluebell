@@ -13,10 +13,8 @@ from hierarchicalStructure import parse, ParseError
 # TODO: block lists
 # TODO: nested block lists
 # TODO: arbitrary indents
-# TODO: schedules
+# TODO: schedules and annexures - how to "push" to end?
 # TODO: tables
-# TODO: inlines (b, i, etc.)
-# TODO: markers (img, eol)
 
 
 class Types:
@@ -42,12 +40,21 @@ class Types:
             else:
                 num = None
 
-            return {
+            info = {
                 'type': 'hier',
                 'name': self.hier_element_name.text.lower(),
                 'num': num,
                 'children': [c.to_dict() for c in self.children]
             }
+
+            if self.subheading.text:
+                info['subheading'] = self.subheading.to_dict()
+
+            return info
+
+    class Heading:
+        def to_dict(self):
+            return Types.Inline.many_to_dict(k for k in self.content)
 
     class Block:
         def to_dict(self):
@@ -214,13 +221,22 @@ def make_akn(tree):
         kids = (to_akn(k) for k in item.get('children', []))
 
         if item['type'] == 'hier':
-            # by default, if all children are hier elements, we add them as-is
+            pre = []
 
+            # by default, if all children are hier elements, we add them as-is
             # if no hierarchy children (ie. all block/content), wrap children in <content>
             if all(k['type'] != 'hier' for k in item['children']):
                 kids = [E.content(*kids)]
 
-            return E(item['name'], E.content(*kids), **item.get('attribs', {}))
+            if item.get('heading'):
+                pre.append(E.heading(*(to_akn(k) for k in item['heading'])))
+
+            if item.get('subheading'):
+                pre.append(E.subheading(*(to_akn(k) for k in item['subheading'])))
+
+            kids = pre + list(kids)
+
+            return E(item['name'], *kids, **item.get('attribs', {}))
 
             # if block/content at start and end, use intro and wrapup
             # TODO

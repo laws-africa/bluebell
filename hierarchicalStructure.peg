@@ -12,12 +12,15 @@ grammar hierarchicalStructure
 
   hier_element      <- hier_element_name hier_element_num:hier_element_num? eol
                        indent
+                       subheading:subheading?
                        children:(hier_element / block_element)*
                        dedent <HierElement>
 
   hier_element_name <- ('CHAPTER' / 'PARA' / 'PART' / 'SUBPART' / 'SECTION' / 'SUBSECTION')
 
   hier_element_num  <- space num:[^ \n]+
+
+  subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
 
   # block elements
 
