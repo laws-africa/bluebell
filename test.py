@@ -8,8 +8,6 @@ from lxml import etree as ET
 
 from hierarchicalStructure import parse, ParseError
 
-# TODO: heading
-# TODO: num
 # TODO: block lists
 # TODO: nested block lists
 # TODO: arbitrary indents
@@ -35,22 +33,30 @@ class Types:
 
     class HierElement:
         def to_dict(self):
-            if hasattr(self.hier_element_num, 'num'):
-                num = self.hier_element_num.num.text
-            else:
-                num = None
-
             info = {
                 'type': 'hier',
                 'name': self.hier_element_name.text.lower(),
-                'num': num,
                 'children': [c.to_dict() for c in self.children]
             }
+
+            if self.heading.text:
+                num = self.heading.num.text.strip()
+                if num:
+                    info['num'] = num
+
+                heading = self.heading.heading_to_dict()
+                if heading:
+                    info['heading'] = heading
 
             if self.subheading.text:
                 info['subheading'] = self.subheading.to_dict()
 
             return info
+
+    class HierElementHeading:
+        def heading_to_dict(self):
+            if hasattr(self.heading, 'content') and self.heading.content.text.strip():
+                return Types.Inline.many_to_dict(x for x in self.heading.content)
 
     class Heading:
         def to_dict(self):
@@ -227,6 +233,9 @@ def make_akn(tree):
             # if no hierarchy children (ie. all block/content), wrap children in <content>
             if all(k['type'] != 'hier' for k in item['children']):
                 kids = [E.content(*kids)]
+
+            if item.get('num'):
+                pre.append(E.num(item['num']))
 
             if item.get('heading'):
                 pre.append(E.heading(*(to_akn(k) for k in item['heading'])))

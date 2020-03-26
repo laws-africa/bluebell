@@ -10,7 +10,7 @@ grammar hierarchicalStructure
 
   # hier elements
 
-  hier_element      <- hier_element_name hier_element_num:hier_element_num? eol
+  hier_element      <- hier_element_name heading:hier_element_heading? eol
                        indent
                        subheading:subheading?
                        children:(hier_element / block_element)*
@@ -18,7 +18,14 @@ grammar hierarchicalStructure
 
   hier_element_name <- ('CHAPTER' / 'PARA' / 'PART' / 'SUBPART' / 'SECTION' / 'SUBSECTION')
 
-  hier_element_num  <- space num:[^ \n]+
+                        # num - heading
+                        # - heading
+                        # num
+                        # TODO: maybe better to make the heading the default?
+                        #   eg: heading
+                        #       num -
+                        #       num - heading
+  hier_element_heading <- space num:[^\n-]* heading:('-' space content:inline*)? <HierElementHeading>
 
   subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
 
