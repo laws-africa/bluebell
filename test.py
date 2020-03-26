@@ -92,6 +92,18 @@ class Types:
                 'children': Types.Inline.many_to_dict(x.inline for x in self.content.elements),
             }
 
+    class Image:
+        def to_dict(self):
+            attribs = {'src': self.href.text}
+            if self.content.text:
+                attribs['alt'] = self.content.text
+
+            return {
+                'type': 'marker',
+                'name': 'img',
+                'attribs': attribs,
+            }
+
     class Bold:
         def to_dict(self):
             return {
@@ -230,6 +242,9 @@ def make_akn(tree):
         if item['type'] == 'inline':
             kids = (to_akn(k) for k in item.get('children', []))
             return E(item['name'], *(k for k in kids if k is not None), **item.get('attribs', {}))
+
+        if item['type'] == 'marker':
+            return E(item['name'], **item.get('attribs', {}))
 
     return to_akn(tree['body'])
 
