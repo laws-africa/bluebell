@@ -211,16 +211,16 @@ def pre_parse(lines):
 
 def make_akn(tree):
     def to_akn(item):
-        if item['type'] == 'hier':
-            # if only hier elements, just add them
-            if all(k['type'] == 'hier' for k in item['children']):
-                kids = (to_akn(k) for k in item['children'])
-                return E(item['name'], *(k for k in kids if k is not None))
+        kids = (to_akn(k) for k in item.get('children', []))
 
-            # if no hierarchy elements, use content and then just add them
+        if item['type'] == 'hier':
+            # by default, if all children are hier elements, we add them as-is
+
+            # if no hierarchy children (ie. all block/content), wrap children in <content>
             if all(k['type'] != 'hier' for k in item['children']):
-                kids = (to_akn(k) for k in item['children'])
-                return E(item['name'], E.content(*(k for k in kids if k is not None)))
+                kids = [E.content(*kids)]
+
+            return E(item['name'], E.content(*kids), **item.get('attribs', {}))
 
             # if block/content at start and end, use intro and wrapup
             # TODO
@@ -229,22 +229,19 @@ def make_akn(tree):
             # TODO
 
         if item['type'] == 'block':
-            kids = (to_akn(k) for k in item.get('children', []))
-            return E(item['name'], *(k for k in kids if k is not None))
+            return E(item['name'], *kids)
 
         if item['type'] == 'content':
-            kids = (to_akn(k) for k in item.get('children', []))
-            return E(item['name'], *(k for k in kids if k is not None))
-
-        if item['type'] == 'text':
-            return item['value']
+            return E(item['name'], *kids)
 
         if item['type'] == 'inline':
-            kids = (to_akn(k) for k in item.get('children', []))
-            return E(item['name'], *(k for k in kids if k is not None), **item.get('attribs', {}))
+            return E(item['name'], *kids, **item.get('attribs', {}))
 
         if item['type'] == 'marker':
             return E(item['name'], **item.get('attribs', {}))
+
+        if item['type'] == 'text':
+            return item['value']
 
     return to_akn(tree['body'])
 
