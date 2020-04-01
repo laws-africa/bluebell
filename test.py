@@ -36,7 +36,7 @@ class Types:
             info = {
                 'type': 'hier',
                 'name': self.hier_element_name.text.lower(),
-                'children': [c.to_dict() for c in self.children]
+                'children': [c.elements[1].to_dict() for c in self.content]
             }
 
             if self.heading.text:
@@ -64,7 +64,29 @@ class Types:
 
     class Block:
         def to_dict(self):
-            return self.content.to_dict()
+            return {
+                'type': 'block',
+                # TODO: name? the block is essentially anonymous?
+                # block list?
+                # what about arbitrary indented text?
+                'name': 'block',
+                'children': [c.elements[1].to_dict() for c in self.content]
+            }
+
+    class BlockItem:
+        def to_dict(self):
+            kids = []
+            if self.content.text and hasattr(self.content, 'block_element'):
+                kids.append(self.content.block_element)
+            if self.children.text:
+                kids.append(self.children)
+
+            return {
+                'type': 'block',
+                'name': 'item',
+                'num': self.num.text,
+                'children': [c.to_dict() for c in kids],
+            }
 
     class Table:
         def to_dict(self):
@@ -79,7 +101,7 @@ class Types:
             return {
                 'type': 'content',
                 'name': 'p',
-                'children': Types.Inline.many_to_dict(self.elements),
+                'children': Types.Inline.many_to_dict(self.content.elements),
             }
 
     class Ref:
@@ -224,7 +246,7 @@ def pre_parse(lines):
 
 def make_akn(tree):
     def to_akn(item):
-        kids = (to_akn(k) for k in item.get('children', []))
+        kids = [to_akn(k) for k in item.get('children', [])]
 
         if item['type'] == 'hier':
             pre = []
@@ -243,7 +265,7 @@ def make_akn(tree):
             if item.get('subheading'):
                 pre.append(E.subheading(*(to_akn(k) for k in item['subheading'])))
 
-            kids = pre + list(kids)
+            kids = pre + kids
 
             return E(item['name'], *kids, **item.get('attribs', {}))
 
@@ -254,6 +276,10 @@ def make_akn(tree):
             # TODO
 
         if item['type'] == 'block':
+            # TODO: can have num, heading, subheading
+            # TODO: make this generic? what else can have num?
+            if 'num' in item:
+                kids.insert(0, E('num', item['num']))
             return E(item['name'], *kids)
 
         if item['type'] == 'content':

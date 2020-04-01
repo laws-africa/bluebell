@@ -68,6 +68,8 @@ or a single `text` attribute.
 
 Block elements cannot have `hier` children.
 
+* `num`: number; inline element
+
 ### Hierarchical elements (`hier`)
 
 * `heading`: heading element; a block element
