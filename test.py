@@ -192,6 +192,7 @@ def pre_parse(lines):
 
     1. no whitespace at the start of a line
     2. no tab characters
+    3. no trailing whitespace at the end of a line
     """
     indent = '\x0E'
     dedent = '\x0F'
@@ -199,9 +200,13 @@ def pre_parse(lines):
     dedent = '}'
 
     line_re = re.compile(r'^([ ]*)([^ \n])', re.M)
+    trailing_ws_re = re.compile(r' +$', re.M)
 
     # tabs are two spaces
     lines = lines.replace('\t', '  ')
+    # strip trailing whitespace
+    lines = trailing_ws_re.sub('', lines)
+
     stack = [-1]
 
     def handle_indent(match):
