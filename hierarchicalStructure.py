@@ -76,29 +76,29 @@ class TreeNode7(TreeNode):
 class TreeNode8(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode8, self).__init__(text, offset, elements)
-        self.eol = elements[1]
-
-
-class TreeNode9(TreeNode):
-    def __init__(self, text, offset, elements):
-        super(TreeNode9, self).__init__(text, offset, elements)
-        self.content = elements[0]
-        self.eol = elements[1]
-
-
-class TreeNode10(TreeNode):
-    def __init__(self, text, offset, elements):
-        super(TreeNode10, self).__init__(text, offset, elements)
         self.num = elements[0]
         self.content = elements[1]
         self.children = elements[2]
 
 
+class TreeNode9(TreeNode):
+    def __init__(self, text, offset, elements):
+        super(TreeNode9, self).__init__(text, offset, elements)
+        self.space = elements[0]
+        self.block_element = elements[3]
+
+
+class TreeNode10(TreeNode):
+    def __init__(self, text, offset, elements):
+        super(TreeNode10, self).__init__(text, offset, elements)
+        self.eol = elements[1]
+
+
 class TreeNode11(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode11, self).__init__(text, offset, elements)
-        self.space = elements[0]
-        self.block_element = elements[3]
+        self.content = elements[0]
+        self.eol = elements[1]
 
 
 class TreeNode12(TreeNode):
@@ -736,7 +736,7 @@ class Grammar(object):
         address0 = self._read_block()
         if address0 is FAILURE:
             self._offset = index1
-            address0 = self._read_block_item()
+            address0 = self._read_block_list()
             if address0 is FAILURE:
                 self._offset = index1
                 address0 = self._read_table()
@@ -748,90 +748,27 @@ class Grammar(object):
         self._cache['block_element'][index0] = (address0, self._offset)
         return address0
 
-    def _read_table(self):
+    def _read_block_list(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['table'].get(index0)
+        cached = self._cache['block_list'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
-        index1, elements0 = self._offset, []
-        address1 = FAILURE
-        chunk0 = None
-        if self._offset < self._input_size:
-            chunk0 = self._input[self._offset:self._offset + 5]
-        if chunk0 == 'TABLE':
-            address1 = TreeNode(self._input[self._offset:self._offset + 5], self._offset)
-            self._offset = self._offset + 5
-        else:
-            address1 = FAILURE
-            if self._offset > self._failure:
-                self._failure = self._offset
-                self._expected = []
-            if self._offset == self._failure:
-                self._expected.append('\'TABLE\'')
-        if address1 is not FAILURE:
-            elements0.append(address1)
-            address2 = FAILURE
-            address2 = self._read_eol()
-            if address2 is not FAILURE:
-                elements0.append(address2)
-            else:
-                elements0 = None
-                self._offset = index1
-        else:
-            elements0 = None
-            self._offset = index1
-        if elements0 is None:
-            address0 = FAILURE
-        else:
-            address0 = TreeNode8(self._input[index1:self._offset], index1, elements0)
-            self._offset = self._offset
-        cls0 = type(address0)
-        if cls0 != object:
-            address0.__class__ = type(cls0.__name__ + 'Table', (cls0, self._types.Table), {})
-        self._cache['table'][index0] = (address0, self._offset)
-        return address0
-
-    def _read_line(self):
-        address0, index0 = FAILURE, self._offset
-        cached = self._cache['line'].get(index0)
-        if cached:
-            self._offset = cached[1]
-            return cached[0]
-        index1, elements0 = self._offset, []
-        address1 = FAILURE
-        remaining0, index2, elements1, address2 = 1, self._offset, [], True
-        while address2 is not FAILURE:
-            address2 = self._read_inline()
-            if address2 is not FAILURE:
-                elements1.append(address2)
+        remaining0, index1, elements0, address1 = 1, self._offset, [], True
+        while address1 is not FAILURE:
+            address1 = self._read_block_item()
+            if address1 is not FAILURE:
+                elements0.append(address1)
                 remaining0 -= 1
         if remaining0 <= 0:
-            address1 = TreeNode(self._input[index2:self._offset], index2, elements1)
+            address0 = TreeNode(self._input[index1:self._offset], index1, elements0)
             self._offset = self._offset
         else:
-            address1 = FAILURE
-        if address1 is not FAILURE:
-            elements0.append(address1)
-            address3 = FAILURE
-            address3 = self._read_eol()
-            if address3 is not FAILURE:
-                elements0.append(address3)
-            else:
-                elements0 = None
-                self._offset = index1
-        else:
-            elements0 = None
-            self._offset = index1
-        if elements0 is None:
             address0 = FAILURE
-        else:
-            address0 = TreeNode9(self._input[index1:self._offset], index1, elements0)
-            self._offset = self._offset
         cls0 = type(address0)
         if cls0 != object:
-            address0.__class__ = type(cls0.__name__ + 'Line', (cls0, self._types.Line), {})
-        self._cache['line'][index0] = (address0, self._offset)
+            address0.__class__ = type(cls0.__name__ + 'BlockList', (cls0, self._types.BlockList), {})
+        self._cache['block_list'][index0] = (address0, self._offset)
         return address0
 
     def _read_block_item(self):
@@ -969,7 +906,7 @@ class Grammar(object):
                 if elements3 is None:
                     address6 = FAILURE
                 else:
-                    address6 = TreeNode11(self._input[index6:self._offset], index6, elements3)
+                    address6 = TreeNode9(self._input[index6:self._offset], index6, elements3)
                     self._offset = self._offset
                 if address6 is FAILURE:
                     address6 = TreeNode(self._input[index5:index5], index5)
@@ -998,12 +935,98 @@ class Grammar(object):
         if elements0 is None:
             address0 = FAILURE
         else:
-            address0 = TreeNode10(self._input[index1:self._offset], index1, elements0)
+            address0 = TreeNode8(self._input[index1:self._offset], index1, elements0)
             self._offset = self._offset
         cls0 = type(address0)
         if cls0 != object:
             address0.__class__ = type(cls0.__name__ + 'BlockItem', (cls0, self._types.BlockItem), {})
         self._cache['block_item'][index0] = (address0, self._offset)
+        return address0
+
+    def _read_table(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['table'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        index1, elements0 = self._offset, []
+        address1 = FAILURE
+        chunk0 = None
+        if self._offset < self._input_size:
+            chunk0 = self._input[self._offset:self._offset + 5]
+        if chunk0 == 'TABLE':
+            address1 = TreeNode(self._input[self._offset:self._offset + 5], self._offset)
+            self._offset = self._offset + 5
+        else:
+            address1 = FAILURE
+            if self._offset > self._failure:
+                self._failure = self._offset
+                self._expected = []
+            if self._offset == self._failure:
+                self._expected.append('\'TABLE\'')
+        if address1 is not FAILURE:
+            elements0.append(address1)
+            address2 = FAILURE
+            address2 = self._read_eol()
+            if address2 is not FAILURE:
+                elements0.append(address2)
+            else:
+                elements0 = None
+                self._offset = index1
+        else:
+            elements0 = None
+            self._offset = index1
+        if elements0 is None:
+            address0 = FAILURE
+        else:
+            address0 = TreeNode10(self._input[index1:self._offset], index1, elements0)
+            self._offset = self._offset
+        cls0 = type(address0)
+        if cls0 != object:
+            address0.__class__ = type(cls0.__name__ + 'Table', (cls0, self._types.Table), {})
+        self._cache['table'][index0] = (address0, self._offset)
+        return address0
+
+    def _read_line(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['line'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        index1, elements0 = self._offset, []
+        address1 = FAILURE
+        remaining0, index2, elements1, address2 = 1, self._offset, [], True
+        while address2 is not FAILURE:
+            address2 = self._read_inline()
+            if address2 is not FAILURE:
+                elements1.append(address2)
+                remaining0 -= 1
+        if remaining0 <= 0:
+            address1 = TreeNode(self._input[index2:self._offset], index2, elements1)
+            self._offset = self._offset
+        else:
+            address1 = FAILURE
+        if address1 is not FAILURE:
+            elements0.append(address1)
+            address3 = FAILURE
+            address3 = self._read_eol()
+            if address3 is not FAILURE:
+                elements0.append(address3)
+            else:
+                elements0 = None
+                self._offset = index1
+        else:
+            elements0 = None
+            self._offset = index1
+        if elements0 is None:
+            address0 = FAILURE
+        else:
+            address0 = TreeNode11(self._input[index1:self._offset], index1, elements0)
+            self._offset = self._offset
+        cls0 = type(address0)
+        if cls0 != object:
+            address0.__class__ = type(cls0.__name__ + 'Line', (cls0, self._types.Line), {})
+        self._cache['line'][index0] = (address0, self._offset)
         return address0
 
     def _read_inline(self):

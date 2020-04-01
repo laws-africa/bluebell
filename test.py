@@ -64,13 +64,26 @@ class Types:
 
     class Block:
         def to_dict(self):
+            # if we have one child, it's a block element and we're only a wrapper,
+            # return it directly
+            if len(self.content.elements) == 1:
+                return self.content.elements[0].block_element.to_dict()
+
+            # TODO: name and attribs for arbitrary indented block
             return {
                 'type': 'block',
                 # TODO: name? the block is essentially anonymous?
-                # block list?
                 # what about arbitrary indented text?
                 'name': 'block',
-                'children': [c.elements[1].to_dict() for c in self.content]
+                'children': [c.block_element.to_dict() for c in self.content]
+            }
+
+    class BlockList:
+        def to_dict(self):
+            return {
+                'type': 'block',
+                'name': 'blockList',
+                'children': [c.to_dict() for c in self],
             }
 
     class BlockItem:

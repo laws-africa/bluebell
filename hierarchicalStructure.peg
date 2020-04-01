@@ -36,12 +36,9 @@ grammar hierarchicalStructure
                        dedent
                        <Block>
 
-  block_element     <- block / block_item / table / line
+  block_element     <- block / block_list / table / line
 
-                     # TODO
-  table             <- 'TABLE' eol <Table>
-
-  line              <- content:inline+ eol <Line>
+  block_list        <- block_item+ <BlockList>
 
                      # (a)
                      #
@@ -51,6 +48,11 @@ grammar hierarchicalStructure
                      #   (i) child
                      #
   block_item        <- num:('(' [^)]+ ')') content:(eol / (space !block_item !block block_element)?) children:block? <BlockItem>
+
+                     # TODO
+  table             <- 'TABLE' eol <Table>
+
+  line              <- content:inline+ eol <Line>
   
   # inline and marker elements
 
