@@ -89,10 +89,14 @@ class Types:
     class BlockItem:
         def to_dict(self):
             kids = []
+
+            # preamble content on the same line as the number
             if self.content.text and hasattr(self.content, 'block_element'):
                 kids.append(self.content.block_element)
+
+            # nested blocks
             if self.children.text:
-                kids.append(self.children)
+                kids.extend(c.block_element for c in self.children.content)
 
             return {
                 'type': 'block',
