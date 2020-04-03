@@ -91,12 +91,12 @@ class Types:
             kids = []
 
             # preamble content on the same line as the number
-            if self.content.text and hasattr(self.content, 'block_element'):
-                kids.append(self.content.block_element)
+            if self.preamble.text and hasattr(self.preamble, 'block_element'):
+                kids.append(self.preamble.block_element)
 
             # nested blocks
-            if self.children.text:
-                kids.extend(c.block_element for c in self.children.content)
+            if self.content.text:
+                kids.extend(c.block_element for c in self.content.content)
 
             return {
                 'type': 'block',

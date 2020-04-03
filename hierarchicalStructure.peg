@@ -13,7 +13,7 @@ grammar hierarchicalStructure
   hier_element      <- hier_element_name heading:hier_element_heading? eol
                        indent
                        subheading:subheading?
-                       content:(!dedent (hier_element / block_element))*
+                       content:(!dedent hier_content)*
                        dedent <HierElement>
 
   hier_element_name <- ('CHAPTER' / 'PARA' / 'PART' / 'SUBPART' / 'SECTION' / 'SUBSECTION')
@@ -28,6 +28,8 @@ grammar hierarchicalStructure
   hier_element_heading <- space num:[^\n-]* heading:('-' space content:inline*)? <HierElementHeading>
 
   subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
+
+  hier_content      <- hier_element / block_element
 
   # blocks
 
@@ -47,7 +49,9 @@ grammar hierarchicalStructure
                      # (a)
                      #   (i) child
                      #
-  block_item        <- num:('(' [^)]+ ')') content:(eol / (space !block_item !block block_element)?) children:block? <BlockItem>
+  block_item        <- num:('(' [^)]+ ')') preamble:(eol / (space !block_item block_element)?)
+                       content:block?
+                       <BlockItem>
 
                      # TODO
   table             <- 'TABLE' eol <Table>
