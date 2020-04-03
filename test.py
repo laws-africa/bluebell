@@ -62,6 +62,25 @@ class Types:
         def to_dict(self):
             return Types.Inline.many_to_dict(k for k in self.content)
 
+    class HierItem:
+        def to_dict(self):
+            kids = []
+
+            # preamble content on the same line as the number
+            if self.preamble.text and hasattr(self.preamble, 'block_element'):
+                kids.append(self.preamble.block_element)
+
+            # nested hier elements
+            if self.content.text:
+                kids.extend(c.hier_content for c in self.content.content)
+
+            return {
+                'type': 'hier',
+                'name': '',
+                'num': self.num.text,
+                'children': [c.to_dict() for c in kids],
+            }
+
     class Block:
         def to_dict(self):
             # if we have one child, it's a block element and we're only a wrapper,
