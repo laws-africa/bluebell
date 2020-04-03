@@ -1,12 +1,27 @@
 grammar hierarchicalStructure
   # TODO: coverpage
   # TODO: preface
+  # TODO: longtitle
   # TODO: preamble
   # TODO: conclusions
+  # TODO: attachments
 
-  root              <- indent body dedent <Root>
+  root              <- indent
+                         preface:preface?
+                         body
+                       dedent
+                       <Root>
+
+  preface           <- preface_marker
+                       content:(!body_marker preface_element)*
+                       body_marker
+                       <Preface>
   
-  body              <- hier_element* <Body>
+  body              <- body_marker? content:hier_element* <Body>
+
+  # preface elements
+
+  preface_element   <- block / block_element
 
   # hier elements
 
@@ -85,6 +100,10 @@ grammar hierarchicalStructure
   ref               <- '[' content:(!'](' [^\n])* '](' href:[^)\n]* ')' <Ref>
 
   # terminals
+
+  preface_marker    <- 'PREFACE' eol
+
+  body_marker       <- 'BODY' eol
 
   eol               <- newline empty_line*
 

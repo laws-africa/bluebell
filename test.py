@@ -15,12 +15,43 @@ from hierarchicalStructure import parse, ParseError
 # TODO: tables
 
 
+def hoist_blocks(children):
+    """ Block elements can use this to pull grandchildren of anonymous block
+        elements into their child list.
+
+        So this:
+            block -> block -> block
+        becomes:
+            block -> block
+    """
+    kids = []
+
+    for kid in children:
+        if kid['type'] == 'block' and kid['name'] == 'block':
+            kids.extend(c for c in kid.get('children', []))
+        else:
+            kids.append(kid)
+
+    return kids
+
+
 class Types:
     class Root:
         def to_dict(self):
-            return {
+            info = {
                 'type': 'hierarchicalStructure',
                 'body': self.body.to_dict(),
+            }
+            if self.preface.text:
+                info['preface'] = self.preface.to_dict()
+
+            return info
+
+    class Preface:
+        def to_dict(self):
+            return {
+                'type': 'preface',
+                'children': hoist_blocks([c.preface_element.to_dict() for c in self.content]),
             }
 
     class Body:
@@ -28,7 +59,7 @@ class Types:
             return {
                 'type': 'hier',
                 'name': 'body',
-                'children': [c.to_dict() for c in self]
+                'children': [c.to_dict() for c in self.content]
             }
 
     class HierElement:
@@ -270,6 +301,9 @@ def make_akn(tree):
     def to_akn(item):
         kids = [to_akn(k) for k in item.get('children', [])]
 
+        if item['type'] == 'preface':
+            return E('preface', *kids)
+
         if item['type'] == 'hier':
             pre = []
 
@@ -316,7 +350,13 @@ def make_akn(tree):
         if item['type'] == 'text':
             return item['value']
 
-    return to_akn(tree['body'])
+    items = []
+
+    if 'preface' in tree:
+        items.append(to_akn(tree['preface']))
+    items.append(to_akn(tree['body']))
+
+    return E('act', *items)
 
 
 def print_with_lines(lines):
