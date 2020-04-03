@@ -29,13 +29,7 @@ grammar hierarchicalStructure
 
   subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
 
-  hier_content      <- hier_element / hier_item / block_element
-
-                     # a numbered hier item
-                     # the hier element name must be determined from the number and position in the hierarchy
-  hier_item         <- num:('(' [^)]+ ')') preamble:(eol / (space block_element)?)
-                       content:(indent content:(!dedent hier_content)+ dedent)?
-                       <HierItem>
+  hier_content      <- hier_element / block_element
 
   # blocks
 
