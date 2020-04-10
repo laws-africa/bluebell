@@ -1,7 +1,7 @@
 grammar hierarchicalStructure
   # TODO: either one big grammar, or we need to fake inheritance
 
-  root              <- judgment
+  root              <- 'noop'
 
   # ------------------------------------------------------------------------------
   # Judgment
@@ -148,6 +148,10 @@ grammar hierarchicalStructure
                      # TODO
   table             <- 'TABLE' eol <Table>
 
+                     # The line block is the only thing that can contain arbitrary text
+                     # at the start of a line, where a dedent may occur. By guarding
+                     # against it, we don't have to guard at every place that
+                     # could start a line.
   line              <- !dedent content:inline+ eol <Line>
 
   # ------------------------------------------------------------------------------ 

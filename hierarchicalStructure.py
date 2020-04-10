@@ -362,7 +362,19 @@ class Grammar(object):
         if cached:
             self._offset = cached[1]
             return cached[0]
-        address0 = self._read_judgment()
+        chunk0 = None
+        if self._offset < self._input_size:
+            chunk0 = self._input[self._offset:self._offset + 4]
+        if chunk0 == 'noop':
+            address0 = TreeNode(self._input[self._offset:self._offset + 4], self._offset)
+            self._offset = self._offset + 4
+        else:
+            address0 = FAILURE
+            if self._offset > self._failure:
+                self._failure = self._offset
+                self._expected = []
+            if self._offset == self._failure:
+                self._expected.append('\'noop\'')
         self._cache['root'][index0] = (address0, self._offset)
         return address0
 

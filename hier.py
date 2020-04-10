@@ -370,7 +370,7 @@ def pre_parse(lines):
     return lines
 
 
-def make_akn(tree):
+def make_akn(tree, root):
     def kids_to_akn(parent=None, kids=None):
         if kids is None:
             kids = parent.get('children', [])
@@ -438,13 +438,14 @@ def make_akn(tree):
     items = []
 
     # TODO: handle different top-level elements
-    if False:
+    if root == 'hierarchical_structure':
         if 'preface' in tree:
             items.append(to_akn(tree['preface']))
         items.append(to_akn(tree['body']))
         return E('act', *items)
 
-    return to_akn(tree)
+    elif root == 'judgment':
+        return to_akn(tree)
 
 
 def print_with_lines(lines):
@@ -453,12 +454,27 @@ def print_with_lines(lines):
         print(f'{i:02}: {line}', file=sys.stderr)
 
 
+def parse_with_failure(lines, root):
+    """ Helper function to do the actual parsing with an arbitrary root.
+    """
+    from hierarchicalStructure import Parser, FAILURE, ParseError, format_error
+
+    parser = Parser(lines, actions=None, types=Types)
+    tree = getattr(parser, f'_read_{root}')()
+    if tree is not FAILURE and parser._offset == parser._input_size:
+        return tree
+    if not parser._expected:
+        parser._failure = parser._offset
+        parser._expected.append('<EOF>')
+    raise ParseError(format_error(parser._input, parser._failure, parser._expected))
+
 if __name__ == '__main__':
-    lines = open(sys.argv[1], "r").read()
+    root = sys.argv[1]
+    lines = open(sys.argv[2], "r").read()
 
     lines = pre_parse(lines)
     try:
-        tree = parse(lines, types=Types)
+        tree = parse_with_failure(lines, root)
     except ParseError as e:
         print_with_lines(lines)
         raise
@@ -466,5 +482,5 @@ if __name__ == '__main__':
     tree = tree.to_dict()
     print(json.dumps(tree))
 
-    xml = make_akn(tree)
+    xml = make_akn(tree, root)
     print(ET.tostring(xml, pretty_print=True, encoding='unicode'))
