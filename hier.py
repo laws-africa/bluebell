@@ -43,10 +43,23 @@ class Types:
 
     class Judgement:
         def to_dict(self):
-            return {
+            kids = [{
                 'type': 'wrapper',
                 'name': 'judgmentBody',
                 'children': [c.to_dict() for c in self.judgment_body if c.text],
+            }]
+
+            if self.conclusions.text:
+                kids.append({
+                    'type': 'wrapper',
+                    'name': 'conclusions',
+                    'children': [self.conclusions.to_dict()],
+                })
+
+            return {
+                'type': 'wrapper',
+                'name': 'judgment',
+                'children': kids,
             }
 
     class Introduction:
@@ -94,6 +107,15 @@ class Types:
             return {
                 'type': 'wrapper',
                 'name': 'decision',
+                'children': Types.HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
+            }
+
+    class Conclusions:
+        # TODO: hoist
+        def to_dict(self):
+            return {
+                'type': 'wrapper',
+                'name': 'conclusions',
                 'children': Types.HierBlockIndent.many_to_dict(self.content),
             }
 

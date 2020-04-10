@@ -9,7 +9,7 @@ grammar hierarchicalStructure
 
   judgment          <- indent
                          judgment_body
-                         #conclusions? <-- TODO: generic
+                         conclusions:conclusions?
                        dedent
                        <Judgement>
 
@@ -21,27 +21,27 @@ grammar hierarchicalStructure
                        decision?
 
   introduction      <- introduction_marker
-                       content:(!background_marker !arguments_marker !remedies_marker !motivation_marker !decision_marker hier_block_indent)*
+                       content:(!background_marker !arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
                        <Introduction>
 
   background        <- background_marker
-                       content:(!arguments_marker !remedies_marker !motivation_marker !decision_marker hier_block_indent)*
+                       content:(!arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
                        <Background>
 
   arguments         <- arguments_marker
-                       content:(!remedies_marker !motivation_marker !decision_marker hier_block_indent)*
+                       content:(!remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
                        <Arguments>
 
   remedies          <- remedies_marker
-                       content:(!motivation_marker !decision_marker hier_block_indent)*
+                       content:(!motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
                        <Remedies>
 
   motivation        <- motivation_marker
-                       content:(!decision_marker hier_block_indent)*
+                       content:(!decision_marker !conclusions_marker hier_block_indent)*
                        <Motivation>
 
   decision          <- decision_marker
-                       content:hier_block_indent*
+                       content:(!conclusions_marker hier_block_indent)*
                        <Decision>
 
   # Judgment markers
@@ -124,7 +124,11 @@ grammar hierarchicalStructure
 
   # ------------------------------------------------------------------------------ 
   # Generic blocks
-  # ------------------------------------------------------------------------------ 
+  # ------------------------------------------------------------------------------
+
+  conclusions       <- conclusions_marker
+                       content:block_element*
+                       <Conclusions>
 
   block             <- indent
                          content:block_element*
@@ -183,6 +187,8 @@ grammar hierarchicalStructure
 
                      # [text](href)
   ref               <- '[' content:(!'](' [^\n])* '](' href:[^)\n]* ')' <Ref>
+
+  conclusions_marker <- 'CONCLUSIONS' eol
 
   # ------------------------------------------------------------------------------ 
   # Terminals
