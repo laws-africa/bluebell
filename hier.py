@@ -54,7 +54,7 @@ class Types:
             return {
                 'type': 'wrapper',
                 'name': 'introduction',
-                'children': [c.block_element.to_dict() for c in self.content],
+                'children': Types.HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
             }
 
     class Background:
@@ -62,7 +62,7 @@ class Types:
             return {
                 'type': 'wrapper',
                 'name': 'background',
-                'children': [c.block_element.to_dict() for c in self.content],
+                'children': Types.HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
             }
 
     class Arguments:
@@ -70,7 +70,7 @@ class Types:
             return {
                 'type': 'wrapper',
                 'name': 'arguments',
-                'children': [c.block_element.to_dict() for c in self.content],
+                'children': Types.HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
             }
 
     class Remedies:
@@ -78,7 +78,7 @@ class Types:
             return {
                 'type': 'wrapper',
                 'name': 'remedies',
-                'children': [c.block_element.to_dict() for c in self.content],
+                'children': Types.HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
             }
 
     class Motivation:
@@ -86,7 +86,7 @@ class Types:
             return {
                 'type': 'wrapper',
                 'name': 'motivation',
-                'children': [c.block_element.to_dict() for c in self.content],
+                'children': Types.HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
             }
 
     class Decision:
@@ -94,7 +94,7 @@ class Types:
             return {
                 'type': 'wrapper',
                 'name': 'decision',
-                'children': [c.to_dict() for c in self.content],
+                'children': Types.HierBlockIndent.many_to_dict(self.content),
             }
 
     # ------------------------------------------------------------------------------
@@ -165,6 +165,17 @@ class Types:
     class Heading:
         def to_dict(self):
             return Types.Inline.many_to_dict(k for k in self.content)
+
+    class HierBlockIndent:
+        @classmethod
+        def many_to_dict(cls, items):
+            kids = []
+            for item in items:
+                if hasattr(item, 'to_dict'):
+                    kids.append(item.to_dict())
+                else:
+                    kids.extend(c.to_dict() for c in item.content)
+            return kids
 
     class Block:
         def to_dict(self):
@@ -432,8 +443,6 @@ def make_akn(tree, root):
 
         if item['type'] == 'wrapper':
             return E(item['name'], *kids_to_akn(item))
-
-        # TODO: host blocks for background, introduction, etc.
 
     items = []
 

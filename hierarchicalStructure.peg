@@ -21,32 +21,31 @@ grammar hierarchicalStructure
                        decision?
 
   introduction      <- introduction_marker
-                       content:(!background_marker !arguments_marker !remedies_marker !motivation_marker !decision_marker block_element)*
+                       content:(!background_marker !arguments_marker !remedies_marker !motivation_marker !decision_marker hier_block_indent)*
                        <Introduction>
 
   background        <- background_marker
-                       content:(!arguments_marker !remedies_marker !motivation_marker !decision_marker block_element)*
+                       content:(!arguments_marker !remedies_marker !motivation_marker !decision_marker hier_block_indent)*
                        <Background>
 
   arguments         <- arguments_marker
-                       content:(!remedies_marker !motivation_marker !decision_marker block_element)*
+                       content:(!remedies_marker !motivation_marker !decision_marker hier_block_indent)*
                        <Arguments>
 
   remedies          <- remedies_marker
-                       content:(!motivation_marker !decision_marker block_element)*
+                       content:(!motivation_marker !decision_marker hier_block_indent)*
                        <Remedies>
 
   motivation        <- motivation_marker
-                       content:(!decision_marker block_element)*
+                       content:(!decision_marker hier_block_indent)*
                        <Motivation>
 
   decision          <- decision_marker
-                       content:block_element*
+                       content:hier_block_indent*
                        <Decision>
 
   # Judgment markers
 
-  # TODO: this is a generic element
   introduction_marker <- 'INTRODUCTION' eol
 
   background_marker <- 'BACKGROUND' eol
@@ -100,7 +99,7 @@ grammar hierarchicalStructure
   hier_element      <- hier_element_name heading:hier_element_heading? eol
                        indent
                          subheading:subheading?
-                         content:(!dedent hier_content)*
+                         content:(!dedent hier_block_element)*
                        dedent <HierElement>
 
   hier_element_name <- ('CHAPTER' / 'PARA' / 'PART' / 'SUBPART' / 'SECTION' / 'SUBSECTION')
@@ -116,7 +115,12 @@ grammar hierarchicalStructure
 
   subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
 
-  hier_content      <- hier_element / block_element
+  hier_block_element <- hier_element / block_element
+
+                     # this is for top-level containers that may/may not start with an
+                     # indented block, but otherwise contain block and hier content
+  hier_block_indent <- (indent content:hier_block_element+ dedent) / hier_block_element
+                       <HierBlockIndent>
 
   # ------------------------------------------------------------------------------ 
   # Generic blocks
