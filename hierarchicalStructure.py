@@ -1843,17 +1843,17 @@ class Grammar(object):
             self._offset = index1
             chunk1 = None
             if self._offset < self._input_size:
-                chunk1 = self._input[self._offset:self._offset + 4]
-            if chunk1 == 'PARA':
-                address0 = TreeNode(self._input[self._offset:self._offset + 4], self._offset)
-                self._offset = self._offset + 4
+                chunk1 = self._input[self._offset:self._offset + 9]
+            if chunk1 == 'PARAGRAPH':
+                address0 = TreeNode(self._input[self._offset:self._offset + 9], self._offset)
+                self._offset = self._offset + 9
             else:
                 address0 = FAILURE
                 if self._offset > self._failure:
                     self._failure = self._offset
                     self._expected = []
                 if self._offset == self._failure:
-                    self._expected.append('\'PARA\'')
+                    self._expected.append('\'PARAGRAPH\'')
             if address0 is FAILURE:
                 self._offset = index1
                 chunk2 = None
