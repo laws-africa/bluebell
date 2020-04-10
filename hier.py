@@ -356,7 +356,7 @@ def pre_parse(lines):
                 s = ""
                 while True:
                     s += dedent + "\n"
-                    if level <= stack[-1]:
+                    if level >= stack[-1]:
                         break
                     stack.pop()
 
