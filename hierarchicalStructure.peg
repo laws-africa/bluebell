@@ -13,7 +13,7 @@ grammar hierarchicalStructure
                        <Root>
 
   preface           <- preface_marker
-                       content:(!body_marker preface_element)*
+                       content:(!body_marker preface_block_element)*
                        body_marker
                        <Preface>
   
@@ -21,14 +21,21 @@ grammar hierarchicalStructure
 
   # preface elements
 
-  preface_element   <- block / block_element
+  preface_block     <- indent
+                         content:(!dedent element:preface_block_element)+
+                       dedent
+                       <Block>
+  
+  preface_block_element <- preface_block / longtitle / block_elements
+
+  longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
 
   # hier elements
 
   hier_element      <- hier_element_name heading:hier_element_heading? eol
                        indent
-                       subheading:subheading?
-                       content:(!dedent hier_content)*
+                         subheading:subheading?
+                         content:(!dedent hier_content)*
                        dedent <HierElement>
 
   hier_element_name <- ('CHAPTER' / 'PARA' / 'PART' / 'SUBPART' / 'SECTION' / 'SUBSECTION')
@@ -49,11 +56,14 @@ grammar hierarchicalStructure
   # blocks
 
   block             <- indent
-                       content:(!dedent block_element)*
+                         content:(!dedent element:block_element)*
                        dedent
                        <Block>
 
-  block_element     <- block / block_list / table / line
+  block_element     <- block / block_elements
+
+                     # these are general block elements that don't care about what block they're in (eg. preface vs body)
+  block_elements    <- block_list / table / line
 
   block_list        <- block_item+ <BlockList>
 

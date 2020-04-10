@@ -51,7 +51,15 @@ class Types:
         def to_dict(self):
             return {
                 'type': 'preface',
-                'children': hoist_blocks([c.preface_element.to_dict() for c in self.content]),
+                'children': [c.preface_block_element.to_dict() for c in self.content]
+            }
+
+    class Longtitle:
+        def to_dict(self):
+            return {
+                'type': 'content',
+                'name': 'longtitle',
+                'children': Types.Inline.many_to_dict(k for k in self.content)
             }
 
     class Body:
@@ -98,7 +106,7 @@ class Types:
             # if we have one child, it's a block element and we're only a wrapper,
             # return it directly
             if len(self.content.elements) == 1:
-                return self.content.elements[0].block_element.to_dict()
+                return self.content.elements[0].element.to_dict()
 
             # TODO: name and attribs for arbitrary indented block
             return {
@@ -106,7 +114,7 @@ class Types:
                 # TODO: name? the block is essentially anonymous?
                 # what about arbitrary indented text?
                 'name': 'block',
-                'children': [c.block_element.to_dict() for c in self.content]
+                'children': [c.element.to_dict() for c in self.content]
             }
 
     class BlockList:
@@ -298,14 +306,20 @@ def pre_parse(lines):
 
 
 def make_akn(tree):
-    def to_akn(item):
-        kids = [to_akn(k) for k in item.get('children', [])]
+    def kids_to_akn(parent=None, kids=None):
+        if kids is None:
+            kids = parent.get('children', [])
+        return [to_akn(k) for k in kids]
 
+    def to_akn(item):
         if item['type'] == 'preface':
-            return E('preface', *kids)
+            # preface is already a block, so hoist in any block children
+            kids = hoist_blocks(item.get('children', []))
+            return E('preface', *kids_to_akn(kids=kids))
 
         if item['type'] == 'hier':
             pre = []
+            kids = kids_to_akn(item)
 
             # by default, if all children are hier elements, we add them as-is
             # if no hierarchy children (ie. all block/content), wrap children in <content>
@@ -334,15 +348,16 @@ def make_akn(tree):
         if item['type'] == 'block':
             # TODO: can have num, heading, subheading
             # TODO: make this generic? what else can have num?
+            kids = kids_to_akn(item)
             if 'num' in item:
                 kids.insert(0, E('num', item['num']))
             return E(item['name'], *kids)
 
         if item['type'] == 'content':
-            return E(item['name'], *kids)
+            return E(item['name'], *kids_to_akn(item))
 
         if item['type'] == 'inline':
-            return E(item['name'], *kids, **item.get('attribs', {}))
+            return E(item['name'], *kids_to_akn(item), **item.get('attribs', {}))
 
         if item['type'] == 'marker':
             return E(item['name'], **item.get('attribs', {}))
@@ -366,7 +381,7 @@ def print_with_lines(lines):
 
 
 if __name__ == '__main__':
-    lines = open("test.txt", "r").read()
+    lines = open("hier.txt", "r").read()
 
     lines = pre_parse(lines)
     try:
