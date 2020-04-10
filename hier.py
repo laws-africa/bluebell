@@ -2,6 +2,7 @@
 
 import re
 import json
+import sys
 
 from lxml.builder import E
 from lxml import etree as ET
@@ -36,7 +37,71 @@ def hoist_blocks(children):
 
 
 class Types:
-    class Root:
+    # ------------------------------------------------------------------------------
+    # Judgement
+    # ------------------------------------------------------------------------------
+
+    class Judgement:
+        def to_dict(self):
+            return {
+                'type': 'wrapper',
+                'name': 'judgmentBody',
+                'children': [c.to_dict() for c in self.judgment_body if c.text],
+            }
+
+    class Introduction:
+        def to_dict(self):
+            return {
+                'type': 'wrapper',
+                'name': 'introduction',
+                'children': [c.block_element.to_dict() for c in self.content],
+            }
+
+    class Background:
+        def to_dict(self):
+            return {
+                'type': 'wrapper',
+                'name': 'background',
+                'children': [c.block_element.to_dict() for c in self.content],
+            }
+
+    class Arguments:
+        def to_dict(self):
+            return {
+                'type': 'wrapper',
+                'name': 'arguments',
+                'children': [c.block_element.to_dict() for c in self.content],
+            }
+
+    class Remedies:
+        def to_dict(self):
+            return {
+                'type': 'wrapper',
+                'name': 'remedies',
+                'children': [c.block_element.to_dict() for c in self.content],
+            }
+
+    class Motivation:
+        def to_dict(self):
+            return {
+                'type': 'wrapper',
+                'name': 'motivation',
+                'children': [c.block_element.to_dict() for c in self.content],
+            }
+
+    class Decision:
+        def to_dict(self):
+            return {
+                'type': 'wrapper',
+                'name': 'decision',
+                'children': [c.to_dict() for c in self.content],
+            }
+
+    # ------------------------------------------------------------------------------
+    # Hierarchical structures (act, bill)
+    # ------------------------------------------------------------------------------
+
+    class HierarchicalStructure:
         def to_dict(self):
             info = {
                 'type': 'hierarchicalStructure',
@@ -106,7 +171,7 @@ class Types:
             # if we have one child, it's a block element and we're only a wrapper,
             # return it directly
             if len(self.content.elements) == 1:
-                return self.content.elements[0].element.to_dict()
+                return self.content.elements[0].to_dict()
 
             # TODO: name and attribs for arbitrary indented block
             return {
@@ -114,7 +179,7 @@ class Types:
                 # TODO: name? the block is essentially anonymous?
                 # what about arbitrary indented text?
                 'name': 'block',
-                'children': [c.element.to_dict() for c in self.content]
+                'children': [c.to_dict() for c in self.content]
             }
 
     class BlockList:
@@ -135,7 +200,7 @@ class Types:
 
             # nested blocks
             if self.content.text:
-                kids.extend(c.block_element for c in self.content.content)
+                kids.extend(self.content.content)
 
             return {
                 'type': 'block',
@@ -365,23 +430,31 @@ def make_akn(tree):
         if item['type'] == 'text':
             return item['value']
 
+        if item['type'] == 'wrapper':
+            return E(item['name'], *kids_to_akn(item))
+
+        # TODO: host blocks for background, introduction, etc.
+
     items = []
 
-    if 'preface' in tree:
-        items.append(to_akn(tree['preface']))
-    items.append(to_akn(tree['body']))
+    # TODO: handle different top-level elements
+    if False:
+        if 'preface' in tree:
+            items.append(to_akn(tree['preface']))
+        items.append(to_akn(tree['body']))
+        return E('act', *items)
 
-    return E('act', *items)
+    return to_akn(tree)
 
 
 def print_with_lines(lines):
     for i, line in enumerate(lines.split('\n')):
         i = i + 1
-        print(f'{i:02}: {line}')
+        print(f'{i:02}: {line}', file=sys.stderr)
 
 
 if __name__ == '__main__':
-    lines = open("hier.txt", "r").read()
+    lines = open(sys.argv[1], "r").read()
 
     lines = pre_parse(lines)
     try:

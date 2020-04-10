@@ -1,4 +1,67 @@
 grammar hierarchicalStructure
+  # TODO: either one big grammar, or we need to fake inheritance
+
+  root              <- judgment
+
+  # ------------------------------------------------------------------------------
+  # Judgment
+  # ------------------------------------------------------------------------------ 
+
+  judgment          <- indent
+                         judgment_body
+                         #conclusions? <-- TODO: generic
+                       dedent
+                       <Judgement>
+
+  judgment_body     <- introduction?
+                       background?
+                       arguments?
+                       remedies?
+                       motivation?
+                       decision?
+
+  introduction      <- introduction_marker
+                       content:(!background_marker !arguments_marker !remedies_marker !motivation_marker !decision_marker block_element)*
+                       <Introduction>
+
+  background        <- background_marker
+                       content:(!arguments_marker !remedies_marker !motivation_marker !decision_marker block_element)*
+                       <Background>
+
+  arguments         <- arguments_marker
+                       content:(!remedies_marker !motivation_marker !decision_marker block_element)*
+                       <Arguments>
+
+  remedies          <- remedies_marker
+                       content:(!motivation_marker !decision_marker block_element)*
+                       <Remedies>
+
+  motivation        <- motivation_marker
+                       content:(!decision_marker block_element)*
+                       <Motivation>
+
+  decision          <- decision_marker
+                       content:block_element*
+                       <Decision>
+
+  # Judgment markers
+
+  # TODO: this is a generic element
+  introduction_marker <- 'INTRODUCTION' eol
+
+  background_marker <- 'BACKGROUND' eol
+
+  arguments_marker  <- 'ARGUMENTS' eol
+
+  remedies_marker   <- 'REMEDIES' eol
+
+  motivation_marker <- 'MOTIVATION' eol
+
+  decision_marker   <- 'DECISION' eol
+
+  # ------------------------------------------------------------------------------ 
+  # Hierarchical Structure (acts, bills)
+  # ------------------------------------------------------------------------------
   # TODO: coverpage
   # TODO: preface
   # TODO: longtitle
@@ -6,11 +69,11 @@ grammar hierarchicalStructure
   # TODO: conclusions
   # TODO: attachments
 
-  root              <- indent
-                         preface:preface?
-                         body
-                       dedent
-                       <Root>
+  hierarchical_structure <- indent
+                              preface:preface?
+                              body
+                            dedent
+                            <HierarchicalStructure>
 
   preface           <- preface_marker
                        content:(!body_marker preface_block_element)*
@@ -22,7 +85,7 @@ grammar hierarchicalStructure
   # preface elements
 
   preface_block     <- indent
-                         content:(!dedent element:preface_block_element)+
+                         content:preface_block_element+
                        dedent
                        <Block>
   
@@ -30,7 +93,9 @@ grammar hierarchicalStructure
 
   longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
 
-  # hier elements
+  # ------------------------------------------------------------------------------ 
+  # Generic hierarchical elements
+  # ------------------------------------------------------------------------------ 
 
   hier_element      <- hier_element_name heading:hier_element_heading? eol
                        indent
@@ -53,10 +118,12 @@ grammar hierarchicalStructure
 
   hier_content      <- hier_element / block_element
 
-  # blocks
+  # ------------------------------------------------------------------------------ 
+  # Generic blocks
+  # ------------------------------------------------------------------------------ 
 
   block             <- indent
-                         content:(!dedent element:block_element)*
+                         content:block_element*
                        dedent
                        <Block>
 
@@ -81,15 +148,15 @@ grammar hierarchicalStructure
                      # TODO
   table             <- 'TABLE' eol <Table>
 
-  line              <- content:inline+ eol <Line>
-  
-  # inline and marker elements
+  line              <- !dedent content:inline+ eol <Line>
 
-  inline            <- inline_marker / [^\n] <Inline>
+  # ------------------------------------------------------------------------------ 
+  # Generic inlines and markers
+  # ------------------------------------------------------------------------------ 
+  
+  inline            <- inline_marker / [^\n]
 
   inline_marker     <- bold / image / italics / remark / ref
-
-  # inlines
 
                      # **foo**
   bold              <- '**' content:(!'**' inline)+ '**' <Bold>
@@ -109,7 +176,9 @@ grammar hierarchicalStructure
                      # [text](href)
   ref               <- '[' content:(!'](' [^\n])* '](' href:[^)\n]* ')' <Ref>
 
-  # terminals
+  # ------------------------------------------------------------------------------ 
+  # Terminals
+  # ------------------------------------------------------------------------------ 
 
   preface_marker    <- 'PREFACE' eol
 
