@@ -5,7 +5,7 @@ import argparse
 
 from lxml import etree as ET
 
-from bluebell.parser import pre_parse, parse_with_failure, make_akn
+from bluebell.parser import pre_parse, parse_with_failure, parse_tree_to_xml
 from bluebell.akn import ParseError
 
 
@@ -19,7 +19,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Parse text into Akoma Ntoso.')
     parser.add_argument('root', type=str, help='the type of document to parse (eg. judgment)')
     parser.add_argument('input', type=str, help='file to parse')
-    parser.add_argument('--json', dest='json', action='store_true', help='output intermediate json, rather than XML.')
+    parser.add_argument('--json', dest='json', action='store_true', help='output intermediate json, rather than XML')
+    parser.add_argument('--pretty', dest='pretty', action='store_true', help='prettify output')
     args = parser.parse_args()
 
     lines = open(args.input, "r").read()
@@ -30,10 +31,9 @@ if __name__ == '__main__':
         print_with_lines(lines)
         raise
 
-    tree = tree.to_dict()
-
     if args.json:
+        tree = tree.to_dict()
         print(json.dumps(tree))
     else:
-        xml = make_akn(tree, args.root)
-        print(ET.tostring(xml, pretty_print=True, encoding='unicode'))
+        xml = parse_tree_to_xml(tree)
+        print(ET.tostring(xml, pretty_print=args.pretty, encoding='unicode'))

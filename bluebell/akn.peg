@@ -11,7 +11,7 @@ grammar akn
                          judgment_body
                          conclusions:conclusions?
                        dedent
-                       <Judgement>
+                       <Judgment>
 
   judgment_body     <- introduction?
                        background?
@@ -67,6 +67,8 @@ grammar akn
   # TODO: preamble
   # TODO: conclusions
   # TODO: attachments
+
+  act               <- hierarchical_structure <Act>
 
   hierarchical_structure <- indent
                               preface:preface?

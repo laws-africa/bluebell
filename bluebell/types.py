@@ -3,7 +3,9 @@
 # ------------------------------------------------------------------------------
 
 
-class Judgement:
+class Judgment:
+    xml = 'Judgment'
+
     def to_dict(self):
         kids = [{
             'type': 'element',
@@ -91,6 +93,11 @@ class Conclusions:
 # ------------------------------------------------------------------------------
 # Hierarchical structures (act, bill)
 # ------------------------------------------------------------------------------
+
+
+class Act:
+    xml = 'Act'
+
 
 class HierarchicalStructure:
     def to_dict(self):
@@ -221,12 +228,14 @@ class BlockItem:
             'children': [c.to_dict() for c in kids],
         }
 
+
 class Table:
     def to_dict(self):
         return {
             'type': 'block',
             'name': 'table',
         }
+
 
 # TODO: document content and inline types
 class Line:

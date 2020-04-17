@@ -1,9 +1,8 @@
 import re
 
-from lxml.builder import E
-
 from .akn import Parser, FAILURE, ParseError, format_error
 import bluebell.types as types
+import bluebell.xml as xml
 
 
 INDENT = '\x0E'
@@ -84,104 +83,18 @@ def parse_with_failure(lines, root):
         parser._expected.append('<EOF>')
     raise ParseError(format_error(parser._input, parser._failure, parser._expected))
 
-# TODO: block lists
-# TODO: nested block lists
-# TODO: arbitrary indents
-# TODO: schedules and annexures - how to "push" to end?
-# TODO: tables
 
+def parse_tree_to_xml(tree):
+    # does the root of the tree declare an xml helper?
+    root = getattr(tree, 'xml', None)
+    if root:
+        # load the helper class from the xml.py
+        root = getattr(xml, root, None)
 
-def hoist_blocks(children):
-    """ Block elements can use this to pull grandchildren of anonymous block
-        elements into their child list.
-
-        So this:
-            block -> block -> block
-        becomes:
-            block -> block
-    """
-    kids = []
-
-    for kid in children:
-        if kid['type'] == 'block' and kid['name'] == 'block':
-            kids.extend(c for c in kid.get('children', []))
-        else:
-            kids.append(kid)
-
-    return kids
-
-
-def make_akn(tree, root):
-    def kids_to_akn(parent=None, kids=None):
-        if kids is None:
-            kids = parent.get('children', [])
-        return [to_akn(k) for k in kids]
-
-    def to_akn(item):
-        if item['type'] == 'preface':
-            # preface is already a block, so hoist in any block children
-            kids = hoist_blocks(item.get('children', []))
-            return E('preface', *kids_to_akn(kids=kids))
-
-        if item['type'] == 'hier':
-            pre = []
-            kids = kids_to_akn(item)
-
-            # by default, if all children are hier elements, we add them as-is
-            # if no hierarchy children (ie. all block/content), wrap children in <content>
-            if all(k['type'] != 'hier' for k in item['children']):
-                kids = [E.content(*kids)]
-
-            if item.get('num'):
-                pre.append(E.num(item['num']))
-
-            if item.get('heading'):
-                pre.append(E.heading(*(to_akn(k) for k in item['heading'])))
-
-            if item.get('subheading'):
-                pre.append(E.subheading(*(to_akn(k) for k in item['subheading'])))
-
-            kids = pre + kids
-
-            return E(item['name'], *kids, **item.get('attribs', {}))
-
-            # if block/content at start and end, use intro and wrapup
-            # TODO
-
-            # otherwise, panic
-            # TODO
-
-        if item['type'] == 'block':
-            # TODO: can have num, heading, subheading
-            # TODO: make this generic? what else can have num?
-            kids = kids_to_akn(item)
-            if 'num' in item:
-                kids.insert(0, E('num', item['num']))
-            return E(item['name'], *kids)
-
-        if item['type'] == 'content':
-            return E(item['name'], *kids_to_akn(item))
-
-        if item['type'] == 'inline':
-            return E(item['name'], *kids_to_akn(item), **item.get('attribs', {}))
-
-        if item['type'] == 'marker':
-            return E(item['name'], **item.get('attribs', {}))
-
-        if item['type'] == 'text':
-            return item['value']
-
-        if item['type'] == 'element':
-            return E(item['name'], *kids_to_akn(item))
-
-    items = []
-
-    # TODO: handle different top-level elements
-    if root == 'hierarchical_structure':
-        if 'preface' in tree:
-            items.append(to_akn(tree['preface']))
-        items.append(to_akn(tree['body']))
-        return E('act', *items)
-
-    elif root == 'judgment':
-        return to_akn(tree)
+    tree = tree.to_dict()
+    if root:
+        # create and use the xml helper class
+        return root().to_xml(tree)
+    else:
+        # default
+        return xml.to_xml(tree)

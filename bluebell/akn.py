@@ -452,7 +452,7 @@ class Grammar(object):
             self._offset = self._offset
         cls0 = type(address0)
         if cls0 != object:
-            address0.__class__ = type(cls0.__name__ + 'Judgement', (cls0, self._types.Judgement), {})
+            address0.__class__ = type(cls0.__name__ + 'Judgment', (cls0, self._types.Judgment), {})
         self._cache['judgment'][index0] = (address0, self._offset)
         return address0
 
@@ -1399,6 +1399,19 @@ class Grammar(object):
             address0 = TreeNode19(self._input[index1:self._offset], index1, elements0)
             self._offset = self._offset
         self._cache['decision_marker'][index0] = (address0, self._offset)
+        return address0
+
+    def _read_act(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['act'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        address0 = self._read_hierarchical_structure()
+        cls0 = type(address0)
+        if cls0 != object:
+            address0.__class__ = type(cls0.__name__ + 'Act', (cls0, self._types.Act), {})
+        self._cache['act'][index0] = (address0, self._offset)
         return address0
 
     def _read_hierarchical_structure(self):
