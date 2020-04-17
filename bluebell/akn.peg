@@ -1,4 +1,4 @@
-grammar hierarchicalStructure
+grammar akn
   # TODO: either one big grammar, or we need to fake inheritance
 
   root              <- 'noop'

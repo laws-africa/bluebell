@@ -2,7 +2,7 @@ SHELL := /bin/bash
 
 .PHONY: compile
 
-hierarchicalStructure.py: hierarchicalStructure.peg
+bluebell/akn.py: bluebell/akn.peg
 	npx canopy $< --lang python
 
-compile: hierarchicalStructure.py
+compile: akn/bluebell.py

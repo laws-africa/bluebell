@@ -1,4 +1,4 @@
-# This file was generated from hierarchicalStructure.peg
+# This file was generated from bluebell/akn.peg
 # See http://canopy.jcoglan.com/ for documentation.
 
 from collections import defaultdict
