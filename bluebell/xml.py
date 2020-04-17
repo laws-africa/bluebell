@@ -1,4 +1,5 @@
 import re
+from itertools import groupby
 
 from lxml.builder import ElementMaker
 
@@ -130,13 +131,28 @@ def to_xml(item, prefix=''):
 
     if item['type'] == 'hier':
         eid = ids.make(prefix, item)
-        kids = kids_to_xml(item, prefix=eid)
         pre = []
 
-        # by default, if all children are hier elements, we add them as-is
-        # if no hierarchy children (ie. all block/content), wrap children in <content>
         if all(k['type'] != 'hier' for k in item['children']):
+            # no hierarchy children (ie. all block/content), wrap children in <content>
+            kids = kids_to_xml(item, prefix=eid)
             kids = [E.content(*kids)]
+        else:
+            # potentially mixed children
+            # group non-hier children into <intro> and <wrapUp> with hier children sandwiched
+            # in the middle
+            kids = []
+            seen_hier = False
+            for is_hier, group in groupby(item['children'], lambda x: x['type'] == 'hier'):
+                group = (to_xml(k, eid) for k in group)
+                if is_hier:
+                    # TODO: what if this hier element is after a wrapUp?
+                    seen_hier = True
+                    kids.extend(group)
+                elif seen_hier:
+                    kids.append(E.wrapUp(*group))
+                else:
+                    kids.append(E.intro(*group))
 
         if item.get('num'):
             pre.append(E.num(item['num']))
@@ -148,14 +164,7 @@ def to_xml(item, prefix=''):
             pre.append(E.subheading(*(to_xml(k, eid) for k in item['subheading'])))
 
         kids = pre + kids
-
         return E(item['name'], *kids, eId=eid, **item.get('attribs', {}))
-
-        # if block/content at start and end, use intro and wrapup
-        # TODO
-
-        # otherwise, panic
-        # TODO
 
     if item['type'] == 'block':
         # TODO: can have num, heading, subheading
