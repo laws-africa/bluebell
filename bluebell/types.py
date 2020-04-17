@@ -32,7 +32,7 @@ class Introduction:
         return {
             'type': 'element',
             'name': 'introduction',
-            'children': HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
+            'children': many_to_dict(c.hier_block_indent for c in self.content),
         }
 
 
@@ -41,7 +41,7 @@ class Background:
         return {
             'type': 'element',
             'name': 'background',
-            'children': HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
+            'children': many_to_dict(c.hier_block_indent for c in self.content),
         }
 
 
@@ -50,7 +50,7 @@ class Arguments:
         return {
             'type': 'element',
             'name': 'arguments',
-            'children': HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
+            'children': many_to_dict(c.hier_block_indent for c in self.content),
         }
 
 
@@ -59,7 +59,7 @@ class Remedies:
         return {
             'type': 'element',
             'name': 'remedies',
-            'children': HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
+            'children': many_to_dict(c.hier_block_indent for c in self.content),
         }
 
 
@@ -68,7 +68,7 @@ class Motivation:
         return {
             'type': 'element',
             'name': 'motivation',
-            'children': HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
+            'children': many_to_dict(c.hier_block_indent for c in self.content),
         }
 
 
@@ -77,17 +77,16 @@ class Decision:
         return {
             'type': 'element',
             'name': 'decision',
-            'children': HierBlockIndent.many_to_dict(c.hier_block_indent for c in self.content),
+            'children': many_to_dict(c.hier_block_indent for c in self.content),
         }
 
 
 class Conclusions:
-    # TODO: hoist
     def to_dict(self):
         return {
             'type': 'element',
             'name': 'conclusions',
-            'children': HierBlockIndent.many_to_dict(self.content),
+            'children': many_to_dict(self.content),
         }
 
 # ------------------------------------------------------------------------------
@@ -112,26 +111,27 @@ class HierarchicalStructure:
         if self.preamble.text:
             info['preamble'] = self.preamble.to_dict()
 
+        if self.conclusions.text:
+            info['conclusions'] = self.conclusions.to_dict()
+
         return info
 
 
 class Preface:
     def to_dict(self):
-        # TODO: don't use hierblockindent, hoist
         return {
             'type': 'element',
             'name': 'preface',
-            'children': HierBlockIndent.many_to_dict(c.block_indent for c in self.content),
+            'children': many_to_dict(c.block_indent for c in self.content),
         }
 
 
 class Preamble:
     def to_dict(self):
-        # TODO: don't use hierblockindent, hoist
         return {
             'type': 'element',
             'name': 'preamble',
-            'children': HierBlockIndent.many_to_dict(c.block_indent for c in self.content),
+            'children': many_to_dict(c.block_indent for c in self.content),
         }
 
 
@@ -149,7 +149,7 @@ class Body:
         return {
             'type': 'element',
             'name': 'body',
-            'children': [c.to_dict() for c in self.content]
+            'children': [c.elements[1].to_dict() for c in self.content]
         }
 
 
@@ -185,18 +185,6 @@ class HierElementHeading:
 class Heading:
     def to_dict(self):
         return Inline.many_to_dict(k for k in self.content)
-
-
-class HierBlockIndent:
-    @classmethod
-    def many_to_dict(cls, items):
-        kids = []
-        for item in items:
-            if hasattr(item, 'to_dict'):
-                kids.append(item.to_dict())
-            else:
-                kids.extend(c.to_dict() for c in item.content)
-        return kids
 
 
 class Block:
@@ -347,3 +335,15 @@ class Inline:
             })
 
         return merged
+
+
+def many_to_dict(items):
+    kids = []
+    for item in items:
+        if hasattr(item, 'to_dict'):
+            kids.append(item.to_dict())
+        else:
+            kids.extend(c.to_dict() for c in item.content)
+    return kids
+
+

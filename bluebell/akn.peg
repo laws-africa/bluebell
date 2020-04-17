@@ -71,6 +71,7 @@ grammar akn
                               preface:preface?
                               preamble:preamble?
                               body
+                              conclusions:conclusions?
                             dedent
                             <HierarchicalStructure>
 
@@ -82,7 +83,7 @@ grammar akn
                        content:(!body_marker block_indent)*
                        <Preamble>
 
-  body              <- body_marker? content:hier_element* <Body>
+  body              <- body_marker? content:(!conclusions_marker hier_element)* <Body>
 
   # ------------------------------------------------------------------------------
   # Generic hierarchical elements
@@ -118,7 +119,7 @@ grammar akn
   # ------------------------------------------------------------------------------
 
   conclusions       <- conclusions_marker
-                       content:block_element*
+                       content:block_indent*
                        <Conclusions>
 
   # ------------------------------------------------------------------------------ 

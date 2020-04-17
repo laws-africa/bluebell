@@ -200,11 +200,17 @@ class Judgment:
 class Act:
     def to_xml(self, tree):
         items = []
+
         if 'preface' in tree:
             items.append(to_xml(tree['preface']))
+
         if 'preamble' in tree:
             items.append(to_xml(tree['preamble']))
+
         items.append(to_xml(tree['body']))
+
+        if 'conclusions' in tree:
+            items.append(to_xml(tree['conclusions']))
 
         return E.akomaNtoso(
             E.act(
