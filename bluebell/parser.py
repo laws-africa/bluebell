@@ -2,11 +2,15 @@ import re
 
 from lxml.builder import E
 
-from .akn import parse, Parser, FAILURE, ParseError, format_error
-from .types import Types
+from .akn import Parser, FAILURE, ParseError, format_error
+import bluebell.types as types
 
 
-def pre_parse(lines):
+INDENT = '\x0E'
+DEDENT = '\x0F'
+
+
+def pre_parse(lines, indent=INDENT, dedent=DEDENT):
     """ Pre-parse text, setting up indent and dedent markers.
 
     After calling this, the following are guaranteed:
@@ -14,12 +18,10 @@ def pre_parse(lines):
     1. no whitespace at the start of a line
     2. no tab characters
     3. no trailing whitespace at the end of a line
-    """
-    indent = '\x0E'
-    dedent = '\x0F'
-    indent = '{'
-    dedent = '}'
 
+    The indent and dedent parameters are the symbols the grammar
+    uses to indicate indented and dedented blocks.
+    """
     line_re = re.compile(r'^([ ]*)([^ \n])', re.M)
     trailing_ws_re = re.compile(r' +$', re.M)
 
@@ -73,7 +75,7 @@ def pre_parse(lines):
 def parse_with_failure(lines, root):
     """ Helper function to do the actual parsing with an arbitrary root.
     """
-    parser = Parser(lines, actions=None, types=Types)
+    parser = Parser(lines, actions=None, types=types)
     tree = getattr(parser, f'_read_{root}')()
     if tree is not FAILURE and parser._offset == parser._input_size:
         return tree
@@ -169,7 +171,7 @@ def make_akn(tree, root):
         if item['type'] == 'text':
             return item['value']
 
-        if item['type'] == 'wrapper':
+        if item['type'] == 'element':
             return E(item['name'], *kids_to_akn(item))
 
     items = []

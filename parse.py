@@ -23,7 +23,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     lines = open(args.input, "r").read()
-    lines = pre_parse(lines)
+    lines = pre_parse(lines, indent='{', dedent='}')
     try:
         tree = parse_with_failure(lines, args.root)
     except ParseError as e:
