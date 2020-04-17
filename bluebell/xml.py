@@ -9,7 +9,7 @@ E = ElementMaker(nsmap={None: 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'
 class IdGenerator:
     counters = {}
     num_strip_re = re.compile('[ .()[\]]')
-    num_exempt = ['body', 'preface']
+    num_exempt = ['body', 'preface', 'preamble', 'conclusions']
 
     aliases = {
         'alinea': 'al',
@@ -91,7 +91,6 @@ ids = IdGenerator()
 
 # TODO: block lists
 # TODO: nested block lists
-# TODO: arbitrary indents
 # TODO: schedules and annexures - how to "push" to end?
 # TODO: tables
 
@@ -123,12 +122,6 @@ def kids_to_xml(parent=None, kids=None, prefix=None):
 
 
 def to_xml(item, prefix=''):
-    if item['type'] == 'preface':
-        # preface is already a block, so hoist in any block children
-        kids = hoist_blocks(item.get('children', []))
-        eid = ids.make(prefix, name='preface')
-        return E('preface', eId=eid, *kids_to_xml(kids=kids, prefix=eid))
-
     if item['type'] == 'hier':
         eid = ids.make(prefix, item)
         pre = []
@@ -209,6 +202,8 @@ class Act:
         items = []
         if 'preface' in tree:
             items.append(to_xml(tree['preface']))
+        if 'preamble' in tree:
+            items.append(to_xml(tree['preamble']))
         items.append(to_xml(tree['body']))
 
         return E.akomaNtoso(

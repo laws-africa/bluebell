@@ -62,9 +62,6 @@ grammar akn
   # Hierarchical Structure (acts, bills)
   # ------------------------------------------------------------------------------
   # TODO: coverpage
-  # TODO: preface
-  # TODO: longtitle
-  # TODO: preamble
   # TODO: conclusions
   # TODO: attachments
 
@@ -72,29 +69,22 @@ grammar akn
 
   hierarchical_structure <- indent
                               preface:preface?
+                              preamble:preamble?
                               body
                             dedent
                             <HierarchicalStructure>
 
   preface           <- preface_marker
-                       content:(!body_marker preface_block_element)*
-                       body_marker
+                       content:(!preamble_marker !body_marker block_indent)*
                        <Preface>
-  
+
+  preamble          <- preamble_marker
+                       content:(!body_marker block_indent)*
+                       <Preamble>
+
   body              <- body_marker? content:hier_element* <Body>
 
-  # preface elements
-
-  preface_block     <- indent
-                         content:preface_block_element+
-                       dedent
-                       <Block>
-  
-  preface_block_element <- preface_block / longtitle / block_elements
-
-  longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
-
-  # ------------------------------------------------------------------------------ 
+  # ------------------------------------------------------------------------------
   # Generic hierarchical elements
   # ------------------------------------------------------------------------------ 
 
@@ -122,15 +112,22 @@ grammar akn
                      # this is for top-level containers that may/may not start with an
                      # indented block, but otherwise contain block and hier content
   hier_block_indent <- (indent content:hier_block_element+ dedent) / hier_block_element
-                       <HierBlockIndent>
 
-  # ------------------------------------------------------------------------------ 
-  # Generic blocks
+  # ------------------------------------------------------------------------------
+  # Generic containers
   # ------------------------------------------------------------------------------
 
   conclusions       <- conclusions_marker
                        content:block_element*
                        <Conclusions>
+
+  # ------------------------------------------------------------------------------ 
+  # Generic blocks
+  # ------------------------------------------------------------------------------
+
+                     # this is for top-level containers that may/may not start with an
+                     # indented block, but otherwise contain block content
+  block_indent      <- (indent content:block_element+ dedent) / block_element
 
   block             <- indent
                          content:block_element*
@@ -140,7 +137,7 @@ grammar akn
   block_element     <- block / block_elements
 
                      # these are general block elements that don't care about what block they're in (eg. preface vs body)
-  block_elements    <- block_list / table / line
+  block_elements    <- block_list / table / longtitle / line
 
   block_list        <- block_item+ <BlockList>
 
@@ -157,6 +154,8 @@ grammar akn
 
                      # TODO
   table             <- 'TABLE' eol <Table>
+
+  longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
 
                      # The line block is the only thing that can contain arbitrary text
                      # at the start of a line, where a dedent may occur. By guarding
@@ -197,6 +196,8 @@ grammar akn
   # ------------------------------------------------------------------------------ 
 
   preface_marker    <- 'PREFACE' eol
+
+  preamble_marker   <- 'PREAMBLE' eol
 
   body_marker       <- 'BODY' eol
 

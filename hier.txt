@@ -8,6 +8,10 @@ x
 
   y
 
+PREAMBLE
+
+  preamble
+
 BODY
 
 PART a num

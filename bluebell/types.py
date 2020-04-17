@@ -105,17 +105,33 @@ class HierarchicalStructure:
             'type': 'hierarchicalStructure',
             'body': self.body.to_dict(),
         }
+
         if self.preface.text:
             info['preface'] = self.preface.to_dict()
+
+        if self.preamble.text:
+            info['preamble'] = self.preamble.to_dict()
 
         return info
 
 
 class Preface:
     def to_dict(self):
+        # TODO: don't use hierblockindent, hoist
         return {
-            'type': 'preface',
-            'children': [c.preface_block_element.to_dict() for c in self.content]
+            'type': 'element',
+            'name': 'preface',
+            'children': HierBlockIndent.many_to_dict(c.block_indent for c in self.content),
+        }
+
+
+class Preamble:
+    def to_dict(self):
+        # TODO: don't use hierblockindent, hoist
+        return {
+            'type': 'element',
+            'name': 'preamble',
+            'children': HierBlockIndent.many_to_dict(c.block_indent for c in self.content),
         }
 
 
@@ -131,7 +147,7 @@ class Longtitle:
 class Body:
     def to_dict(self):
         return {
-            'type': 'hier',
+            'type': 'element',
             'name': 'body',
             'children': [c.to_dict() for c in self.content]
         }
