@@ -193,6 +193,7 @@ def to_xml(item, prefix=''):
 
 class Judgment:
     def to_xml(self, tree):
+        # TODO: empty ARGUMENTS, REMEDIES etc. should be excluded
         return E.akomaNtoso(
             E.judgment(
                 E.meta(),

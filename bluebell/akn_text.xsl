@@ -100,7 +100,8 @@
        ............................................................................... -->
 
   <!-- content containers -->
-  <xsl:template match="a:preface | a:preamble | a:conclusions">
+  <xsl:template match="a:arguments | a:background | a:conclusions | a:decision | a:introduction | a:motivation
+                       | a:preamble | a:preface | a:remedies">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:call-template name="indent">
@@ -131,8 +132,11 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <!-- TODO: all hier elements -->
-  <xsl:template match="a:part | a:chapter | a:subpart | a:paragraph | a:section">
+  <!-- hierarchical elements -->
+  <xsl:template match="a:alinea | a:article | a:book | a:chapter | a:clause | a:division | a:indent | a:level | a:list
+                       | a:paragraph | a:part | a:point | a:proviso | a:rule | a:section | a:subchapter | a:subclause
+                       | a:subdivision | a:sublist | a:subparagraph | a:subpart | a:subrule | a:subsection | a:subtitle
+                       | a:title | a:tome | a:transitional">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:call-template name="indent">
@@ -162,7 +166,7 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <!-- crossheadings -->
+  <!-- TODO: crossheadings -->
   <xsl:template match="a:hcontainer[@name='crossheading']">
     <xsl:text>CROSSHEADING </xsl:text>
     <xsl:apply-templates select="a:heading" />
@@ -191,6 +195,18 @@
     </xsl:call-template>
     <xsl:value-of select="a:num" />
     <xsl:text> </xsl:text>
+
+    <!-- if our first content node is not a p tage, force a new line.
+         this supports nested lists where an item has no text:
+
+         (a)
+
+           (i) some text
+    -->
+    <xsl:if test="./a:*[2][not(self::a:p)]">
+      <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:if>
+
     <xsl:apply-templates select="./*[not(self::a:num)]">
       <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
