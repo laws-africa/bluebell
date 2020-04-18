@@ -342,6 +342,10 @@ class Act(HierarchicalStructure):
     name = 'act'
 
 
+class Bill(HierarchicalStructure):
+    name = 'bill'
+
+
 class Judgment(DocumentRoot):
     children = ['header', 'judgement_body', 'conclusions']
     name = 'judgment'
@@ -354,3 +358,11 @@ class OpenStructure(DocumentRoot):
 
 class Statement(OpenStructure):
     name = 'statement'
+
+
+class Doc(OpenStructure):
+    name = 'doc'
+
+
+class DebateReport(OpenStructure):
+    name = 'debateReport'

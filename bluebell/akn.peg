@@ -29,6 +29,8 @@ grammar akn
 
   act               <- hierarchical_structure <Act>
 
+  bill              <- hierarchical_structure <Bill>
+
   hierarchical_structure <- indent
                               preface:preface?
                               preamble:preamble?
@@ -40,6 +42,10 @@ grammar akn
   # ------------------------------------------------------------------------------
   # Open structure (doc, statement, debateReport, etc.)
   # ------------------------------------------------------------------------------
+
+  debate_report     <- open_structure <DebateReport>
+
+  doc               <- open_structure <Doc>
 
   statement         <- open_structure <Statement>
 

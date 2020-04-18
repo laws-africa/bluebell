@@ -607,6 +607,19 @@ class Grammar(object):
         self._cache['act'][index0] = (address0, self._offset)
         return address0
 
+    def _read_bill(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['bill'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        address0 = self._read_hierarchical_structure()
+        cls0 = type(address0)
+        if cls0 != object:
+            address0.__class__ = type(cls0.__name__ + 'Bill', (cls0, self._types.Bill), {})
+        self._cache['bill'][index0] = (address0, self._offset)
+        return address0
+
     def _read_hierarchical_structure(self):
         address0, index0 = FAILURE, self._offset
         cached = self._cache['hierarchical_structure'].get(index0)
@@ -677,6 +690,32 @@ class Grammar(object):
         if cls0 != object:
             address0.__class__ = type(cls0.__name__ + 'HierarchicalStructure', (cls0, self._types.HierarchicalStructure), {})
         self._cache['hierarchical_structure'][index0] = (address0, self._offset)
+        return address0
+
+    def _read_debate_report(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['debate_report'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        address0 = self._read_open_structure()
+        cls0 = type(address0)
+        if cls0 != object:
+            address0.__class__ = type(cls0.__name__ + 'DebateReport', (cls0, self._types.DebateReport), {})
+        self._cache['debate_report'][index0] = (address0, self._offset)
+        return address0
+
+    def _read_doc(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['doc'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        address0 = self._read_open_structure()
+        cls0 = type(address0)
+        if cls0 != object:
+            address0.__class__ = type(cls0.__name__ + 'Doc', (cls0, self._types.Doc), {})
+        self._cache['doc'][index0] = (address0, self._offset)
         return address0
 
     def _read_statement(self):

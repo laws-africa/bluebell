@@ -1,5 +1,13 @@
 # Generic AKN parser
 
+Generic Akoma Ntoso 3 parser.
+
+Supports the following Akoma Ntoso document types:
+
+* act, bill (hierarchicalStructure)
+* debateReport, doc, statement (openStructure)
+* judment (judgmentStructure)
+
 ## Usage
 
 ### From Python
