@@ -1,0 +1,20 @@
+PREFACE
+
+  preface
+
+PREAMBLE
+
+  preamble
+
+BODY
+
+  the body of the statement
+
+  (a) item a
+
+    (i) item a-i
+
+CONCLUSIONS
+
+something
+

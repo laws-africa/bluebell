@@ -87,13 +87,7 @@
        ............................................................................... -->
 
   <!-- TODO all document types -->
-  <xsl:template match="a:act">
-    <xsl:apply-templates select="a:coverPage" />
-    <xsl:apply-templates select="a:preface" />
-    <xsl:apply-templates select="a:preamble" />
-    <xsl:apply-templates select="a:body" />
-    <xsl:apply-templates select="a:conclusions" />
-  </xsl:template>
+  <xsl:template match="a:meta" />
 
   <!-- ...............................................................................
        Containers and hierarchical elements
@@ -118,7 +112,7 @@
   </xsl:template>
 
   <!-- hier content containers TODO -->
-  <xsl:template match="a:body">
+  <xsl:template match="a:body | a:mainBody">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:call-template name="indent">

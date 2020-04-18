@@ -75,15 +75,20 @@ grammar akn
                             dedent
                             <HierarchicalStructure>
 
-  preface           <- preface_marker
-                       content:(!preamble_marker !body_marker block_indent)*
-                       <Preface>
+  # ------------------------------------------------------------------------------
+  # Open structure (doc, statement, debateReport, etc.)
+  # ------------------------------------------------------------------------------
 
-  preamble          <- preamble_marker
-                       content:(!body_marker block_indent)*
-                       <Preamble>
+  statement         <- openstructure <Statement>
 
-  body              <- body_marker? content:(!conclusions_marker hier_element)* <Body>
+  # TODO: attachments, components
+  openstructure     <- indent
+                         preface:preface?
+                         preamble:preamble?
+                         main_body
+                         conclusions:conclusions?
+                       dedent
+                       <OpenStructure>
 
   # ------------------------------------------------------------------------------
   # Generic hierarchical elements
@@ -119,6 +124,24 @@ grammar akn
   # ------------------------------------------------------------------------------
   # Generic containers
   # ------------------------------------------------------------------------------
+
+  preface           <- preface_marker
+                       content:(!preamble_marker !body_marker block_indent)*
+                       <Preface>
+
+  preamble          <- preamble_marker
+                       content:(!body_marker block_indent)*
+                       <Preamble>
+
+                     # body that MUST have a hier element
+  body              <- body_marker?
+                       content:(!conclusions_marker hier_element)*
+                       <Body>
+
+                     # body with mixed block and hier elements
+  main_body         <- body_marker?
+                       content:(!conclusions_marker hier_block_indent)*
+                       <MainBody>
 
   conclusions       <- conclusions_marker
                        content:block_indent*

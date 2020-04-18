@@ -1,26 +1,35 @@
 # ------------------------------------------------------------------------------
+# Top-level documents
+# ------------------------------------------------------------------------------
+
+
+class DocumentRoot:
+    name = None
+    xml = None
+    child_tags = []
+
+    def to_dict(self):
+        kids = []
+        for tag in self.child_tags:
+            node = getattr(self, tag, None)
+            if node and node.text:
+                kids.append(node.to_dict())
+
+        return {
+            'type': 'element',
+            'name': self.name,
+            'children': kids,
+        }
+
+# ------------------------------------------------------------------------------
 # Judgement
 # ------------------------------------------------------------------------------
 
 
-class Judgment:
+class Judgment(DocumentRoot):
+    child_tags = ['header', 'judgement_body', 'conclusions']
     xml = 'Judgment'
-
-    def to_dict(self):
-        kids = [{
-            'type': 'element',
-            'name': 'judgmentBody',
-            'children': [c.to_dict() for c in self.judgment_body if c.text],
-        }]
-
-        if self.conclusions.text:
-            kids.append(self.conclusions.to_dict())
-
-        return {
-            'type': 'element',
-            'name': 'judgment',
-            'children': kids,
-        }
+    name = 'judgment'
 
 
 class Introduction:
@@ -90,27 +99,34 @@ class Conclusions:
 # ------------------------------------------------------------------------------
 
 
-class Act:
+class HierarchicalStructure(DocumentRoot):
+    child_tags = ['preface', 'preamble', 'body', 'conclusions']
+    name = 'hierarchicalStructure'
+
+
+class Act(HierarchicalStructure):
+    name = 'act'
     xml = 'Act'
 
 
-class HierarchicalStructure:
-    def to_dict(self):
-        info = {
-            'type': 'hierarchicalStructure',
-            'body': self.body.to_dict(),
-        }
+# ------------------------------------------------------------------------------
+# Open structure (doc, statement, etc.)
+# ------------------------------------------------------------------------------
 
-        if self.preface.text:
-            info['preface'] = self.preface.to_dict()
 
-        if self.preamble.text:
-            info['preamble'] = self.preamble.to_dict()
+class OpenStructure(DocumentRoot):
+    child_tags = ['preface', 'preamble', 'main_body', 'conclusions']
+    name = 'openStructure'
 
-        if self.conclusions.text:
-            info['conclusions'] = self.conclusions.to_dict()
 
-        return info
+class Statement(OpenStructure):
+    name = 'statement'
+    xml = 'Statement'
+
+
+# ------------------------------------------------------------------------------
+# Generic elements
+# ------------------------------------------------------------------------------
 
 
 class Preface:
@@ -160,6 +176,15 @@ class Body:
             'type': 'element',
             'name': 'body',
             'children': [c.elements[1].to_dict() for c in self.content]
+        }
+
+
+class MainBody:
+    def to_dict(self):
+        return {
+            'type': 'element',
+            'name': 'mainBody',
+            'children': many_to_dict(c.hier_block_indent for c in self.content),
         }
 
 

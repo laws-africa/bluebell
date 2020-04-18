@@ -9,7 +9,7 @@ E = ElementMaker(nsmap={None: 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'
 class IdGenerator:
     counters = {}
     num_strip_re = re.compile('[ .()[\]]')
-    num_exempt = ['body', 'preface', 'preamble', 'conclusions']
+    num_exempt = ['body', 'preface', 'preamble', 'conclusions', 'mainBody']
 
     aliases = {
         'alinea': 'al',
@@ -202,24 +202,22 @@ class Judgment:
         )
 
 
+class Statement:
+    def to_xml(self, tree):
+        # TODO: empty elements should be excluded
+        return E.akomaNtoso(
+            E.statement(
+                E.meta(),
+                *to_xml(tree),
+            ),
+        )
+
+
 class Act:
     def to_xml(self, tree):
-        items = []
-
-        if 'preface' in tree:
-            items.append(to_xml(tree['preface']))
-
-        if 'preamble' in tree:
-            items.append(to_xml(tree['preamble']))
-
-        items.append(to_xml(tree['body']))
-
-        if 'conclusions' in tree:
-            items.append(to_xml(tree['conclusions']))
-
         return E.akomaNtoso(
             E.act(
                 E.meta(),
-                *items,
+                *to_xml(tree),
             ),
         )
