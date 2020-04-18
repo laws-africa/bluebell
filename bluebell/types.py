@@ -316,7 +316,7 @@ class Image:
 
 class DocumentRoot:
     name = None
-    xml = None
+    xml = 'Document'
     children = []
 
     def to_dict(self):
@@ -340,13 +340,11 @@ class HierarchicalStructure(DocumentRoot):
 
 class Act(HierarchicalStructure):
     name = 'act'
-    xml = 'Act'
 
 
 class Judgment(DocumentRoot):
     children = ['header', 'judgement_body', 'conclusions']
     name = 'judgment'
-    xml = 'Judgment'
 
 
 class OpenStructure(DocumentRoot):
@@ -356,4 +354,3 @@ class OpenStructure(DocumentRoot):
 
 class Statement(OpenStructure):
     name = 'statement'
-    xml = 'Statement'

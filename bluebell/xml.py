@@ -2,6 +2,7 @@ import re
 from itertools import groupby
 
 from lxml.builder import ElementMaker
+import lxml.etree as ET
 
 AKN3_NAMESPACE = 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'
 
@@ -10,8 +11,15 @@ E = ElementMaker(nsmap={None: AKN3_NAMESPACE})
 
 class IdGenerator:
     counters = {}
-    num_strip_re = re.compile('[ .()[\]]')
-    num_exempt = ['body', 'preface', 'preamble', 'conclusions', 'mainBody']
+    num_strip_re = re.compile(r'[ .()[\]]')
+
+    id_exempt = set("act amendment amendmentList bill debate debateReport doc documentCollection judgment"
+                    " officialGazette portion statement body mainBody".split())
+    """ Top-level document types that never have ids. """
+
+    id_unnecessary = set("arguments background conclusions decision header introduction motivation preamble preface"
+                         " remedies".split())
+    """ Elements for which an id is optional. """
 
     aliases = {
         'alinea': 'al',
@@ -32,8 +40,6 @@ class IdGenerator:
         'documentRef': 'dref',
         'eventRef': 'eref',
         'judgmentBody': 'body',
-        'intro': 'intro',
-        'list': 'list',
         'listIntroduction': 'intro',
         'listWrapUp': 'wrap',
         'mainBody': 'body',
@@ -57,15 +63,27 @@ class IdGenerator:
         sub[name] = sub.get(name, 0) + 1
         return sub[name]
 
-    def make(self, prefix, item=None, name=None):
-        # TODO: should some tags (like body, etc.) have ids?
+    def is_exempt(self, prefix, item):
+        """ Is this element completely exempt from having an eId?
+        """
+        return item['name'] in self.id_exempt
+
+    def is_unnecessary(self, prefix, item):
+        """ Certain top-level elements only need ids if they're embedded and therefore have a prefix.
+        """
+        return item['name'] in self.id_unnecessary and not prefix
+
+    def make(self, prefix, item):
+        if self.is_exempt(prefix, item):
+            return None
+
         item = item or {}
         if prefix:
             eid = prefix + '__'
         else:
             eid = ''
 
-        name = name or item['name']
+        name = item['name']
         eid = eid + self.aliases.get(name, name)
 
         if self.needs_num(name):
@@ -83,7 +101,7 @@ class IdGenerator:
         self.counters.clear()
 
     def needs_num(self, name):
-        return name not in self.num_exempt
+        return name not in self.id_unnecessary
 
     def clean_num(self, num):
         return self.num_strip_re.sub('', num)
@@ -189,28 +207,19 @@ def to_xml(item, prefix=''):
         return item['value']
 
     if item['type'] == 'element':
+        attrs = {}
         eid = ids.make(prefix, item)
-        return E(item['name'], eId=eid, *kids_to_xml(item, prefix=eid))
+        if eid and not ids.is_unnecessary(prefix, item):
+            attrs['eId'] = eid
+        return E(item['name'], *kids_to_xml(item, prefix=eid), **attrs)
 
 
 class Document:
     name = None
 
-    def to_xml(self, tree):
+    def make_xml(self, tree):
         # TODO: empty ARGUMENTS, REMEDIES etc. should be excluded
-        # TODO: besides meta, everything is in the tree, we don't need to repeat it
-        return E.akomaNtoso(
-            E(self.name, E.meta(), *to_xml(tree)),
-        )
+        return E.akomaNtoso(to_xml(tree))
 
-
-class Act(Document):
-    name = 'act'
-
-
-class Judgment(Document):
-    name = 'judgment'
-
-
-class Statement(Document):
-    name = 'statement'
+    def to_xml(self, tree):
+        return ET.fromstring(ET.tostring(self.make_xml(tree)))
