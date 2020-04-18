@@ -109,31 +109,6 @@ class IdGenerator:
 
 ids = IdGenerator()
 
-# TODO: block lists
-# TODO: nested block lists
-# TODO: schedules and annexures - how to "push" to end?
-# TODO: tables
-
-
-def hoist_blocks(children):
-    """ Block elements can use this to pull grandchildren of anonymous block
-        elements into their child list.
-
-        So this:
-            block -> block -> block
-        becomes:
-            block -> block
-    """
-    kids = []
-
-    for kid in children:
-        if kid['type'] == 'block' and kid['name'] == 'block':
-            kids.extend(c for c in kid.get('children', []))
-        else:
-            kids.append(kid)
-
-    return kids
-
 
 def kids_to_xml(parent=None, kids=None, prefix=None):
     if kids is None:
@@ -215,11 +190,17 @@ def to_xml(item, prefix=''):
 
 
 class Document:
-    name = None
-
     def make_xml(self, tree):
         # TODO: empty ARGUMENTS, REMEDIES etc. should be excluded
         return E.akomaNtoso(to_xml(tree))
 
+    def meta(self):
+        return ET.fromstring(ET.tostring(E.meta()))
+
     def to_xml(self, tree):
-        return ET.fromstring(ET.tostring(self.make_xml(tree)))
+        tree = ET.fromstring(ET.tostring(self.make_xml(tree)))
+
+        # insert empty meta element as first child of document element
+        list(tree)[0].insert(0, self.meta())
+
+        return tree
