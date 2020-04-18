@@ -1,12 +1,25 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:a="http://www.akomantoso.org/2.0"
+  xmlns:a="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
   exclude-result-prefixes="a">
 
   <xsl:output method="text" indent="no" omit-xml-declaration="yes" />
+  <xsl:param name="indentStr" select="'..'"/>
 
   <!-- strip whitespace from most elements, but preserve whitespace in inline elements that can contain text -->
   <xsl:strip-space elements="*"/>
-  <xsl:preserve-space elements="a:a a:affectedDocument a:b a:block a:caption a:change a:concept a:courtType a:date a:def a:del a:docCommittee a:docDate a:docIntroducer a:docJurisdiction a:docNumber a:docProponent a:docPurpose a:docStage a:docStatus a:docTitle a:docType a:docketNumber a:entity a:event a:extractText a:fillIn a:from a:heading a:i a:inline a:ins a:judge a:lawyer a:legislature a:li a:listConclusion a:listIntroduction a:location a:mmod a:mod a:mref a:narrative a:neutralCitation a:num a:object a:omissis a:opinion a:organization a:outcome a:p a:party a:person a:placeholder a:process a:quantity a:quotedText a:recordedTime a:ref a:relatedDocument a:remark a:rmod a:role a:rref a:scene a:session a:shortTitle a:signature a:span a:sub a:subheading a:summary a:sup a:term a:tocItem a:u a:vote"/>
+  <xsl:preserve-space elements="a:a a:affectedDocument a:b a:block a:caption a:change a:concept a:courtType a:date a:def
+                                a:del a:docCommittee a:docDate a:docIntroducer a:docJurisdiction a:docNumber a:docProponent
+                                a:docPurpose a:docStage a:docStatus a:docTitle a:docType a:docketNumber a:entity a:event
+                                a:extractText a:fillIn a:from a:heading a:i a:inline a:ins a:judge a:lawyer a:legislature
+                                a:li a:listConclusion a:listIntroduction a:location a:mmod a:mod a:mref a:narrative
+                                a:neutralCitation a:num a:object a:omissis a:opinion a:organization a:outcome a:p
+                                a:party a:person a:placeholder a:process a:quantity a:quotedText a:recordedTime a:ref
+                                a:relatedDocument a:remark a:rmod a:role a:rref a:scene a:session a:shortTitle a:signature
+                                a:span a:sub a:subheading a:summary a:sup a:term a:tocItem a:u a:vote"/>
+
+  <!-- ...............................................................................
+       Functions / helper templates
+       ............................................................................... -->
 
   <!-- adds a backslash to the start of the value param, if necessary -->
   <xsl:template name="escape">
@@ -37,6 +50,14 @@
     <xsl:value-of select="$value"/>
   </xsl:template>
 
+  <!-- convert a string to uppercase -->
+  <xsl:variable name="lowercase" select="'abcdefghijklmnopqrstuvwxyz'" />
+  <xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
+  <xsl:template name="uppercase">
+    <xsl:param name="s"/>
+    <xsl:value-of select="translate($s, $lowercase, $uppercase)" />
+  </xsl:template>
+
   <!-- repeats a character a certain number of times -->
   <xsl:template name="repeat">
     <xsl:param name="str" />
@@ -56,12 +77,16 @@
     <xsl:param name="level" />
 
     <xsl:call-template name="repeat">
-      <xsl:with-param name="str" select="'    '" />
+      <xsl:with-param name="str" select="$indentStr" />
       <xsl:with-param name="count" select="$level" />
     </xsl:call-template>
   </xsl:template>
 
+  <!-- ...............................................................................
+       Main structures
+       ............................................................................... -->
 
+  <!-- TODO all document types -->
   <xsl:template match="a:act">
     <xsl:apply-templates select="a:coverPage" />
     <xsl:apply-templates select="a:preface" />
@@ -70,97 +95,71 @@
     <xsl:apply-templates select="a:conclusions" />
   </xsl:template>
 
-  <xsl:template match="a:preface">
-    <xsl:text>PREFACE</xsl:text>
+  <!-- ...............................................................................
+       Containers and hierarchical elements
+       ............................................................................... -->
+
+  <!-- content containers -->
+  <xsl:template match="a:preface | a:preamble | a:conclusions">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:call-template name="uppercase">
+      <xsl:with-param name="s" select="local-name()"/>
+    </xsl:call-template>
     <xsl:text>&#10;&#10;</xsl:text>
 
-    <xsl:apply-templates />
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="a:preamble">
-    <xsl:text>PREAMBLE</xsl:text>
-    <xsl:text>&#10;&#10;</xsl:text>
-
-    <xsl:apply-templates />
-  </xsl:template>
-
+  <!-- hier content containers TODO -->
   <xsl:template match="a:body">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
     <xsl:text>BODY</xsl:text>
     <xsl:text>&#10;&#10;</xsl:text>
 
-    <xsl:apply-templates />
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="a:part">
-    <xsl:text>Part </xsl:text>
-    <xsl:value-of select="a:num" />
-    <xsl:text> - </xsl:text>
-    <xsl:apply-templates select="a:heading" />
-    <xsl:text>&#10;&#10;</xsl:text>
+  <!-- TODO: all hier elements -->
+  <xsl:template match="a:part | a:chapter | a:subpart | a:paragraph | a:section">
+    <xsl:param name="indent">0</xsl:param>
 
-    <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading)]" />
-  </xsl:template>
-
-  <xsl:template match="a:subpart">
-    <xsl:text>SUBPART </xsl:text>
-    <xsl:value-of select="a:num" />
-    <xsl:text> - </xsl:text>
-    <xsl:apply-templates select="a:heading" />
-    <xsl:text>&#10;&#10;</xsl:text>
-
-    <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading)]" />
-  </xsl:template>
-
-  <xsl:template match="a:chapter">
-    <xsl:text>Chapter </xsl:text>
-    <xsl:value-of select="a:num" />
-    <xsl:text> - </xsl:text>
-    <xsl:apply-templates select="a:heading" />
-    <xsl:text>&#10;&#10;</xsl:text>
-
-    <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading)]" />
-  </xsl:template>
-
-  <xsl:template match="a:article">
-    <xsl:text>Article </xsl:text>
-    <xsl:value-of select="a:num" />
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:call-template name="uppercase">
+      <xsl:with-param name="s" select="local-name()"/>
+    </xsl:call-template>
+    <xsl:if test="a:num">
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="a:num" />
+    </xsl:if>
     <xsl:if test="a:heading">
       <xsl:text> - </xsl:text>
       <xsl:apply-templates select="a:heading" />
     </xsl:if>
-    <xsl:text>&#10;&#10;</xsl:text>
-    <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading)]" />
-  </xsl:template>
-
-  <xsl:template match="a:paragraph">
-    <xsl:if test="a:num != ''">
-      <!-- paragraphs in articles that look like (a) don't need to be prefixed with PARA -->
-      <xsl:if test="not(parent::a:article) or not(starts-with(a:num, '(')) or substring(a:num, string-length(a:num)) != ')'">
-        <xsl:text>PARA </xsl:text>
-      </xsl:if>
-      <xsl:value-of select="a:num" />
-      <xsl:text> </xsl:text>
+    <xsl:if test="a:subheading">
+      <xsl:text>&#10;</xsl:text>
+      <xsl:apply-templates select="./a:subheading">
+        <xsl:with-param name="indent" select="$indent + 1" />
+      </xsl:apply-templates>
     </xsl:if>
-
-    <xsl:apply-templates select="./*[not(self::a:num)]" />
-  </xsl:template>
-
-  <xsl:template match="a:section">
-    <xsl:value-of select="a:num" />
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="a:heading" />
     <xsl:text>&#10;&#10;</xsl:text>
 
-    <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading)]" />
-  </xsl:template>
-
-  <xsl:template match="a:subsection">
-    <xsl:if test="a:num != ''">
-      <xsl:value-of select="a:num" />
-      <xsl:text> </xsl:text>
-    </xsl:if>
-
-    <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading)]" />
+    <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading) and not(self::a:subheading)]">
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
   </xsl:template>
 
   <!-- crossheadings -->
@@ -170,28 +169,15 @@
     <xsl:text>&#10;&#10;</xsl:text>
   </xsl:template>
 
-  <!-- longtitle -->
-  <xsl:template match="a:longTitle">
-    <xsl:text>LONGTITLE </xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>&#10;&#10;</xsl:text>
-  </xsl:template>
-
-  <!-- p tags must end with a blank line -->
-  <xsl:template match="a:p">
-    <xsl:apply-templates/>
-    <xsl:text>&#10;&#10;</xsl:text>
-  </xsl:template>
-
+  <!-- ...............................................................................
+       Block elements
+       ............................................................................... -->
 
   <!-- indented blocklists -->
   <xsl:template match="a:blockList">
-    <xsl:param name="indent">1</xsl:param>
+    <xsl:param name="indent">0</xsl:param>
 
-    <xsl:if test="not(a:listIntroduction)">
-      <xsl:text>&#10;&#10;</xsl:text>
-    </xsl:if>
-
+    <!-- TODO: handle listintroduction and listwrapup -->
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
@@ -203,11 +189,10 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-
     <xsl:value-of select="a:num" />
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="./*[not(self::a:num)]">
-      <xsl:with-param name="indent" select="$indent+1" />
+      <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
   </xsl:template>
 
@@ -237,38 +222,12 @@
     <xsl:text>&#10;&#10;</xsl:text>
   </xsl:template>
 
-  <xsl:template match="a:item/a:p | a:td/a:p | a:th/a:p">
-    <xsl:param name="indent">0</xsl:param>
-
-    <!-- don't indent the first p tag -->
-    <xsl:if test="position() &gt; 1">
-      <xsl:call-template name="indent">
-        <xsl:with-param name="level" select="$indent" />
-      </xsl:call-template>
-    </xsl:if>
-
-    <xsl:apply-templates>
-      <xsl:with-param name="indent" select="$indent" />
-    </xsl:apply-templates>
-
-    <xsl:if test="not(parent::a:th) and not(parent::a:td)">
-      <xsl:text>&#10;&#10;</xsl:text>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template match="a:list">
     <xsl:if test="a:intro != ''">
       <xsl:apply-templates select="a:intro" />
       <xsl:text>&#10;&#10;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="./*[not(self::a:intro)]" />
-  </xsl:template>
-
-  <!-- first text nodes of these elems must be escaped if they have special chars -->
-  <xsl:template match="a:p[not(ancestor::a:table)]/text()[not(preceding-sibling::*)] | a:listIntroduction/text()[not(preceding-sibling::*)] | a:intro/text()[not(preceding-sibling::*)]">
-    <xsl:call-template name="escape">
-      <xsl:with-param name="value" select="." />
-    </xsl:call-template>
   </xsl:template>
 
 
@@ -391,6 +350,66 @@
 
   <!-- END tables -->
 
+  <!-- ...............................................................................
+       Content elements
+       ............................................................................... -->
+
+  <!-- p tags must end with a blank line -->
+  <xsl:template match="a:p">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:apply-templates/>
+    <xsl:text>&#10;&#10;</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="a:item/a:p | a:td/a:p | a:th/a:p">
+    <xsl:param name="indent">0</xsl:param>
+
+    <!-- don't indent the first p tag -->
+    <xsl:if test="position() &gt; 1">
+      <xsl:call-template name="indent">
+        <xsl:with-param name="level" select="$indent" />
+      </xsl:call-template>
+    </xsl:if>
+
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
+
+    <xsl:if test="not(parent::a:th) and not(parent::a:td)">
+      <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="a:subheading">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:text>SUBHEADING </xsl:text>
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <!-- longTitle -->
+  <xsl:template match="a:longTitle">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:text>LONGTITLE </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>&#10;&#10;</xsl:text>
+  </xsl:template>
+
+  <!-- ...............................................................................
+       Inline and marker elements
+       ............................................................................... -->
+
   <xsl:template match="a:remark">
     <xsl:text>[</xsl:text>
     <xsl:apply-templates />
@@ -435,10 +454,29 @@
     </xsl:call-template>
   </xsl:template>
 
+  <!-- ...............................................................................
+       Text
+       ............................................................................... -->
 
-  <!-- for most nodes, just dump their text content -->
+  <!-- first text nodes of these elems must be escaped if they have special chars -->
+  <xsl:template match="a:p[not(ancestor::a:table)]/text()[not(preceding-sibling::*)] | a:listIntroduction/text()[not(preceding-sibling::*)] | a:intro/text()[not(preceding-sibling::*)]">
+    <xsl:call-template name="escape">
+      <xsl:with-param name="value" select="." />
+    </xsl:call-template>
+  </xsl:template>
+
+  <!-- ...............................................................................
+       Catch-all
+       ............................................................................... -->
+
+  <!-- for most nodes, just dump their text content and pass through the indentation level
+       to children -->
   <xsl:template match="*">
-    <xsl:apply-templates />
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent"/>
+    </xsl:apply-templates>
   </xsl:template>
 
 </xsl:stylesheet>
