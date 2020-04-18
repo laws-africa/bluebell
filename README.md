@@ -1,5 +1,35 @@
 # Generic AKN parser
 
+## Usage
+
+### From Python
+
+Use the parser from python as follows:
+
+```python
+from lxml import etree
+import json
+from bluebell.parser import parse, parse_tree_to_xml
+
+tree = parse(text, 'act')
+
+# transforms to json
+print(json.dumps(tree))
+
+# transforms to xml
+xml = parse_tree_to_xml(tree)
+print(etree.tostring(xml, pretty_print=True, encoding='unicode'))
+```
+
+### Commandline
+
+In general, see `python parse.py --help`
+
+Parse an `act` in `act.txt` and output pretty XML: `python parse.py act act.txt --pretty`
+
+Use `--json` for intermediat json output.
+
+
 ## Development
 
 1. Install customised Canopy as per below
