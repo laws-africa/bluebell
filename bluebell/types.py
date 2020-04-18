@@ -1,89 +1,46 @@
+def many_to_dict(items):
+    kids = []
+    for item in items:
+        if hasattr(item, 'to_dict'):
+            kids.append(item.to_dict())
+        else:
+            kids.extend(c.to_dict() for c in item.content)
+    return kids
+
+
 # ------------------------------------------------------------------------------
-# Top-level documents
+# Hier elements and containers
 # ------------------------------------------------------------------------------
 
 
-class DocumentRoot:
+class HierBlockIndentElement:
     name = None
-    xml = None
-    child_tags = []
 
     def to_dict(self):
-        kids = []
-        for tag in self.child_tags:
-            node = getattr(self, tag, None)
-            if node and node.text:
-                kids.append(node.to_dict())
-
         return {
             'type': 'element',
             'name': self.name,
-            'children': kids,
-        }
-
-# ------------------------------------------------------------------------------
-# Judgement
-# ------------------------------------------------------------------------------
-
-
-class Judgment(DocumentRoot):
-    child_tags = ['header', 'judgement_body', 'conclusions']
-    xml = 'Judgment'
-    name = 'judgment'
-
-
-class Introduction:
-    def to_dict(self):
-        return {
-            'type': 'element',
-            'name': 'introduction',
             'children': many_to_dict(c.hier_block_indent for c in self.content),
         }
 
 
-class Background:
+class BlockIndentElement:
+    name = None
+
     def to_dict(self):
         return {
             'type': 'element',
-            'name': 'background',
-            'children': many_to_dict(c.hier_block_indent for c in self.content),
+            'name': self.name,
+            'children': many_to_dict(c.block_indent for c in self.content),
         }
 
 
-class Arguments:
-    def to_dict(self):
-        return {
-            'type': 'element',
-            'name': 'arguments',
-            'children': many_to_dict(c.hier_block_indent for c in self.content),
-        }
+class Preface(BlockIndentElement):
+    name = 'preface'
 
 
-class Remedies:
-    def to_dict(self):
-        return {
-            'type': 'element',
-            'name': 'remedies',
-            'children': many_to_dict(c.hier_block_indent for c in self.content),
-        }
-
-
-class Motivation:
-    def to_dict(self):
-        return {
-            'type': 'element',
-            'name': 'motivation',
-            'children': many_to_dict(c.hier_block_indent for c in self.content),
-        }
-
-
-class Decision:
-    def to_dict(self):
-        return {
-            'type': 'element',
-            'name': 'decision',
-            'children': many_to_dict(c.hier_block_indent for c in self.content),
-        }
+class Preamble(BlockIndentElement):
+    name = 'preamble'
 
 
 class Conclusions:
@@ -92,58 +49,6 @@ class Conclusions:
             'type': 'element',
             'name': 'conclusions',
             'children': many_to_dict(self.content),
-        }
-
-# ------------------------------------------------------------------------------
-# Hierarchical structures (act, bill)
-# ------------------------------------------------------------------------------
-
-
-class HierarchicalStructure(DocumentRoot):
-    child_tags = ['preface', 'preamble', 'body', 'conclusions']
-    name = 'hierarchicalStructure'
-
-
-class Act(HierarchicalStructure):
-    name = 'act'
-    xml = 'Act'
-
-
-# ------------------------------------------------------------------------------
-# Open structure (doc, statement, etc.)
-# ------------------------------------------------------------------------------
-
-
-class OpenStructure(DocumentRoot):
-    child_tags = ['preface', 'preamble', 'main_body', 'conclusions']
-    name = 'openStructure'
-
-
-class Statement(OpenStructure):
-    name = 'statement'
-    xml = 'Statement'
-
-
-# ------------------------------------------------------------------------------
-# Generic elements
-# ------------------------------------------------------------------------------
-
-
-class Preface:
-    def to_dict(self):
-        return {
-            'type': 'element',
-            'name': 'preface',
-            'children': many_to_dict(c.block_indent for c in self.content),
-        }
-
-
-class Preamble:
-    def to_dict(self):
-        return {
-            'type': 'element',
-            'name': 'preamble',
-            'children': many_to_dict(c.block_indent for c in self.content),
         }
 
 
@@ -179,13 +84,8 @@ class Body:
         }
 
 
-class MainBody:
-    def to_dict(self):
-        return {
-            'type': 'element',
-            'name': 'mainBody',
-            'children': many_to_dict(c.hier_block_indent for c in self.content),
-        }
+class MainBody(HierBlockIndentElement):
+    name = 'mainBody'
 
 
 class HierElement:
@@ -217,9 +117,33 @@ class HierElementHeading:
             return Inline.many_to_dict(x for x in self.heading.content)
 
 
-class Heading:
-    def to_dict(self):
-        return Inline.many_to_dict(k for k in self.content)
+class Introduction(HierBlockIndentElement):
+    name = 'introduction'
+
+
+class Background(HierBlockIndentElement):
+    name = 'background'
+
+
+class Arguments(HierBlockIndentElement):
+    name = 'arguments'
+
+
+class Remedies(HierBlockIndentElement):
+    name = 'remedies'
+
+
+class Motivation(HierBlockIndentElement):
+    name = 'motivation'
+
+
+class Decision(HierBlockIndentElement):
+    name = 'decision'
+
+
+# ------------------------------------------------------------------------------
+# Block elements
+# ------------------------------------------------------------------------------
 
 
 class Block:
@@ -276,6 +200,16 @@ class Table:
         }
 
 
+# ------------------------------------------------------------------------------
+# Content elements
+# ------------------------------------------------------------------------------
+
+
+class Heading:
+    def to_dict(self):
+        return Inline.many_to_dict(k for k in self.content)
+
+
 # TODO: document content and inline types
 class Line:
     def to_dict(self):
@@ -286,63 +220,21 @@ class Line:
         }
 
 
-class Ref:
-    def to_dict(self):
-        return {
-            'type': 'inline',
-            'name': 'ref',
-            'attribs': {
-                'href': self.href.text,
-            },
-            'children': [{
-                'type': 'text',
-                'value': self.content.text,
-            }],
-        }
-
-
-class Remark:
-    def to_dict(self):
-        return {
-            'type': 'inline',
-            'name': 'remark',
-            'attribs': {'status': 'editorial'},
-            'children': Inline.many_to_dict(x.inline for x in self.content.elements),
-        }
-
-
-class Image:
-    def to_dict(self):
-        attribs = {'src': self.href.text}
-        if self.content.text:
-            attribs['alt'] = self.content.text
-
-        return {
-            'type': 'marker',
-            'name': 'img',
-            'attribs': attribs,
-        }
-
-
-class Bold:
-    def to_dict(self):
-        return {
-            'type': 'inline',
-            'name': 'b',
-            'children': Inline.many_to_dict(x.inline for x in self.content.elements),
-        }
-
-
-class Italics:
-    def to_dict(self):
-        return {
-            'type': 'inline',
-            'name': 'i',
-            'children': Inline.many_to_dict(x.inline for x in self.content.elements),
-        }
+# ------------------------------------------------------------------------------
+# Inline elements
+# ------------------------------------------------------------------------------
 
 
 class Inline:
+    name = None
+
+    def to_dict(self):
+        return {
+            'type': 'inline',
+            'name': self.name,
+            'children': Inline.many_to_dict(x.inline for x in self.content.elements),
+        }
+
     @classmethod
     def many_to_dict(cls, items):
         """ Convert adjacent inline items, merging consecutive single characters.
@@ -372,13 +264,96 @@ class Inline:
         return merged
 
 
-def many_to_dict(items):
-    kids = []
-    for item in items:
-        if hasattr(item, 'to_dict'):
-            kids.append(item.to_dict())
-        else:
-            kids.extend(c.to_dict() for c in item.content)
-    return kids
+class Bold(Inline):
+    name = 'b'
 
 
+class Italics(Inline):
+    name = 'i'
+
+
+class Remark(Inline):
+    name = 'remark'
+
+    def to_dict(self):
+        d = super().to_dict()
+        d['attribs'] = {'status': 'editorial'}
+        return d
+
+
+class Ref:
+    def to_dict(self):
+        return {
+            'type': 'inline',
+            'name': 'ref',
+            'attribs': {
+                'href': self.href.text,
+            },
+            'children': [{
+                'type': 'text',
+                'value': self.content.text,
+            }],
+        }
+
+
+class Image:
+    def to_dict(self):
+        attribs = {'src': self.href.text}
+        if self.content.text:
+            attribs['alt'] = self.content.text
+
+        return {
+            'type': 'marker',
+            'name': 'img',
+            'attribs': attribs,
+        }
+
+
+# ------------------------------------------------------------------------------
+# Top-level documents
+# ------------------------------------------------------------------------------
+
+
+class DocumentRoot:
+    name = None
+    xml = None
+    children = []
+
+    def to_dict(self):
+        kids = []
+        for tag in self.children:
+            node = getattr(self, tag, None)
+            if node and node.text:
+                kids.append(node.to_dict())
+
+        return {
+            'type': 'element',
+            'name': self.name,
+            'children': kids,
+        }
+
+
+class HierarchicalStructure(DocumentRoot):
+    children = ['preface', 'preamble', 'body', 'conclusions']
+    name = 'hierarchicalStructure'
+
+
+class Act(HierarchicalStructure):
+    name = 'act'
+    xml = 'Act'
+
+
+class Judgment(DocumentRoot):
+    children = ['header', 'judgement_body', 'conclusions']
+    name = 'judgment'
+    xml = 'Judgment'
+
+
+class OpenStructure(DocumentRoot):
+    children = ['preface', 'preamble', 'main_body', 'conclusions']
+    name = 'openStructure'
+
+
+class Statement(OpenStructure):
+    name = 'statement'
+    xml = 'Statement'

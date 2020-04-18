@@ -3,7 +3,9 @@ from itertools import groupby
 
 from lxml.builder import ElementMaker
 
-E = ElementMaker(nsmap={None: 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'})
+AKN3_NAMESPACE = 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'
+
+E = ElementMaker(nsmap={None: AKN3_NAMESPACE})
 
 
 class IdGenerator:
@@ -191,33 +193,24 @@ def to_xml(item, prefix=''):
         return E(item['name'], eId=eid, *kids_to_xml(item, prefix=eid))
 
 
-class Judgment:
+class Document:
+    name = None
+
     def to_xml(self, tree):
         # TODO: empty ARGUMENTS, REMEDIES etc. should be excluded
+        # TODO: besides meta, everything is in the tree, we don't need to repeat it
         return E.akomaNtoso(
-            E.judgment(
-                E.meta(),
-                *to_xml(tree),
-            ),
+            E(self.name, E.meta(), *to_xml(tree)),
         )
 
 
-class Statement:
-    def to_xml(self, tree):
-        # TODO: empty elements should be excluded
-        return E.akomaNtoso(
-            E.statement(
-                E.meta(),
-                *to_xml(tree),
-            ),
-        )
+class Act(Document):
+    name = 'act'
 
 
-class Act:
-    def to_xml(self, tree):
-        return E.akomaNtoso(
-            E.act(
-                E.meta(),
-                *to_xml(tree),
-            ),
-        )
+class Judgment(Document):
+    name = 'judgment'
+
+
+class Statement(Document):
+    name = 'statement'
