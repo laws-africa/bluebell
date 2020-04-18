@@ -20,44 +20,6 @@ grammar akn
                        motivation?
                        decision?
 
-  introduction      <- introduction_marker
-                       content:(!background_marker !arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
-                       <Introduction>
-
-  background        <- background_marker
-                       content:(!arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
-                       <Background>
-
-  arguments         <- arguments_marker
-                       content:(!remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
-                       <Arguments>
-
-  remedies          <- remedies_marker
-                       content:(!motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
-                       <Remedies>
-
-  motivation        <- motivation_marker
-                       content:(!decision_marker !conclusions_marker hier_block_indent)*
-                       <Motivation>
-
-  decision          <- decision_marker
-                       content:(!conclusions_marker hier_block_indent)*
-                       <Decision>
-
-  # Judgment markers
-
-  introduction_marker <- 'INTRODUCTION' eol
-
-  background_marker <- 'BACKGROUND' eol
-
-  arguments_marker  <- 'ARGUMENTS' eol
-
-  remedies_marker   <- 'REMEDIES' eol
-
-  motivation_marker <- 'MOTIVATION' eol
-
-  decision_marker   <- 'DECISION' eol
-
   # ------------------------------------------------------------------------------ 
   # Hierarchical Structure (acts, bills)
   # ------------------------------------------------------------------------------
@@ -79,10 +41,10 @@ grammar akn
   # Open structure (doc, statement, debateReport, etc.)
   # ------------------------------------------------------------------------------
 
-  statement         <- openstructure <Statement>
+  statement         <- open_structure <Statement>
 
   # TODO: attachments, components
-  openstructure     <- indent
+  open_structure    <- indent
                          preface:preface?
                          preamble:preamble?
                          main_body
@@ -91,21 +53,16 @@ grammar akn
                        <OpenStructure>
 
   # ------------------------------------------------------------------------------
-  # Generic hierarchical elements
+  # Hierarchical elements
   # ------------------------------------------------------------------------------
 
-  hier_element      <- crossheading / hier_element_indent
+  hier_element      <- crossheading / hier_element_block
 
-  hier_element_indent <- hier_element_name heading:hier_element_heading? eol
-                       indent
-                         subheading:subheading?
-                         content:(!dedent hier_block_element)*
-                       dedent <HierElement>
-
-  hier_element_name <- ('ALINEA' / 'ARTICLE' / 'BOOK' / 'CHAPTER' / 'CLAUSE' / 'DIVISION' / 'INDENT' / 'LEVEL' / 'LIST'
-                        / 'PARAGRAPH' / 'PART' / 'POINT' / 'PROVISO' / 'RULE' / 'SECTION' / 'SUBCHAPTER' / 'SUBCLAUSE'
-                        / 'SUBDIVISION' / 'SUBLIST' / 'SUBPARAGRAPH' / 'SUBPART' / 'SUBRULE' / 'SUBSECTION' / 'SUBTITLE'
-                        / 'TITLE' / 'TOME' / 'TRANSITIONAL')
+  hier_element_block <- hier_element_name heading:hier_element_heading? eol
+                        indent
+                          subheading:subheading?
+                          content:(!dedent hier_block_element)*
+                        dedent <HierElement>
 
                         # num - heading
                         # - heading
@@ -116,16 +73,19 @@ grammar akn
                         #       num - heading
   hier_element_heading <- space num:[^\n-]* heading:('-' space content:inline*)? <HierElementHeading>
 
-  subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
-
   hier_block_element <- hier_element / block_element
 
                      # this is for top-level containers that may/may not start with an
                      # indented block, but otherwise contain block and hier content
   hier_block_indent <- (indent content:hier_block_element+ dedent) / hier_block_element
 
+  hier_element_name <- ('ALINEA' / 'ARTICLE' / 'BOOK' / 'CHAPTER' / 'CLAUSE' / 'DIVISION' / 'INDENT' / 'LEVEL' / 'LIST'
+                        / 'PARAGRAPH' / 'PART' / 'POINT' / 'PROVISO' / 'RULE' / 'SECTION' / 'SUBCHAPTER' / 'SUBCLAUSE'
+                        / 'SUBDIVISION' / 'SUBLIST' / 'SUBPARAGRAPH' / 'SUBPART' / 'SUBRULE' / 'SUBSECTION' / 'SUBTITLE'
+                        / 'TITLE' / 'TOME' / 'TRANSITIONAL')
+
   # ------------------------------------------------------------------------------
-  # Generic containers
+  # Containers
   # ------------------------------------------------------------------------------
 
   preface           <- preface_marker
@@ -150,8 +110,58 @@ grammar akn
                        content:block_indent*
                        <Conclusions>
 
+  # Judment-specific containers
+
+  introduction      <- introduction_marker
+                       content:(!background_marker !arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
+                       <Introduction>
+
+  background        <- background_marker
+                       content:(!arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
+                       <Background>
+
+  arguments         <- arguments_marker
+                       content:(!remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
+                       <Arguments>
+
+  remedies          <- remedies_marker
+                       content:(!motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
+                       <Remedies>
+
+  motivation        <- motivation_marker
+                       content:(!decision_marker !conclusions_marker hier_block_indent)*
+                       <Motivation>
+
+  decision          <- decision_marker
+                       content:(!conclusions_marker hier_block_indent)*
+                       <Decision>
+
+  # General container markers
+
+  body_marker       <- 'BODY' eol
+
+  conclusions_marker <- 'CONCLUSIONS' eol
+
+  preamble_marker   <- 'PREAMBLE' eol
+
+  preface_marker    <- 'PREFACE' eol
+
+  # Judgment markers
+
+  introduction_marker <- 'INTRODUCTION' eol
+
+  background_marker <- 'BACKGROUND' eol
+
+  arguments_marker  <- 'ARGUMENTS' eol
+
+  remedies_marker   <- 'REMEDIES' eol
+
+  motivation_marker <- 'MOTIVATION' eol
+
+  decision_marker   <- 'DECISION' eol
+
   # ------------------------------------------------------------------------------ 
-  # Generic blocks
+  # Blocks
   # ------------------------------------------------------------------------------
 
                      # this is for top-level containers that may/may not start with an
@@ -186,6 +196,8 @@ grammar akn
 
   longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
 
+  subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
+
   crossheading      <- 'CROSSHEADING' space content:inline+ eol <Crossheading>
 
                      # The line block is the only thing that can contain arbitrary text
@@ -195,21 +207,21 @@ grammar akn
   line              <- !dedent content:inline+ eol <Line>
 
   # ------------------------------------------------------------------------------ 
-  # Generic inlines and markers
+  # Inlines and markers
   # ------------------------------------------------------------------------------ 
   
   inline            <- inline_marker / [^\n]
 
   inline_marker     <- bold / image / italics / remark / ref
 
-                     # **foo**
-  bold              <- '**' content:(!'**' inline)+ '**' <Bold>
-
                      # images like markdown
                      # eg. ![title text](image url)
                      #
                      # the title text is optional, but the enclosing square brackets aren't
   image             <- '![' content:(!'](' [^\n])* '](' href:([^)\n]+) ')' <Image>
+
+                     # **foo**
+  bold              <- '**' content:(!'**' inline)+ '**' <Bold>
 
                      # //foo//
   italics           <- '//' content:(!'//' inline)+ '//' <Italics>
@@ -220,17 +232,9 @@ grammar akn
                      # [text](href)
   ref               <- '[' content:(!'](' [^\n])* '](' href:[^)\n]* ')' <Ref>
 
-  conclusions_marker <- 'CONCLUSIONS' eol
-
-  # ------------------------------------------------------------------------------ 
+  # ------------------------------------------------------------------------------
   # Terminals
   # ------------------------------------------------------------------------------ 
-
-  preface_marker    <- 'PREFACE' eol
-
-  preamble_marker   <- 'PREAMBLE' eol
-
-  body_marker       <- 'BODY' eol
 
   eol               <- newline empty_line*
 
