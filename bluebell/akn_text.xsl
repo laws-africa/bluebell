@@ -3,7 +3,7 @@
   exclude-result-prefixes="a">
 
   <xsl:output method="text" indent="no" omit-xml-declaration="yes" />
-  <xsl:param name="indentStr" select="'..'"/>
+  <xsl:param name="indentStr" select="'  '"/>
 
   <!-- strip whitespace from most elements, but preserve whitespace in inline elements that can contain text -->
   <xsl:strip-space elements="*"/>
@@ -164,13 +164,6 @@
     <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading) and not(self::a:subheading)]">
       <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
-  </xsl:template>
-
-  <!-- TODO: crossheadings -->
-  <xsl:template match="a:hcontainer[@name='crossheading']">
-    <xsl:text>CROSSHEADING </xsl:text>
-    <xsl:apply-templates select="a:heading" />
-    <xsl:text>&#10;&#10;</xsl:text>
   </xsl:template>
 
   <!-- ...............................................................................
@@ -407,10 +400,25 @@
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
     <xsl:text>SUBHEADING </xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
   </xsl:template>
 
-  <!-- longTitle -->
+  <xsl:template match="a:crossHeading">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:text>CROSSHEADING </xsl:text>
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
+    <xsl:text>&#10;&#10;</xsl:text>
+  </xsl:template>
+
+  <!-- TODO: this is actually a block element, not a container -->
   <xsl:template match="a:longTitle">
     <xsl:param name="indent">0</xsl:param>
 
@@ -418,7 +426,7 @@
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
     <xsl:text>LONGTITLE </xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>&#10;&#10;</xsl:text>
   </xsl:template>
 

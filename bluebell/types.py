@@ -145,6 +145,15 @@ class Longtitle:
         }
 
 
+class Crossheading:
+    def to_dict(self):
+        return {
+            'type': 'element',
+            'name': 'crossHeading',
+            'children': Inline.many_to_dict(k for k in self.content),
+        }
+
+
 class Body:
     def to_dict(self):
         return {

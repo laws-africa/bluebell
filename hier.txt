@@ -17,6 +17,8 @@ BODY
 PART a num
   intro to part
 
+  CROSSHEADING a crossheading
+
   CHAPTER 2 - foo [[remark]]
     SUBHEADING hello [[remark]]
 

@@ -136,7 +136,7 @@ def to_xml(item, prefix=''):
             # in the middle
             kids = []
             seen_hier = False
-            for is_hier, group in groupby(item['children'], lambda x: x['type'] == 'hier'):
+            for is_hier, group in groupby(item['children'], lambda x: x['type'] == 'hier' or x['name'] == 'crossHeading'):
                 group = (to_xml(k, eid) for k in group)
                 if is_hier:
                     # TODO: what if this hier element is after a wrapUp?

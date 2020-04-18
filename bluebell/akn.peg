@@ -87,9 +87,11 @@ grammar akn
 
   # ------------------------------------------------------------------------------
   # Generic hierarchical elements
-  # ------------------------------------------------------------------------------ 
+  # ------------------------------------------------------------------------------
 
-  hier_element      <- hier_element_name heading:hier_element_heading? eol
+  hier_element      <- crossheading / hier_element_indent
+
+  hier_element_indent <- hier_element_name heading:hier_element_heading? eol
                        indent
                          subheading:subheading?
                          content:(!dedent hier_block_element)*
@@ -157,6 +159,8 @@ grammar akn
   table             <- 'TABLE' eol <Table>
 
   longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
+
+  crossheading      <- 'CROSSHEADING' space content:inline+ eol <Crossheading>
 
                      # The line block is the only thing that can contain arbitrary text
                      # at the start of a line, where a dedent may occur. By guarding
