@@ -102,7 +102,10 @@ grammar akn
                          content:(!dedent hier_block_element)*
                        dedent <HierElement>
 
-  hier_element_name <- ('CHAPTER' / 'PARAGRAPH' / 'PART' / 'SUBPART' / 'SECTION' / 'SUBSECTION')
+  hier_element_name <- ('ALINEA' / 'ARTICLE' / 'BOOK' / 'CHAPTER' / 'CLAUSE' / 'DIVISION' / 'INDENT' / 'LEVEL' / 'LIST'
+                        / 'PARAGRAPH' / 'PART' / 'POINT' / 'PROVISO' / 'RULE' / 'SECTION' / 'SUBCHAPTER' / 'SUBCLAUSE'
+                        / 'SUBDIVISION' / 'SUBLIST' / 'SUBPARAGRAPH' / 'SUBPART' / 'SUBRULE' / 'SUBSECTION' / 'SUBTITLE'
+                        / 'TITLE' / 'TOME' / 'TRANSITIONAL')
 
                         # num - heading
                         # - heading

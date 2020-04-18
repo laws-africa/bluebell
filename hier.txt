@@ -19,6 +19,11 @@ PART a num
 
   CROSSHEADING a crossheading
 
+  SUBRULE aoeu - foo
+    SUBHEADING blah
+
+    in the rule
+
   CHAPTER 2 - foo [[remark]]
     SUBHEADING hello [[remark]]
 
