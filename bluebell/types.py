@@ -136,11 +136,16 @@ class Preamble:
 
 
 class Longtitle:
+    # TODO: this is actually a block element
     def to_dict(self):
         return {
-            'type': 'content',
-            'name': 'longtitle',
-            'children': Inline.many_to_dict(k for k in self.content)
+            'type': 'element',
+            'name': 'longTitle',
+            'children': [{
+                'type': 'content',
+                'name': 'p',
+                'children': Inline.many_to_dict(k for k in self.content),
+            }]
         }
 
 

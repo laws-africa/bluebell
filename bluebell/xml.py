@@ -164,6 +164,10 @@ def to_xml(item, prefix=''):
         # TODO: make this generic? what else can have num?
         eid = ids.make(prefix, item)
         kids = kids_to_xml(item, prefix=eid)
+        if not kids:
+            # block elements must have at least one content child
+            kids = [E.p()]
+
         if 'num' in item:
             kids.insert(0, E('num', item['num']))
         return E(item['name'], eId=eid, *kids)
