@@ -14,11 +14,7 @@ class Judgment:
         }]
 
         if self.conclusions.text:
-            kids.append({
-                'type': 'element',
-                'name': 'conclusions',
-                'children': [self.conclusions.to_dict()],
-            })
+            kids.append(self.conclusions.to_dict())
 
         return {
             'type': 'element',
