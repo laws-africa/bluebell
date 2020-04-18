@@ -5,7 +5,7 @@ import argparse
 
 from lxml import etree as ET
 
-from bluebell.parser import pre_parse, parse_with_failure, parse_tree_to_xml
+from bluebell.parser import parse, parse_tree_to_xml
 from bluebell.akn import ParseError
 
 
@@ -23,12 +23,11 @@ if __name__ == '__main__':
     parser.add_argument('--pretty', dest='pretty', action='store_true', help='prettify output')
     args = parser.parse_args()
 
-    lines = open(args.input, "r").read()
-    lines = pre_parse(lines, indent='{', dedent='}')
+    text = open(args.input, "r").read()
     try:
-        tree = parse_with_failure(lines, args.root)
+        tree = parse(text, args.root)
     except ParseError as e:
-        print_with_lines(lines)
+        print_with_lines(text)
         raise
 
     if args.json:

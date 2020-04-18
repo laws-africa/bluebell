@@ -9,7 +9,7 @@ INDENT = '\x0E'
 DEDENT = '\x0F'
 
 
-def pre_parse(lines, indent=INDENT, dedent=DEDENT):
+def pre_parse(text, indent=INDENT, dedent=DEDENT):
     """ Pre-parse text, setting up indent and dedent markers.
 
     After calling this, the following are guaranteed:
@@ -25,9 +25,9 @@ def pre_parse(lines, indent=INDENT, dedent=DEDENT):
     trailing_ws_re = re.compile(r' +$', re.M)
 
     # tabs are two spaces
-    lines = lines.replace('\t', '  ')
+    text = text.replace('\t', '  ')
     # strip trailing whitespace
-    lines = trailing_ws_re.sub('', lines)
+    text = trailing_ws_re.sub('', text)
 
     stack = [-1]
 
@@ -63,18 +63,18 @@ def pre_parse(lines, indent=INDENT, dedent=DEDENT):
 
                 return s + match.group(2)
 
-    lines = line_re.sub(handle_indent, lines)
+    text = line_re.sub(handle_indent, text)
 
     if stack:
-        lines += (dedent + "\n") * (len(stack) - 1)
+        text += (dedent + "\n") * (len(stack) - 1)
 
-    return lines
+    return text
 
 
-def parse_with_failure(lines, root):
+def parse_with_failure(text, root):
     """ Helper function to do the actual parsing with an arbitrary root.
     """
-    parser = Parser(lines, actions=None, types=types)
+    parser = Parser(text, actions=None, types=types)
     tree = getattr(parser, f'_read_{root}')()
     if tree is not FAILURE and parser._offset == parser._input_size:
         return tree
@@ -98,3 +98,8 @@ def parse_tree_to_xml(tree):
     else:
         # default
         return xml.to_xml(tree)
+
+
+def parse(text, root):
+    text = pre_parse(text, indent='{', dedent='}')
+    return parse_with_failure(text, root)
