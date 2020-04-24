@@ -54,13 +54,8 @@ class Preamble(BlockIndentElement):
     name = 'preamble'
 
 
-class Conclusions:
-    def to_dict(self):
-        return {
-            'type': 'element',
-            'name': 'conclusions',
-            'children': many_to_dict(self.content),
-        }
+class Conclusions(BlockIndentElement):
+    name = 'conclusions'
 
 
 class Longtitle:
@@ -91,7 +86,7 @@ class Body:
         return {
             'type': 'element',
             'name': 'body',
-            'children': [c.elements[1].to_dict() for c in self.content]
+            'children': [c.elements[2].to_dict() for c in self.content]
         }
 
 
@@ -126,6 +121,43 @@ class HierElementHeading:
     def heading_to_dict(self):
         if hasattr(self.heading, 'content') and self.heading.content.text.strip():
             return Inline.many_to_dict(x for x in self.heading.content)
+
+
+class Attachments:
+    def to_dict(self):
+        return {
+            'type': 'element',
+            'name': 'attachments',
+            'children': [c.to_dict() for c in self]
+        }
+
+
+class Attachment:
+    def to_dict(self):
+        info = {
+            'type': 'attachment',
+            'name': self.attachment_marker.text.lower(),
+            'attribs': {
+                'contains': 'originalVersion',
+            },
+            'children': [c.elements[1].to_dict() for c in self.content]
+        }
+
+        if self.heading.text:
+            heading = self.heading.heading_to_dict()
+            if heading:
+                info['heading'] = heading
+
+        if self.subheading.text:
+            info['subheading'] = self.subheading.to_dict()
+
+        return info
+
+
+class AttachmentHeading:
+    def heading_to_dict(self):
+        if self.content.text:
+            return Inline.many_to_dict(x for x in self.content)
 
 
 class Introduction(HierBlockIndentElement):
@@ -359,7 +391,7 @@ class DocumentRoot:
 
 
 class HierarchicalStructure(DocumentRoot):
-    children = ['preface', 'preamble', 'body', 'conclusions']
+    children = ['preface', 'preamble', 'body', 'conclusions', 'attachments']
     name = 'hierarchicalStructure'
 
 
@@ -372,12 +404,12 @@ class Bill(HierarchicalStructure):
 
 
 class Judgment(DocumentRoot):
-    children = ['header', 'judgment_body', 'conclusions']
+    children = ['header', 'judgment_body', 'conclusions', 'attachments']
     name = 'judgment'
 
 
 class OpenStructure(DocumentRoot):
-    children = ['preface', 'preamble', 'main_body', 'conclusions']
+    children = ['preface', 'preamble', 'main_body', 'conclusions', 'attachments']
     name = 'openStructure'
 
 

@@ -10,6 +10,7 @@ grammar akn
   judgment          <- indent
                          judgment_body
                          conclusions:conclusions?
+                         attachments:attachments?
                        dedent
                        <Judgment>
 
@@ -37,6 +38,7 @@ grammar akn
                               preamble:preamble?
                               body
                               conclusions:conclusions?
+                              attachments:attachments?
                             dedent
                             <HierarchicalStructure>
 
@@ -56,6 +58,7 @@ grammar akn
                          preamble:preamble?
                          main_body
                          conclusions:conclusions?
+                         attachments:attachments?
                        dedent
                        <OpenStructure>
 
@@ -105,43 +108,53 @@ grammar akn
 
                      # body that MUST have a hier element
   body              <- body_marker?
-                       content:(!conclusions_marker hier_element)*
+                       content:(!conclusions_marker !attachment_marker hier_element)*
                        <Body>
 
                      # body with mixed block and hier elements
   main_body         <- body_marker?
-                       content:(!conclusions_marker hier_block_indent)*
+                       content:(!conclusions_marker !attachment_marker hier_block_indent)*
                        <MainBody>
 
   conclusions       <- conclusions_marker
-                       content:block_indent*
+                       content:(!attachment_marker block_indent)*
                        <Conclusions>
 
   # Judment-specific containers
 
   introduction      <- introduction_marker
-                       content:(!background_marker !arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
+                       content:(!background_marker !arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker !attachment_marker hier_block_indent)*
                        <Introduction>
 
   background        <- background_marker
-                       content:(!arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
+                       content:(!arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker !attachment_marker hier_block_indent)*
                        <Background>
 
   arguments         <- arguments_marker
-                       content:(!remedies_marker !motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
+                       content:(!remedies_marker !motivation_marker !decision_marker !conclusions_marker !attachment_marker hier_block_indent)*
                        <Arguments>
 
   remedies          <- remedies_marker
-                       content:(!motivation_marker !decision_marker !conclusions_marker hier_block_indent)*
+                       content:(!motivation_marker !decision_marker !conclusions_marker !attachment_marker hier_block_indent)*
                        <Remedies>
 
   motivation        <- motivation_marker
-                       content:(!decision_marker !conclusions_marker hier_block_indent)*
+                       content:(!decision_marker !conclusions_marker !attachment_marker hier_block_indent)*
                        <Motivation>
 
   decision          <- decision_marker
-                       content:(!conclusions_marker hier_block_indent)*
+                       content:(!conclusions_marker !attachment_marker hier_block_indent)*
                        <Decision>
+
+  attachments       <- attachment+ <Attachments>
+
+  attachment        <- attachment_marker heading:attachment_heading? eol
+                       indent
+                         subheading:subheading?
+                         content:(!dedent hier_block_element)*
+                       dedent <Attachment>
+
+  attachment_heading <- space content:inline* <AttachmentHeading>
 
   # General container markers
 
@@ -166,6 +179,10 @@ grammar akn
   motivation_marker <- 'MOTIVATION' eol
 
   decision_marker   <- 'DECISION' eol
+
+  # attachment markers
+
+  attachment_marker <- 'ATTACHMENT' / 'APPENDIX' / 'SCHEDULE' / 'ANNEXURE'
 
   # ------------------------------------------------------------------------------ 
   # Blocks

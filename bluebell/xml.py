@@ -14,7 +14,7 @@ class IdGenerator:
     num_strip_re = re.compile(r'[ .()[\]]')
 
     id_exempt = set("act amendment amendmentList bill debate debateReport doc documentCollection judgment"
-                    " officialGazette portion statement body mainBody judgmentBody".split())
+                    " officialGazette portion statement body mainBody judgmentBody attachments".split())
     """ Top-level document types that never have ids. """
 
     id_unnecessary = set("arguments background conclusions decision header introduction motivation preamble preface"
@@ -187,6 +187,17 @@ def to_xml(item, prefix=''):
         if eid and not ids.is_unnecessary(prefix, item):
             attrs['eId'] = eid
         return E(item['name'], *kids_to_xml(item, prefix=eid), **attrs)
+
+    if item['type'] == 'attachment':
+        # TODO: attachment id
+        eid = ids.make(prefix, item)
+        return E('attachment',
+                 E('doc',
+                   E('meta'),
+                   E('mainBody', *kids_to_xml(item, prefix=eid)),
+                   name=item['name'],
+                   **item.get('attribs', {})),
+                 eId=eid)
 
 
 class Document:
