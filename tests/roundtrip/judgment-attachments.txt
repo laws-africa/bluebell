@@ -1,0 +1,26 @@
+ARGUMENTS
+
+  an argument
+
+CONCLUSIONS
+
+  conclusion
+
+ANNEXURE Annex 1
+
+  annex 1 text
+
+ANNEXURE Annex 2
+  SUBHEADING the annexing
+
+  annex 2 text
+
+APPENDIX
+  SUBHEADING appendex subheading
+
+  appendex 1 text
+
+APPENDIX
+
+  appendex 2 text
+

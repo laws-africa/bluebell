@@ -112,22 +112,18 @@
   </xsl:template>
 
   <!-- hier content containers -->
-  <xsl:template match="a:body | a:mainBody">
+  <xsl:template match="a:body | a:mainBody | a:judgmentBody">
     <xsl:param name="indent">0</xsl:param>
 
-    <xsl:call-template name="indent">
-      <xsl:with-param name="level" select="$indent" />
-    </xsl:call-template>
-    <xsl:text>BODY</xsl:text>
-    <xsl:text>&#10;&#10;</xsl:text>
+    <!-- only add the BODY marker if a preface or preamble comes before the body -->
+    <xsl:if test="preceding-sibling::a:preface or preceding-sibling::a:preamble">
+      <xsl:call-template name="indent">
+        <xsl:with-param name="level" select="$indent" />
+      </xsl:call-template>
+      <xsl:text>BODY</xsl:text>
+      <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:if>
 
-    <xsl:apply-templates>
-      <xsl:with-param name="indent" select="$indent + 1" />
-    </xsl:apply-templates>
-  </xsl:template>
-
-  <xsl:template match="a:judgmentBody">
-    <xsl:param name="indent">0</xsl:param>
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
@@ -240,41 +236,6 @@
     <xsl:apply-templates select="./*[not(self::a:intro)]" />
   </xsl:template>
 
-
-  <!-- components/schedules -->
-  <!-- new-style schedules, "hcontainer" elements -->
-  <xsl:template match="a:hcontainer[@name='schedule']">
-    <xsl:text>SCHEDULE&#10;HEADING </xsl:text>
-    <xsl:apply-templates select="a:heading" />
-    <xsl:text>&#10;</xsl:text>
-
-    <xsl:if test="a:subheading">
-      <xsl:text>SUBHEADING </xsl:text>
-      <xsl:apply-templates select="a:subheading" />
-      <xsl:text>&#10;</xsl:text>
-    </xsl:if>
-
-    <xsl:text>&#10;&#10;</xsl:text>
-    <xsl:apply-templates select="./*[not(self::a:heading) and not(self::a:subheading)]" />
-  </xsl:template>
-
-
-  <!-- old-style schedules, "article" elements -->
-  <xsl:template match="a:doc/a:mainBody/a:article">
-    <xsl:text>SCHEDULE&#10;HEADING </xsl:text>
-    <xsl:value-of select="../../a:meta/a:identification/a:FRBRWork/a:FRBRalias/@value" />
-    <xsl:text>&#10;</xsl:text>
-
-    <xsl:if test="a:heading">
-      <xsl:text>SUBHEADING </xsl:text>
-      <xsl:apply-templates select="a:heading" />
-      <xsl:text>&#10;</xsl:text>
-    </xsl:if>
-
-    <xsl:text>&#10;</xsl:text>
-    <xsl:apply-templates select="./*[not(self::a:heading)]"/>
-  </xsl:template>
-
   <xsl:template match="a:embeddedStructure">
     <xsl:param name="indent">0</xsl:param>
 
@@ -369,7 +330,33 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <!-- END tables -->
+  <!-- ...............................................................................
+       Attachments
+       ............................................................................... -->
+
+  <xsl:template match="a:attachment">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:call-template name="uppercase">
+      <xsl:with-param name="s" select="a:doc/@name" />
+    </xsl:call-template>
+    <xsl:apply-templates select="a:heading" />
+    <xsl:text>&#10;</xsl:text>
+
+    <xsl:if test="a:subheading">
+      <xsl:text>SUBHEADING </xsl:text>
+      <xsl:apply-templates select="a:subheading" />
+      <xsl:text>&#10;</xsl:text>
+    </xsl:if>
+    <xsl:text>&#10;</xsl:text>
+
+    <xsl:apply-templates select="a:doc">
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
+  </xsl:template>
 
   <!-- ...............................................................................
        Content elements

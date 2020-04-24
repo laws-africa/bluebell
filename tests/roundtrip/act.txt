@@ -16,8 +16,9 @@ CHAPTER 1 - Heading
 
       (a) item (a)
 
-      (b)
+      (b) 
 
         (i) item (b)(i)
 
         (ii) item (b)(ii)
+

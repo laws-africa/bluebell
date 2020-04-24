@@ -31,3 +31,6 @@ class RoundTripTestCase(TestCase):
 
     def test_judgment(self):
         self.roundtrip('judgment', 'judgment')
+
+    def test_judgment_attachments(self):
+        self.roundtrip('judgment-attachments', 'judgment')
