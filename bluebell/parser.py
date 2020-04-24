@@ -1,8 +1,10 @@
 import re
+import os.path
 
 from .akn import Parser, FAILURE, ParseError, format_error
 import bluebell.types as types
 import bluebell.xml as xml
+from lxml import etree
 
 
 INDENT = '\x0E'
@@ -103,3 +105,18 @@ def parse_tree_to_xml(tree):
 def parse(text, root):
     text = pre_parse(text, indent='{', dedent='}')
     return parse_with_failure(text, root)
+
+
+def parse_to_xml(text, root):
+    return parse_tree_to_xml(parse(text, root))
+
+
+def unparse(xml):
+    if isinstance(xml, (str, bytes)):
+        xml = etree.fromstring(xml)
+
+    # load xslt
+    fname = os.path.join(os.path.dirname(__file__), 'akn_text.xsl')
+    xslt = etree.XSLT(etree.parse(fname))
+
+    return str(xslt(xml))

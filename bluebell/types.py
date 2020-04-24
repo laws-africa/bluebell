@@ -13,6 +13,17 @@ def many_to_dict(items):
 # ------------------------------------------------------------------------------
 
 
+class JudgmentBody:
+    def to_dict(self):
+        kids = [getattr(self, c) for c in ['introduction', 'background', 'arguments', 'remedies', 'motivation', 'decision']]
+
+        return {
+            'type': 'element',
+            'name': 'judgmentBody',
+            'children': [c.to_dict() for c in kids if c.text],
+        }
+
+
 class HierBlockIndentElement:
     name = None
 
@@ -347,7 +358,7 @@ class Bill(HierarchicalStructure):
 
 
 class Judgment(DocumentRoot):
-    children = ['header', 'judgement_body', 'conclusions']
+    children = ['header', 'judgment_body', 'conclusions']
     name = 'judgment'
 
 

@@ -13,12 +13,13 @@ grammar akn
                        dedent
                        <Judgment>
 
-  judgment_body     <- introduction?
-                       background?
-                       arguments?
-                       remedies?
-                       motivation?
-                       decision?
+  judgment_body     <- introduction:introduction?
+                       background:background?
+                       arguments:arguments?
+                       remedies:remedies?
+                       motivation:motivation?
+                       decision:decision?
+                       <JudgmentBody>
 
   # ------------------------------------------------------------------------------ 
   # Hierarchical Structure (acts, bills)

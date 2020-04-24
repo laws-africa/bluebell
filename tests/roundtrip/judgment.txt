@@ -1,0 +1,23 @@
+PREAMBLE
+
+  some preamble text
+
+BODY
+
+CHAPTER 1 - Heading
+
+  SECTION 1 - Section
+
+    some text at the start
+
+    SUBSECTION 1
+
+      list intro
+
+      (a) item (a)
+
+      (b)
+
+        (i) item (b)(i)
+
+        (ii) item (b)(ii)

@@ -111,7 +111,7 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <!-- hier content containers TODO -->
+  <!-- hier content containers -->
   <xsl:template match="a:body | a:mainBody">
     <xsl:param name="indent">0</xsl:param>
 
@@ -123,6 +123,13 @@
 
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template match="a:judgmentBody">
+    <xsl:param name="indent">0</xsl:param>
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
   </xsl:template>
 
