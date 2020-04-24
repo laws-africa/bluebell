@@ -1,8 +1,6 @@
-import sys
 from unittest import TestCase
 
-from bluebell.parser import pre_parse, parse_with_failure
-from . import ParserSupport
+from .support import ParserSupport
 
 
 class ContainerTestCase(TestCase, ParserSupport):

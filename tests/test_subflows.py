@@ -1,115 +1,32 @@
-import sys
 from unittest import TestCase
 
-from bluebell.parser import pre_parse, parse_with_failure
-from . import ParserSupport
+from .support import ParserSupport
 
 
-class ContainerTestCase(TestCase, ParserSupport):
+class SubflowsTestCase(TestCase, ParserSupport):
     maxDiff = None
 
-    def test_preamble_simple(self):
+    def test_quote(self):
         tree = self.parse("""
-PREAMBLE
+QUOTE
 
-some preamble text
-""", 'preamble')
-        self.assertEqual({
-            'name': 'preamble',
-            'type': 'element',
-            'children': [{
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': 'some preamble text',
-                }]
-            }]
-        }, tree.to_dict())
-
-    def test_preamble_mixed_indent(self):
-        tree = self.parse("""
-PREAMBLE
-
-not indented
-
-    indented
-""", 'preamble')
-        self.assertEqual({
-            'name': 'preamble',
-            'type': 'element',
-            'children': [{
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': 'not indented',
-                }]
-            }, {
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': 'indented',
-                }]
-            }]
-        }, tree.to_dict())
-
-    def test_preamble_mixed_indent_starts_indented(self):
-        tree = self.parse("""
-PREAMBLE
-
-    not indented
-
-indented
-""", 'preamble')
-        self.assertEqual({
-            'name': 'preamble',
-            'type': 'element',
-            'children': [{
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': 'not indented',
-                }]
-            }, {
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': 'indented',
-                }]
-            }]
-        }, tree.to_dict())
-
-    def test_conclusions_hier_ignored(self):
-        # conclusions can't contain hier elements
-        tree = self.parse("""
-CONCLUSIONS
-
-    PART 1
+    some text
     
-    text
+    (a) list item
     
-    (a) item a
-""", 'conclusions')
+    PART 1 - Heading
+    
+        part 1 text
+""", 'embedded_structure')
         self.assertEqual({
-            'name': 'conclusions',
+            'name': 'embeddedStructure',
             'type': 'element',
             'children': [{
                 'name': 'p',
                 'type': 'content',
                 'children': [{
                     'type': 'text',
-                    'value': 'PART 1',
-                }]
-            }, {
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': 'text',
+                    'value': 'some text',
                 }]
             }, {
                 'name': 'blockList',
@@ -123,9 +40,25 @@ CONCLUSIONS
                         'type': 'content',
                         'children': [{
                             'type': 'text',
-                            'value': 'item a',
+                            'value': 'list item',
                         }]
-                    }],
+                    }]
+                }]
+            }, {
+                'name': 'part',
+                'type': 'hier',
+                'num': '1',
+                'heading': [{
+                    'type': 'text',
+                    'value': 'Heading',
                 }],
-            }],
+                'children': [{
+                    'name': 'p',
+                    'type': 'content',
+                    'children': [{
+                        'type': 'text',
+                        'value': 'part 1 text',
+                    }]
+                }]
+            }]
         }, tree.to_dict())

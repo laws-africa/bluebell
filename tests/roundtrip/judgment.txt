@@ -1,23 +1,32 @@
-PREAMBLE
+BACKGROUND
 
-  some preamble text
+  x
 
-BODY
+  y
 
-CHAPTER 1 - Heading
+  PART
 
-  SECTION 1 - Section
+    (a) something
 
-    some text at the start
+ARGUMENTS
 
-    SUBSECTION 1
+  an argument
 
-      list intro
+  (b) aoeu
 
-      (a) item (a)
+REMEDIES
 
-      (b)
+  fixes!
 
-        (i) item (b)(i)
+  (b) fixes
 
-        (ii) item (b)(ii)
+DECISION
+
+  blah
+
+CONCLUSIONS
+
+  aou
+
+  (a) aoeu
+
