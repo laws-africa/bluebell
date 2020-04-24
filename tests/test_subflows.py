@@ -62,3 +62,44 @@ QUOTE
                 }]
             }]
         }, tree.to_dict())
+
+    def test_quote_in_block(self):
+        tree = self.parse("""
+some text
+
+QUOTE
+
+  quoted
+    
+something else
+""", 'block', block=True)
+        self.assertEqual({
+            'name': 'block',
+            'type': 'block',
+            'children': [{
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'some text',
+                }]
+            }, {
+                'name': 'embeddedStructure',
+                'type': 'element',
+                'children': [{
+                    'name': 'p',
+                    'type': 'content',
+                    'children': [{
+                        'type': 'text',
+                        'value': 'quoted',
+                    }]
+                }],
+            }, {
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'something else',
+                }]
+            }],
+        }, tree.to_dict())

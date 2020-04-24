@@ -183,7 +183,7 @@ grammar akn
   block_element     <- block / block_elements
 
                      # these are general block elements that don't care about what block they're in (eg. preface vs body)
-  block_elements    <- block_list / table / longtitle / line
+  block_elements    <- block_list / table / longtitle / embedded_structure / line
 
   block_list        <- block_item+ <BlockList>
 
@@ -212,6 +212,16 @@ grammar akn
                      # against it, we don't have to guard at every place that
                      # could start a line.
   line              <- !dedent content:inline+ eol <Line>
+
+  # ------------------------------------------------------------------------------
+  # Subflows (that go from inlines into nested complex structures)
+  # ------------------------------------------------------------------------------
+
+  embedded_structure <- 'QUOTE' eol
+                        indent
+                          content:(!dedent hier_block_element)*
+                        dedent
+                        <EmbeddedStructure>
 
   # ------------------------------------------------------------------------------ 
   # Inlines and markers

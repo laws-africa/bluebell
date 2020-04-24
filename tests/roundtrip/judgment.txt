@@ -14,6 +14,10 @@ ARGUMENTS
 
   (b) aoeu
 
+  QUOTE
+
+    some quoted text
+
 REMEDIES
 
   fixes!

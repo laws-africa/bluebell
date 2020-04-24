@@ -275,6 +275,17 @@
     <xsl:apply-templates select="./*[not(self::a:heading)]"/>
   </xsl:template>
 
+  <xsl:template match="a:embeddedStructure">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:text>QUOTE&#10;&#10;</xsl:text>
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
+  </xsl:template>
 
   <!-- tables -->
   <xsl:template match="a:table">
