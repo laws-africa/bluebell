@@ -26,8 +26,6 @@ grammar akn
   # Hierarchical Structure (acts, bills)
   # ------------------------------------------------------------------------------
   # TODO: coverpage
-  # TODO: conclusions
-  # TODO: attachments
 
   act               <- hierarchical_structure <Act>
 
@@ -52,7 +50,7 @@ grammar akn
 
   statement         <- open_structure <Statement>
 
-  # TODO: attachments, components
+  # TODO: components
   open_structure    <- indent
                          preface:preface?
                          preamble:preamble?
