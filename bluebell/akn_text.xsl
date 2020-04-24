@@ -343,16 +343,21 @@
     <xsl:call-template name="uppercase">
       <xsl:with-param name="s" select="a:doc/@name" />
     </xsl:call-template>
-    <xsl:apply-templates select="a:heading" />
-    <xsl:text>&#10;</xsl:text>
 
-    <xsl:if test="a:subheading">
-      <xsl:text>SUBHEADING </xsl:text>
-      <xsl:apply-templates select="a:subheading" />
-      <xsl:text>&#10;</xsl:text>
+    <xsl:if test="a:heading">
+      <xsl:text> </xsl:text>
+      <xsl:apply-templates select="a:heading" />
     </xsl:if>
     <xsl:text>&#10;</xsl:text>
 
+    <xsl:if test="a:subheading">
+      <xsl:apply-templates select="./a:subheading">
+        <xsl:with-param name="indent" select="$indent + 1" />
+      </xsl:apply-templates>
+      <xsl:text>&#10;</xsl:text>
+    </xsl:if>
+
+    <xsl:text>&#10;</xsl:text>
     <xsl:apply-templates select="a:doc">
       <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>

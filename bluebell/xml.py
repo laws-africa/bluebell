@@ -191,12 +191,20 @@ def to_xml(item, prefix=''):
     if item['type'] == 'attachment':
         # TODO: attachment id
         eid = ids.make(prefix, item)
+
+        pre = []
+        if item.get('heading'):
+            pre.append(E.heading(*(to_xml(k, eid) for k in item['heading'])))
+
+        if item.get('subheading'):
+            pre.append(E.subheading(*(to_xml(k, eid) for k in item['subheading'])))
+
         return E('attachment',
+                 *pre,
                  E('doc',
                    E('meta'),
                    E('mainBody', *kids_to_xml(item, prefix=eid)),
-                   name=item['name'],
-                   **item.get('attribs', {})),
+                   name=item['name'], **item.get('attribs', {})),
                  eId=eid)
 
 
