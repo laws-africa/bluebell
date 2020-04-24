@@ -30,6 +30,8 @@ def pre_parse(text, indent_size=2, indent=INDENT, dedent=DEDENT):
     text = text.replace('\t', ' ' * indent_size)
     # strip trailing whitespace
     text = trailing_ws_re.sub('', text)
+    if not text.endswith('\n'):
+        text = text + '\n'
 
     stack = [-1]
 
