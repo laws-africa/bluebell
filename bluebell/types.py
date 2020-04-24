@@ -86,7 +86,7 @@ class Body:
         return {
             'type': 'element',
             'name': 'body',
-            'children': [c.elements[2].to_dict() for c in self.content]
+            'children': many_to_dict(c.hier_indent for c in self.content),
         }
 
 

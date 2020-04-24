@@ -86,6 +86,10 @@ grammar akn
   hier_block_element <- hier_element / block_element
 
                      # this is for top-level containers that may/may not start with an
+                     # indented block, but otherwise contain hier content
+  hier_indent       <- (indent content:hier_element+ dedent) / hier_element
+
+                     # this is for top-level containers that may/may not start with an
                      # indented block, but otherwise contain block and hier content
   hier_block_indent <- (indent content:hier_block_element+ dedent) / hier_block_element
 
@@ -108,7 +112,7 @@ grammar akn
 
                      # body that MUST have a hier element
   body              <- body_marker?
-                       content:(!conclusions_marker !attachment_marker hier_element)*
+                       content:(!conclusions_marker !attachment_marker hier_indent)*
                        <Body>
 
                      # body with mixed block and hier elements
