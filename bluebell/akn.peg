@@ -69,8 +69,7 @@ grammar akn
   hier_element_block <- hier_element_name heading:hier_element_heading? eol
                         indent
                           subheading:subheading?
-                          # TODO: this dedent negative lookahead can be removed - the bare line checks for it already
-                          content:(!dedent hier_block_element)*
+                          content:hier_block_element*
                         dedent <HierElement>
 
                         # num - heading

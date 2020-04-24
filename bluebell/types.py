@@ -108,7 +108,7 @@ class HierElement:
         info = {
             'type': 'hier',
             'name': self.hier_element_name.text.lower(),
-            'children': many_to_dict(c.elements[1] for c in self.content),
+            'children': many_to_dict(self.content),
         }
 
         if self.heading.text:
