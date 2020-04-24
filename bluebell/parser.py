@@ -9,7 +9,7 @@ INDENT = '\x0E'
 DEDENT = '\x0F'
 
 
-def pre_parse(text, indent=INDENT, dedent=DEDENT):
+def pre_parse(text, indent_size=2, indent=INDENT, dedent=DEDENT):
     """ Pre-parse text, setting up indent and dedent markers.
 
     After calling this, the following are guaranteed:
@@ -25,14 +25,14 @@ def pre_parse(text, indent=INDENT, dedent=DEDENT):
     trailing_ws_re = re.compile(r' +$', re.M)
 
     # tabs are two spaces
-    text = text.replace('\t', '  ')
+    text = text.replace('\t', ' ' * indent_size)
     # strip trailing whitespace
     text = trailing_ws_re.sub('', text)
 
     stack = [-1]
 
     def handle_indent(match):
-        level = len(match.group(1)) / 2
+        level = len(match.group(1)) / indent_size
 
         if level == stack[-1]:
             # same level, no change
