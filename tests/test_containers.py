@@ -53,6 +53,34 @@ not indented
             }]
         }, tree.to_dict())
 
+    def test_preamble_deeply_nested(self):
+        tree = self.parse("""
+PREAMBLE
+
+    indented
+
+        indented
+""", 'preamble')
+        self.assertEqual({
+            'name': 'preamble',
+            'type': 'element',
+            'children': [{
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'indented',
+                }]
+            }, {
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'indented',
+                }]
+            }]
+        }, tree.to_dict())
+
     def test_preamble_mixed_indent_starts_indented(self):
         tree = self.parse("""
 PREAMBLE

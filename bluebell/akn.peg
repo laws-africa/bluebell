@@ -69,6 +69,7 @@ grammar akn
   hier_element_block <- hier_element_name heading:hier_element_heading? eol
                         indent
                           subheading:subheading?
+                          # TODO: this dedent negative lookahead can be removed - the bare line checks for it already
                           content:(!dedent hier_block_element)*
                         dedent <HierElement>
 
@@ -101,11 +102,11 @@ grammar akn
   # ------------------------------------------------------------------------------
 
   preface           <- preface_marker
-                       content:(!preamble_marker !body_marker block_indent)*
+                       content:(!preamble_marker !body_marker block_element)*
                        <Preface>
 
   preamble          <- preamble_marker
-                       content:(!body_marker block_indent)*
+                       content:(!body_marker block_element)*
                        <Preamble>
 
                      # body that MUST have a hier element
@@ -119,7 +120,7 @@ grammar akn
                        <MainBody>
 
   conclusions       <- conclusions_marker
-                       content:(!attachment_marker block_indent)*
+                       content:(!attachment_marker block_element)*
                        <Conclusions>
 
   # Judment-specific containers
@@ -190,18 +191,11 @@ grammar akn
   # Blocks
   # ------------------------------------------------------------------------------
 
-                     # this is for top-level containers that may/may not start with an
-                     # indented block, but otherwise contain block content
-  block_indent      <- (indent content:block_element+ dedent) / block_element
+                     # optionally nested block element
+  block_element     <- nested_block_element / block_elements
 
-  block             <- indent
-                         content:block_element*
-                       dedent
-                       <Block>
+  nested_block_element <- (indent content:block_element+ dedent) <NestedBlockElement>
 
-  block_element     <- block / block_elements
-
-                     # these are general block elements that don't care about what block they're in (eg. preface vs body)
   block_elements    <- block_list / table / longtitle / embedded_structure / line
 
   block_list        <- block_item+ <BlockList>
@@ -213,8 +207,10 @@ grammar akn
                      # (a)
                      #   (i) child
                      #
-  block_item        <- num:('(' [^)]+ ')') preamble:(eol / (space !block_item block_element)?)
-                       content:block?
+  block_item        <- num:('(' [^)]+ ')') preamble:(eol / (space !block_item block_elements)?)
+                       children:(indent
+                         content:block_element+
+                       dedent)?
                        <BlockItem>
 
                      # TODO

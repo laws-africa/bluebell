@@ -65,6 +65,8 @@ QUOTE
 
     def test_quote_in_block(self):
         tree = self.parse("""
+INTRODUCTION
+
 some text
 
 QUOTE
@@ -72,10 +74,10 @@ QUOTE
   quoted
     
 something else
-""", 'block', block=True)
+""", 'introduction')
         self.assertEqual({
-            'name': 'block',
-            'type': 'block',
+            'type': 'element',
+            'name': 'introduction',
             'children': [{
                 'name': 'p',
                 'type': 'content',

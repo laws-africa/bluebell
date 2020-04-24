@@ -3,6 +3,9 @@ def many_to_dict(items):
     for item in items:
         if hasattr(item, 'to_dict'):
             kids.append(item.to_dict())
+        elif hasattr(item, 'to_children'):
+            # recurse into children directly
+            kids.extend(item.to_children())
         else:
             kids.extend(c.to_dict() for c in item.content)
     return kids
@@ -42,8 +45,14 @@ class BlockIndentElement:
         return {
             'type': 'element',
             'name': self.name,
-            'children': many_to_dict(c.block_indent for c in self.content),
+            'children': many_to_dict(c.block_element for c in self.content),
         }
+
+
+class NestedBlockElement:
+    # this class wraps nested blocks, just recurse into the children
+    def to_children(self):
+        return many_to_dict(self.content)
 
 
 class Preface(BlockIndentElement):
@@ -99,7 +108,7 @@ class HierElement:
         info = {
             'type': 'hier',
             'name': self.hier_element_name.text.lower(),
-            'children': [c.elements[1].to_dict() for c in self.content]
+            'children': many_to_dict(c.elements[1] for c in self.content),
         }
 
         if self.heading.text:
@@ -189,23 +198,6 @@ class Decision(HierBlockIndentElement):
 # ------------------------------------------------------------------------------
 
 
-class Block:
-    def to_dict(self):
-        # if we have one child, it's a block element and we're only a wrapper,
-        # return it directly
-        if len(self.content.elements) == 1:
-            return self.content.elements[0].to_dict()
-
-        # TODO: name and attribs for arbitrary indented block
-        return {
-            'type': 'block',
-            # TODO: name? the block is essentially anonymous?
-            # what about arbitrary indented text?
-            'name': 'block',
-            'children': [c.to_dict() for c in self.content]
-        }
-
-
 class BlockList:
     def to_dict(self):
         return {
@@ -220,18 +212,18 @@ class BlockItem:
         kids = []
 
         # preamble content on the same line as the number
-        if self.preamble.text and hasattr(self.preamble, 'block_element'):
-            kids.append(self.preamble.block_element)
+        if self.preamble.text and hasattr(self.preamble, 'block_elements'):
+            kids.append(self.preamble.block_elements.to_dict())
 
         # nested blocks
-        if self.content.text:
-            kids.extend(self.content.content)
+        if self.children.text:
+            kids.extend(many_to_dict(self.children.content))
 
         return {
             'type': 'block',
             'name': 'item',
             'num': self.num.text,
-            'children': [c.to_dict() for c in kids],
+            'children': kids,
         }
 
 
