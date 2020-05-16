@@ -161,6 +161,13 @@ class Attachments:
 
 class Attachment:
     def to_dict(self):
+        if self.indented.text:
+            kids = many_to_dict(self.indented.content)
+        else:
+            kids = []
+
+        kids.extend(many_to_dict(c.hier_block_indent for c in self.content))
+
         info = {
             'type': 'element',
             'name': 'attachment',
@@ -168,7 +175,7 @@ class Attachment:
                 'contains': 'originalVersion',
                 'name': self.attachment_marker.text.lower(),
             },
-            'children': [c.elements[1].to_dict() for c in self.content]
+            'children': kids,
         }
 
         if self.heading.text:
@@ -176,8 +183,8 @@ class Attachment:
             if heading:
                 info['heading'] = heading
 
-        if self.subheading.text:
-            info['subheading'] = self.subheading.to_dict()
+        if self.indented.text and self.indented.subheading.text:
+            info['subheading'] = self.indented.subheading.to_dict()
 
         return info
 

@@ -150,11 +150,17 @@ grammar akn
 
   attachments       <- attachment+ <Attachments>
 
+                       # an attachment's body may be indented with a subheading, or go
+                       # directly into content, or a mixture
   attachment        <- attachment_marker heading:attachment_heading? eol
-                       indent
-                         subheading:subheading?
-                         content:(!dedent hier_block_element)*
-                       dedent <Attachment>
+                       indented:(
+                         indent
+                           subheading:subheading?
+                           content:hier_block_element*
+                         dedent
+                       )?
+                       content:(!attachment_marker hier_block_indent)*
+                       <Attachment>
 
   attachment_heading <- space content:inline* <AttachmentHeading>
 
