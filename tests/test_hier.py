@@ -15,9 +15,7 @@ class HierTestCase(TestCase, ParserSupport):
         tree = self.parse("""
 hello
 
-PART 1
-
-  text
+there
 """, 'hierarchical_structure', block=True)
 
         self.assertEqual({
@@ -27,11 +25,23 @@ PART 1
                 'type': 'element',
                 'name': 'body',
                 'children': [{
-                    'type': 'content',
-                    'name': 'p',
+                    'type': 'element',
+                    'name': 'hcontainer',
+                    'attribs': {'name': 'hcontainer'},
                     'children': [{
-                        'type': 'text',
-                        'value': 'hello',
+                        'type': 'content',
+                        'name': 'p',
+                        'children': [{
+                            'type': 'text',
+                            'value': 'hello',
+                        }]
+                    }, {
+                        'type': 'content',
+                        'name': 'p',
+                        'children': [{
+                            'type': 'text',
+                            'value': 'there',
+                        }]
                     }]
                 }]
             }],
@@ -41,9 +51,10 @@ PART 1
 
         self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="hierarchicalStructure_1">
   <body>
-    <container eId="container_1" name="container">
+    <hcontainer name="hcontainer" eId="hcontainer_1">
       <p>hello</p>
-    </container>
+      <p>there</p>
+    </hcontainer>
   </body>
 </hierarchicalStructure>
 """, xml)

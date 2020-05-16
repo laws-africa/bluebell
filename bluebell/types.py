@@ -1,3 +1,6 @@
+from itertools import groupby
+
+
 def many_to_dict(items):
     kids = []
     for item in items:
@@ -92,10 +95,25 @@ class Crossheading:
 
 class Body:
     def to_dict(self):
+        # the body element MUST only contain hier elements at the top level
+        # so group non-hier children into hcontainers
+        kids = many_to_dict(c.hier_block_indent for c in self.content)
+        children = []
+        for is_hier, group in groupby(kids, lambda k: k['type'] == 'hier'):
+            if is_hier:
+                children.extend(group)
+            else:
+                children.append({
+                    'type': 'element',
+                    'name': 'hcontainer',
+                    'attribs': {'name': 'hcontainer'},
+                    'children': list(group),
+                })
+
         return {
             'type': 'element',
             'name': 'body',
-            'children': many_to_dict(c.hier_block_indent for c in self.content),
+            'children': children,
         }
 
 

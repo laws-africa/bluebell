@@ -225,7 +225,7 @@ def to_xml(item, prefix=''):
                  eId=eid)
 
     if item['type'] == 'element':
-        attrs = {}
+        attrs = item.get('attribs', {})
         eid = ids.make(prefix, item)
         if eid and not ids.is_unnecessary(prefix, item):
             attrs['eId'] = eid
