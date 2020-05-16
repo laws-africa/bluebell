@@ -97,7 +97,7 @@ class IdGenerator:
 
         return eid
 
-    def clear(self):
+    def reset(self):
         self.counters.clear()
 
     def needs_num(self, name):
@@ -126,20 +126,45 @@ def to_xml(item, prefix=''):
             kids = kids_to_xml(item, prefix=eid)
             kids = [E.content(*kids)]
         else:
-            # potentially mixed children
-            # group non-hier children into <intro> and <wrapUp> with hier children sandwiched
-            # in the middle
+            # there are potentially mixed hier and block/content children
+            # group non-hier children into <intro> and <wrapUp>, with hier children sandwiched in the middle
+            #
+            # intro
+            #   ...
+            # hier
+            #   ...
+            # container
+            #   ...
+            # hier
+            #   ...
+            # wrapUp
+            #   ...
+            #
+            groups = [
+                (is_hier, list(group))
+                for is_hier, group in
+                groupby(item['children'], lambda x: x['type'] == 'hier' or x['name'] == 'crossHeading')
+            ]
+
             kids = []
             seen_hier = False
-            for is_hier, group in groupby(item['children'], lambda x: x['type'] == 'hier' or x['name'] == 'crossHeading'):
+            for i, (is_hier, group) in enumerate(groups):
                 group = (to_xml(k, eid) for k in group)
+
                 if is_hier:
-                    # TODO: what if this hier element is after a wrapUp?
+                    # add hier elemnts as-is
                     seen_hier = True
                     kids.extend(group)
                 elif seen_hier:
-                    kids.append(E.wrapUp(*group))
+                    # content after a hier element
+                    if i == len(groups) - 1:
+                        # it's the last group, use a wrapUp
+                        kids.append(E.wrapUp(*group))
+                    else:
+                        # more groups to come, use a container
+                        kids.append(E.container(*group, name="container", eId=ids.make(eid, {'name': 'container'})))
                 else:
+                    # before hier
                     kids.append(E.intro(*group))
 
         if item.get('num'):
