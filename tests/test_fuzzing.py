@@ -69,7 +69,8 @@ class FuzzingTestCase(TestCase, ParserSupport):
                 ' '.join(random.sample(words, random.randint(1, 10)))
                 for x in range(length)
             ])
-            yield lines
+            if lines.strip():
+                yield lines
 
     def test_fuzzing(self):
         for text in self.make_strings():

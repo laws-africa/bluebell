@@ -196,7 +196,6 @@ class TreeNode23(TreeNode):
 class TreeNode24(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode24, self).__init__(text, offset, elements)
-        self.arguments_marker = elements[0]
         self.content = elements[1]
 
 
@@ -2339,17 +2338,21 @@ class Grammar(object):
             return cached[0]
         index1, elements0 = self._offset, []
         address1 = FAILURE
+        index2 = self._offset
         address1 = self._read_arguments_marker()
+        if address1 is FAILURE:
+            address1 = TreeNode(self._input[index2:index2], index2)
+            self._offset = index2
         if address1 is not FAILURE:
             elements0.append(address1)
             address2 = FAILURE
-            remaining0, index2, elements1, address3 = 0, self._offset, [], True
+            remaining0, index3, elements1, address3 = 0, self._offset, [], True
             while address3 is not FAILURE:
-                index3, elements2 = self._offset, []
+                index4, elements2 = self._offset, []
                 address4 = FAILURE
-                index4 = self._offset
+                index5 = self._offset
                 address4 = self._read_remedies_marker()
-                self._offset = index4
+                self._offset = index5
                 if address4 is FAILURE:
                     address4 = TreeNode(self._input[self._offset:self._offset], self._offset)
                     self._offset = self._offset
@@ -2358,9 +2361,9 @@ class Grammar(object):
                 if address4 is not FAILURE:
                     elements2.append(address4)
                     address5 = FAILURE
-                    index5 = self._offset
+                    index6 = self._offset
                     address5 = self._read_motivation_marker()
-                    self._offset = index5
+                    self._offset = index6
                     if address5 is FAILURE:
                         address5 = TreeNode(self._input[self._offset:self._offset], self._offset)
                         self._offset = self._offset
@@ -2369,9 +2372,9 @@ class Grammar(object):
                     if address5 is not FAILURE:
                         elements2.append(address5)
                         address6 = FAILURE
-                        index6 = self._offset
+                        index7 = self._offset
                         address6 = self._read_decision_marker()
-                        self._offset = index6
+                        self._offset = index7
                         if address6 is FAILURE:
                             address6 = TreeNode(self._input[self._offset:self._offset], self._offset)
                             self._offset = self._offset
@@ -2380,9 +2383,9 @@ class Grammar(object):
                         if address6 is not FAILURE:
                             elements2.append(address6)
                             address7 = FAILURE
-                            index7 = self._offset
+                            index8 = self._offset
                             address7 = self._read_conclusions_marker()
-                            self._offset = index7
+                            self._offset = index8
                             if address7 is FAILURE:
                                 address7 = TreeNode(self._input[self._offset:self._offset], self._offset)
                                 self._offset = self._offset
@@ -2391,9 +2394,9 @@ class Grammar(object):
                             if address7 is not FAILURE:
                                 elements2.append(address7)
                                 address8 = FAILURE
-                                index8 = self._offset
+                                index9 = self._offset
                                 address8 = self._read_attachment_marker()
-                                self._offset = index8
+                                self._offset = index9
                                 if address8 is FAILURE:
                                     address8 = TreeNode(self._input[self._offset:self._offset], self._offset)
                                     self._offset = self._offset
@@ -2407,32 +2410,32 @@ class Grammar(object):
                                         elements2.append(address9)
                                     else:
                                         elements2 = None
-                                        self._offset = index3
+                                        self._offset = index4
                                 else:
                                     elements2 = None
-                                    self._offset = index3
+                                    self._offset = index4
                             else:
                                 elements2 = None
-                                self._offset = index3
+                                self._offset = index4
                         else:
                             elements2 = None
-                            self._offset = index3
+                            self._offset = index4
                     else:
                         elements2 = None
-                        self._offset = index3
+                        self._offset = index4
                 else:
                     elements2 = None
-                    self._offset = index3
+                    self._offset = index4
                 if elements2 is None:
                     address3 = FAILURE
                 else:
-                    address3 = TreeNode25(self._input[index3:self._offset], index3, elements2)
+                    address3 = TreeNode25(self._input[index4:self._offset], index4, elements2)
                     self._offset = self._offset
                 if address3 is not FAILURE:
                     elements1.append(address3)
                     remaining0 -= 1
             if remaining0 <= 0:
-                address2 = TreeNode(self._input[index2:self._offset], index2, elements1)
+                address2 = TreeNode(self._input[index3:self._offset], index3, elements1)
                 self._offset = self._offset
             else:
                 address2 = FAILURE

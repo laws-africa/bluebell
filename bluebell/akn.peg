@@ -132,7 +132,7 @@ grammar akn
                        content:(!arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker !attachment_marker hier_block_indent)*
                        <Background>
 
-  arguments         <- arguments_marker
+  arguments         <- arguments_marker?
                        content:(!remedies_marker !motivation_marker !decision_marker !conclusions_marker !attachment_marker hier_block_indent)*
                        <Arguments>
 
