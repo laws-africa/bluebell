@@ -144,10 +144,11 @@ class Attachments:
 class Attachment:
     def to_dict(self):
         info = {
-            'type': 'attachment',
-            'name': self.attachment_marker.text.lower(),
+            'type': 'element',
+            'name': 'attachment',
             'attribs': {
                 'contains': 'originalVersion',
+                'name': self.attachment_marker.text.lower(),
             },
             'children': [c.elements[1].to_dict() for c in self.content]
         }

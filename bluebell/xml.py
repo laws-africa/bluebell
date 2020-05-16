@@ -206,15 +206,7 @@ def to_xml(item, prefix=''):
     if item['type'] == 'text':
         return item['value']
 
-    if item['type'] == 'element':
-        attrs = {}
-        eid = ids.make(prefix, item)
-        if eid and not ids.is_unnecessary(prefix, item):
-            attrs['eId'] = eid
-        return E(item['name'], *kids_to_xml(item, prefix=eid), **attrs)
-
-    if item['type'] == 'attachment':
-        # TODO: attachment id
+    if item['type'] == 'element' and item['name'] == 'attachment':
         eid = ids.make(prefix, item)
 
         pre = []
@@ -229,8 +221,15 @@ def to_xml(item, prefix=''):
                  E('doc',
                    E('meta'),
                    E('mainBody', *kids_to_xml(item, prefix=eid)),
-                   name=item['name'], **item.get('attribs', {})),
+                   **item.get('attribs', {})),
                  eId=eid)
+
+    if item['type'] == 'element':
+        attrs = {}
+        eid = ids.make(prefix, item)
+        if eid and not ids.is_unnecessary(prefix, item):
+            attrs['eId'] = eid
+        return E(item['name'], *kids_to_xml(item, prefix=eid), **attrs)
 
 
 class Document:
