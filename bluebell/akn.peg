@@ -239,7 +239,7 @@ grammar akn
 
   embedded_structure <- 'QUOTE' eol
                         indent
-                          content:(!dedent hier_block_element)*
+                          content:hier_block_element*
                         dedent
                         <EmbeddedStructure>
 

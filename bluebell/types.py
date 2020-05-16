@@ -291,7 +291,7 @@ class EmbeddedStructure:
         return {
             'type': 'element',
             'name': 'embeddedStructure',
-            'children': [c.elements[1].to_dict() for c in self.content]
+            'children': [c.to_dict() for c in self.content]
         }
 
 
