@@ -11,6 +11,43 @@ class HierTestCase(TestCase, ParserSupport):
     def setUp(self):
         ids.reset()
 
+    def test_hier_plain(self):
+        tree = self.parse("""
+hello
+
+PART 1
+
+  text
+""", 'hierarchical_structure', block=True)
+
+        self.assertEqual({
+            'type': 'element',
+            'name': 'hierarchicalStructure',
+            'children': [{
+                'type': 'element',
+                'name': 'body',
+                'children': [{
+                    'type': 'content',
+                    'name': 'p',
+                    'children': [{
+                        'type': 'text',
+                        'value': 'hello',
+                    }]
+                }]
+            }],
+        }, tree.to_dict())
+
+        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="hierarchicalStructure_1">
+  <body>
+    <container eId="container_1" name="container">
+      <p>hello</p>
+    </container>
+  </body>
+</hierarchicalStructure>
+""", xml)
+
     def test_hier_with_block_lists(self):
         tree = self.parse("""
 PART

@@ -110,7 +110,7 @@ grammar akn
 
                      # body that MUST have a hier element
   body              <- body_marker?
-                       content:(!conclusions_marker !attachment_marker hier_indent)*
+                       content:(!conclusions_marker !attachment_marker hier_block_indent)*
                        <Body>
 
                      # body with mixed block and hier elements

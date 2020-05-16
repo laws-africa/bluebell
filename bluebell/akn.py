@@ -139,7 +139,7 @@ class TreeNode14(TreeNode):
 class TreeNode15(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode15, self).__init__(text, offset, elements)
-        self.hier_indent = elements[2]
+        self.hier_block_indent = elements[2]
 
 
 class TreeNode16(TreeNode):
@@ -1842,7 +1842,7 @@ class Grammar(object):
                     if address5 is not FAILURE:
                         elements2.append(address5)
                         address6 = FAILURE
-                        address6 = self._read_hier_indent()
+                        address6 = self._read_hier_block_indent()
                         if address6 is not FAILURE:
                             elements2.append(address6)
                         else:
