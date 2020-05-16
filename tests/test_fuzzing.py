@@ -60,12 +60,16 @@ class FuzzingTestCase(TestCase, ParserSupport):
             for x in range(500)
         ]
 
+        # when choosing keywords, also have a bit of a chance of choosing none
         keywords = self.keywords + [''] * 3
 
         for length in random.sample(range(self.max_snippets), self.num_strings):
             lines = ''.join([
+                # newline / indent
                 random.choice(self.separators) +
+                # optional keyword
                 random.choice(keywords) + ' ' +
+                # some text
                 ' '.join(random.sample(words, random.randint(1, 10)))
                 for x in range(length)
             ])
