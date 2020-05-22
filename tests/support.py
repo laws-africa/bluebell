@@ -10,11 +10,8 @@ def print_with_lines(text):
 
 
 class ParserSupport:
-    def parse(self, text, root, block=False):
+    def parse(self, text, root):
         text = pre_parse(text.lstrip(), indent='{', dedent='}')
-        if not block:
-            # strip (indent + newline) and (dedent + newline) markers around text
-            text = text[2:-2]
 
         try:
             return parse_with_failure(text, root)

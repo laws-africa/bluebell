@@ -19,6 +19,7 @@ def pre_parse(text, indent_size=2, indent=INDENT, dedent=DEDENT):
     1. no whitespace at the start of a line
     2. no tab characters
     3. no trailing whitespace at the end of a line
+    4. a newline at the end of the string
 
     The indent and dedent parameters are the symbols the grammar
     uses to indicate indented and dedented blocks.
@@ -69,10 +70,11 @@ def pre_parse(text, indent_size=2, indent=INDENT, dedent=DEDENT):
 
     text = line_re.sub(handle_indent, text)
 
-    if stack:
-        text += (dedent + "\n") * (len(stack) - 1)
+    text += (dedent + "\n") * (len(stack) - 1)
 
-    return text
+    # exclude initial indent+newline and final dedent+newline
+    skip = len(indent) + 1
+    return text[skip:-skip]
 
 
 def parse_with_failure(text, root):

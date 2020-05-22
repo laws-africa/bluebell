@@ -19,11 +19,9 @@ class TreeNode(object):
 class TreeNode1(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode1, self).__init__(text, offset, elements)
-        self.indent = elements[0]
-        self.judgment_body = elements[1]
-        self.conclusions = elements[2]
-        self.attachments = elements[3]
-        self.dedent = elements[4]
+        self.judgment_body = elements[0]
+        self.conclusions = elements[1]
+        self.attachments = elements[2]
 
 
 class TreeNode2(TreeNode):
@@ -40,25 +38,21 @@ class TreeNode2(TreeNode):
 class TreeNode3(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode3, self).__init__(text, offset, elements)
-        self.indent = elements[0]
-        self.preface = elements[1]
-        self.preamble = elements[2]
-        self.body = elements[3]
-        self.conclusions = elements[4]
-        self.attachments = elements[5]
-        self.dedent = elements[6]
+        self.preface = elements[0]
+        self.preamble = elements[1]
+        self.body = elements[2]
+        self.conclusions = elements[3]
+        self.attachments = elements[4]
 
 
 class TreeNode4(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode4, self).__init__(text, offset, elements)
-        self.indent = elements[0]
-        self.preface = elements[1]
-        self.preamble = elements[2]
-        self.main_body = elements[3]
-        self.conclusions = elements[4]
-        self.attachments = elements[5]
-        self.dedent = elements[6]
+        self.preface = elements[0]
+        self.preamble = elements[1]
+        self.main_body = elements[2]
+        self.conclusions = elements[3]
+        self.attachments = elements[4]
 
 
 class TreeNode5(TreeNode):
@@ -533,39 +527,25 @@ class Grammar(object):
             return cached[0]
         index1, elements0 = self._offset, []
         address1 = FAILURE
-        address1 = self._read_indent()
+        address1 = self._read_judgment_body()
         if address1 is not FAILURE:
             elements0.append(address1)
             address2 = FAILURE
-            address2 = self._read_judgment_body()
+            index2 = self._offset
+            address2 = self._read_conclusions()
+            if address2 is FAILURE:
+                address2 = TreeNode(self._input[index2:index2], index2)
+                self._offset = index2
             if address2 is not FAILURE:
                 elements0.append(address2)
                 address3 = FAILURE
-                index2 = self._offset
-                address3 = self._read_conclusions()
+                index3 = self._offset
+                address3 = self._read_attachments()
                 if address3 is FAILURE:
-                    address3 = TreeNode(self._input[index2:index2], index2)
-                    self._offset = index2
+                    address3 = TreeNode(self._input[index3:index3], index3)
+                    self._offset = index3
                 if address3 is not FAILURE:
                     elements0.append(address3)
-                    address4 = FAILURE
-                    index3 = self._offset
-                    address4 = self._read_attachments()
-                    if address4 is FAILURE:
-                        address4 = TreeNode(self._input[index3:index3], index3)
-                        self._offset = index3
-                    if address4 is not FAILURE:
-                        elements0.append(address4)
-                        address5 = FAILURE
-                        address5 = self._read_dedent()
-                        if address5 is not FAILURE:
-                            elements0.append(address5)
-                        else:
-                            elements0 = None
-                            self._offset = index1
-                    else:
-                        elements0 = None
-                        self._offset = index1
                 else:
                     elements0 = None
                     self._offset = index1
@@ -704,55 +684,41 @@ class Grammar(object):
             return cached[0]
         index1, elements0 = self._offset, []
         address1 = FAILURE
-        address1 = self._read_indent()
+        index2 = self._offset
+        address1 = self._read_preface()
+        if address1 is FAILURE:
+            address1 = TreeNode(self._input[index2:index2], index2)
+            self._offset = index2
         if address1 is not FAILURE:
             elements0.append(address1)
             address2 = FAILURE
-            index2 = self._offset
-            address2 = self._read_preface()
+            index3 = self._offset
+            address2 = self._read_preamble()
             if address2 is FAILURE:
-                address2 = TreeNode(self._input[index2:index2], index2)
-                self._offset = index2
+                address2 = TreeNode(self._input[index3:index3], index3)
+                self._offset = index3
             if address2 is not FAILURE:
                 elements0.append(address2)
                 address3 = FAILURE
-                index3 = self._offset
-                address3 = self._read_preamble()
-                if address3 is FAILURE:
-                    address3 = TreeNode(self._input[index3:index3], index3)
-                    self._offset = index3
+                address3 = self._read_body()
                 if address3 is not FAILURE:
                     elements0.append(address3)
                     address4 = FAILURE
-                    address4 = self._read_body()
+                    index4 = self._offset
+                    address4 = self._read_conclusions()
+                    if address4 is FAILURE:
+                        address4 = TreeNode(self._input[index4:index4], index4)
+                        self._offset = index4
                     if address4 is not FAILURE:
                         elements0.append(address4)
                         address5 = FAILURE
-                        index4 = self._offset
-                        address5 = self._read_conclusions()
+                        index5 = self._offset
+                        address5 = self._read_attachments()
                         if address5 is FAILURE:
-                            address5 = TreeNode(self._input[index4:index4], index4)
-                            self._offset = index4
+                            address5 = TreeNode(self._input[index5:index5], index5)
+                            self._offset = index5
                         if address5 is not FAILURE:
                             elements0.append(address5)
-                            address6 = FAILURE
-                            index5 = self._offset
-                            address6 = self._read_attachments()
-                            if address6 is FAILURE:
-                                address6 = TreeNode(self._input[index5:index5], index5)
-                                self._offset = index5
-                            if address6 is not FAILURE:
-                                elements0.append(address6)
-                                address7 = FAILURE
-                                address7 = self._read_dedent()
-                                if address7 is not FAILURE:
-                                    elements0.append(address7)
-                                else:
-                                    elements0 = None
-                                    self._offset = index1
-                            else:
-                                elements0 = None
-                                self._offset = index1
                         else:
                             elements0 = None
                             self._offset = index1
@@ -826,55 +792,41 @@ class Grammar(object):
             return cached[0]
         index1, elements0 = self._offset, []
         address1 = FAILURE
-        address1 = self._read_indent()
+        index2 = self._offset
+        address1 = self._read_preface()
+        if address1 is FAILURE:
+            address1 = TreeNode(self._input[index2:index2], index2)
+            self._offset = index2
         if address1 is not FAILURE:
             elements0.append(address1)
             address2 = FAILURE
-            index2 = self._offset
-            address2 = self._read_preface()
+            index3 = self._offset
+            address2 = self._read_preamble()
             if address2 is FAILURE:
-                address2 = TreeNode(self._input[index2:index2], index2)
-                self._offset = index2
+                address2 = TreeNode(self._input[index3:index3], index3)
+                self._offset = index3
             if address2 is not FAILURE:
                 elements0.append(address2)
                 address3 = FAILURE
-                index3 = self._offset
-                address3 = self._read_preamble()
-                if address3 is FAILURE:
-                    address3 = TreeNode(self._input[index3:index3], index3)
-                    self._offset = index3
+                address3 = self._read_main_body()
                 if address3 is not FAILURE:
                     elements0.append(address3)
                     address4 = FAILURE
-                    address4 = self._read_main_body()
+                    index4 = self._offset
+                    address4 = self._read_conclusions()
+                    if address4 is FAILURE:
+                        address4 = TreeNode(self._input[index4:index4], index4)
+                        self._offset = index4
                     if address4 is not FAILURE:
                         elements0.append(address4)
                         address5 = FAILURE
-                        index4 = self._offset
-                        address5 = self._read_conclusions()
+                        index5 = self._offset
+                        address5 = self._read_attachments()
                         if address5 is FAILURE:
-                            address5 = TreeNode(self._input[index4:index4], index4)
-                            self._offset = index4
+                            address5 = TreeNode(self._input[index5:index5], index5)
+                            self._offset = index5
                         if address5 is not FAILURE:
                             elements0.append(address5)
-                            address6 = FAILURE
-                            index5 = self._offset
-                            address6 = self._read_attachments()
-                            if address6 is FAILURE:
-                                address6 = TreeNode(self._input[index5:index5], index5)
-                                self._offset = index5
-                            if address6 is not FAILURE:
-                                elements0.append(address6)
-                                address7 = FAILURE
-                                address7 = self._read_dedent()
-                                if address7 is not FAILURE:
-                                    elements0.append(address7)
-                                else:
-                                    elements0 = None
-                                    self._offset = index1
-                            else:
-                                elements0 = None
-                                self._offset = index1
                         else:
                             elements0 = None
                             self._offset = index1

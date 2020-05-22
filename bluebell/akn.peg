@@ -7,11 +7,9 @@ grammar akn
   # Judgment
   # ------------------------------------------------------------------------------ 
 
-  judgment          <- indent
-                         judgment_body
-                         conclusions:conclusions?
-                         attachments:attachments?
-                       dedent
+  judgment          <- judgment_body
+                       conclusions:conclusions?
+                       attachments:attachments?
                        <Judgment>
 
   judgment_body     <- introduction:introduction?
@@ -31,13 +29,11 @@ grammar akn
 
   bill              <- hierarchical_structure <Bill>
 
-  hierarchical_structure <- indent
-                              preface:preface?
-                              preamble:preamble?
-                              body
-                              conclusions:conclusions?
-                              attachments:attachments?
-                            dedent
+  hierarchical_structure <- preface:preface?
+                            preamble:preamble?
+                            body
+                            conclusions:conclusions?
+                            attachments:attachments?
                             <HierarchicalStructure>
 
   # ------------------------------------------------------------------------------
@@ -51,13 +47,11 @@ grammar akn
   statement         <- open_structure <Statement>
 
   # TODO: components
-  open_structure    <- indent
-                         preface:preface?
-                         preamble:preamble?
-                         main_body
-                         conclusions:conclusions?
-                         attachments:attachments?
-                       dedent
+  open_structure    <- preface:preface?
+                       preamble:preamble?
+                       main_body
+                       conclusions:conclusions?
+                       attachments:attachments?
                        <OpenStructure>
 
   # ------------------------------------------------------------------------------

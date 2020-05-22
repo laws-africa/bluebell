@@ -80,6 +80,6 @@ class FuzzingTestCase(TestCase, ParserSupport):
         for text in self.make_strings():
             for root in self.roots:
                 try:
-                    self.parse(text, root, block=True)
+                    self.parse(text, root)
                 except ParseError as e:
                     self.fail(f"Failed to parse root {root} with text: {text}")

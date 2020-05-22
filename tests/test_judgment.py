@@ -16,7 +16,7 @@ class JudgmentTestCase(TestCase, ParserSupport):
 hello
 
 there
-""", 'judgment', block=True)
+""", 'judgment')
 
         self.assertEqual({
             'type': 'element',

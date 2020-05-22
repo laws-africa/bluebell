@@ -16,7 +16,7 @@ class HierTestCase(TestCase, ParserSupport):
 hello
 
 there
-""", 'hierarchical_structure', block=True)
+""", 'hierarchical_structure')
 
         self.assertEqual({
             'type': 'element',
