@@ -249,7 +249,7 @@ grammar akn
   
   inline            <- inline_marker / [^\n]
 
-  inline_marker     <- bold / image / italics / sup / remark / ref / footnote_ref
+  inline_marker     <- bold / image / italics / underline / sup / sub / remark / ref / footnote_ref
 
                      # images like markdown
                      # eg. ![title text](image url)
@@ -265,6 +265,12 @@ grammar akn
 
                      # ^^foo^^
   sup               <- '^^' content:(!'^^' inline)+ '^^' <Sup>
+
+                     # _^foo^_
+  sub               <- '_^' content:(!'^_' inline)+ '^_' <Sub>
+
+                     # __foo__
+  underline         <- '__' content:(!'__' inline)+ '__' <Underline>
 
                      # [[remark]]
   remark            <- '[[' content:(!']]' inline)+ ']]' <Remark>

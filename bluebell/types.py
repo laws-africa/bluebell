@@ -377,8 +377,16 @@ class Italics(Inline):
     name = 'i'
 
 
+class Underline(Inline):
+    name = 'u'
+
+
 class Sup(Inline):
     name = 'sup'
+
+
+class Sub(Inline):
+    name = 'sub'
 
 
 class Remark(Inline):
