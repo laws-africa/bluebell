@@ -103,7 +103,7 @@ def parse_tree_to_xml(tree):
         return root().to_xml(tree)
     else:
         # default
-        return xml.to_xml(tree)
+        return xml.tree_to_xml(tree)
 
 
 def parse(text, root):

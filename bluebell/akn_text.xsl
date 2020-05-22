@@ -249,6 +249,31 @@
     </xsl:apply-templates>
   </xsl:template>
 
+  <!-- authorial notes are made up of two parts:
+       1. a reference, inline where the note appears (the default)
+       2. the content, as a block element (mode=content)
+  -->
+  <xsl:template match="a:authorialNote">
+    <xsl:text>++FN </xsl:text>
+    <xsl:value-of select="@marker"/>
+    <xsl:text>++</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="a:authorialNote" mode="content">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:text>FOOTNOTE </xsl:text>
+    <xsl:value-of select="@marker"/>
+    <xsl:text>&#10;&#10;</xsl:text>
+
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
+  </xsl:template>
+
   <!-- tables -->
   <xsl:template match="a:table">
     <xsl:param name="indent">0</xsl:param>
@@ -377,6 +402,10 @@
     </xsl:call-template>
     <xsl:apply-templates/>
     <xsl:text>&#10;&#10;</xsl:text>
+
+    <xsl:apply-templates select=".//a:authorialNote" mode="content">
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="a:item/a:p | a:td/a:p | a:th/a:p">

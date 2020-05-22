@@ -1,0 +1,40 @@
+PREAMBLE
+
+  some ++FN 1++ text
+
+  FOOTNOTE 1
+
+    text
+
+BODY
+
+CHAPTER 1 - Heading
+
+  SECTION 1 - Section
+
+    some text at ++FN 1++ the start
+
+    FOOTNOTE 1
+
+      footnote text
+
+    SUBSECTION 1
+
+      list intro++FN 2++ with ++FN 3++ two footnotes
+
+      FOOTNOTE 2
+
+        footnote 2 text
+
+      FOOTNOTE 3
+
+        footnote 3 text
+
+      (a) item (a)
+
+      (b) 
+
+        (i) item (b)(i)
+
+        (ii) item (b)(ii)
+

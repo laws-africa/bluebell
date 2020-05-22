@@ -291,7 +291,37 @@ class EmbeddedStructure:
         return {
             'type': 'element',
             'name': 'embeddedStructure',
-            'children': [c.to_dict() for c in self.content]
+            'children': many_to_dict(self.content),
+        }
+
+
+class FootnoteRef:
+    def to_dict(self):
+        return {
+            'type': 'element',
+            'name': 'authorialNote',
+            'attribs': {
+                'marker': self.marker.text.strip(),
+                'placement': 'bottom',
+                # TODO: document
+                'displaced': 'footnote',
+            },
+        }
+
+
+class Footnote:
+    """ This returns a non-AKN element, which is pulled into the referencing element
+    during post-processing.
+    """
+    def to_dict(self):
+        return {
+            'type': 'element',
+            'name': 'displaced',
+            'attribs': {
+                'marker': self.marker.text.strip(),
+                'name': 'footnote',
+            },
+            'children': many_to_dict(self.content),
         }
 
 

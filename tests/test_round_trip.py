@@ -1,6 +1,5 @@
 import os.path
 from unittest import TestCase
-from lxml import etree
 
 from bluebell.parser import parse_with_failure, unparse, parse_tree_to_xml, pre_parse
 from tests.support import print_with_lines
@@ -34,3 +33,6 @@ class RoundTripTestCase(TestCase):
 
     def test_judgment_attachments(self):
         self.roundtrip('judgment-attachments', 'judgment')
+
+    def test_act_footnotes(self):
+        self.roundtrip('act-footnotes', 'act')

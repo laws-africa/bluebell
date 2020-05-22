@@ -1,10 +1,15 @@
 from unittest import TestCase
 
+from lxml import etree
+from bluebell.xml import tree_to_xml, ids
 from .support import ParserSupport
 
 
 class SubflowsTestCase(TestCase, ParserSupport):
     maxDiff = None
+
+    def setUp(self):
+        ids.reset()
 
     def test_quote(self):
         tree = self.parse("""
@@ -105,3 +110,172 @@ something else
                 }]
             }],
         }, tree.to_dict())
+
+    def test_footnote_content(self):
+        tree = self.parse("""
+FOOTNOTE 99a
+  some text
+  PART 1
+    (a) item
+""", 'footnote')
+
+        self.assertEqual({
+            'type': 'element',
+            'name': 'displaced',
+            'attribs': {'marker': '99a', 'name': 'footnote'},
+            'children': [{
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'some text'
+                }],
+            }, {
+                'type': 'hier',
+                'name': 'part',
+                'num': '1',
+                'children': [{
+                    'name': 'blockList',
+                    'type': 'block',
+                    'children': [{
+                        'type': 'block',
+                        'name': 'item',
+                        'num': '(a)',
+                        'children': [{
+                            'name': 'p',
+                            'type': 'content',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'item',
+                            }]
+                        }]
+                    }]
+                }]
+            }]
+        }, tree.to_dict())
+
+    def test_footnote_marker(self):
+        tree = self.parse("""
+hello ++FN 9 9 ++ there
+""", 'line')
+
+        self.assertEqual({
+            'type': 'content',
+            'name': 'p',
+            'children': [{
+                'type': 'text',
+                'value': 'hello '
+            }, {
+                'type': 'element',
+                'name': 'authorialNote',
+                'attribs': {
+                    'marker': '9 9',
+                    'placement': 'bottom',
+                    'displaced': 'footnote',
+                },
+            }, {
+                'type': 'text',
+                'value': ' there'
+            }],
+        }, tree.to_dict())
+
+    def test_footnote_marker_incomplete(self):
+        tree = self.parse("""
+hello ++FN ++ there
+""", 'line')
+
+        self.assertEqual({
+            'type': 'content',
+            'name': 'p',
+            'children': [{
+                'type': 'text',
+                'value': 'hello ++FN ++ there'
+            }],
+        }, tree.to_dict())
+
+        tree = self.parse("""
+hello ++FN ++ ++ there
+""", 'line')
+
+        self.assertEqual({
+            'type': 'content',
+            'name': 'p',
+            'children': [{
+                'type': 'text',
+                'value': 'hello ++FN ++ ++ there'
+            }],
+        }, tree.to_dict())
+
+    def test_footnote_xml(self):
+        tree = self.parse("""
+PART 1
+  this section [++FN 1++] uses a footnote.
+  
+  FOOTNOTE 1
+  
+    which isn't very interesting
+ 
+  FOOTNOTE 2
+  
+    which is not used
+""", 'hier_element')
+
+        self.assertEqual({
+            'type': 'hier',
+            'name': 'part',
+            'num': '1',
+            'children': [{
+                'type': 'content',
+                'name': 'p',
+                'children': [{
+                    'type': 'text',
+                    'value': 'this section [',
+                }, {
+                    'type': 'element',
+                    'name': 'authorialNote',
+                    'attribs': {
+                        'placement': 'bottom',
+                        'displaced': 'footnote',
+                        'marker': '1',
+                    },
+                }, {
+                    'type': 'text',
+                    'value': '] uses a footnote.',
+                }]
+            }, {
+                'type': 'element',
+                'name': 'displaced',
+                'attribs': {'marker': '1', 'name': 'footnote'},
+                'children': [{
+                    'type': 'content',
+                    'name': 'p',
+                    'children': [{
+                        'type': 'text',
+                        'value': "which isn't very interesting",
+                    }]
+                }]
+            }, {
+                'type': 'element',
+                'name': 'displaced',
+                'attribs': {'marker': '2', 'name': 'footnote'},
+                'children': [{
+                    'type': 'content',
+                    'name': 'p',
+                    'children': [{
+                        'type': 'text',
+                        'value': "which is not used",
+                    }]
+                }]
+            }]
+        }, tree.to_dict())
+
+        xml = etree.tostring(tree_to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
+  <num>1</num>
+  <content>
+    <p>this section [<authorialNote marker="1" placement="bottom" eId="part_1__authorialNote_1"><p>which isn't very interesting</p></authorialNote>] uses a footnote.</p>
+  </content>
+</part>
+""", xml)
+

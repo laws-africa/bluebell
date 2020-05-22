@@ -195,7 +195,7 @@ grammar akn
 
   nested_block_element <- indent content:block_element+ dedent <NestedBlockElement>
 
-  block_elements    <- block_list / table / longtitle / embedded_structure / line
+  block_elements    <- block_list / table / longtitle / footnote / embedded_structure / line
 
   block_list        <- block_item+ <BlockList>
 
@@ -233,9 +233,15 @@ grammar akn
 
   embedded_structure <- 'QUOTE' eol
                         indent
-                          content:hier_block_element*
+                          content:hier_block_element+
                         dedent
                         <EmbeddedStructure>
+
+  footnote          <- 'FOOTNOTE' space marker:([^ \n]+) space? eol
+                       indent
+                         content:hier_block_element+
+                       dedent
+                       <Footnote>
 
   # ------------------------------------------------------------------------------ 
   # Inlines and markers
@@ -243,7 +249,7 @@ grammar akn
   
   inline            <- inline_marker / [^\n]
 
-  inline_marker     <- bold / image / italics / remark / ref
+  inline_marker     <- bold / image / italics / remark / ref / footnote_ref
 
                      # images like markdown
                      # eg. ![title text](image url)
@@ -262,6 +268,10 @@ grammar akn
 
                      # [text](href)
   ref               <- '[' content:(!'](' [^\n])* '](' href:[^)\n]* ')' <Ref>
+
+                     # ++FN 9++
+                     # TODO: change ++ to { and }
+  footnote_ref      <- '++FN' space marker:(!'++' [^\n])+ '++' <FootnoteRef>
 
   # ------------------------------------------------------------------------------
   # Terminals

@@ -1,6 +1,6 @@
 import sys
 
-from bluebell.parser import pre_parse, parse_with_failure
+from bluebell.parser import pre_parse, parse_with_failure, INDENT, DEDENT
 
 
 def print_with_lines(text):

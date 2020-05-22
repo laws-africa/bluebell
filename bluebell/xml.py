@@ -232,10 +232,42 @@ def to_xml(item, prefix=''):
         return E(item['name'], *kids_to_xml(item, prefix=eid), **attrs)
 
 
+def post_process(xml):
+    ns = xml.nsmap[None]
+
+    def get_displaced_content(start, name, marker):
+        for parent in start.iterancestors():
+            for child in parent.iter(f'{{{ns}}}displaced'):
+                if child.get('marker') == marker and child.get('name') == name:
+                    return child
+            # TODO: when to stop
+
+    # resolve displaced content (ie. footnotes)
+    for ref in xml.xpath('//a:*[@displaced]', namespaces={'a': ns}):
+        name = ref.attrib.pop('displaced')
+
+        # find the displaced content, by walking through following nodes in the tree
+        content = get_displaced_content(ref, name, ref.get('marker'))
+        for child in content:
+            ref.append(child)
+        content.getparent().remove(content)
+
+    # clean up unused displaced content
+    for displaced in xml.iter(f'{{{ns}}}displaced'):
+        displaced.getparent().remove(displaced)
+
+    return xml
+
+
+def tree_to_xml(tree):
+    root = ET.fromstring(ET.tostring(to_xml(tree)))
+    return post_process(root)
+
+
 class Document:
     def make_xml(self, tree):
         # TODO: empty ARGUMENTS, REMEDIES etc. should be excluded
-        return E.akomaNtoso(to_xml(tree))
+        return E.akomaNtoso(tree_to_xml(tree))
 
     def meta(self):
         return ET.fromstring(ET.tostring(E.meta()))

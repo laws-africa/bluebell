@@ -114,6 +114,27 @@ Block elements cannot have `hier` children.
 * `subheading`: subheading element; a block element
 * `num`: number; inline element
 
+### Footnotes
+
+Footnotes are treated specially because they are a subflow element that appears inline.
+The are split into two parts: a reference to the footnote inline, and the footnote content:
+
+    This text[++FN 1++] has a footnote.
+    
+    FOOTNOTE 1
+    
+      the content of the footnote
+
+When converting the parse tree into XML, the footnote content must be inserted into
+the point where it is referenced. This is done by post-processing the XML. A special non-AKN
+`<displaced name="footnote" marker="1">...</displaced>` element is inserted in the
+XML where the footnote content appears. The reference to the footnote inline is an
+appropriate `authorialNote` element with a `displaced="footnote"` attribute.
+
+Post-processing code then matches the `<displaced>` element with its `<authorialNote>`
+using the name and marker, moves the children of the `displaced` into the `authorialNote`,
+and removes the `displaced` element.
+
 ## Example
 
 ```javascript
