@@ -8,7 +8,9 @@ CHAPTER 1 - Heading
 
   SECTION 1 - Section
 
-    some text at the start
+    some **text** at //the start// with **multiple //types// of** markup
+
+    include ^^superscripts^^ which are fun
 
     SUBSECTION 1
 

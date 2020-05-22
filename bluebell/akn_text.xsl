@@ -502,6 +502,12 @@
     <xsl:text>**</xsl:text>
   </xsl:template>
 
+  <xsl:template match="a:sup">
+    <xsl:text>^^</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>^^</xsl:text>
+  </xsl:template>
+
   <xsl:template match="a:eol">
     <xsl:param name="indent">0</xsl:param>
 
