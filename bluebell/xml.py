@@ -14,7 +14,8 @@ class IdGenerator:
     num_strip_re = re.compile(r'[ .()[\]]')
 
     id_exempt = set("act amendment amendmentList bill debate debateReport doc documentCollection judgment"
-                    " officialGazette portion statement body mainBody judgmentBody attachments".split())
+                    " officialGazette portion statement body mainBody judgmentBody attachments"
+                    " tr td th".split())
     """ Top-level document types that never have ids. """
 
     id_unnecessary = set("arguments background conclusions decision header introduction motivation preamble preface"

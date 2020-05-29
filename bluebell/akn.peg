@@ -212,9 +212,6 @@ grammar akn
                        dedent)?
                        <BlockItem>
 
-                     # TODO
-  table             <- 'TABLE' eol <Table>
-
   longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
 
   subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
@@ -226,6 +223,49 @@ grammar akn
                      # against it, we don't have to guard at every place that
                      # could start a line.
   line              <- !dedent content:inline+ eol <Line>
+
+  # ------------------------------------------------------------------------------
+  # Tables
+  # ------------------------------------------------------------------------------
+
+                     # TODO
+  table             <- table_start
+                       table_body
+                       table_end
+                       <Table>
+
+  table_start       <- '{|' eol
+
+  table_body        <- (table_row / table_cell)*
+
+  table_row         <- '|-' eol
+
+  table_cell        <- !table_end
+                       # td (|) or th (!) cell marker with attributes
+                       table_cell_start attribs:table_attribs? space?
+
+                       # cell's first content line, then multiple lines
+                       initial:table_line content:(!table_cell_start space? line:table_line)*
+                       <TableCell>
+
+  table_cell_start  <- [!|]
+
+                       # TODO block elements
+  table_line        <- line
+
+                       # foo=one bar=two |
+  table_attribs     <- space? attribs:(table_attrib+) '|'
+                       <TableAttribs>
+
+                       # foo=bar
+                       # foo="bar"
+                       # foo='bar'
+  table_attrib      <- name:([a-z_-]+) '=' value:(
+                         ('"' (!'"' .)* '"') /
+                         ("'" (!"'" .)* "'"))
+                       space?
+
+  table_end         <- '|}' eol
 
   # ------------------------------------------------------------------------------
   # Subflows (that go from inlines into nested complex structures)

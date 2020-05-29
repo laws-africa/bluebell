@@ -255,9 +255,49 @@ class BlockItem:
 
 class Table:
     def to_dict(self):
+        rows = []
+        cells = []
+
+        for child in self.table_body:
+            if isinstance(child, TableCell):
+                cells.append(child)
+            else:
+                if cells:
+                    rows.append(cells)
+                cells = []
+
+        if cells:
+            rows.append(cells)
+
         return {
-            'type': 'block',
+            'type': 'element',
             'name': 'table',
+            'children': [{
+                'type': 'element',
+                'name': 'tr',
+                'children': [c.to_dict() for c in row],
+            } for row in rows]
+        }
+
+
+class TableCell:
+    def to_dict(self):
+        info = {
+            'type': 'element',
+            'name': 'th' if self.table_cell_start.text == '!' else 'td',
+            'children': [self.initial.to_dict()],
+        }
+
+        if self.attribs.text:
+            info['attribs'] = self.attribs.to_dict()
+
+        return info
+
+
+class TableAttribs:
+    def to_dict(self):
+        return {
+            a.name.text: a.value.elements[1].text for a in self.attribs
         }
 
 
