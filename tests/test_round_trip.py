@@ -23,7 +23,7 @@ class RoundTripTestCase(TestCase):
 
         actual = unparse(xml)
 
-        self.assertMultiLineEqual(input, actual)
+        self.assertMultiLineEqual(actual, input)
 
     def test_act(self):
         self.roundtrip('act', 'act')

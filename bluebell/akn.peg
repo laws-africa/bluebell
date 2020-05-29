@@ -278,9 +278,9 @@ grammar akn
                      # [text](href)
   ref               <- '[' content:(!'](' [^\n])* '](' href:[^)\n]* ')' <Ref>
 
-                     # ++FN 9++
+                     # ++FOOTNOTE 9++
                      # TODO: change ++ to { and }
-  footnote_ref      <- '++FN' space marker:(!'++' [^\n])+ '++' <FootnoteRef>
+  footnote_ref      <- '++FOOTNOTE' space marker:(!'++' [^\n])+ '++' <FootnoteRef>
 
   # ------------------------------------------------------------------------------
   # Terminals

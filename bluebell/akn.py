@@ -5337,17 +5337,17 @@ class Grammar(object):
         address1 = FAILURE
         chunk0 = None
         if self._offset < self._input_size:
-            chunk0 = self._input[self._offset:self._offset + 4]
-        if chunk0 == '++FN':
-            address1 = TreeNode(self._input[self._offset:self._offset + 4], self._offset)
-            self._offset = self._offset + 4
+            chunk0 = self._input[self._offset:self._offset + 10]
+        if chunk0 == '++FOOTNOTE':
+            address1 = TreeNode(self._input[self._offset:self._offset + 10], self._offset)
+            self._offset = self._offset + 10
         else:
             address1 = FAILURE
             if self._offset > self._failure:
                 self._failure = self._offset
                 self._expected = []
             if self._offset == self._failure:
-                self._expected.append('\'++FN\'')
+                self._expected.append('\'++FOOTNOTE\'')
         if address1 is not FAILURE:
             elements0.append(address1)
             address2 = FAILURE

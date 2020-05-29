@@ -254,7 +254,7 @@
        2. the content, as a block element (mode=content)
   -->
   <xsl:template match="a:authorialNote">
-    <xsl:text>++FN </xsl:text>
+    <xsl:text>++FOOTNOTE </xsl:text>
     <xsl:value-of select="@marker"/>
     <xsl:text>++</xsl:text>
   </xsl:template>

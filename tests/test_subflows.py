@@ -156,7 +156,7 @@ FOOTNOTE 99a
 
     def test_footnote_marker(self):
         tree = self.parse("""
-hello ++FN 9 9 ++ there
+hello ++FOOTNOTE 9 9 ++ there
 """, 'line')
 
         self.assertEqual({
@@ -181,7 +181,7 @@ hello ++FN 9 9 ++ there
 
     def test_footnote_marker_incomplete(self):
         tree = self.parse("""
-hello ++FN ++ there
+hello ++FOOTNOTE ++ there
 """, 'line')
 
         self.assertEqual({
@@ -189,12 +189,12 @@ hello ++FN ++ there
             'name': 'p',
             'children': [{
                 'type': 'text',
-                'value': 'hello ++FN ++ there'
+                'value': 'hello ++FOOTNOTE ++ there'
             }],
         }, tree.to_dict())
 
         tree = self.parse("""
-hello ++FN ++ ++ there
+hello ++FOOTNOTE ++ ++ there
 """, 'line')
 
         self.assertEqual({
@@ -202,14 +202,14 @@ hello ++FN ++ ++ there
             'name': 'p',
             'children': [{
                 'type': 'text',
-                'value': 'hello ++FN ++ ++ there'
+                'value': 'hello ++FOOTNOTE ++ ++ there'
             }],
         }, tree.to_dict())
 
     def test_footnote_xml(self):
         tree = self.parse("""
 PART 1
-  this section [++FN 1++] uses a footnote.
+  this section [++FOOTNOTE 1++] uses a footnote.
   
   FOOTNOTE 1
   
