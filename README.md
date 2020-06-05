@@ -37,33 +37,12 @@ Parse an `act` in `act.txt` and output pretty XML: `bluebell act act.txt --prett
 
 Use `--json` for intermediat json output.
 
-
-## Development
-
-1. Install customised Canopy as per below
-
-### Canopy
-
-Install customised canopy from github:
-
-```
-npm install git://github.com/laws-africa/canopy.git#lawsafrica
-```
-
-TODO: you may need to check it out elsewhere and compile it
-
-### Compiling a grammar
-
-```
-npx canopy akn.peg --lang python
-```
-
-will produce akn.py
-
 ## Intermediate output structure
 
 The parser produces a dict (Python) parse tree, which is later transformed into XML.
 This intermediate step makes it easier to adapt the parser's output it AKN's sometimes finnicky requirements.
+
+You can see an example of this structure by running `bluebell act act.txt --json`
 
 ```
 {
@@ -204,3 +183,25 @@ and removes the `displaced` element.
   }],
 }
 ```
+
+## Development
+
+1. Install customised Canopy as per below
+
+### Canopy
+
+Install customised canopy from github:
+
+```
+npm install git://github.com/laws-africa/canopy.git#lawsafrica
+```
+
+TODO: you may need to check it out elsewhere and compile it
+
+### Compiling a grammar
+
+```
+npx canopy akn.peg --lang python
+```
+
+will produce akn.py
