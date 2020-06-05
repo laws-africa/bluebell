@@ -1,18 +1,18 @@
-# Generic AKN parser
+# Bluebell
 
-Generic Akoma Ntoso 3 parser.
+Bluebell is a (fairly) generic Akoma Ntoso 3 parser, supporting all hierarchical elements and multiple document types.
 
-Supports the following Akoma Ntoso document types:
+Bluebell supports the following Akoma Ntoso document types:
 
 * act, bill (hierarchicalStructure)
 * debateReport, doc, statement (openStructure)
-* judment (judgmentStructure)
+* judgment (judgmentStructure)
 
 ## Usage
 
 ### From Python
 
-Use the parser from python as follows:
+Use the parser from Python as follows:
 
 ```python
 from lxml import etree
@@ -31,9 +31,9 @@ print(etree.tostring(xml, pretty_print=True, encoding='unicode'))
 
 ### Commandline
 
-In general, see `python parse.py --help`
+In general, see `bluebell --help`
 
-Parse an `act` in `act.txt` and output pretty XML: `python parse.py act act.txt --pretty`
+Parse an `act` in `act.txt` and output pretty XML: `bluebell act act.txt --pretty`
 
 Use `--json` for intermediat json output.
 
@@ -60,9 +60,10 @@ npx canopy akn.peg --lang python
 
 will produce akn.py
 
-## Output structure
+## Intermediate output structure
 
-The parser produces a dict (Python) or object (Javascript) parse tree.
+The parser produces a dict (Python) parse tree, which is later transformed into XML.
+This intermediate step makes it easier to adapt the parser's output it AKN's sometimes finnicky requirements.
 
 ```
 {
@@ -78,11 +79,13 @@ The parser produces a dict (Python) or object (Javascript) parse tree.
 
 Valid types:
 
-* `hier`: hierarchical elemnt
+* `element`: simple element
+* `hier`: hierarchical element
 * `block`: block element
-* `inline`: inline content
+* `content`: content element, such as `p` or `listIntroduction`
+* `inline`: inline element, such as `b` or `ref`
 * `text`: plain text
-* `marker`: a marker element
+* `marker`: a marker element that cannot contain children, such as `img`
 
 ### Children
 
