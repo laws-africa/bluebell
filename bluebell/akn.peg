@@ -245,13 +245,13 @@ grammar akn
                        table_cell_start attribs:table_attribs? space?
 
                        # cell's first content line, then multiple lines
-                       initial:table_line content:(!table_cell_start space? line:table_line)*
+                       initial:(eol / table_line?)
+                       content:(!table_cell_start line:table_line)*
                        <TableCell>
 
   table_cell_start  <- [!|]
 
-                       # TODO block elements
-  table_line        <- line
+  table_line        <- block_element
 
                        # foo=one bar=two |
   table_attribs     <- space? attribs:(table_attrib+) '|'

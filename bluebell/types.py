@@ -282,10 +282,15 @@ class Table:
 
 class TableCell:
     def to_dict(self):
+        children = []
+        if isinstance(self.initial, Line):
+            children.append(self.initial.to_dict())
+        children.extend(many_to_dict(c.table_line for c in self.content))
+
         info = {
             'type': 'element',
             'name': 'th' if self.table_cell_start.text == '!' else 'td',
-            'children': [self.initial.to_dict()],
+            'children': children,
         }
 
         if self.attribs.text:
