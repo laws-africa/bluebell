@@ -262,11 +262,19 @@ SECTION 1.
                 'children': [{
                     'type': 'element',
                     'name': 'td',
-                    'children': [],
+                    'children': [{
+                        'type': 'content',
+                        'name': 'p',
+                        'children': [],
+                    }],
                 }, {
                     'type': 'element',
                     'name': 'td',
-                    'children': [],
+                    'children': [{
+                        'type': 'content',
+                        'name': 'p',
+                        'children': [],
+                    }],
                 }, {
                     'type': 'element',
                     'name': 'td',
@@ -285,16 +293,27 @@ SECTION 1.
                 'children': [{
                     'type': 'element',
                     'name': 'td',
-                    'children': [],
+                    'children': [{
+                        'type': 'content',
+                        'name': 'p',
+                        'children': [],
+                    }],
                 }, {
                     'type': 'element',
                     'name': 'th',
-                    'children': [],
+                    'children': [{
+                        'type': 'content',
+                        'name': 'p',
+                        'children': [],
+                    }],
                 }],
             }]
         }, tree.to_dict())
 
     def test_nested_blocks(self):
+        """ In future, we may want to support nested blocks in cells.
+        For now, they aren't supported.
+        """
         tree = self.parse("""
 SECTION 1.
 
@@ -321,48 +340,23 @@ SECTION 1.
                         'type': 'element',
                         'name': 'td',
                         'children': [{
-                            'type': 'block',
-                            'name': 'blockList',
+                            'type': 'content',
+                            'name': 'p',
                             'children': [{
-                                'type': 'block',
-                                'name': 'item',
-                                'num': '(a)',
-                                'children': [{
-                                    'type': 'content',
-                                    'name': 'p',
-                                    'children': [{
-                                        'type': 'text',
-                                        'value': 'item a',
-                                    }],
-                                }, {
-                                    'type': 'block',
-                                    'name': 'blockList',
-                                    'children': [{
-                                        'type': 'block',
-                                        'name': 'item',
-                                        'num': '(i)',
-                                        'children': [{
-                                            'type': 'content',
-                                            'name': 'p',
-                                            'children': [{
-                                                'type': 'text',
-                                                'value': 'item a-i',
-                                            }]
-                                        }]
-                                    }]
-                                }]
+                                'type': 'text',
+                                'value': '(a) item a',
                             }, {
-                                'type': 'block',
-                                'name': 'item',
-                                'num': '(b)',
-                                'children': [{
-                                    'type': 'content',
-                                    'name': 'p',
-                                    'children': [{
-                                        'type': 'text',
-                                        'value': 'item b',
-                                    }]
-                                }]
+                                'type': 'marker',
+                                'name': 'eol'
+                            }, {
+                                'type': 'text',
+                                'value': '(i) item a-i',
+                            }, {
+                                'type': 'marker',
+                                'name': 'eol'
+                            }, {
+                                'type': 'text',
+                                'value': '(b) item b',
                             }]
                         }]
                     }]
@@ -378,22 +372,7 @@ SECTION 1.
     <table eId="sec_1__table_1">
       <tr>
         <td>
-          <blockList eId="list_1">
-            <item eId="list_1__item_a">
-              <num>(a)</num>
-              <p>item a</p>
-              <blockList eId="list_1__item_a__list_1">
-                <item eId="list_1__item_a__list_1__item_i">
-                  <num>(i)</num>
-                  <p>item a-i</p>
-                </item>
-              </blockList>
-            </item>
-            <item eId="list_1__item_b">
-              <num>(b)</num>
-              <p>item b</p>
-            </item>
-          </blockList>
+          <p>(a) item a<eol/>(i) item a-i<eol/>(b) item b</p>
         </td>
       </tr>
     </table>
@@ -404,14 +383,17 @@ SECTION 1.
     def test_linebreaks(self):
         tree = self.parse("""
 {|
-| foo
-bar
+| one
+
+two
+
 |
-foo
+
+three
+
 |}
 """, 'table')
 
-        # TODO: this isn't quite right yet
         self.assertEqual({
             'type': 'element',
             'name': 'table',
@@ -426,13 +408,16 @@ foo
                         'name': 'p',
                         'children': [{
                             'type': 'text',
-                            'value': 'foo',
+                            'value': 'one',
                         }, {
                             'type': 'marker',
-                            'name': 'br',
+                            'name': 'eol',
+                        }, {
+                            'type': 'marker',
+                            'name': 'eol',
                         }, {
                             'type': 'text',
-                            'value': 'bar',
+                            'value': 'two',
                         }]
                     }]
                 }, {
@@ -442,11 +427,8 @@ foo
                         'type': 'content',
                         'name': 'p',
                         'children': [{
-                            'type': 'marker',
-                            'name': 'br',
-                        }, {
                             'type': 'text',
-                            'value': 'foo',
+                            'value': 'three',
                         }]
                     }]
                 }]
@@ -458,9 +440,32 @@ foo
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>
     <td>
-      <p>foo<br>bar</p>
+      <p>one<eol/><eol/>two</p>
     </td>
-      <td><br>foo</p>
+    <td>
+      <p>three</p>
+    </td>
+  </tr>
+</table>
+""", xml)
+
+    def test_non_cells(self):
+        tree = self.parse("""
+{|
+| one
+|} two
+|}
+""", 'table')
+
+        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
+  <tr>
+    <td>
+      <p>one</p>
+    </td>
+    <td>
+      <p>} two</p>
     </td>
   </tr>
 </table>

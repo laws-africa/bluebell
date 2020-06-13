@@ -281,22 +281,47 @@ class Table:
 
 
 class TableCell:
+    def trim(self, kids, posn):
+        while kids and kids[posn]['type'] == 'marker' and kids[posn]['name'] == 'eol':
+            kids.pop(posn)
+
     def to_dict(self):
-        children = []
-        if isinstance(self.initial, Line):
-            children.append(self.initial.to_dict())
-        children.extend(many_to_dict(c.table_line for c in self.content))
+        # first line
+        children = self.initial.to_dict(last=not(self.content.text))
+
+        # remaining lines
+        last = len(self.content.elements) - 1
+        for i, c in enumerate(self.content):
+            if isinstance(c.table_line, TableLine):
+                children.extend(c.table_line.to_dict(last=(i == last)))
+
+        # trim leading and trailing newline markers
+        self.trim(children, 0)
+        self.trim(children, -1)
 
         info = {
             'type': 'element',
             'name': 'th' if self.table_cell_start.text == '!' else 'td',
-            'children': children,
+            'children': [{
+                'type': 'content',
+                'name': 'p',
+                'children': children,
+            }]
         }
 
         if self.attribs.text:
             info['attribs'] = self.attribs.to_dict()
 
         return info
+
+
+class TableLine:
+    def to_dict(self, last):
+        kids = Inline.many_to_dict(self.content)
+        # whitespace
+        for x in range(len(self.eol.text)):
+            kids.append({'type': 'marker', 'name': 'eol'})
+        return kids
 
 
 class TableAttribs:

@@ -241,17 +241,16 @@ grammar akn
   table_row         <- '|-' eol
 
   table_cell        <- !table_end
-                       # td (|) or th (!) cell marker with attributes
-                       table_cell_start attribs:table_attribs? space?
-
-                       # cell's first content line, then multiple lines
-                       initial:(eol / table_line?)
-                       content:(!table_cell_start line:table_line)*
+                       # td (|) or th (!) cell marker with attributes, then content on first line
+                       table_cell_start attribs:table_attribs? space? initial:table_line
+                       # cell contents after the first line
+                       content:(!table_cell_start table_line)*
                        <TableCell>
 
   table_cell_start  <- [!|]
 
-  table_line        <- block_element
+  table_line        <- indent / dedent / (content:inline* eol)
+                       <TableLine>
 
                        # foo=one bar=two |
   table_attribs     <- space? attribs:(table_attrib+) '|'
@@ -328,7 +327,7 @@ grammar akn
 
   eol               <- newline empty_line*
 
-  empty_line        <- space? newline
+  empty_line        <- newline
 
   space             <- ' '+
 
