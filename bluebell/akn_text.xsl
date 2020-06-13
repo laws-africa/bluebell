@@ -284,7 +284,7 @@
     <xsl:text>{| </xsl:text>
 
     <!-- attributes -->
-    <xsl:for-each select="@*[local-name()!='id']">
+    <xsl:for-each select="@*[local-name() != 'eId']">
       <xsl:value-of select="local-name(.)" />
       <xsl:text>="</xsl:text>
       <xsl:value-of select="." />
