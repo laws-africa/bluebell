@@ -43,6 +43,11 @@ class FuzzingTestCase(TestCase, ParserSupport):
         '\n    ',
         '\n',
         ' ',
+        '|',
+        '|-',
+        '!',
+        '{|',
+        '}|',
     ]
 
     min_snippets = 1

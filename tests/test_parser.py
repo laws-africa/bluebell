@@ -84,3 +84,31 @@ one
 """, indent_size=4, indent='{', dedent='}'),
                          )
 
+    def test_pre_parse_tables(self):
+        self.assertEqual("""
+SECTION 1.
+
+{
+SUBSECTION (a)
+
+{
+{|
+|
+}
+bar
+{
+|}
+}
+}
+""", pre_parse("""
+SECTION 1.
+
+  SUBSECTION (a)
+      
+    {|
+    |
+  bar
+    |}
+""", indent_size=2, indent='{', dedent='}'),
+                         )
+

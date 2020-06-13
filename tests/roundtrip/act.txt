@@ -24,3 +24,14 @@ CHAPTER 1 - Heading
 
         (ii) item (b)(ii)
 
+      {| 
+      |-
+      ! colspan="2" | The Heading
+      |-
+      | cell 1
+      
+      with newlines
+      | cell 2
+      |-
+      |}
+
