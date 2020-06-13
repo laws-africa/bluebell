@@ -242,15 +242,19 @@ grammar akn
 
   table_cell        <- !table_end
                        # td (|) or th (!) cell marker with attributes, then content on first line
-                       table_cell_start attribs:table_attribs? space? initial:table_line
+                       table_cell_start attribs:table_attribs? space? initial:table_cell_line
                        # cell contents after the first line
-                       content:(!table_cell_start table_line)*
+                       content:table_cell_block*
                        <TableCell>
 
   table_cell_start  <- [!|]
 
-  table_line        <- indent / dedent / (content:inline* eol)
-                       <TableLine>
+  table_cell_block  <- nested_table_cell_block / table_cell_line
+
+  nested_table_cell_block <- indent content:table_cell_block+ dedent <NestedBlockElement>
+
+                       # table_cell_start also conveniently handles table row and table end markers
+  table_cell_line   <- !dedent !table_cell_start content:inline* eol <TableCellLine>
 
                        # foo=one bar=two |
   table_attribs     <- space? attribs:(table_attrib+) '|'

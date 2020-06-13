@@ -418,21 +418,23 @@ class TreeNode57(TreeNode):
         self.table_cell_start = elements[1]
         self.attribs = elements[2]
         self.initial = elements[4]
-        self.table_line = elements[4]
+        self.table_cell_line = elements[4]
         self.content = elements[5]
 
 
 class TreeNode58(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode58, self).__init__(text, offset, elements)
-        self.table_line = elements[1]
+        self.indent = elements[0]
+        self.content = elements[1]
+        self.dedent = elements[2]
 
 
 class TreeNode59(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode59, self).__init__(text, offset, elements)
-        self.content = elements[0]
-        self.eol = elements[1]
+        self.content = elements[2]
+        self.eol = elements[3]
 
 
 class TreeNode60(TreeNode):
@@ -4251,39 +4253,13 @@ class Grammar(object):
                     if address4 is not FAILURE:
                         elements0.append(address4)
                         address5 = FAILURE
-                        address5 = self._read_table_line()
+                        address5 = self._read_table_cell_line()
                         if address5 is not FAILURE:
                             elements0.append(address5)
                             address6 = FAILURE
                             remaining0, index5, elements1, address7 = 0, self._offset, [], True
                             while address7 is not FAILURE:
-                                index6, elements2 = self._offset, []
-                                address8 = FAILURE
-                                index7 = self._offset
-                                address8 = self._read_table_cell_start()
-                                self._offset = index7
-                                if address8 is FAILURE:
-                                    address8 = TreeNode(self._input[self._offset:self._offset], self._offset)
-                                    self._offset = self._offset
-                                else:
-                                    address8 = FAILURE
-                                if address8 is not FAILURE:
-                                    elements2.append(address8)
-                                    address9 = FAILURE
-                                    address9 = self._read_table_line()
-                                    if address9 is not FAILURE:
-                                        elements2.append(address9)
-                                    else:
-                                        elements2 = None
-                                        self._offset = index6
-                                else:
-                                    elements2 = None
-                                    self._offset = index6
-                                if elements2 is None:
-                                    address7 = FAILURE
-                                else:
-                                    address7 = TreeNode58(self._input[index6:self._offset], index6, elements2)
-                                    self._offset = self._offset
+                                address7 = self._read_table_cell_block()
                                 if address7 is not FAILURE:
                                     elements1.append(address7)
                                     remaining0 -= 1
@@ -4345,55 +4321,139 @@ class Grammar(object):
         self._cache['table_cell_start'][index0] = (address0, self._offset)
         return address0
 
-    def _read_table_line(self):
+    def _read_table_cell_block(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['table_line'].get(index0)
+        cached = self._cache['table_cell_block'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
         index1 = self._offset
-        address0 = self._read_indent()
+        address0 = self._read_nested_table_cell_block()
         if address0 is FAILURE:
             self._offset = index1
-            address0 = self._read_dedent()
+            address0 = self._read_table_cell_line()
             if address0 is FAILURE:
                 self._offset = index1
-                index2, elements0 = self._offset, []
-                address1 = FAILURE
-                remaining0, index3, elements1, address2 = 0, self._offset, [], True
-                while address2 is not FAILURE:
-                    address2 = self._read_inline()
-                    if address2 is not FAILURE:
-                        elements1.append(address2)
-                        remaining0 -= 1
-                if remaining0 <= 0:
-                    address1 = TreeNode(self._input[index3:self._offset], index3, elements1)
-                    self._offset = self._offset
-                else:
-                    address1 = FAILURE
-                if address1 is not FAILURE:
-                    elements0.append(address1)
-                    address3 = FAILURE
-                    address3 = self._read_eol()
-                    if address3 is not FAILURE:
-                        elements0.append(address3)
-                    else:
-                        elements0 = None
-                        self._offset = index2
+        self._cache['table_cell_block'][index0] = (address0, self._offset)
+        return address0
+
+    def _read_nested_table_cell_block(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['nested_table_cell_block'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        index1, elements0 = self._offset, []
+        address1 = FAILURE
+        address1 = self._read_indent()
+        if address1 is not FAILURE:
+            elements0.append(address1)
+            address2 = FAILURE
+            remaining0, index2, elements1, address3 = 1, self._offset, [], True
+            while address3 is not FAILURE:
+                address3 = self._read_table_cell_block()
+                if address3 is not FAILURE:
+                    elements1.append(address3)
+                    remaining0 -= 1
+            if remaining0 <= 0:
+                address2 = TreeNode(self._input[index2:self._offset], index2, elements1)
+                self._offset = self._offset
+            else:
+                address2 = FAILURE
+            if address2 is not FAILURE:
+                elements0.append(address2)
+                address4 = FAILURE
+                address4 = self._read_dedent()
+                if address4 is not FAILURE:
+                    elements0.append(address4)
                 else:
                     elements0 = None
-                    self._offset = index2
-                if elements0 is None:
-                    address0 = FAILURE
-                else:
-                    address0 = TreeNode59(self._input[index2:self._offset], index2, elements0)
-                    self._offset = self._offset
-                cls0 = type(address0)
-                if cls0 != object:
-                    address0.__class__ = type(cls0.__name__ + 'TableLine', (cls0, self._types.TableLine), {})
-                if address0 is FAILURE:
                     self._offset = index1
-        self._cache['table_line'][index0] = (address0, self._offset)
+            else:
+                elements0 = None
+                self._offset = index1
+        else:
+            elements0 = None
+            self._offset = index1
+        if elements0 is None:
+            address0 = FAILURE
+        else:
+            address0 = TreeNode58(self._input[index1:self._offset], index1, elements0)
+            self._offset = self._offset
+        cls0 = type(address0)
+        if cls0 != object:
+            address0.__class__ = type(cls0.__name__ + 'NestedBlockElement', (cls0, self._types.NestedBlockElement), {})
+        self._cache['nested_table_cell_block'][index0] = (address0, self._offset)
+        return address0
+
+    def _read_table_cell_line(self):
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['table_cell_line'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        index1, elements0 = self._offset, []
+        address1 = FAILURE
+        index2 = self._offset
+        address1 = self._read_dedent()
+        self._offset = index2
+        if address1 is FAILURE:
+            address1 = TreeNode(self._input[self._offset:self._offset], self._offset)
+            self._offset = self._offset
+        else:
+            address1 = FAILURE
+        if address1 is not FAILURE:
+            elements0.append(address1)
+            address2 = FAILURE
+            index3 = self._offset
+            address2 = self._read_table_cell_start()
+            self._offset = index3
+            if address2 is FAILURE:
+                address2 = TreeNode(self._input[self._offset:self._offset], self._offset)
+                self._offset = self._offset
+            else:
+                address2 = FAILURE
+            if address2 is not FAILURE:
+                elements0.append(address2)
+                address3 = FAILURE
+                remaining0, index4, elements1, address4 = 0, self._offset, [], True
+                while address4 is not FAILURE:
+                    address4 = self._read_inline()
+                    if address4 is not FAILURE:
+                        elements1.append(address4)
+                        remaining0 -= 1
+                if remaining0 <= 0:
+                    address3 = TreeNode(self._input[index4:self._offset], index4, elements1)
+                    self._offset = self._offset
+                else:
+                    address3 = FAILURE
+                if address3 is not FAILURE:
+                    elements0.append(address3)
+                    address5 = FAILURE
+                    address5 = self._read_eol()
+                    if address5 is not FAILURE:
+                        elements0.append(address5)
+                    else:
+                        elements0 = None
+                        self._offset = index1
+                else:
+                    elements0 = None
+                    self._offset = index1
+            else:
+                elements0 = None
+                self._offset = index1
+        else:
+            elements0 = None
+            self._offset = index1
+        if elements0 is None:
+            address0 = FAILURE
+        else:
+            address0 = TreeNode59(self._input[index1:self._offset], index1, elements0)
+            self._offset = self._offset
+        cls0 = type(address0)
+        if cls0 != object:
+            address0.__class__ = type(cls0.__name__ + 'TableCellLine', (cls0, self._types.TableCellLine), {})
+        self._cache['table_cell_line'][index0] = (address0, self._offset)
         return address0
 
     def _read_table_attribs(self):

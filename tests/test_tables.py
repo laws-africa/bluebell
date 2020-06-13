@@ -198,11 +198,13 @@ class SubflowsTestCase(TestCase, ParserSupport):
     def test_broken_tables(self):
         tree = self.parse("""
 SECTION 1.
+
+  SUBSECTION (a)
       
-      {|
-      |
+    {|
+    |
   bar
-      |}
+    |}
 """, 'hier_element')
 
         self.assertEqual({
@@ -210,18 +212,23 @@ SECTION 1.
             'name': 'section',
             'num': '1.',
             'children': [{
-                'name': 'p',
-                'type': 'content',
+                'type': 'hier',
+                'name': 'subsection',
+                'num': '(a)',
                 'children': [{
-                    'type': 'text',
-                    'value': '{|',
-                }]
-            }, {
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': '|',
+                    'name': 'p',
+                    'type': 'content',
+                    'children': [{
+                        'type': 'text',
+                        'value': '{|',
+                    }]
+                }, {
+                    'name': 'p',
+                    'type': 'content',
+                    'children': [{
+                        'type': 'text',
+                        'value': '|',
+                    }]
                 }]
             }, {
                 'name': 'p',
@@ -321,6 +328,7 @@ SECTION 1.
     |
         (a) item a
               (i) item a-i
+              (ii) item a-ii
         (b) item b
     |-
     |}
@@ -356,6 +364,12 @@ SECTION 1.
                                 'name': 'eol'
                             }, {
                                 'type': 'text',
+                                'value': '(ii) item a-ii',
+                            }, {
+                                'type': 'marker',
+                                'name': 'eol'
+                            }, {
+                                'type': 'text',
                                 'value': '(b) item b',
                             }]
                         }]
@@ -372,7 +386,7 @@ SECTION 1.
     <table eId="sec_1__table_1">
       <tr>
         <td>
-          <p>(a) item a<eol/>(i) item a-i<eol/>(b) item b</p>
+          <p>(a) item a<eol/>(i) item a-i<eol/>(ii) item a-ii<eol/>(b) item b</p>
         </td>
       </tr>
     </table>

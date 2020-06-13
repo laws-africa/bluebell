@@ -287,13 +287,11 @@ class TableCell:
 
     def to_dict(self):
         # first line
-        children = self.initial.to_dict(last=not(self.content.text))
+        children = self.initial.to_dict()
 
         # remaining lines
-        last = len(self.content.elements) - 1
-        for i, c in enumerate(self.content):
-            if isinstance(c.table_line, TableLine):
-                children.extend(c.table_line.to_dict(last=(i == last)))
+        for kid in many_to_dict(self.content.elements):
+            children.extend(kid)
 
         # trim leading and trailing newline markers
         self.trim(children, 0)
@@ -315,8 +313,8 @@ class TableCell:
         return info
 
 
-class TableLine:
-    def to_dict(self, last):
+class TableCellLine:
+    def to_dict(self):
         kids = Inline.many_to_dict(self.content)
         # whitespace
         for x in range(len(self.eol.text)):
