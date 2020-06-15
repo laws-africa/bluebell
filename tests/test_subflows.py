@@ -1,15 +1,12 @@
 from unittest import TestCase
 
 from lxml import etree
-from bluebell.xml import tree_to_xml, ids
+from bluebell.xml import tree_to_xml
 from .support import ParserSupport
 
 
 class SubflowsTestCase(TestCase, ParserSupport):
     maxDiff = None
-
-    def setUp(self):
-        ids.reset()
 
     def test_quote(self):
         tree = self.parse("""

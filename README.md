@@ -17,7 +17,7 @@ Use the parser from Python as follows:
 ```python
 from lxml import etree
 import json
-from bluebell.parser import parse, parse_tree_to_xml
+from bluebell.parser import parse, parse_tree_to_xml, parse_to_xml
 
 tree = parse(text, 'act')
 
@@ -27,6 +27,9 @@ print(json.dumps(tree))
 # transforms to xml
 xml = parse_tree_to_xml(tree)
 print(etree.tostring(xml, pretty_print=True, encoding='unicode'))
+
+# parsers text to xml
+xml = parse_to_xml(text, 'act')
 ```
 
 ### Commandline
