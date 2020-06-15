@@ -1,15 +1,12 @@
 from unittest import TestCase
 
 from lxml import etree
-from bluebell.xml import to_xml, ids
+from bluebell.xml import to_xml
 from .support import ParserSupport
 
 
 class HierTestCase(TestCase, ParserSupport):
     maxDiff = None
-
-    def setUp(self):
-        ids.reset()
 
     def test_hier_plain(self):
         tree = self.parse("""
