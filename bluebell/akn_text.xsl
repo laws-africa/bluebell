@@ -449,6 +449,10 @@
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
     <xsl:text>&#10;&#10;</xsl:text>
+
+    <xsl:apply-templates select=".//a:authorialNote" mode="content">
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
   </xsl:template>
 
   <!-- TODO: this is actually a block element, not a container -->
