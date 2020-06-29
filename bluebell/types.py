@@ -463,6 +463,19 @@ class Remark(Inline):
     def to_dict(self):
         d = super().to_dict()
         d['attribs'] = {'status': 'editorial'}
+
+        # add [
+        if d['children'] and d['children'][0]['type'] == 'text':
+            d['children'][0]['value'] = '[' + d['children'][0]['value']
+        else:
+            d['children'].insert(0, {'type': 'text', 'value': '['})
+
+        # add ]
+        if d['children'][-1]['type'] == 'text':
+            d['children'][-1]['value'] = d['children'][-1]['value'] + ']'
+        else:
+            d['children'].append({'type': 'text', 'value': ']'})
+
         return d
 
 
