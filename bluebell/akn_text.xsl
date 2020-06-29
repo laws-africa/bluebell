@@ -158,6 +158,10 @@
     </xsl:if>
     <xsl:text>&#10;&#10;</xsl:text>
 
+    <xsl:apply-templates select="a:heading//a:authorialNote | a:subheading//a:authorialNote" mode="content">
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
+
     <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading) and not(self::a:subheading)]">
       <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
