@@ -90,7 +90,7 @@ def parse_with_failure(text, root):
     raise ParseError(format_error(parser._input, parser._failure, parser._expected))
 
 
-def parse_tree_to_xml(tree):
+def parse_tree_to_xml(tree, eid_prefix=''):
     # does the root of the tree declare an xml helper?
     root = getattr(tree, 'xml', None)
     if root:
@@ -100,10 +100,10 @@ def parse_tree_to_xml(tree):
     tree = tree.to_dict()
     if root:
         # create and use the xml helper class
-        return root().to_xml(tree)
+        return root().to_xml(tree, eid_prefix)
     else:
         # default
-        return xml.tree_to_xml(tree)
+        return xml.tree_to_xml(tree, eid_prefix)
 
 
 def parse(text, root):
@@ -111,8 +111,8 @@ def parse(text, root):
     return parse_with_failure(text, root)
 
 
-def parse_to_xml(text, root):
-    return parse_tree_to_xml(parse(text, root))
+def parse_to_xml(text, root, eid_prefix):
+    return parse_tree_to_xml(parse(text, root), eid_prefix)
 
 
 def unparse(xml):
