@@ -114,10 +114,10 @@ class XmlGenerator:
     def __init__(self):
         self.ids = IdGenerator()
 
-    def tree_to_xml(self, tree):
+    def tree_to_xml(self, tree, eid_prefix=''):
         """ Transform an entire parse tree to XML, including post-processing.
         """
-        root = ET.fromstring(ET.tostring(self.to_xml(tree)))
+        root = ET.fromstring(ET.tostring(self.to_xml(tree, eid_prefix)))
         return self.post_process(root)
 
     def kids_to_xml(self, parent=None, kids=None, prefix=None):
@@ -273,22 +273,22 @@ def to_xml(item):
     return XmlGenerator().to_xml(item)
 
 
-def tree_to_xml(tree):
+def tree_to_xml(tree, eid_prefix=''):
     """ Transform an entire parse tree to XML.
     """
-    return XmlGenerator().tree_to_xml(tree)
+    return XmlGenerator().tree_to_xml(tree, eid_prefix)
 
 
 class Document:
-    def make_xml(self, tree):
+    def make_xml(self, tree, eid_prefix):
         # TODO: empty ARGUMENTS, REMEDIES etc. should be excluded
-        return E.akomaNtoso(tree_to_xml(tree))
+        return E.akomaNtoso(tree_to_xml(tree, eid_prefix))
 
     def meta(self):
         return ET.fromstring(ET.tostring(E.meta()))
 
-    def to_xml(self, tree):
-        tree = ET.fromstring(ET.tostring(self.make_xml(tree)))
+    def to_xml(self, tree, eid_prefix=''):
+        tree = ET.fromstring(ET.tostring(self.make_xml(tree, eid_prefix)))
 
         # insert empty meta element as first child of document element
         list(tree)[0].insert(0, self.meta())
