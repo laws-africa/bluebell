@@ -43,8 +43,7 @@
                   starts-with($prefix, 'SUBHEADING ') or
                   starts-with($prefix, 'LONGTITLE ') or
                   starts-with($prefix, 'CROSSHEADING ') or
-                  starts-with($prefix, '{|') or
-                  starts-with($numprefix, '(')">
+                  starts-with($prefix, '{|')">
       <xsl:text>\</xsl:text>
     </xsl:if>
     <xsl:value-of select="$value"/>

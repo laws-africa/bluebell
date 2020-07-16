@@ -111,7 +111,7 @@ def parse(text, root):
     return parse_with_failure(text, root)
 
 
-def parse_to_xml(text, root, eid_prefix):
+def parse_to_xml(text, root, eid_prefix=''):
     return parse_tree_to_xml(parse(text, root), eid_prefix)
 
 
