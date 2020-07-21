@@ -2,11 +2,17 @@
 
 Bluebell is a (fairly) generic Akoma Ntoso 3 parser, supporting all hierarchical elements and multiple document types.
 
-Bluebell supports the following Akoma Ntoso document types:
+Bluebell supports the following Akoma Ntoso (AKN) document types:
 
 * act, bill (hierarchicalStructure)
 * debateReport, doc, statement (openStructure)
 * judgment (judgmentStructure)
+
+Bluebell tries to walk the line between being expressive and supporting a range of AKN documents and structures,
+while being simple to use and not requiring that authors have an in-depth knowledge of AKN.
+
+Bluebell will always produce structurally valid Akoma Ntoso, no matter what input is given. It will never refuse to parse
+malformed input. If it does, it's a bug.
 
 ## Usage
 
@@ -28,7 +34,7 @@ print(json.dumps(tree))
 xml = parse_tree_to_xml(tree)
 print(etree.tostring(xml, pretty_print=True, encoding='unicode'))
 
-# parsers text to xml
+# parse text to xml
 xml = parse_to_xml(text, 'act')
 ```
 
@@ -39,6 +45,66 @@ In general, see `bluebell --help`
 Parse an `act` in `act.txt` and output pretty XML: `bluebell act act.txt --pretty`
 
 Use `--json` for intermediat json output.
+
+## Grammar examples
+
+The document type (act, judgment, etc.) determines the top-level elements of the text. Most other elements (hierarchical containers, tables, etc.)
+are common to all document types.
+
+Here's an example act:
+
+    PREFACE
+    
+    This is in the preface
+    
+    PREAMBLE
+    
+    This is in the preamble
+    
+    BODY
+    
+    Introductory text in the body.
+    
+    SECTION 1.
+    
+      Text in section one, with some list items:
+            
+      SUBSECTION (a)
+      
+        cheese
+        
+      SUBSECTION (b)
+      
+        fish, both:
+        
+        SUBSECTION (i)
+        
+          fresh, and
+          
+        SUBSECTION (ii)
+        
+          tinned.
+          
+    PART 1 - The First Part
+      SUBHEADING Very exciting
+      
+      SECTION 2.
+      
+        This is the second section inside part 1.
+        
+    SCHEDULE - First Schedule
+      SUBHEADING With a subheading
+      
+      Text of the schedule
+
+Key points:
+
+* Keywords are in ALL CAPS, so that it's harder to mistake them for actual text
+* Hierarchical elements all follow the same pattern, and support a number, heading and subheading, all of which are optional
+* Content inside a hierarchical element is always nested
+* Content inside a block element at the top level is usually nested, but Bluebell is forgiving and
+  makes a best effort if you don't nest it.
+* If Bluebell finds something it doesn't understand, it includes it as text and continues.
 
 ## Intermediate output structure
 
