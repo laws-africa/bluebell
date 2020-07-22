@@ -33,6 +33,8 @@ class AkomaNtosoParser:
         return self.parse_with_failure(self.pre_parse(text), root)
 
     def tree_to_xml(self, tree):
+        """ Transform a parse tree into XML.
+        """
         return self.generator.to_xml(tree)
 
     def pre_parse(self, text):
