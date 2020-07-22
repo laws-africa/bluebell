@@ -1,15 +1,13 @@
 import re
 from itertools import groupby
 
-from lxml.builder import ElementMaker
-import lxml.etree as ET
-
-AKN3_NAMESPACE = 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'
-
-E = ElementMaker(nsmap={None: AKN3_NAMESPACE})
+from cobalt.akn import get_maker, StructuredDocument
+import lxml.etree as etree
 
 
 class IdGenerator:
+    """ Support class for generating ID elements when building an XML document.
+    """
     num_strip_re = re.compile(r'[ .()[\]]')
 
     id_exempt = set("act amendment amendmentList bill debate debateReport doc documentCollection judgment"
@@ -111,21 +109,48 @@ class IdGenerator:
 
 
 class XmlGenerator:
-    def __init__(self):
-        self.ids = IdGenerator()
+    """ Turns a parse tree into XML.
 
-    def tree_to_xml(self, tree, eid_prefix=''):
+    For example::
+
+        gen = XmlGenerator('/akn/act/za/2020/1', 'chp_1__')
+        xml = gen.to_xml(tree)
+    """
+
+    akn_version = '3.0'
+    """ AKN version to use, relying on Cobalt's versions and namespaces.
+    """
+
+    def __init__(self, frbr_uri=None, eid_prefix='', maker=None):
+        """ Setup a new generator for an FRBR URI (optional).
+        """
+        self.ids = IdGenerator()
+        self.frbr_uri = frbr_uri
+        self.maker = maker or get_maker(self.akn_version)
+        self.eid_prefix = eid_prefix
+
+    def to_xml(self, tree):
         """ Transform an entire parse tree to XML, including post-processing.
         """
-        root = ET.fromstring(ET.tostring(self.to_xml(tree, eid_prefix)))
-        return self.post_process(root)
+        self.tree = tree.to_dict()
+        return self.xml_from_dict(self.tree, getattr(tree, 'is_root', False))
 
-    def kids_to_xml(self, parent=None, kids=None, prefix=None):
-        if kids is None:
-            kids = parent.get('children', [])
-        return [self.to_xml(k, prefix) for k in kids]
+    def xml_from_dict(self, tree, is_root=False):
+        """ Transform an intermediate dict representation into XML, including post-processing.
+        """
+        xml = self.xml_from_tree(tree)
+        if is_root:
+            xml = self.add_meta(self.wrap_akn(xml))
+        return self.post_process(xml)
 
-    def to_xml(self, item, prefix=''):
+    def xml_from_tree(self, tree):
+        """ Transform an entire parse tree to XML.
+        """
+        return etree.fromstring(etree.tostring(self.item_to_xml(tree, self.eid_prefix)))
+
+    def item_to_xml(self, item, prefix=''):
+        m = self.maker
+
         if item['type'] == 'hier':
             eid = self.ids.make(prefix, item)
             pre = []
@@ -133,7 +158,7 @@ class XmlGenerator:
             if all(k['type'] != 'hier' for k in item['children']):
                 # no hierarchy children (ie. all block/content), wrap children in <content>
                 kids = self.kids_to_xml(item, prefix=eid)
-                kids = [E.content(*kids)]
+                kids = [m.content(*kids)]
             else:
                 # there are potentially mixed hier and block/content children
                 # group non-hier children into <intro> and <wrapUp>, with hier children sandwiched in the middle
@@ -158,7 +183,7 @@ class XmlGenerator:
                 kids = []
                 seen_hier = False
                 for i, (is_hier, group) in enumerate(groups):
-                    group = (self.to_xml(k, eid) for k in group)
+                    group = (self.item_to_xml(k, eid) for k in group)
 
                     if is_hier:
                         # add hier elemnts as-is
@@ -168,25 +193,25 @@ class XmlGenerator:
                         # content after a hier element
                         if i == len(groups) - 1:
                             # it's the last group, use a wrapUp
-                            kids.append(E.wrapUp(*group))
+                            kids.append(m.wrapUp(*group))
                         else:
                             # more groups to come, use a container
-                            kids.append(E.container(*group, name="container", eId=self.ids.make(eid, {'name': 'container'})))
+                            kids.append(m.container(*group, name="container", eId=self.ids.make(eid, {'name': 'container'})))
                     else:
                         # before hier
-                        kids.append(E.intro(*group))
+                        kids.append(m.intro(*group))
 
             if item.get('num'):
-                pre.append(E.num(item['num']))
+                pre.append(m.num(item['num']))
 
             if item.get('heading'):
-                pre.append(E.heading(*(self.to_xml(k, eid) for k in item['heading'])))
+                pre.append(m.heading(*(self.item_to_xml(k, eid) for k in item['heading'])))
 
             if item.get('subheading'):
-                pre.append(E.subheading(*(self.to_xml(k, eid) for k in item['subheading'])))
+                pre.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
 
             kids = pre + kids
-            return E(item['name'], *kids, eId=eid, **item.get('attribs', {}))
+            return m(item['name'], *kids, eId=eid, **item.get('attribs', {}))
 
         if item['type'] == 'block':
             # TODO: can have num, heading, subheading
@@ -195,22 +220,22 @@ class XmlGenerator:
             kids = self.kids_to_xml(item, prefix=eid)
             if not kids:
                 # block elements must have at least one content child
-                kids = [E.p()]
+                kids = [m.p()]
 
             if 'num' in item:
-                kids.insert(0, E('num', item['num']))
-            return E(item['name'], eId=eid, *kids)
+                kids.insert(0, m('num', item['num']))
+            return m(item['name'], eId=eid, *kids)
 
         if item['type'] == 'content':
-            return E(item['name'], *self.kids_to_xml(item, prefix=prefix))
+            return m(item['name'], *self.kids_to_xml(item, prefix=prefix))
 
         if item['type'] == 'inline':
             # TODO: should these have ids?
-            return E(item['name'], *self.kids_to_xml(item, prefix=prefix), **item.get('attribs', {}))
+            return m(item['name'], *self.kids_to_xml(item, prefix=prefix), **item.get('attribs', {}))
 
         if item['type'] == 'marker':
             # TODO: should these have ids?
-            return E(item['name'], **item.get('attribs', {}))
+            return m(item['name'], **item.get('attribs', {}))
 
         if item['type'] == 'text':
             return item['value']
@@ -220,16 +245,16 @@ class XmlGenerator:
 
             pre = []
             if item.get('heading'):
-                pre.append(E.heading(*(self.to_xml(k, eid) for k in item['heading'])))
+                pre.append(m.heading(*(self.item_to_xml(k, eid) for k in item['heading'])))
 
             if item.get('subheading'):
-                pre.append(E.subheading(*(self.to_xml(k, eid) for k in item['subheading'])))
+                pre.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
 
-            return E('attachment',
+            return m('attachment',
                      *pre,
-                     E('doc',
-                       E('meta'),
-                       E('mainBody', *self.kids_to_xml(item, prefix=eid)),
+                     m('doc',
+                       self.make_meta(self.attachment_frbr_uri(item)),
+                       m('mainBody', *self.kids_to_xml(item, prefix=eid)),
                        **item.get('attribs', {})),
                      eId=eid)
 
@@ -238,9 +263,19 @@ class XmlGenerator:
             eid = self.ids.make(prefix, item)
             if eid and not self.ids.is_unnecessary(prefix, item):
                 attrs['eId'] = eid
-            return E(item['name'], *self.kids_to_xml(item, prefix=eid), **attrs)
+            return m(item['name'], *self.kids_to_xml(item, prefix=eid), **attrs)
+
+    def kids_to_xml(self, parent=None, kids=None, prefix=None):
+        if kids is None:
+            kids = parent.get('children', [])
+        return [self.item_to_xml(k, prefix) for k in kids]
 
     def post_process(self, xml):
+        return self.resolve_displaced_content(xml)
+
+    def resolve_displaced_content(self, xml):
+        """ Resolve displaced content (ie. footnotes).
+        """
         ns = xml.nsmap[None]
 
         def get_displaced_content(start, name, marker):
@@ -250,7 +285,6 @@ class XmlGenerator:
                         return child
                 # TODO: when to stop
 
-        # resolve displaced content (ie. footnotes)
         for ref in xml.xpath('//a:*[@displaced]', namespaces={'a': ns}):
             name = ref.attrib.pop('displaced')
 
@@ -266,31 +300,37 @@ class XmlGenerator:
 
         return xml
 
+    def attachment_frbr_uri(self, item):
+        """ Build an FrbrUri instance for the attachment in the given item.
+        """
+        name = item.get('attribs', {}).get('name', 'attachment')
+        num = self.ids.incr('__attachments', name)
 
-def to_xml(item):
-    """ Transform an item in a parse tree to XML.
-    """
-    return XmlGenerator().to_xml(item)
+        frbr_uri = self.frbr_uri.clone()
+        frbr_uri.work_component = f'{name}_{num}'
 
+        return frbr_uri
 
-def tree_to_xml(tree, eid_prefix=''):
-    """ Transform an entire parse tree to XML.
-    """
-    return XmlGenerator().tree_to_xml(tree, eid_prefix)
+    def wrap_akn(self, xml):
+        """ Wrap in an akomaNtoso element.
+        """
+        ns = xml.nsmap[None]
+        akn = etree.Element(f'{{{ns}}}akomaNtoso', nsmap=xml.nsmap)
+        akn.append(xml)
+        return akn
 
+    def add_meta(self, xml):
+        """ Insert empty meta element as first child of document element.
+        """
+        if not self.frbr_uri:
+            raise ValueError("An frbr_uri must be provided when generating top-level documents.")
 
-class Document:
-    def make_xml(self, tree, eid_prefix):
-        # TODO: empty ARGUMENTS, REMEDIES etc. should be excluded
-        return E.akomaNtoso(tree_to_xml(tree, eid_prefix))
+        meta = etree.fromstring(etree.tostring(self.make_meta(self.frbr_uri)))
+        list(xml)[0].insert(0, meta)
+        return xml
 
-    def meta(self):
-        return ET.fromstring(ET.tostring(E.meta()))
-
-    def to_xml(self, tree, eid_prefix=''):
-        tree = ET.fromstring(ET.tostring(self.make_xml(tree, eid_prefix)))
-
-        # insert empty meta element as first child of document element
-        list(tree)[0].insert(0, self.meta())
-
-        return tree
+    def make_meta(self, frbr_uri):
+        """ Create a meta element appropriate for this generator's FRBR URI.
+        """
+        cls = StructuredDocument.for_document_type(frbr_uri.doctype)
+        return cls.empty_meta(frbr_uri, maker=self.maker)

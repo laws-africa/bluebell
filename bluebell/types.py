@@ -514,7 +514,7 @@ class Image:
 
 class DocumentRoot:
     name = None
-    xml = 'Document'
+    is_root = True
     children = []
 
     def to_dict(self):

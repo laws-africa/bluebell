@@ -1,9 +1,9 @@
 from unittest import TestCase
 
-from .support import ParserSupport
+from tests.support import ParserSupport
 
 
-class ContainerTestCase(TestCase, ParserSupport):
+class ContainerTestCase(ParserSupport, TestCase):
     maxDiff = None
 
     def test_preamble_simple(self):

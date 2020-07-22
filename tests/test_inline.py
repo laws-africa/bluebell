@@ -1,11 +1,10 @@
 from unittest import TestCase
 
 from lxml import etree
-from bluebell.xml import to_xml
-from .support import ParserSupport
+from tests.support import ParserSupport
 
 
-class InlineTestCase(TestCase, ParserSupport):
+class InlineTestCase(ParserSupport, TestCase):
     maxDiff = None
 
     def test_remark(self):
@@ -27,7 +26,7 @@ class InlineTestCase(TestCase, ParserSupport):
             }],
         }, tree.to_dict())
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <remark status="editorial">[a remark]</remark>
@@ -64,7 +63,7 @@ class InlineTestCase(TestCase, ParserSupport):
             }],
         }, tree.to_dict())
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <remark status="editorial">[<ref href="https://example.com">a link</ref>]</remark>

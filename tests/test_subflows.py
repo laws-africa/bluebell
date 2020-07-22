@@ -1,11 +1,10 @@
 from unittest import TestCase
 
 from lxml import etree
-from bluebell.xml import tree_to_xml
-from .support import ParserSupport
+from tests.support import ParserSupport
 
 
-class SubflowsTestCase(TestCase, ParserSupport):
+class SubflowsTestCase(ParserSupport, TestCase):
     maxDiff = None
 
     def test_quote(self):
@@ -266,7 +265,7 @@ PART 1
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(tree_to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
   <num>1</num>
