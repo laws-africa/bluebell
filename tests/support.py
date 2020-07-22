@@ -1,6 +1,8 @@
 import sys
 
-from bluebell.parser import pre_parse, parse_with_failure, INDENT, DEDENT
+from cobalt import FrbrUri
+
+from bluebell.parser import AkomaNtosoParser
 
 
 def print_with_lines(text):
@@ -10,11 +12,25 @@ def print_with_lines(text):
 
 
 class ParserSupport:
+    def setUp(self):
+        super().setUp()
+        self.frbr_uri = self.make_frbr_uri()
+        self.parser = AkomaNtosoParser(self.frbr_uri)
+        self.parser.indent = '{'
+        self.parser.dedent = '}'
+        self.generator = self.parser.generator
+
     def parse(self, text, root):
-        text = pre_parse(text.lstrip(), indent='{', dedent='}')
+        text = self.parser.pre_parse(text.lstrip())
 
         try:
-            return parse_with_failure(text, root)
+            return self.parser.parse_with_failure(text, root)
         except:
             print_with_lines(text)
             raise
+
+    def to_xml(self, dict_tree):
+        return self.generator.xml_from_tree(dict_tree)
+
+    def make_frbr_uri(self):
+        return FrbrUri.parse('/akn/za/act/2009/10')

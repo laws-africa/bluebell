@@ -23,26 +23,24 @@ Use the parser from Python as follows:
 ```python
 from lxml import etree
 import json
-from bluebell.parser import parse, parse_tree_to_xml, parse_to_xml
+from bluebell.parser import AkomaNtosoParser
 
-tree = parse(text, 'act')
-
-# transforms to json
-print(json.dumps(tree))
-
-# transforms to xml
-xml = parse_tree_to_xml(tree)
-print(etree.tostring(xml, pretty_print=True, encoding='unicode'))
+parser = AkomaNtosoParser()
 
 # parse text to xml
-xml = parse_to_xml(text, 'act')
+xml = parser.parse_to_xml(text, 'act')
+print(etree.tostring(xml, pretty_print=True, encoding='unicode'))
+
+# parse text to intermediate dict format
+tree = parser.parse(text, 'act')
+print(json.dumps(tree.to_dict()))
 ```
 
 ### Commandline
 
 In general, see `bluebell --help`
 
-Parse an `act` in `act.txt` and output pretty XML: `bluebell act act.txt --pretty`
+Parse an `act` in `act.txt` and output pretty XML: `bluebell /za/act/2020/1 act act.txt --pretty`
 
 Use `--json` for intermediat json output.
 

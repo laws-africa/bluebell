@@ -65,6 +65,7 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
         'lxml >= 3.4.1',
+        'cobalt @ git+https://github.com/laws-africa/cobalt#egg=cobalt',
     ],
 
     # List additional groups of dependencies here (e.g. development

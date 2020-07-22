@@ -1,11 +1,10 @@
 import os.path
 from unittest import TestCase
 
-from bluebell.parser import parse_with_failure, unparse, parse_tree_to_xml, pre_parse
-from tests.support import print_with_lines
+from tests.support import print_with_lines, ParserSupport
 
 
-class RoundTripTestCase(TestCase):
+class RoundTripTestCase(ParserSupport, TestCase):
     def roundtrip(self, prefix, root):
         dir = os.path.join(os.path.dirname(__file__), 'roundtrip')
 
@@ -13,15 +12,14 @@ class RoundTripTestCase(TestCase):
         with open(fname, 'rt') as f:
             input = f.read()
 
-        text = pre_parse(input, indent='{', dedent='}')
+        text = self.parser.pre_parse(input)
         try:
-            tree = parse_with_failure(text, root)
-            xml = parse_tree_to_xml(tree)
+            xml = self.parser.parse_to_xml(text, root)
         except:
             print_with_lines(text)
             raise
 
-        actual = unparse(xml)
+        actual = self.parser.unparse(xml)
 
         self.assertMultiLineEqual(input, actual)
 
