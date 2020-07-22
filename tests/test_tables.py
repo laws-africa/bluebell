@@ -1,11 +1,10 @@
 from unittest import TestCase
 
 from lxml import etree
-from bluebell.xml import to_xml
-from .support import ParserSupport
+from tests.support import ParserSupport
 
 
-class TablesTestCase(TestCase, ParserSupport):
+class TablesTestCase(ParserSupport, TestCase):
     maxDiff = None
 
     def test_basic(self):
@@ -76,7 +75,7 @@ class TablesTestCase(TestCase, ParserSupport):
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>
@@ -170,7 +169,7 @@ class TablesTestCase(TestCase, ParserSupport):
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>
@@ -375,7 +374,7 @@ SECTION 1.
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="sec_1">
   <num>1.</num>
@@ -446,7 +445,7 @@ three
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>
@@ -468,7 +467,7 @@ three
 |}
 """, 'table')
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>

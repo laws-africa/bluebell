@@ -1,11 +1,10 @@
 from unittest import TestCase
 
 from lxml import etree
-from bluebell.xml import to_xml
 from .support import ParserSupport
 
 
-class HierTestCase(TestCase, ParserSupport):
+class HierTestCase(ParserSupport, TestCase):
     maxDiff = None
 
     def test_hier_plain(self):
@@ -44,7 +43,7 @@ there
             }],
         }, tree.to_dict())
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="hierarchicalStructure_1">
   <body>
@@ -158,7 +157,7 @@ PART
   conclusion
 """, 'hier_element_block')
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
   <intro>
@@ -202,7 +201,7 @@ PART
   conclusion
 """, 'hier_element_block')
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
   <intro>
@@ -239,7 +238,7 @@ PART
     section 2 text
 """, 'hier_element_block')
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
   <section eId="part_1__sec_1">

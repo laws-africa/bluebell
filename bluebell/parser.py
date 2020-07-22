@@ -3,124 +3,125 @@ import os.path
 
 from .akn import Parser, FAILURE, ParseError, format_error
 import bluebell.types as types
-import bluebell.xml as xml
+from bluebell.xml import XmlGenerator
 from lxml import etree
 
 
-INDENT = '\x0E'
-DEDENT = '\x0F'
+INDENT = '\x0E'  # ascii SHIFT-IN character
+DEDENT = '\x0F'  # ascii SHIFT_OUT character
 
 
-def pre_parse(text, indent_size=2, indent=INDENT, dedent=DEDENT):
-    """ Pre-parse text, setting up indent and dedent markers.
-
-    After calling this, the following are guaranteed:
-
-    1. no whitespace at the start of a line
-    2. no tab characters
-    3. no trailing whitespace at the end of a line
-    4. a newline at the end of the string
-
-    The indent and dedent parameters are the symbols the grammar
-    uses to indicate indented and dedented blocks.
+class AkomaNtosoParser:
+    """ Parses plain text into well-formed Akoma Ntoso XML.
     """
-    line_re = re.compile(r'^([ ]*)([^ \n])', re.M)
-    trailing_ws_re = re.compile(r' +$', re.M)
+    indent = '{'
+    dedent = '}'
+    indent_size = 2
 
-    # tabs are two spaces
-    text = text.replace('\t', ' ' * indent_size)
-    # strip trailing whitespace
-    text = trailing_ws_re.sub('', text)
-    if not text.endswith('\n'):
-        text = text + '\n'
+    def __init__(self, frbr_uri, eid_prefix=''):
+        self.eid_prefix = eid_prefix
+        self.generator = XmlGenerator(frbr_uri, self.eid_prefix)
 
-    stack = [-1]
+    def parse_to_xml(self, text, root):
+        """ Parse text for a particular root rule into XML.
+        """
+        tree = self.parse(text, root)
+        return self.tree_to_xml(tree)
 
-    def handle_indent(match):
-        level = len(match.group(1)) / indent_size
+    def parse(self, text, root):
+        """ Parse text for a particular root rule into a parse tree.
+        """
+        text = self.pre_parse(text)
+        return self.parse_with_failure(text, root)
 
-        if level == stack[-1]:
-            # same level, no change
-            return match.group(2)
+    def tree_to_xml(self, tree):
+        return self.generator.to_xml(tree)
 
-        elif level > stack[-1]:
-            # indent
-            stack.append(level)
-            return indent + "\n" + match.group(2)
+    def pre_parse(self, text):
+        """ Pre-parse text, setting up indent and dedent markers.
 
-        else:
-            # dedent
-            stack.pop()
+        After calling this, the following are guaranteed:
 
-            if level > stack[-1]:
-                # we were over-indented previously
-                stack.append(level)
+        1. no whitespace at the start of a line
+        2. no tab characters
+        3. no trailing whitespace at the end of a line
+        4. a newline at the end of the string
+
+        The indent and dedent parameters are the symbols the grammar
+        uses to indicate indented and dedented blocks.
+        """
+        line_re = re.compile(r'^([ ]*)([^ \n])', re.M)
+        trailing_ws_re = re.compile(r' +$', re.M)
+
+        # tabs are two spaces
+        text = text.replace('\t', ' ' * self.indent_size)
+        # strip trailing whitespace
+        text = trailing_ws_re.sub('', text)
+        if not text.endswith('\n'):
+            text = text + '\n'
+
+        stack = [-1]
+
+        def handle_indent(match):
+            level = len(match.group(1)) / self.indent_size
+
+            if level == stack[-1]:
+                # same level, no change
                 return match.group(2)
 
+            elif level > stack[-1]:
+                # indent
+                stack.append(level)
+                return self.indent + "\n" + match.group(2)
+
             else:
-                # dedent until we're back to the previous level
-                s = ""
-                while True:
-                    s += dedent + "\n"
-                    if level >= stack[-1]:
-                        break
-                    stack.pop()
+                # dedent
+                stack.pop()
 
-                return s + match.group(2)
+                if level > stack[-1]:
+                    # we were over-indented previously
+                    stack.append(level)
+                    return match.group(2)
 
-    text = line_re.sub(handle_indent, text)
+                else:
+                    # dedent until we're back to the previous level
+                    s = ""
+                    while True:
+                        s += self.dedent + "\n"
+                        if level >= stack[-1]:
+                            break
+                        stack.pop()
 
-    text += (dedent + "\n") * (len(stack) - 1)
+                    return s + match.group(2)
 
-    # exclude initial indent+newline and final dedent+newline
-    skip = len(indent) + 1
-    return text[skip:-skip]
+        text = line_re.sub(handle_indent, text)
 
+        text += (self.dedent + "\n") * (len(stack) - 1)
 
-def parse_with_failure(text, root):
-    """ Helper function to do the actual parsing with an arbitrary root.
-    """
-    parser = Parser(text, actions=None, types=types)
-    tree = getattr(parser, f'_read_{root}')()
-    if tree is not FAILURE and parser._offset == parser._input_size:
-        return tree
-    if not parser._expected:
-        parser._failure = parser._offset
-        parser._expected.append('<EOF>')
-    raise ParseError(format_error(parser._input, parser._failure, parser._expected))
+        # exclude initial indent+newline and final dedent+newline
+        skip = len(self.indent) + 1
+        return text[skip:-skip]
 
+    def parse_with_failure(self, text, root):
+        """ Helper function to do the actual parsing with an arbitrary root. Raises ParseError if parsing fails.
+        """
+        parser = Parser(text, actions=None, types=types)
+        tree = getattr(parser, f'_read_{root}')()
+        if tree is not FAILURE and parser._offset == parser._input_size:
+            return tree
+        if not parser._expected:
+            parser._failure = parser._offset
+            parser._expected.append('<EOF>')
+        raise ParseError(format_error(parser._input, parser._failure, parser._expected))
 
-def parse_tree_to_xml(tree, eid_prefix=''):
-    # does the root of the tree declare an xml helper?
-    root = getattr(tree, 'xml', None)
-    if root:
-        # load the helper class from the xml.py
-        root = getattr(xml, root, None)
+    def unparse(self, xml):
+        """ Transform an XML document or fragment into parseable plain text.
+        """
+        if isinstance(xml, (str, bytes)):
+            xml = etree.fromstring(xml)
 
-    tree = tree.to_dict()
-    if root:
-        # create and use the xml helper class
-        return root().to_xml(tree, eid_prefix)
-    else:
-        # default
-        return xml.tree_to_xml(tree, eid_prefix)
+        # load xslt
+        fname = os.path.join(os.path.dirname(__file__), 'akn_text.xsl')
+        xslt = etree.XSLT(etree.parse(fname))
 
-
-def parse(text, root):
-    text = pre_parse(text, indent='{', dedent='}')
-    return parse_with_failure(text, root)
-
-
-def parse_to_xml(text, root, eid_prefix=''):
-    return parse_tree_to_xml(parse(text, root), eid_prefix)
-
-
-def unparse(xml):
-    if isinstance(xml, (str, bytes)):
-        xml = etree.fromstring(xml)
-
-    # load xslt
-    fname = os.path.join(os.path.dirname(__file__), 'akn_text.xsl')
-    xslt = etree.XSLT(etree.parse(fname))
-
-    return str(xslt(xml))
+        return str(xslt(xml))

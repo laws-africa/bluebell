@@ -514,7 +514,8 @@ class Image:
 
 class DocumentRoot:
     name = None
-    xml = 'Document'
+    # The name of the class in xml.py which will be used to serialise this parse tree into XML
+    generator = 'Document'
     children = []
 
     def to_dict(self):

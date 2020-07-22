@@ -1,11 +1,10 @@
 from unittest import TestCase
 
 from lxml import etree
-from bluebell.xml import to_xml
-from .support import ParserSupport
+from tests.support import ParserSupport
 
 
-class JudgmentTestCase(TestCase, ParserSupport):
+class JudgmentTestCase(ParserSupport, TestCase):
     maxDiff = None
 
     def test_judgment_no_structure(self):
@@ -43,7 +42,7 @@ there
             }],
         }, tree.to_dict())
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<judgment xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <judgmentBody>

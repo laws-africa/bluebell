@@ -1,11 +1,11 @@
 from unittest import TestCase
 
 from lxml import etree
-from bluebell.xml import to_xml
-from .support import ParserSupport
+
+from tests.support import ParserSupport
 
 
-class ContainerTestCase(TestCase, ParserSupport):
+class ContainerTestCase(ParserSupport, TestCase):
     maxDiff = None
 
     def test_attachment(self):
@@ -125,7 +125,7 @@ SCHEDULE heading
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
@@ -206,7 +206,7 @@ schedule text
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
