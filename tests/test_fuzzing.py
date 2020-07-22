@@ -3,10 +3,10 @@ import random
 import string
 
 from bluebell.akn import ParseError
-from .support import ParserSupport
+from tests.support import ParserSupport
 
 
-class FuzzingTestCase(TestCase, ParserSupport):
+class FuzzingTestCase(ParserSupport, TestCase):
     """ This test case creates random strings, using various grammar components, and ensures that
     each grammar still matches.
 
