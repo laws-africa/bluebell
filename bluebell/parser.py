@@ -25,14 +25,12 @@ class AkomaNtosoParser:
     def parse_to_xml(self, text, root):
         """ Parse text for a particular root rule into XML.
         """
-        tree = self.parse(text, root)
-        return self.tree_to_xml(tree)
+        return self.tree_to_xml(self.parse(text, root))
 
     def parse(self, text, root):
         """ Parse text for a particular root rule into a parse tree.
         """
-        text = self.pre_parse(text)
-        return self.parse_with_failure(text, root)
+        return self.parse_with_failure(self.pre_parse(text), root)
 
     def tree_to_xml(self, tree):
         return self.generator.to_xml(tree)
