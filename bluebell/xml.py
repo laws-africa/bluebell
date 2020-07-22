@@ -2,7 +2,7 @@ import re
 from itertools import groupby
 
 from cobalt.akn import get_maker, StructuredDocument
-import lxml.etree as ET
+import lxml.etree as etree
 
 
 class IdGenerator:
@@ -130,27 +130,23 @@ class XmlGenerator:
         self.eid_prefix = eid_prefix
 
     def to_xml(self, tree):
-        """ Transform an entire parse tree to XML, including post-processing. If the parse tree has a link to a
-        top-level generator, delegate to it.
-        """
-        self.tree = tree.to_dict()
-        """ Intermediate representation of the parse tree. """
-
-        # does the root of the tree declare an xml generator?
-        generator = getattr(tree, 'generator', None)
-        if generator:
-            # create the generator class
-            generator = globals()[generator](self.frbr_uri, self.eid_prefix, self.maker)
-        else:
-            generator = self
-
-        return generator.xml_from_tree(self.tree)
-
-    def xml_from_tree(self, tree):
         """ Transform an entire parse tree to XML, including post-processing.
         """
-        root = ET.fromstring(ET.tostring(self.item_to_xml(tree, self.eid_prefix)))
-        return self.post_process(root)
+        self.tree = tree.to_dict()
+        return self.xml_from_dict(self.tree, getattr(tree, 'is_root', False))
+
+    def xml_from_dict(self, tree, is_root=False):
+        """ Transform an intermediate dict representation into XML, including post-processing.
+        """
+        xml = self.xml_from_tree(tree)
+        if is_root:
+            xml = self.add_meta(self.wrap_akn(xml))
+        return self.post_process(xml)
+
+    def xml_from_tree(self, tree):
+        """ Transform an entire parse tree to XML.
+        """
+        return etree.fromstring(etree.tostring(self.item_to_xml(tree, self.eid_prefix)))
 
     def item_to_xml(self, item, prefix=''):
         m = self.maker
@@ -315,25 +311,11 @@ class XmlGenerator:
 
         return frbr_uri
 
-    def make_meta(self, frbr_uri):
-        """ Create a meta element appropriate for this generator's FRBR URI.
-        """
-        cls = StructuredDocument.for_document_type(frbr_uri.doctype)
-        return cls.empty_meta(frbr_uri, maker=self.maker)
-
-
-class Document(XmlGenerator):
-    """ Generates a complete Akoma Ntoso document.
-    """
-    def xml_from_tree(self, tree):
-        xml = super().xml_from_tree(tree)
-        xml = self.wrap_akn(xml)
-        return self.add_meta(xml)
-
     def wrap_akn(self, xml):
         """ Wrap in an akomaNtoso element.
         """
-        akn = xml.makeelement('akomaNtoso')
+        ns = xml.nsmap[None]
+        akn = etree.Element(f'{{{ns}}}akomaNtoso', nsmap=xml.nsmap)
         akn.append(xml)
         return akn
 
@@ -343,6 +325,12 @@ class Document(XmlGenerator):
         if not self.frbr_uri:
             raise ValueError("An frbr_uri must be provided when generating top-level documents.")
 
-        meta = ET.fromstring(ET.tostring(self.make_meta(self.frbr_uri)))
+        meta = etree.fromstring(etree.tostring(self.make_meta(self.frbr_uri)))
         list(xml)[0].insert(0, meta)
         return xml
+
+    def make_meta(self, frbr_uri):
+        """ Create a meta element appropriate for this generator's FRBR URI.
+        """
+        cls = StructuredDocument.for_document_type(frbr_uri.doctype)
+        return cls.empty_meta(frbr_uri, maker=self.maker)

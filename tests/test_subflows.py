@@ -265,7 +265,7 @@ PART 1
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.generator.xml_from_tree(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
   <num>1</num>
