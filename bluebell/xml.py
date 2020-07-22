@@ -257,7 +257,7 @@ class XmlGenerator:
             return m('attachment',
                      *pre,
                      m('doc',
-                       m('meta'),
+                       self.make_meta(self.attachment_frbr_uri(item)),
                        m('mainBody', *self.kids_to_xml(item, prefix=eid)),
                        **item.get('attribs', {})),
                      eId=eid)
@@ -304,6 +304,23 @@ class XmlGenerator:
 
         return xml
 
+    def attachment_frbr_uri(self, item):
+        """ Build an FrbrUri instance for the attachment in the given item.
+        """
+        name = item.get('attribs', {}).get('name', 'attachment')
+        num = self.ids.incr('__attachments', name)
+
+        frbr_uri = self.frbr_uri.clone()
+        frbr_uri.work_component = f'{name}_{num}'
+
+        return frbr_uri
+
+    def make_meta(self, frbr_uri):
+        """ Create a meta element appropriate for this generator's FRBR URI.
+        """
+        cls = StructuredDocument.for_document_type(frbr_uri.doctype)
+        return cls.empty_meta(frbr_uri, maker=self.maker)
+
 
 class Document(XmlGenerator):
     """ Generates a complete Akoma Ntoso document.
@@ -323,14 +340,9 @@ class Document(XmlGenerator):
     def add_meta(self, xml):
         """ Insert empty meta element as first child of document element.
         """
-        list(xml)[0].insert(0, self.make_meta())
-        return xml
-
-    def make_meta(self):
-        """ Create a meta element appropriate for this generator's FRBR URI.
-        """
         if not self.frbr_uri:
             raise ValueError("An frbr_uri must be provided when generating top-level documents.")
 
-        cls = StructuredDocument.for_document_type(self.frbr_uri.doctype)
-        return ET.fromstring(ET.tostring(cls.empty_meta(self.frbr_uri, maker=self.maker)))
+        meta = ET.fromstring(ET.tostring(self.make_meta(self.frbr_uri)))
+        list(xml)[0].insert(0, meta)
+        return xml

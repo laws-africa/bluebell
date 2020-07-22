@@ -132,7 +132,35 @@ SCHEDULE heading
     <heading>a heading</heading>
     <subheading>subheading</subheading>
     <doc contains="originalVersion" name="annexure">
-      <meta/>
+      <meta>
+        <identification source="#cobalt">
+          <FRBRWork>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10"/>
+            <FRBRalias value="Untitled" name="title"/>
+            <FRBRdate date="2009" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRcountry value="za"/>
+            <FRBRnumber value="10"/>
+          </FRBRWork>
+          <FRBRExpression>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRlanguage language="eng"/>
+          </FRBRExpression>
+          <FRBRManifestation>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRauthor href=""/>
+          </FRBRManifestation>
+        </identification>
+        <references source="#cobalt">
+          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        </references>
+      </meta>
       <mainBody>
         <p>some text</p>
       </mainBody>
@@ -141,7 +169,35 @@ SCHEDULE heading
   <attachment eId="att_2">
     <heading>heading</heading>
     <doc contains="originalVersion" name="schedule">
-      <meta/>
+      <meta>
+        <identification source="#cobalt">
+          <FRBRWork>
+            <FRBRthis value="/akn/za/act/2009/10/!schedule_1"/>
+            <FRBRuri value="/akn/za/act/2009/10"/>
+            <FRBRalias value="Untitled" name="title"/>
+            <FRBRdate date="2009" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRcountry value="za"/>
+            <FRBRnumber value="10"/>
+          </FRBRWork>
+          <FRBRExpression>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRlanguage language="eng"/>
+          </FRBRExpression>
+          <FRBRManifestation>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRauthor href=""/>
+          </FRBRManifestation>
+        </identification>
+        <references source="#cobalt">
+          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        </references>
+      </meta>
       <mainBody>
         <p>schedule text</p>
       </mainBody>
@@ -213,7 +269,35 @@ schedule text
     <heading>a heading</heading>
     <subheading>subheading</subheading>
     <doc contains="originalVersion" name="annexure">
-      <meta/>
+      <meta>
+        <identification source="#cobalt">
+          <FRBRWork>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10"/>
+            <FRBRalias value="Untitled" name="title"/>
+            <FRBRdate date="2009" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRcountry value="za"/>
+            <FRBRnumber value="10"/>
+          </FRBRWork>
+          <FRBRExpression>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRlanguage language="eng"/>
+          </FRBRExpression>
+          <FRBRManifestation>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRauthor href=""/>
+          </FRBRManifestation>
+        </identification>
+        <references source="#cobalt">
+          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        </references>
+      </meta>
       <mainBody>
         <p>some text</p>
       </mainBody>
@@ -222,7 +306,35 @@ schedule text
   <attachment eId="att_2">
     <heading>heading</heading>
     <doc contains="originalVersion" name="schedule">
-      <meta/>
+      <meta>
+        <identification source="#cobalt">
+          <FRBRWork>
+            <FRBRthis value="/akn/za/act/2009/10/!schedule_1"/>
+            <FRBRuri value="/akn/za/act/2009/10"/>
+            <FRBRalias value="Untitled" name="title"/>
+            <FRBRdate date="2009" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRcountry value="za"/>
+            <FRBRnumber value="10"/>
+          </FRBRWork>
+          <FRBRExpression>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRlanguage language="eng"/>
+          </FRBRExpression>
+          <FRBRManifestation>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRauthor href=""/>
+          </FRBRManifestation>
+        </identification>
+        <references source="#cobalt">
+          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        </references>
+      </meta>
       <mainBody>
         <p>schedule text</p>
       </mainBody>
