@@ -1,6 +1,7 @@
 import re
 from itertools import groupby
 
+from cobalt import FrbrUri
 from cobalt.akn import get_maker, StructuredDocument
 import lxml.etree as etree
 
@@ -332,5 +333,7 @@ class XmlGenerator:
     def make_meta(self, frbr_uri):
         """ Create a meta element appropriate for this generator's FRBR URI.
         """
+        if not isinstance(frbr_uri, FrbrUri):
+            frbr_uri = FrbrUri.parse(frbr_uri)
         cls = StructuredDocument.for_document_type(frbr_uri.doctype)
         return cls.empty_meta(frbr_uri, maker=self.maker)
