@@ -290,7 +290,7 @@ class XmlGenerator:
             name = ref.attrib.pop('displaced')
 
             content = get_displaced_content(ref, name, ref.get('marker'))
-            if content:
+            if content is not None:
                 # move children of the displaced element into the ref
                 for child in content:
                     ref.append(child)
@@ -298,12 +298,19 @@ class XmlGenerator:
             else:
                 # we couldn't find the content
                 # TODO: stash a warning somewhere?
-                p = etree.Element(f'{{{ns}}}p', nsmap=ref.nsmap)
+                p = etree.Element(f'{{{ns}}}p', nsmap=xml.nsmap)
                 p.text = "(content missing)"
                 ref.append(p)
 
-        # clean up unused displaced content
+        # don't lose unused displaced content. Instead, change it to a p tag
         for displaced in xml.iter(f'{{{ns}}}displaced'):
+            p = etree.Element(f'{{{ns}}}p', nsmap=xml.nsmap)
+            # eg. FOOTNOTE 99
+            p.text = displaced.get('name').upper() + ' ' + displaced.get('marker')
+            displaced.addprevious(p)
+            for child in displaced:
+                displaced.addprevious(child)
+            # remove the empty element
             displaced.getparent().remove(displaced)
 
         return xml
