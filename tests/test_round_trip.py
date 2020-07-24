@@ -5,6 +5,8 @@ from tests.support import print_with_lines, ParserSupport
 
 
 class RoundTripTestCase(ParserSupport, TestCase):
+    maxDiff = None
+
     def roundtrip(self, prefix, root):
         dir = os.path.join(os.path.dirname(__file__), 'roundtrip')
 

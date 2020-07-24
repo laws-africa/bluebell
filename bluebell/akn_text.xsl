@@ -427,6 +427,10 @@
     <xsl:if test="not(parent::a:th) and not(parent::a:td)">
       <xsl:text>&#10;&#10;</xsl:text>
     </xsl:if>
+
+    <xsl:apply-templates select=".//a:authorialNote" mode="content">
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="a:subheading">

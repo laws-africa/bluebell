@@ -1,7 +1,9 @@
+from datetime import date
 from unittest import TestCase
 
 from lxml import etree
 
+from cobalt import datestring
 from tests.support import ParserSupport
 
 
@@ -126,8 +128,9 @@ SCHEDULE heading
         }, tree.to_dict())
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        today = datestring(date.today())
 
-        self.assertEqual("""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+        self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
     <heading>a heading</heading>
     <subheading>subheading</subheading>
@@ -146,14 +149,14 @@ SCHEDULE heading
           <FRBRExpression>
             <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
-            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
             <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
-            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
@@ -183,14 +186,14 @@ SCHEDULE heading
           <FRBRExpression>
             <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
-            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
             <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
-            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
@@ -263,8 +266,9 @@ schedule text
         }, tree.to_dict())
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        today = datestring(date.today())
 
-        self.assertEqual("""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+        self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
     <heading>a heading</heading>
     <subheading>subheading</subheading>
@@ -283,14 +287,14 @@ schedule text
           <FRBRExpression>
             <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
-            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
             <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
-            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
@@ -320,14 +324,14 @@ schedule text
           <FRBRExpression>
             <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
-            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
             <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
-            <FRBRdate date="2020-07-22" name="Generation"/>
+            <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
