@@ -202,6 +202,16 @@ hello ++FOOTNOTE ++ ++ there
             }],
         }, tree.to_dict())
 
+    def test_footnote_content_missing(self):
+        tree = self.parse("""
+hello ++FOOTNOTE 1++ there
+""", 'line')
+
+        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">hello <authorialNote marker="1" placement="bottom" eId="authorialNote_1"><p>(content missing)</p></authorialNote> there</p>
+""", xml)
+
     def test_footnote_xml(self):
         tree = self.parse("""
 PART 1
