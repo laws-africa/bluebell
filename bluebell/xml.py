@@ -279,6 +279,7 @@ class XmlGenerator:
         ns = xml.nsmap[None]
 
         def get_displaced_content(start, name, marker):
+            # find the displaced content, by walking through following nodes in the tree
             for parent in start.iterancestors():
                 for child in parent.iter(f'{{{ns}}}displaced'):
                     if child.get('marker') == marker and child.get('name') == name:
@@ -288,11 +289,18 @@ class XmlGenerator:
         for ref in xml.xpath('//a:*[@displaced]', namespaces={'a': ns}):
             name = ref.attrib.pop('displaced')
 
-            # find the displaced content, by walking through following nodes in the tree
             content = get_displaced_content(ref, name, ref.get('marker'))
-            for child in content:
-                ref.append(child)
-            content.getparent().remove(content)
+            if content:
+                # move children of the displaced element into the ref
+                for child in content:
+                    ref.append(child)
+                content.getparent().remove(content)
+            else:
+                # we couldn't find the content
+                # TODO: stash a warning somewhere?
+                p = etree.Element(f'{{{ns}}}p', nsmap=ref.nsmap)
+                p.text = "(content missing)"
+                ref.append(p)
 
         # clean up unused displaced content
         for displaced in xml.iter(f'{{{ns}}}displaced'):
