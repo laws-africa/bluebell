@@ -202,6 +202,35 @@ hello ++FOOTNOTE ++ ++ there
             }],
         }, tree.to_dict())
 
+    def test_footnote_content_missing(self):
+        tree = self.parse("""
+hello ++FOOTNOTE 1++ there
+""", 'line')
+
+        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">hello <authorialNote marker="1" placement="bottom" eId="authorialNote_1"><p>(content missing)</p></authorialNote> there</p>
+""", xml)
+
+    def test_footnote_owner_missing(self):
+        tree = self.parse("""
+REMEDIES
+some content
+
+FOOTNOTE 99
+
+  a footnote without a parent
+""", 'remedies')
+
+        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<remedies xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <p>some content</p>
+  <p>FOOTNOTE 99</p>
+  <p>a footnote without a parent</p>
+</remedies>
+""", xml)
+
     def test_footnote_xml(self):
         tree = self.parse("""
 PART 1
@@ -271,6 +300,8 @@ PART 1
   <num>1</num>
   <content>
     <p>this section [<authorialNote marker="1" placement="bottom" eId="part_1__authorialNote_1"><p>which isn't very interesting</p></authorialNote>] uses a footnote.</p>
+    <p>FOOTNOTE 2</p>
+    <p>which is not used</p>
   </content>
 </part>
 """, xml)
