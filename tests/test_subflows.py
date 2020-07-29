@@ -306,3 +306,45 @@ PART 1
 </part>
 """, xml)
 
+    def test_duplicate_footnotes(self):
+        tree = self.parse("""
+PREAMBLE
+
+First reference to the Sustainable Development Goals,^^++FOOTNOTE 1++^^
+
+FOOTNOTE 1
+
+  General Assembly resolution 70/1, annex.
+
+Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,^^++FOOTNOTE 1++^^
+
+FOOTNOTE 1
+
+  General Assembly resolution 70/1, annex.
+
+""", 'preamble')
+
+        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<preamble xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <p>First reference to the Sustainable Development Goals,<sup><authorialNote marker="1" placement="bottom" eId="preamble__authorialNote_1"><p>General Assembly resolution 70/1, annex.</p></authorialNote></sup></p>
+  <p>Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,<sup><authorialNote marker="1" placement="bottom" eId="preamble__authorialNote_2"><p>General Assembly resolution 70/1, annex.</p></authorialNote></sup></p>
+</preamble>
+""", xml)
+
+        text = self.parser.unparse(xml)
+        self.assertEqual("""PREAMBLE
+
+  First reference to the Sustainable Development Goals,^^++FOOTNOTE 1++^^
+
+  FOOTNOTE 1
+
+    General Assembly resolution 70/1, annex.
+
+  Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,^^++FOOTNOTE 1++^^
+
+  FOOTNOTE 1
+
+    General Assembly resolution 70/1, annex.
+
+""", text)
