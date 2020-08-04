@@ -33,6 +33,12 @@ class ParserTestCase(ParserSupport, TestCase):
             self.parser.pre_parse("\ta\tb"),
         )
 
+    def test_pre_parse_leading_whitespace(self):
+        self.assertEqual(
+            "b\nanother line\n",
+            self.parser.pre_parse("  \n  \t\n  \n\t\n b\nanother line\n")
+        )
+
     def test_pre_parse_simple(self):
         self.assertEqual(
             "hello\n",
