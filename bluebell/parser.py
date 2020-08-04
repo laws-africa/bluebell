@@ -18,6 +18,10 @@ class AkomaNtosoParser:
     dedent = '}'
     indent_size = 2
 
+    line_re = re.compile(r'^([ ]*)([^ \n])', re.M)
+    leading_ws_re = re.compile(r'^(\s+\n)[^\n]*\S')
+    trailing_ws_re = re.compile(r' +$', re.M)
+
     def __init__(self, frbr_uri, eid_prefix=''):
         self.eid_prefix = eid_prefix
         self.generator = XmlGenerator(frbr_uri, self.eid_prefix)
@@ -42,21 +46,25 @@ class AkomaNtosoParser:
 
         After calling this, the following are guaranteed:
 
-        1. no whitespace at the start of a line
-        2. no tab characters
-        3. no trailing whitespace at the end of a line
-        4. a newline at the end of the string
+        1. no empty lines at the start
+        2. no whitespace at the start of a line
+        3. no tab characters
+        4. no trailing whitespace at the end of a line
+        5. a newline at the end of the string
 
         The indent and dedent parameters are the symbols the grammar
         uses to indicate indented and dedented blocks.
         """
-        line_re = re.compile(r'^([ ]*)([^ \n])', re.M)
-        trailing_ws_re = re.compile(r' +$', re.M)
-
-        # tabs are two spaces
+        # tabs to spaces
         text = text.replace('\t', ' ' * self.indent_size)
-        # strip trailing whitespace
-        text = trailing_ws_re.sub('', text)
+
+        # strip leading whitespace at start
+        m = self.leading_ws_re.match(text)
+        if m:
+            text = text[m.end(1):]
+
+        # strip trailing whitespace on lines
+        text = self.trailing_ws_re.sub('', text)
         if not text.endswith('\n'):
             text = text + '\n'
 
@@ -94,7 +102,7 @@ class AkomaNtosoParser:
 
                     return s + match.group(2)
 
-        text = line_re.sub(handle_indent, text)
+        text = self.line_re.sub(handle_indent, text)
 
         text += (self.dedent + "\n") * (len(stack) - 1)
 
