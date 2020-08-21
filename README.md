@@ -253,22 +253,6 @@ and removes the `displaced` element.
 
 ## Development
 
-1. Install customised Canopy as per below
-
-### Canopy
-
-Install customised canopy from github:
-
-```
-npm install git://github.com/laws-africa/canopy.git#lawsafrica
-```
-
-TODO: you may need to check it out elsewhere and compile it
-
-### Compiling a grammar
-
-```
-npx canopy akn.peg --lang python
-```
-
-will produce akn.py
+1. We use a version of `canopy` from github, so clone it into the same directory as this directory: `git clone https://github.com/jcoglan/canopy.git`
+2. Build canopy: `cd canopy; npm install; make; cd ..`
+3. Build grammar changes with `make`, which runs our Makefile to compile the grammar
