@@ -255,3 +255,95 @@ PART
   </section>
 </part>
 """, xml)
+
+    def test_implicit_heir_simple(self):
+        tree = self.parse("""
+1. some text in paragraph 1
+
+  with a second line
+""", 'hier_element')
+
+        self.assertEqual({
+            'type': 'hier',
+            'name': 'implicit',
+            'num': '1.',
+            'children': [{
+                'type': 'content',
+                'name': 'p',
+                'children': [{
+                    'type': 'text',
+                    'value': 'some text in paragraph 1',
+                }],
+            }, {
+                'type': 'content',
+                'name': 'p',
+                'children': [{
+                    'type': 'text',
+                    'value': 'with a second line',
+                }],
+            }],
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<paragraph xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="para_1">
+  <num>1.</num>
+  <content>
+    <p>some text in paragraph 1</p>
+    <p>with a second line</p>
+  </content>
+</paragraph>
+""", xml)
+
+    def test_implicit_heir_complex(self):
+        tree = self.parse("""
+1.2a.
+
+  SUBPARAGRAPH (a)
+  
+    item a text
+    
+  and some outro
+""", 'hier_element')
+
+        self.assertEqual({
+            'type': 'hier',
+            'name': 'implicit',
+            'num': '1.2a.',
+            'children': [{
+                'type': 'hier',
+                'name': 'subparagraph',
+                'num': '(a)',
+                'children': [{
+                    'type': 'content',
+                    'name': 'p',
+                    'children': [{
+                        'type': 'text',
+                        'value': 'item a text',
+                    }],
+                }],
+            }, {
+                'type': 'content',
+                'name': 'p',
+                'children': [{
+                    'type': 'text',
+                    'value': 'and some outro',
+                }],
+            }],
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<paragraph xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="para_12a">
+  <num>1.2a.</num>
+  <subparagraph eId="para_12a__subpara_a">
+    <num>(a)</num>
+    <content>
+      <p>item a text</p>
+    </content>
+  </subparagraph>
+  <wrapUp>
+    <p>and some outro</p>
+  </wrapUp>
+</paragraph>
+""", xml)

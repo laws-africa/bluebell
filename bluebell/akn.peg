@@ -58,7 +58,7 @@ grammar akn
   # Hierarchical elements
   # ------------------------------------------------------------------------------
 
-  hier_element      <- crossheading / hier_element_block
+  hier_element      <- crossheading / implicit_hier_element / hier_element_block
 
   hier_element_block <- hier_element_name heading:hier_element_heading? eol
                         indent
@@ -89,6 +89,18 @@ grammar akn
                         / 'PARAGRAPH' / 'PART' / 'POINT' / 'PROVISO' / 'RULE' / 'SECTION' / 'SUBCHAPTER' / 'SUBCLAUSE'
                         / 'SUBDIVISION' / 'SUBLIST' / 'SUBPARAGRAPH' / 'SUBPART' / 'SUBRULE' / 'SUBSECTION' / 'SUBTITLE'
                         / 'TITLE' / 'TOME' / 'TRANSITIONAL')
+
+  # ------------------------------------------------------------------------------
+  # Implicit numbered hier provisions
+  # ------------------------------------------------------------------------------
+
+  # TODO: inline doesn't seem right
+  implicit_hier_element <- dotted_num '.' intro:(space content:inline*)? eol
+                           indented:(indent
+                             content:hier_block_element*
+                           dedent)? <ImplicitHierElement>
+
+  dotted_num        <- [0-9] ('.'? [0-9a-zA-Z])*
 
   # ------------------------------------------------------------------------------
   # Containers

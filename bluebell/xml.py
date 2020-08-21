@@ -108,6 +108,10 @@ class IdGenerator:
         return self.num_strip_re.sub('', num)
 
 
+def implicit_hier_paragraph(generator, item):
+    item['name'] = 'paragraph'
+
+
 class XmlGenerator:
     """ Turns a parse tree into XML.
 
@@ -119,6 +123,12 @@ class XmlGenerator:
 
     akn_version = '3.0'
     """ AKN version to use, relying on Cobalt's versions and namespaces.
+    """
+
+    implicit_hier_handler = implicit_hier_paragraph
+    """ A function to call when processing an implicit hier element. The function is called
+    with this generator object and the item as arguments. The default handler marks the item
+    as a paragraph.
     """
 
     def __init__(self, frbr_uri=None, eid_prefix='', maker=None):
@@ -150,6 +160,10 @@ class XmlGenerator:
 
     def item_to_xml(self, item, prefix=''):
         m = self.maker
+
+        # give the caller a chance to handle implicit hier items
+        if item['type'] == 'hier' and item['name'] == 'implicit':
+            self.process_implicit_hier(item)
 
         if item['type'] == 'hier':
             eid = self.ids.make(prefix, item)
@@ -349,3 +363,9 @@ class XmlGenerator:
         """
         cls = StructuredDocument.for_document_type(frbr_uri.doctype)
         return cls.empty_meta(frbr_uri, maker=self.maker)
+
+    def process_implicit_hier(self, item):
+        # call the implicit hier element callback, to allow it to adjust implicit
+        # hier element details
+        if self.implicit_hier_handler:
+            self.implicit_hier_handler(item)

@@ -150,6 +150,28 @@ class HierElementHeading:
             return Inline.many_to_dict(x for x in self.heading.content)
 
 
+class ImplicitHierElement:
+    def to_dict(self):
+        kids = []
+
+        if self.intro.text and self.intro.content.text:
+            kids.append({
+                'type': 'content',
+                'name': 'p',
+                'children': Inline.many_to_dict(x for x in self.intro.content),
+            })
+
+        if self.indented.text:
+            kids.extend(many_to_dict(self.indented.content))
+
+        return {
+            'type': 'hier',
+            'name': 'implicit',
+            'num': self.dotted_num.text + '.',
+            'children': kids,
+        }
+
+
 class Attachments:
     def to_dict(self):
         return {
