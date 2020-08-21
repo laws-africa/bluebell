@@ -348,3 +348,37 @@ FOOTNOTE 1
     General Assembly resolution 70/1, annex.
 
 """, text)
+
+    def test_nested_quotes(self):
+        tree = self.parse("""
+QUOTE
+
+  line one
+  
+  QUOTE
+  
+    line two
+""", 'embedded_structure')
+        self.assertEqual({
+            'name': 'embeddedStructure',
+            'type': 'element',
+            'children': [{
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'line one',
+                }]
+            }, {
+                'name': 'embeddedStructure',
+                'type': 'element',
+                'children': [{
+                    'name': 'p',
+                    'type': 'content',
+                    'children': [{
+                        'type': 'text',
+                        'value': 'line two',
+                    }]
+                }]
+            }]
+        }, tree.to_dict())
