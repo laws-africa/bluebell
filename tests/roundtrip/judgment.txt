@@ -18,6 +18,10 @@ ARGUMENTS
 
     some quoted text
 
+  1. Paragraph 1 with
+
+    some text on a second line.
+
 REMEDIES
 
   fixes!
