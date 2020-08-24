@@ -9,13 +9,20 @@ class TablesTestCase(ParserSupport, TestCase):
 
     def test_basic(self):
         tree = self.parse("""
-{|
-! r1c1
-| r1c2
-|-
-| r2c1
-| r2c2
-|}
+TABLE
+  TR
+    TH
+      r1c1
+      
+    TC
+      r1c2
+      
+  TR
+    TC
+      r2c1
+      
+    TC
+      r2c2
 """, 'table')
         self.assertEqual({
             'type': 'element',
@@ -99,13 +106,17 @@ class TablesTestCase(ParserSupport, TestCase):
 
     def test_basic_attribs(self):
         tree = self.parse("""
-{|
-| colspan="2" | r1c1
-|  rowspan="1"  colspan='3"' | r1c2
-|-
-|a="b'"| r2c1
-|a="b"c="d"  | r2c2
-|}
+TABLE
+  TR
+    TC{colspan 2}
+      r1c1
+    TC{rowspan 1 | colspan 3"}
+      r1c2
+  TR
+    TC
+      r2c1
+    TC
+      r2c2
 """, 'table')
         self.assertEqual({
             'type': 'element',
@@ -144,7 +155,6 @@ class TablesTestCase(ParserSupport, TestCase):
                 'children': [{
                     'type': 'element',
                     'name': 'td',
-                    'attribs': {'a': "b'"},
                     'children': [{
                         'name': 'p',
                         'type': 'content',
@@ -156,7 +166,6 @@ class TablesTestCase(ParserSupport, TestCase):
                 }, {
                     'type': 'element',
                     'name': 'td',
-                    'attribs': {'a': 'b', 'c': 'd'},
                     'children': [{
                         'name': 'p',
                         'type': 'content',
@@ -181,10 +190,10 @@ class TablesTestCase(ParserSupport, TestCase):
     </td>
   </tr>
   <tr>
-    <td a="b'">
+    <td>
       <p>r2c1</p>
     </td>
-    <td a="b" c="d">
+    <td>
       <p>r2c2</p>
     </td>
   </tr>
@@ -196,11 +205,10 @@ class TablesTestCase(ParserSupport, TestCase):
 SECTION 1.
 
   SUBSECTION (a)
-      
-    {|
-    |
+  
+    TABLE
+      TR
   bar
-    |}
 """, 'hier_element')
 
         self.assertEqual({
@@ -245,15 +253,16 @@ SECTION 1.
 
     def test_empty_cells(self):
         tree = self.parse("""
-{|
-|
-|
-| x
-|-
-|
-!
-|-
-|}
+TABLE
+  TR
+    TC
+    TC
+    TC
+      x
+  TR
+    TC
+    TH
+  TR
 """, 'table')
 
         self.assertEqual({
@@ -392,16 +401,16 @@ SECTION 1.
 
     def test_linebreaks(self):
         tree = self.parse("""
-{|
-| one
-
-two
-
-|
-
-three
-
-|}
+TABLE
+  TR
+    TC
+      one
+      
+      two
+      
+    TC
+    
+      three
 """, 'table')
 
         self.assertEqual({
@@ -461,10 +470,15 @@ three
 
     def test_non_cells(self):
         tree = self.parse("""
-{|
-| one
-|} two
-|}
+        
+TABLE
+  one
+  
+  TR
+    TC
+      two
+      
+    three
 """, 'table')
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
