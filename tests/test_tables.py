@@ -392,13 +392,11 @@ TABLE
                         'children': [{
                             'type': 'text',
                             'value': 'one',
-                        }, {
-                            'type': 'marker',
-                            'name': 'eol',
-                        }, {
-                            'type': 'marker',
-                            'name': 'eol',
-                        }, {
+                        }]
+                    }, {
+                        'type': 'content',
+                        'name': 'p',
+                        'children': [{
                             'type': 'text',
                             'value': 'two',
                         }]
@@ -423,37 +421,11 @@ TABLE
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>
     <td>
-      <p>one<eol/><eol/>two</p>
+      <p>one</p>
+      <p>two</p>
     </td>
     <td>
       <p>three</p>
-    </td>
-  </tr>
-</table>
-""", xml)
-
-    def test_non_cells(self):
-        tree = self.parse("""
-        
-TABLE
-  one
-  
-  TR
-    TC
-      two
-      
-    three
-""", 'table')
-
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
-
-        self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
-  <tr>
-    <td>
-      <p>one</p>
-    </td>
-    <td>
-      <p>} two</p>
     </td>
   </tr>
 </table>
