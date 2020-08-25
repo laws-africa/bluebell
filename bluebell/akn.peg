@@ -248,17 +248,17 @@ grammar akn
                        dedent <TableRow>
 
   table_cell        <- name:('TH' / 'TC') attrs:block_attrs? eol
-                       indent
+                       content:(indent
                          content:block_element+
-                       dedent <TableCell>
+                       dedent)? <TableCell>
 
-  block_attrs       <- '{' block_attr attrs:('|' block_attr)* '}' <BlockAttrs>
+  block_attrs       <- '{' first:block_attr? space? rest:('|' space? attr:block_attr?)* '}' <BlockAttrs>
 
-  block_attr        <- space? attr_name value:(space attr_value)? <BlockAttr>
+  block_attr        <- attr_name value:(space attr_value)? <BlockAttr>
 
-  attr_name         <- (!'|' !'}' !' ' [^\n])+
+  attr_name         <- [^ \n|}]+
 
-  attr_value        <- (!'|' !'}' [^\n])*
+  attr_value        <- [^\n|}]*
 
   # ------------------------------------------------------------------------------
   # Subflows (that go from inlines into nested complex structures)

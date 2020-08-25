@@ -113,7 +113,7 @@ TABLE
     TC{rowspan 1 | colspan 3"}
       r1c2
   TR
-    TC
+    TC{|   |a}
       r2c1
     TC
       r2c2
@@ -155,6 +155,7 @@ TABLE
                 'children': [{
                     'type': 'element',
                     'name': 'td',
+                    'attribs': {'a': ''},
                     'children': [{
                         'name': 'p',
                         'type': 'content',
@@ -190,7 +191,7 @@ TABLE
     </td>
   </tr>
   <tr>
-    <td>
+    <td a="">
       <p>r2c1</p>
     </td>
     <td>
@@ -224,14 +225,14 @@ SECTION 1.
                     'type': 'content',
                     'children': [{
                         'type': 'text',
-                        'value': '{|',
+                        'value': 'TABLE',
                     }]
                 }, {
                     'name': 'p',
                     'type': 'content',
                     'children': [{
                         'type': 'text',
-                        'value': '|',
+                        'value': 'TR',
                     }]
                 }]
             }, {
@@ -240,13 +241,6 @@ SECTION 1.
                 'children': [{
                     'type': 'text',
                     'value': 'bar',
-                }]
-            }, {
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': '|}',
                 }]
             }]
         }, tree.to_dict())
@@ -262,7 +256,6 @@ TABLE
   TR
     TC
     TH
-  TR
 """, 'table')
 
         self.assertEqual({
