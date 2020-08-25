@@ -263,7 +263,7 @@ class XmlGenerator:
             eid = self.ids.make(prefix, item)
             if eid and not self.ids.is_unnecessary(prefix, item):
                 attrs['eId'] = eid
-            return m(item['name'], *self.kids_to_xml(item, prefix=eid), **attrs)
+            return m(item['name'], *self.kids_to_xml(item, prefix=(eid or prefix)), **attrs)
 
     def kids_to_xml(self, parent=None, kids=None, prefix=None):
         if kids is None:

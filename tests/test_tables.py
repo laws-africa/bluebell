@@ -316,65 +316,17 @@ TABLE
         }, tree.to_dict())
 
     def test_nested_blocks(self):
-        """ In future, we may want to support nested blocks in cells.
-        For now, they aren't supported.
-        """
         tree = self.parse("""
 SECTION 1.
 
-    {|
-    |
+  TABLE
+    TR
+      TC
         (a) item a
-              (i) item a-i
-              (ii) item a-ii
+          (i) item a-i
+          (ii) item a-ii
         (b) item b
-    |-
-    |}
 """, 'hier_element')
-
-        self.assertEqual({
-            'type': 'hier',
-            'name': 'section',
-            'num': '1.',
-            'children': [{
-                'type': 'element',
-                'name': 'table',
-                'children': [{
-                    'type': 'element',
-                    'name': 'tr',
-                    'children': [{
-                        'type': 'element',
-                        'name': 'td',
-                        'children': [{
-                            'type': 'content',
-                            'name': 'p',
-                            'children': [{
-                                'type': 'text',
-                                'value': '(a) item a',
-                            }, {
-                                'type': 'marker',
-                                'name': 'eol'
-                            }, {
-                                'type': 'text',
-                                'value': '(i) item a-i',
-                            }, {
-                                'type': 'marker',
-                                'name': 'eol'
-                            }, {
-                                'type': 'text',
-                                'value': '(ii) item a-ii',
-                            }, {
-                                'type': 'marker',
-                                'name': 'eol'
-                            }, {
-                                'type': 'text',
-                                'value': '(b) item b',
-                            }]
-                        }]
-                    }]
-                }]
-            }]
-        }, tree.to_dict())
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
@@ -384,7 +336,26 @@ SECTION 1.
     <table eId="sec_1__table_1">
       <tr>
         <td>
-          <p>(a) item a<eol/>(i) item a-i<eol/>(ii) item a-ii<eol/>(b) item b</p>
+          <blockList eId="sec_1__table_1__list_1">
+            <item eId="sec_1__table_1__list_1__item_a">
+              <num>(a)</num>
+              <p>item a</p>
+              <blockList eId="sec_1__table_1__list_1__item_a__list_1">
+                <item eId="sec_1__table_1__list_1__item_a__list_1__item_i">
+                  <num>(i)</num>
+                  <p>item a-i</p>
+                </item>
+                <item eId="sec_1__table_1__list_1__item_a__list_1__item_ii">
+                  <num>(ii)</num>
+                  <p>item a-ii</p>
+                </item>
+              </blockList>
+            </item>
+            <item eId="sec_1__table_1__list_1__item_b">
+              <num>(b)</num>
+              <p>item b</p>
+            </item>
+          </blockList>
         </td>
       </tr>
     </table>
