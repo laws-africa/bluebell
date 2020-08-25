@@ -278,10 +278,19 @@ class TableCell:
     }
 
     def to_dict(self):
+        if self.content.text:
+            kids = many_to_dict(self.content.content)
+        else:
+            kids = [{
+                'type': 'content',
+                'name': 'p',
+                'children': [],
+            }]
+
         info = {
             'type': 'element',
             'name': self.names[self.name.text],
-            'children': many_to_dict(self.content),
+            'children': kids,
         }
 
         if self.attrs.text:
@@ -290,22 +299,16 @@ class TableCell:
         return info
 
 
-class TableCellLine:
-    def to_dict(self):
-        kids = Inline.many_to_dict(self.content)
-        # whitespace
-        for x in range(len(self.eol.text)):
-            kids.append({'type': 'marker', 'name': 'eol'})
-        return kids
-
-
 class BlockAttrs:
     def to_dict(self):
-        attrs = self.block_attr.to_dict()
+        attrs = {}
 
-        for el in self.attrs:
-            if el.block_attr.text:
-                attrs.update(el.block_attr.to_dict())
+        if self.first.text:
+            attrs.update(self.first.to_dict())
+
+        for el in self.rest:
+            if el.attr.text:
+                attrs.update(el.attr.to_dict())
 
         return attrs
 
