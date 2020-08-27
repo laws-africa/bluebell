@@ -276,86 +276,82 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <!-- tables -->
+  <!-- ...............................................................................
+       Tables
+       ............................................................................... -->
   <xsl:template match="a:table">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>{| </xsl:text>
-
-    <!-- attributes -->
-    <xsl:for-each select="@*[local-name() != 'eId']">
-      <xsl:value-of select="local-name(.)" />
-      <xsl:text>="</xsl:text>
-      <xsl:value-of select="." />
-      <xsl:text>" </xsl:text>
-    </xsl:for-each>
-
+    <xsl:text>TABLE</xsl:text>
+    <xsl:call-template name="block-attrs" />
     <xsl:text>&#10;</xsl:text>
-    <xsl:call-template name="indent">
-      <xsl:with-param name="level" select="$indent" />
-    </xsl:call-template>
-    <xsl:text>|-</xsl:text>
 
-    <!-- table rows -->
     <xsl:apply-templates>
-      <xsl:with-param name="indent" select="$indent" />
+      <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
-
-    <xsl:text>&#10;</xsl:text>
-    <xsl:call-template name="indent">
-      <xsl:with-param name="level" select="$indent" />
-    </xsl:call-template>
-    <xsl:text>|}&#10;&#10;</xsl:text>
   </xsl:template>
+
 
   <xsl:template match="a:tr">
     <xsl:param name="indent">0</xsl:param>
 
-    <xsl:apply-templates>
-      <xsl:with-param name="indent" select="$indent" />
-    </xsl:apply-templates>
-
-    <xsl:text>&#10;</xsl:text>
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>|-</xsl:text>
+    <xsl:text>TR&#10;</xsl:text>
+
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
   </xsl:template>
+
 
   <xsl:template match="a:th|a:td">
     <xsl:param name="indent">0</xsl:param>
 
-    <xsl:text>&#10;</xsl:text>
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
 
     <xsl:choose>
       <xsl:when test="local-name(.) = 'th'">
-        <xsl:text>! </xsl:text>
+        <xsl:text>TH</xsl:text>
       </xsl:when>
       <xsl:when test="local-name(.) = 'td'">
-        <xsl:text>| </xsl:text>
+        <xsl:text>TC</xsl:text>
       </xsl:when>
     </xsl:choose>
 
-    <!-- attributes -->
-    <xsl:if test="@*">
-      <xsl:for-each select="@*">
-        <xsl:value-of select="local-name(.)" />
-        <xsl:text>="</xsl:text>
-        <xsl:value-of select="." />
-        <xsl:text>" </xsl:text>
-      </xsl:for-each>
-      <xsl:text>| </xsl:text>
-    </xsl:if>
+    <xsl:call-template name="block-attrs" />
+    <xsl:text>&#10;</xsl:text>
 
     <xsl:apply-templates>
-      <xsl:with-param name="indent" select="$indent" />
+      <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
+  </xsl:template>
+
+  <!-- ...............................................................................
+       Attribute lists at the start of marked blocks
+       ............................................................................... -->
+
+  <xsl:template name="block-attrs">
+    <xsl:if test="@*[local-name() != 'eId']">
+      <xsl:text>{</xsl:text>
+
+      <xsl:for-each select="@*[local-name() != 'eId']">
+        <xsl:if test="position() > 1">
+          <xsl:text>|</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="local-name(.)" />
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="." />
+      </xsl:for-each>
+
+      <xsl:text>}</xsl:text>
+    </xsl:if>
   </xsl:template>
 
   <!-- ...............................................................................
@@ -410,7 +406,7 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="a:item/a:p | a:td/a:p | a:th/a:p">
+  <xsl:template match="a:item/a:p">
     <xsl:param name="indent">0</xsl:param>
 
     <!-- don't indent the first p tag -->
@@ -424,9 +420,7 @@
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
 
-    <xsl:if test="not(parent::a:th) and not(parent::a:td)">
-      <xsl:text>&#10;&#10;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#10;&#10;</xsl:text>
 
     <xsl:apply-templates select=".//a:authorialNote" mode="content">
       <xsl:with-param name="indent" select="$indent" />
@@ -545,7 +539,7 @@
        ............................................................................... -->
 
   <!-- first text nodes of these elems must be escaped if they have special chars -->
-  <xsl:template match="a:p[not(ancestor::a:table)]/text()[not(preceding-sibling::*)] | a:listIntroduction/text()[not(preceding-sibling::*)] | a:intro/text()[not(preceding-sibling::*)]">
+  <xsl:template match="a:p/text()[not(preceding-sibling::*)] | a:listIntroduction/text()[not(preceding-sibling::*)] | a:intro/text()[not(preceding-sibling::*)]">
     <xsl:call-template name="escape">
       <xsl:with-param name="value" select="." />
     </xsl:call-template>

@@ -24,14 +24,16 @@ CHAPTER 1 - Heading
 
         (ii) item (b)(ii)
 
-      {| 
-      |-
-      ! colspan="2" | The Heading
-      |-
-      | cell 1
-      
-      with newlines
-      | cell 2
-      |-
-      |}
+      TABLE
+        TR
+          TC{colspan 2|rowspan 3}
+            The Heading
+
+          TC
+            cell 1
+
+            with newlines
+
+          TC
+            cell 2
 
