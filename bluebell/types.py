@@ -255,78 +255,67 @@ class BlockItem:
 
 class Table:
     def to_dict(self):
-        rows = []
-        cells = []
-
-        for child in self.table_body:
-            if isinstance(child, TableCell):
-                cells.append(child)
-            else:
-                if cells:
-                    rows.append(cells)
-                cells = []
-
-        if cells:
-            rows.append(cells)
-
         return {
             'type': 'element',
             'name': 'table',
-            'children': [{
-                'type': 'element',
-                'name': 'tr',
-                'children': [c.to_dict() for c in row],
-            } for row in rows]
+            'children': [r.to_dict() for r in self.rows],
+        }
+
+
+class TableRow:
+    def to_dict(self):
+        return {
+            'type': 'element',
+            'name': 'tr',
+            'children': [c.to_dict() for c in self.cells],
         }
 
 
 class TableCell:
-    def trim(self, kids, posn):
-        while kids and kids[posn]['type'] == 'marker' and kids[posn]['name'] == 'eol':
-            kids.pop(posn)
+    names = {
+        'TH': 'th',
+        'TC': 'td',
+    }
 
     def to_dict(self):
-        # first line
-        children = self.initial.to_dict()
-
-        # remaining lines
-        for kid in many_to_dict(self.content.elements):
-            children.extend(kid)
-
-        # trim leading and trailing newline markers
-        self.trim(children, 0)
-        self.trim(children, -1)
+        if self.content.text:
+            kids = many_to_dict(self.content.content)
+        else:
+            kids = [{
+                'type': 'content',
+                'name': 'p',
+                'children': [],
+            }]
 
         info = {
             'type': 'element',
-            'name': 'th' if self.table_cell_start.text == '!' else 'td',
-            'children': [{
-                'type': 'content',
-                'name': 'p',
-                'children': children,
-            }]
+            'name': self.names[self.name.text],
+            'children': kids,
         }
 
-        if self.attribs.text:
-            info['attribs'] = self.attribs.to_dict()
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
 
         return info
 
 
-class TableCellLine:
+class BlockAttrs:
     def to_dict(self):
-        kids = Inline.many_to_dict(self.content)
-        # whitespace
-        for x in range(len(self.eol.text)):
-            kids.append({'type': 'marker', 'name': 'eol'})
-        return kids
+        attrs = {}
+
+        if self.first.text:
+            attrs.update(self.first.to_dict())
+
+        for el in self.rest:
+            if el.attr.text:
+                attrs.update(el.attr.to_dict())
+
+        return attrs
 
 
-class TableAttribs:
+class BlockAttr:
     def to_dict(self):
-        return {
-            a.name.text: a.value.elements[1].text for a in self.attribs
-        }
+        return {self.attr_name.text: self.value.text.strip()}
 
 
 # ------------------------------------------------------------------------------

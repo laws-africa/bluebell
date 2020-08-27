@@ -226,49 +226,39 @@ grammar akn
 
   # ------------------------------------------------------------------------------
   # Tables
+  #
+  # TABLE
+  #   TR
+  #     TH{colspan 2}
+  #       text
+  #
+  #     TD{rowspan 3|colspan 1}
+  #       text
   # ------------------------------------------------------------------------------
 
                      # TODO
-  table             <- table_start
-                       table_body
-                       table_end
-                       <Table>
+  table             <- 'TABLE' attrs:block_attrs? eol
+                       indent
+                         rows:table_row+
+                       dedent <Table>
 
-  table_start       <- '{|' eol
+  table_row         <- 'TR' eol
+                       indent
+                         cells:table_cell+
+                       dedent <TableRow>
 
-  table_body        <- (table_row / table_cell)*
+  table_cell        <- name:('TH' / 'TC') attrs:block_attrs? eol
+                       content:(indent
+                         content:block_element+
+                       dedent)? <TableCell>
 
-  table_row         <- '|-' eol
+  block_attrs       <- '{' first:block_attr? space? rest:('|' space? attr:block_attr?)* '}' <BlockAttrs>
 
-  table_cell        <- !table_end
-                       # td (|) or th (!) cell marker with attributes, then content on first line
-                       table_cell_start attribs:table_attribs? space? initial:table_cell_line
-                       # cell contents after the first line
-                       content:table_cell_block*
-                       <TableCell>
+  block_attr        <- attr_name value:(space attr_value)? <BlockAttr>
 
-  table_cell_start  <- [!|]
+  attr_name         <- [^ \n|}]+
 
-  table_cell_block  <- nested_table_cell_block / table_cell_line
-
-  nested_table_cell_block <- indent content:table_cell_block+ dedent <NestedBlockElement>
-
-                       # table_cell_start also conveniently handles table row and table end markers
-  table_cell_line   <- !dedent !table_cell_start content:inline* eol <TableCellLine>
-
-                       # foo=one bar=two |
-  table_attribs     <- space? attribs:(table_attrib+) '|'
-                       <TableAttribs>
-
-                       # foo=bar
-                       # foo="bar"
-                       # foo='bar'
-  table_attrib      <- name:([a-z_-]+) '=' value:(
-                         ('"' (!'"' .)* '"') /
-                         ("'" (!"'" .)* "'"))
-                       space?
-
-  table_end         <- '|}' eol
+  attr_value        <- [^\n|}]*
 
   # ------------------------------------------------------------------------------
   # Subflows (that go from inlines into nested complex structures)
