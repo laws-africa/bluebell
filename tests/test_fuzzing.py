@@ -36,6 +36,10 @@ class FuzzingTestCase(ParserSupport, TestCase):
     SECTION
     SUBHEADING
     SUBSECTION
+    TABLE
+    TR
+    TH
+    TC
     """.strip().split()
 
     separators = [
@@ -43,11 +47,6 @@ class FuzzingTestCase(ParserSupport, TestCase):
         '\n    ',
         '\n',
         ' ',
-        '|',
-        '|-',
-        '!',
-        '{|',
-        '}|',
     ]
 
     min_snippets = 1
@@ -68,6 +67,7 @@ class FuzzingTestCase(ParserSupport, TestCase):
         # when choosing keywords, also have a bit of a chance of choosing none
         keywords = self.keywords + [''] * 3
 
+        # generate lines of random length
         for length in random.sample(range(self.max_snippets), self.num_strings):
             lines = ''.join([
                 # newline / indent
@@ -75,7 +75,7 @@ class FuzzingTestCase(ParserSupport, TestCase):
                 # optional keyword
                 random.choice(keywords) + ' ' +
                 # some text
-                ' '.join(random.sample(words, random.randint(1, 10)))
+                ' '.join(random.sample(words, random.randint(0, 10)))
                 for x in range(length)
             ])
             if lines.strip():
