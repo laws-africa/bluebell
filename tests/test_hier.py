@@ -47,7 +47,7 @@ there
 
         self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="hierarchicalStructure_1">
   <body>
-    <hcontainer name="hcontainer" eId="hcontainer_1">
+    <hcontainer name="hcontainer" eId="hierarchicalStructure_1__hcontainer_1">
       <p>hello</p>
       <p>there</p>
     </hcontainer>
