@@ -138,13 +138,28 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:call-template name="uppercase">
-      <xsl:with-param name="s" select="local-name()"/>
-    </xsl:call-template>
+
+    <xsl:choose>
+      <!-- shorter synonyms for some common elements -->
+      <xsl:when test="self::a:article"><xsl:text>ART</xsl:text></xsl:when>
+      <xsl:when test="self::a:chapter"><xsl:text>CHAP</xsl:text></xsl:when>
+      <xsl:when test="self::a:paragraph"><xsl:text>PARA</xsl:text></xsl:when>
+      <xsl:when test="self::a:section"><xsl:text>SEC</xsl:text></xsl:when>
+      <xsl:when test="self::a:subchapter"><xsl:text>SUBCHAP</xsl:text></xsl:when>
+      <xsl:when test="self::a:subparagraph"><xsl:text>SUBPARA</xsl:text></xsl:when>
+      <xsl:when test="self::a:subsection"><xsl:text>SUBSEC</xsl:text></xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="uppercase">
+          <xsl:with-param name="s" select="local-name()"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+
     <xsl:if test="a:num">
       <xsl:text> </xsl:text>
       <xsl:value-of select="a:num" />
     </xsl:if>
+
     <xsl:if test="a:heading">
       <xsl:text> - </xsl:text>
       <xsl:apply-templates select="a:heading" />

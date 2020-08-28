@@ -85,10 +85,12 @@ grammar akn
                      # indented block, but otherwise contain block and hier content
   hier_block_indent <- (indent content:hier_block_element+ dedent) / hier_block_element
 
+                     # synonyms that are prefixes of other items must come last
   hier_element_name <- ('ALINEA' / 'ARTICLE' / 'BOOK' / 'CHAPTER' / 'CLAUSE' / 'DIVISION' / 'INDENT' / 'LEVEL' / 'LIST'
-                        / 'PARAGRAPH' / 'PART' / 'POINT' / 'PROVISO' / 'RULE' / 'SECTION' / 'SUBCHAPTER' / 'SUBCLAUSE'
-                        / 'SUBDIVISION' / 'SUBLIST' / 'SUBPARAGRAPH' / 'SUBPART' / 'SUBRULE' / 'SUBSECTION' / 'SUBTITLE'
-                        / 'TITLE' / 'TOME' / 'TRANSITIONAL')
+                        / 'PARAGRAPH' / 'PART' / 'POINT' / 'PROVISO' / 'RULE' / 'SECTION' / 'SUBCHAPTER'
+                        / 'SUBCLAUSE' / 'SUBDIVISION' / 'SUBLIST' / 'SUBPARAGRAPH' / 'SUBPART' / 'SUBRULE'
+                        / 'SUBSECTION' / 'SUBTITLE' / 'TITLE' / 'TOME' / 'TRANSITIONAL'
+                        / 'ART' / 'CHAP' / 'PARA' / 'SEC' / 'SUBCHAP' / 'SUBPARA' / 'SUBSEC')
 
   # ------------------------------------------------------------------------------
   # Containers

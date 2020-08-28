@@ -1708,6 +1708,111 @@ class Grammar(object):
                                                                                                                         self._expected.append('\'TRANSITIONAL\'')
                                                                                                                 if address0 is FAILURE:
                                                                                                                     self._offset = index1
+                                                                                                                    chunk27, max27 = None, self._offset + 3
+                                                                                                                    if max27 <= self._input_size:
+                                                                                                                        chunk27 = self._input[self._offset:max27]
+                                                                                                                    if chunk27 == 'ART':
+                                                                                                                        address0 = TreeNode(self._input[self._offset:self._offset + 3], self._offset, [])
+                                                                                                                        self._offset = self._offset + 3
+                                                                                                                    else:
+                                                                                                                        address0 = FAILURE
+                                                                                                                        if self._offset > self._failure:
+                                                                                                                            self._failure = self._offset
+                                                                                                                            self._expected = []
+                                                                                                                        if self._offset == self._failure:
+                                                                                                                            self._expected.append('\'ART\'')
+                                                                                                                    if address0 is FAILURE:
+                                                                                                                        self._offset = index1
+                                                                                                                        chunk28, max28 = None, self._offset + 4
+                                                                                                                        if max28 <= self._input_size:
+                                                                                                                            chunk28 = self._input[self._offset:max28]
+                                                                                                                        if chunk28 == 'CHAP':
+                                                                                                                            address0 = TreeNode(self._input[self._offset:self._offset + 4], self._offset, [])
+                                                                                                                            self._offset = self._offset + 4
+                                                                                                                        else:
+                                                                                                                            address0 = FAILURE
+                                                                                                                            if self._offset > self._failure:
+                                                                                                                                self._failure = self._offset
+                                                                                                                                self._expected = []
+                                                                                                                            if self._offset == self._failure:
+                                                                                                                                self._expected.append('\'CHAP\'')
+                                                                                                                        if address0 is FAILURE:
+                                                                                                                            self._offset = index1
+                                                                                                                            chunk29, max29 = None, self._offset + 4
+                                                                                                                            if max29 <= self._input_size:
+                                                                                                                                chunk29 = self._input[self._offset:max29]
+                                                                                                                            if chunk29 == 'PARA':
+                                                                                                                                address0 = TreeNode(self._input[self._offset:self._offset + 4], self._offset, [])
+                                                                                                                                self._offset = self._offset + 4
+                                                                                                                            else:
+                                                                                                                                address0 = FAILURE
+                                                                                                                                if self._offset > self._failure:
+                                                                                                                                    self._failure = self._offset
+                                                                                                                                    self._expected = []
+                                                                                                                                if self._offset == self._failure:
+                                                                                                                                    self._expected.append('\'PARA\'')
+                                                                                                                            if address0 is FAILURE:
+                                                                                                                                self._offset = index1
+                                                                                                                                chunk30, max30 = None, self._offset + 3
+                                                                                                                                if max30 <= self._input_size:
+                                                                                                                                    chunk30 = self._input[self._offset:max30]
+                                                                                                                                if chunk30 == 'SEC':
+                                                                                                                                    address0 = TreeNode(self._input[self._offset:self._offset + 3], self._offset, [])
+                                                                                                                                    self._offset = self._offset + 3
+                                                                                                                                else:
+                                                                                                                                    address0 = FAILURE
+                                                                                                                                    if self._offset > self._failure:
+                                                                                                                                        self._failure = self._offset
+                                                                                                                                        self._expected = []
+                                                                                                                                    if self._offset == self._failure:
+                                                                                                                                        self._expected.append('\'SEC\'')
+                                                                                                                                if address0 is FAILURE:
+                                                                                                                                    self._offset = index1
+                                                                                                                                    chunk31, max31 = None, self._offset + 7
+                                                                                                                                    if max31 <= self._input_size:
+                                                                                                                                        chunk31 = self._input[self._offset:max31]
+                                                                                                                                    if chunk31 == 'SUBCHAP':
+                                                                                                                                        address0 = TreeNode(self._input[self._offset:self._offset + 7], self._offset, [])
+                                                                                                                                        self._offset = self._offset + 7
+                                                                                                                                    else:
+                                                                                                                                        address0 = FAILURE
+                                                                                                                                        if self._offset > self._failure:
+                                                                                                                                            self._failure = self._offset
+                                                                                                                                            self._expected = []
+                                                                                                                                        if self._offset == self._failure:
+                                                                                                                                            self._expected.append('\'SUBCHAP\'')
+                                                                                                                                    if address0 is FAILURE:
+                                                                                                                                        self._offset = index1
+                                                                                                                                        chunk32, max32 = None, self._offset + 7
+                                                                                                                                        if max32 <= self._input_size:
+                                                                                                                                            chunk32 = self._input[self._offset:max32]
+                                                                                                                                        if chunk32 == 'SUBPARA':
+                                                                                                                                            address0 = TreeNode(self._input[self._offset:self._offset + 7], self._offset, [])
+                                                                                                                                            self._offset = self._offset + 7
+                                                                                                                                        else:
+                                                                                                                                            address0 = FAILURE
+                                                                                                                                            if self._offset > self._failure:
+                                                                                                                                                self._failure = self._offset
+                                                                                                                                                self._expected = []
+                                                                                                                                            if self._offset == self._failure:
+                                                                                                                                                self._expected.append('\'SUBPARA\'')
+                                                                                                                                        if address0 is FAILURE:
+                                                                                                                                            self._offset = index1
+                                                                                                                                            chunk33, max33 = None, self._offset + 6
+                                                                                                                                            if max33 <= self._input_size:
+                                                                                                                                                chunk33 = self._input[self._offset:max33]
+                                                                                                                                            if chunk33 == 'SUBSEC':
+                                                                                                                                                address0 = TreeNode(self._input[self._offset:self._offset + 6], self._offset, [])
+                                                                                                                                                self._offset = self._offset + 6
+                                                                                                                                            else:
+                                                                                                                                                address0 = FAILURE
+                                                                                                                                                if self._offset > self._failure:
+                                                                                                                                                    self._failure = self._offset
+                                                                                                                                                    self._expected = []
+                                                                                                                                                if self._offset == self._failure:
+                                                                                                                                                    self._expected.append('\'SUBSEC\'')
+                                                                                                                                            if address0 is FAILURE:
+                                                                                                                                                self._offset = index1
         self._cache['hier_element_name'][index0] = (address0, self._offset)
         return address0
 
