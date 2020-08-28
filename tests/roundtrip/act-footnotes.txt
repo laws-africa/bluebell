@@ -8,9 +8,9 @@ PREAMBLE
 
 BODY
 
-CHAPTER 1 - Heading
+CHAP 1 - Heading
 
-  SECTION 1 - Section
+  SEC 1 - Section
 
     some text at ++FOOTNOTE 1++ the start
 
@@ -18,7 +18,7 @@ CHAPTER 1 - Heading
 
       footnote text
 
-    SUBSECTION 1
+    SUBSEC 1
 
       list intro++FOOTNOTE 2++ with ++FOOTNOTE 3++ two footnotes
 

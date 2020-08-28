@@ -122,10 +122,23 @@ class MainBody(HierBlockIndentElement):
 
 
 class HierElement:
+    synonyms = {
+        'art': 'article',
+        'chap': 'chapter',
+        'para': 'paragraph',
+        'sec': 'section',
+        'subchap': 'subchapter',
+        'subpara': 'subparagraph',
+        'subsec': 'subsection',
+    }
+
     def to_dict(self):
+        name = self.hier_element_name.text.lower()
+        name = self.synonyms.get(name, name)
+
         info = {
             'type': 'hier',
-            'name': self.hier_element_name.text.lower(),
+            'name': name,
             'children': many_to_dict(self.content),
         }
 
