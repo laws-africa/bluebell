@@ -255,3 +255,32 @@ PART
   </section>
 </part>
 """, xml)
+
+    def test_num_incremented(self):
+        tree = self.parse("""
+        DIVISION I. - Introduction
+
+          Some standalone text.
+
+        DIVISION - Next heading
+
+          Some more text.
+
+        """, 'hier_element_block')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<division xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="dvs_I">
+  <num>I.</num>
+  <heading>Introduction</heading>
+  <content>
+    <p>Some standalone text.</p>
+  </content>
+</division>
+<division eId="dvs_2">
+  <heading>Next heading</heading>
+  <content>
+    <p>Some more text.</p>
+  </content>
+</division>
+""", xml)
