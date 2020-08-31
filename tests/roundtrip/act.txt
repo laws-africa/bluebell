@@ -4,15 +4,15 @@ PREAMBLE
 
 BODY
 
-CHAPTER 1 - Heading
+CHAP 1 - Heading
 
-  SECTION 1 - Section
+  SEC 1 - Section
 
     some **text** at //the start// with **multiple //types// of** markup
 
     include ^^superscripts^^ and _^subscripts^_ which are fun
 
-    SUBSECTION 1
+    SUBSEC 1
 
       list __intro__
 
