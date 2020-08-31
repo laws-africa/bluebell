@@ -255,3 +255,36 @@ PART
   </section>
 </part>
 """, xml)
+
+    def test_duplicate_eids(self):
+        tree = self.parse("""
+PART
+
+  DIVISION - Introduction
+
+    Some standalone text.
+
+  DIVISION 1 - Next heading
+
+    Some more text.
+
+""", 'hier_element_block')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
+  <division eId="part_1__dvs_1">
+    <heading>Introduction</heading>
+    <content>
+      <p>Some standalone text.</p>
+    </content>
+  </division>
+  <division eId="part_1__dvs_1">
+    <num>1</num>
+    <heading>Next heading</heading>
+    <content>
+      <p>Some more text.</p>
+    </content>
+  </division>
+</part>
+""", xml)
