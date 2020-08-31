@@ -104,6 +104,18 @@ Key points:
   makes a best effort if you don't nest it.
 * If Bluebell finds something it doesn't understand, it includes it as text and continues.
 
+### Synonyms
+
+The following synonyms are supported for hierarchical elements:
+
+* ART (ARTICLE)
+* CHAP (CHAPTER)
+* PARA (PARAGRAPH)
+* SEC (SECTION)
+* SUBCHAP (SUBCHAPTER)
+* SUBPARA (SUBPARAGRAPH)
+* SUBSEC (SUBSECTION)
+
 ## Intermediate output structure
 
 The parser produces a dict (Python) parse tree, which is later transformed into XML.
