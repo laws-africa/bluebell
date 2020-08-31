@@ -272,15 +272,15 @@ PART
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_I">
-  <division eId="part_I__dvs_I">
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
+  <division eId="part_1__dvs_I">
     <num>I.</num>
     <heading>Introduction</heading>
     <content>
       <p>Some standalone text.</p>
     </content>
   </division>
-  <division eId="part_I__dvs_2">
+  <division eId="part_1__dvs_2">
     <heading>Next heading</heading>
     <content>
       <p>Some more text.</p>
