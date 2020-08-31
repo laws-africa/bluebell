@@ -89,6 +89,8 @@ class IdGenerator:
 
         if self.needs_num(name):
             if item.get('num'):
+                # increment num but don't use it
+                self.incr(prefix, name)
                 num = self.clean_num(item.get('num'))
             else:
                 num = self.incr(prefix, name)
