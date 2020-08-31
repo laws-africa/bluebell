@@ -286,5 +286,5 @@ PART
       <p>Some more text.</p>
     </content>
   </division>
-  </part>
+</part>
 """, xml)
