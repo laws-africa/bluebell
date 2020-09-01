@@ -110,8 +110,7 @@ class IdGenerator:
     def rewrite_id_prefix(self, root, old_prefix, new_prefix):
         """ Rewrite the eId attributes of elem and its descendants to replace old_prefix with new_prefix.
 
-        The old_prefix and the new_prefix are both without the '__' separator, so that the id of element
-        can be appropriately replaced.
+        The old_prefix and the new_prefix are both without the '__' suffix, to permit exact and substring matches.
         """
         offset = len(old_prefix) + 2
 
