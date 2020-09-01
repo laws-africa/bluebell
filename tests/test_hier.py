@@ -48,8 +48,8 @@ there
         self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="hierarchicalStructure_1">
   <body>
     <hcontainer name="hcontainer" eId="hierarchicalStructure_1__hcontainer_1">
-      <p>hello</p>
-      <p>there</p>
+      <p eId="hierarchicalStructure_1__hcontainer_1__p_1">hello</p>
+      <p eId="hierarchicalStructure_1__hcontainer_1__p_2">there</p>
     </hcontainer>
   </body>
 </hierarchicalStructure>
@@ -161,25 +161,25 @@ PART
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
   <intro>
-    <p>some intro text</p>
+    <p eId="part_1__intro__p_1">some intro text</p>
   </intro>
   <section eId="part_1__sec_1">
     <num>1</num>
     <content>
-      <p>section 1 text</p>
+      <p eId="part_1__sec_1__p_1">section 1 text</p>
     </content>
   </section>
   <container name="container" eId="part_1__container_1">
-    <p>some interstitial text</p>
+    <p eId="part_1__container_1__p_1">some interstitial text</p>
   </container>
   <section eId="part_1__sec_2">
     <num>2</num>
     <content>
-      <p>section 2 text</p>
+      <p eId="part_1__sec_2__p_1">section 2 text</p>
     </content>
   </section>
   <wrapUp>
-    <p>conclusion</p>
+    <p eId="part_1__wrapup__p_1">conclusion</p>
   </wrapUp>
 </part>
 """, xml)
@@ -205,22 +205,22 @@ PART
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
   <intro>
-    <p>some intro text</p>
+    <p eId="part_1__intro__p_1">some intro text</p>
   </intro>
   <section eId="part_1__sec_1">
     <num>1</num>
     <content>
-      <p>section 1 text</p>
+      <p eId="part_1__sec_1__p_1">section 1 text</p>
     </content>
   </section>
   <section eId="part_1__sec_2">
     <num>2</num>
     <content>
-      <p>section 2 text</p>
+      <p eId="part_1__sec_2__p_1">section 2 text</p>
     </content>
   </section>
   <wrapUp>
-    <p>conclusion</p>
+    <p eId="part_1__wrapup__p_1">conclusion</p>
   </wrapUp>
 </part>
 """, xml)
@@ -244,13 +244,13 @@ PART
   <section eId="part_1__sec_1">
     <num>1</num>
     <content>
-      <p>section 1 text</p>
+      <p eId="part_1__sec_1__p_1">section 1 text</p>
     </content>
   </section>
   <section eId="part_1__sec_2">
     <num>2</num>
     <content>
-      <p>section 2 text</p>
+      <p eId="part_1__sec_2__p_1">section 2 text</p>
     </content>
   </section>
 </part>

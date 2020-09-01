@@ -1,5 +1,5 @@
 import re
-from itertools import groupby
+from itertools import groupby, chain
 
 from cobalt.akn import get_maker, StructuredDocument
 import lxml.etree as etree
@@ -39,7 +39,7 @@ class IdGenerator:
         'eventRef': 'eref',
         'judgmentBody': 'body',
         'listIntroduction': 'intro',
-        'listWrapUp': 'wrap',
+        'listWrapUp': 'wrapup',
         'mainBody': 'body',
         'paragraph': 'para',
         'quotedStructure': 'qstr',
@@ -106,6 +106,24 @@ class IdGenerator:
 
     def clean_num(self, num):
         return self.num_strip_re.sub('', num)
+
+    def rewrite_id_prefix(self, root, old_prefix, new_prefix):
+        """ Rewrite the eId attributes of elem and its descendants to replace old_prefix with new_prefix.
+
+        The old_prefix and the new_prefix are both without the '__' separator, so that the id of element
+        can be appropriately replaced.
+        """
+        offset = len(old_prefix) + 2
+
+        # rewrite element and children
+        for elem in chain([root], root.xpath('.//a:*[@eId]', namespaces={'a': root.nsmap[None]})):
+            old_id = elem.get('eId')
+
+            if old_id == old_prefix:
+                elem.set('eId', new_prefix)
+
+            elif old_id.startswith(old_prefix + '__'):
+                elem.set('eId', new_prefix + '__' + old_id[offset:])
 
 
 class XmlGenerator:
@@ -183,23 +201,25 @@ class XmlGenerator:
                 kids = []
                 seen_hier = False
                 for i, (is_hier, group) in enumerate(groups):
-                    group = (self.item_to_xml(k, eid) for k in group)
+                    def make_group(pre):
+                        return (self.item_to_xml(k, pre) for k in group)
 
                     if is_hier:
                         # add hier elemnts as-is
                         seen_hier = True
-                        kids.extend(group)
+                        kids.extend(make_group(eid))
                     elif seen_hier:
                         # content after a hier element
                         if i == len(groups) - 1:
                             # it's the last group, use a wrapUp
-                            kids.append(m.wrapUp(*group))
+                            kids.append(m.wrapUp(*make_group(eid + '__wrapup')))
                         else:
                             # more groups to come, use a container
-                            kids.append(m.container(*group, name="container", eId=self.ids.make(eid, {'name': 'container'})))
+                            container_eid = self.ids.make(eid, {'name': 'container'})
+                            kids.append(m.container(*make_group(container_eid), name="container", eId=container_eid))
                     else:
                         # before hier
-                        kids.append(m.intro(*group))
+                        kids.append(m.intro(*make_group(eid + '__intro')))
 
             if item.get('num'):
                 pre.append(m.num(item['num']))
@@ -227,7 +247,8 @@ class XmlGenerator:
             return m(item['name'], eId=eid, *kids)
 
         if item['type'] == 'content':
-            return m(item['name'], *self.kids_to_xml(item, prefix=prefix))
+            eid = self.ids.make(prefix, item)
+            return m(item['name'], eId=eid, *self.kids_to_xml(item, prefix=eid))
 
         if item['type'] == 'inline':
             # TODO: should these have ids?
@@ -254,7 +275,7 @@ class XmlGenerator:
                      *pre,
                      m('doc',
                        self.make_meta(self.attachment_frbr_uri(item)),
-                       m('mainBody', *self.kids_to_xml(item, prefix=eid)),
+                       m('mainBody', *self.kids_to_xml(item, prefix=eid + '__body')),
                        **item.get('attribs', {})),
                      eId=eid)
 
@@ -288,11 +309,15 @@ class XmlGenerator:
 
         for ref in xml.xpath('//a:*[@displaced]', namespaces={'a': ns}):
             name = ref.attrib.pop('displaced')
+            new_prefix = ref.attrib.get('eId')
 
             content = get_displaced_content(ref, name, ref.get('marker'))
             if content is not None:
+                old_prefix = content.get('eId')
+
                 # move children of the displaced element into the ref
                 for child in content:
+                    self.ids.rewrite_id_prefix(child, old_prefix, new_prefix)
                     ref.append(child)
                 content.getparent().remove(content)
             else:
@@ -300,16 +325,29 @@ class XmlGenerator:
                 # TODO: stash a warning somewhere?
                 p = etree.Element(f'{{{ns}}}p', nsmap=xml.nsmap)
                 p.text = "(content missing)"
+                p.set('eId', self.ids.make(new_prefix, {'name': 'p'}))
                 ref.append(p)
 
-        # don't lose unused displaced content. Instead, change it to a p tag
+        # don't lose unused displaced content. Instead, change it to a p tag and pull in its children
+        # as siblings
         for displaced in xml.iter(f'{{{ns}}}displaced'):
             p = etree.Element(f'{{{ns}}}p', nsmap=xml.nsmap)
             # eg. FOOTNOTE 99
             p.text = displaced.get('name').upper() + ' ' + displaced.get('marker')
+
+            # eg. part_1__displaced_2 -> part_1
+            new_prefix = displaced.attrib.get('eId').rsplit('__', 1)[0]
+            # eg. part_1__p_1
+            p.set('eId', self.ids.make(new_prefix, {'name': 'p'}))
+
             displaced.addprevious(p)
+
             for child in displaced:
+                name = child.tag.split('}', 1)[1]
+                eid = self.ids.make(new_prefix, {'name': name})
+                self.ids.rewrite_id_prefix(child, child.get('eId'), eid)
                 displaced.addprevious(child)
+
             # remove the empty element
             displaced.getparent().remove(displaced)
 
