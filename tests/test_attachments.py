@@ -7,7 +7,7 @@ from cobalt import datestring
 from tests.support import ParserSupport
 
 
-class ContainerTestCase(ParserSupport, TestCase):
+class AttachmentsTestCase(ParserSupport, TestCase):
     maxDiff = None
 
     def test_attachment(self):
@@ -165,7 +165,7 @@ SCHEDULE heading
         </references>
       </meta>
       <mainBody>
-        <p>some text</p>
+        <p eId="att_1__body__p_1">some text</p>
       </mainBody>
     </doc>
   </attachment>
@@ -202,7 +202,7 @@ SCHEDULE heading
         </references>
       </meta>
       <mainBody>
-        <p>schedule text</p>
+        <p eId="att_2__body__p_1">schedule text</p>
       </mainBody>
     </doc>
   </attachment>
@@ -303,7 +303,7 @@ schedule text
         </references>
       </meta>
       <mainBody>
-        <p>some text</p>
+        <p eId="att_1__body__p_1">some text</p>
       </mainBody>
     </doc>
   </attachment>
@@ -340,7 +340,7 @@ schedule text
         </references>
       </meta>
       <mainBody>
-        <p>schedule text</p>
+        <p eId="att_2__body__p_1">schedule text</p>
       </mainBody>
     </doc>
   </attachment>

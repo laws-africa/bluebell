@@ -28,7 +28,7 @@ class InlineTestCase(ParserSupport, TestCase):
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <remark status="editorial">[a remark]</remark>
 </p>
 """, xml)
@@ -65,7 +65,7 @@ class InlineTestCase(ParserSupport, TestCase):
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <remark status="editorial">[<ref href="https://example.com">a link</ref>]</remark>
 </p>
 """, xml)

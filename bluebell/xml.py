@@ -1,5 +1,5 @@
 import re
-from itertools import groupby
+from itertools import groupby, chain
 
 from cobalt.akn import get_maker, StructuredDocument
 import lxml.etree as etree
@@ -39,7 +39,7 @@ class IdGenerator:
         'eventRef': 'eref',
         'judgmentBody': 'body',
         'listIntroduction': 'intro',
-        'listWrapUp': 'wrap',
+        'listWrapUp': 'wrapup',
         'mainBody': 'body',
         'paragraph': 'para',
         'quotedStructure': 'qstr',
@@ -107,6 +107,23 @@ class IdGenerator:
     def clean_num(self, num):
         return self.num_strip_re.sub('', num)
 
+    def rewrite_id_prefix(self, root, old_prefix, new_prefix):
+        """ Rewrite the eId attributes of elem and its descendants to replace old_prefix with new_prefix.
+
+        The old_prefix and the new_prefix are both without the '__' suffix, to permit exact and substring matches.
+        """
+        offset = len(old_prefix) + 2
+
+        # rewrite element and children
+        for elem in chain([root], root.xpath('.//a:*[@eId]', namespaces={'a': root.nsmap[None]})):
+            old_id = elem.get('eId')
+
+            if old_id == old_prefix:
+                elem.set('eId', new_prefix)
+
+            elif old_id.startswith(old_prefix + '__'):
+                elem.set('eId', new_prefix + '__' + old_id[offset:])
+
 
 class XmlGenerator:
     """ Turns a parse tree into XML.
@@ -149,98 +166,107 @@ class XmlGenerator:
         return etree.fromstring(etree.tostring(self.item_to_xml(tree, self.eid_prefix)))
 
     def item_to_xml(self, item, prefix=''):
+        return getattr(self, f'item_to_xml_{item["type"]}')(item, prefix)
+
+    def item_to_xml_hier(self, item, prefix):
+        m = self.maker
+        eid = self.ids.make(prefix, item)
+        pre = []
+
+        if all(k['type'] != 'hier' for k in item['children']):
+            # no hierarchy children (ie. all block/content), wrap children in <content>
+            kids = self.kids_to_xml(item, prefix=eid)
+            kids = [m.content(*kids)]
+        else:
+            # there are potentially mixed hier and block/content children
+            # group non-hier children into <intro> and <wrapUp>, with hier children sandwiched in the middle
+            #
+            # intro
+            #   ...
+            # hier
+            #   ...
+            # container
+            #   ...
+            # hier
+            #   ...
+            # wrapUp
+            #   ...
+            #
+            groups = [
+                (is_hier, list(group))
+                for is_hier, group in
+                groupby(item['children'], lambda x: x['type'] == 'hier' or x['name'] == 'crossHeading')
+            ]
+
+            kids = []
+            seen_hier = False
+            for i, (is_hier, group) in enumerate(groups):
+                def make_group(pre):
+                    return (self.item_to_xml(k, pre) for k in group)
+
+                if is_hier:
+                    # add hier elemnts as-is
+                    seen_hier = True
+                    kids.extend(make_group(eid))
+                elif seen_hier:
+                    # content after a hier element
+                    if i == len(groups) - 1:
+                        # it's the last group, use a wrapUp
+                        kids.append(m.wrapUp(*make_group(eid + '__wrapup')))
+                    else:
+                        # more groups to come, use a container
+                        container_eid = self.ids.make(eid, {'name': 'container'})
+                        kids.append(m.container(*make_group(container_eid), name="container", eId=container_eid))
+                else:
+                    # before hier
+                    kids.append(m.intro(*make_group(eid + '__intro')))
+
+        if item.get('num'):
+            pre.append(m.num(item['num']))
+
+        if item.get('heading'):
+            pre.append(m.heading(*(self.item_to_xml(k, eid) for k in item['heading'])))
+
+        if item.get('subheading'):
+            pre.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
+
+        kids = pre + kids
+        return m(item['name'], *kids, eId=eid, **item.get('attribs', {}))
+
+    def item_to_xml_block(self, item, prefix):
         m = self.maker
 
-        if item['type'] == 'hier':
-            eid = self.ids.make(prefix, item)
-            pre = []
+        # TODO: can have num, heading, subheading
+        # TODO: make this generic? what else can have num?
+        eid = self.ids.make(prefix, item)
+        kids = self.kids_to_xml(item, prefix=eid)
+        if not kids:
+            # block elements must have at least one content child
+            kids = [m.p()]
 
-            if all(k['type'] != 'hier' for k in item['children']):
-                # no hierarchy children (ie. all block/content), wrap children in <content>
-                kids = self.kids_to_xml(item, prefix=eid)
-                kids = [m.content(*kids)]
-            else:
-                # there are potentially mixed hier and block/content children
-                # group non-hier children into <intro> and <wrapUp>, with hier children sandwiched in the middle
-                #
-                # intro
-                #   ...
-                # hier
-                #   ...
-                # container
-                #   ...
-                # hier
-                #   ...
-                # wrapUp
-                #   ...
-                #
-                groups = [
-                    (is_hier, list(group))
-                    for is_hier, group in
-                    groupby(item['children'], lambda x: x['type'] == 'hier' or x['name'] == 'crossHeading')
-                ]
+        if 'num' in item:
+            kids.insert(0, m('num', item['num']))
+        return m(item['name'], eId=eid, *kids)
 
-                kids = []
-                seen_hier = False
-                for i, (is_hier, group) in enumerate(groups):
-                    group = (self.item_to_xml(k, eid) for k in group)
+    def item_to_xml_content(self, item, prefix):
+        eid = self.ids.make(prefix, item)
+        return self.maker(item['name'], eId=eid, *self.kids_to_xml(item, prefix=eid))
 
-                    if is_hier:
-                        # add hier elemnts as-is
-                        seen_hier = True
-                        kids.extend(group)
-                    elif seen_hier:
-                        # content after a hier element
-                        if i == len(groups) - 1:
-                            # it's the last group, use a wrapUp
-                            kids.append(m.wrapUp(*group))
-                        else:
-                            # more groups to come, use a container
-                            kids.append(m.container(*group, name="container", eId=self.ids.make(eid, {'name': 'container'})))
-                    else:
-                        # before hier
-                        kids.append(m.intro(*group))
+    def item_to_xml_inline(self, item, prefix):
+        # TODO: should these have ids?
+        return self.maker(item['name'], *self.kids_to_xml(item, prefix=prefix), **item.get('attribs', {}))
 
-            if item.get('num'):
-                pre.append(m.num(item['num']))
+    def item_to_xml_marker(self, item, prefix):
+        # TODO: should these have ids?
+        return self.maker(item['name'], **item.get('attribs', {}))
 
-            if item.get('heading'):
-                pre.append(m.heading(*(self.item_to_xml(k, eid) for k in item['heading'])))
+    def item_to_xml_text(self, item, prefix):
+        return item['value']
 
-            if item.get('subheading'):
-                pre.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
+    def item_to_xml_element(self, item, prefix):
+        m = self.maker
 
-            kids = pre + kids
-            return m(item['name'], *kids, eId=eid, **item.get('attribs', {}))
-
-        if item['type'] == 'block':
-            # TODO: can have num, heading, subheading
-            # TODO: make this generic? what else can have num?
-            eid = self.ids.make(prefix, item)
-            kids = self.kids_to_xml(item, prefix=eid)
-            if not kids:
-                # block elements must have at least one content child
-                kids = [m.p()]
-
-            if 'num' in item:
-                kids.insert(0, m('num', item['num']))
-            return m(item['name'], eId=eid, *kids)
-
-        if item['type'] == 'content':
-            return m(item['name'], *self.kids_to_xml(item, prefix=prefix))
-
-        if item['type'] == 'inline':
-            # TODO: should these have ids?
-            return m(item['name'], *self.kids_to_xml(item, prefix=prefix), **item.get('attribs', {}))
-
-        if item['type'] == 'marker':
-            # TODO: should these have ids?
-            return m(item['name'], **item.get('attribs', {}))
-
-        if item['type'] == 'text':
-            return item['value']
-
-        if item['type'] == 'element' and item['name'] == 'attachment':
+        if item['name'] == 'attachment':
             eid = self.ids.make(prefix, item)
 
             pre = []
@@ -254,16 +280,15 @@ class XmlGenerator:
                      *pre,
                      m('doc',
                        self.make_meta(self.attachment_frbr_uri(item)),
-                       m('mainBody', *self.kids_to_xml(item, prefix=eid)),
+                       m('mainBody', *self.kids_to_xml(item, prefix=eid + '__body')),
                        **item.get('attribs', {})),
                      eId=eid)
 
-        if item['type'] == 'element':
-            attrs = item.get('attribs', {})
-            eid = self.ids.make(prefix, item)
-            if eid and not self.ids.is_unnecessary(prefix, item):
-                attrs['eId'] = eid
-            return m(item['name'], *self.kids_to_xml(item, prefix=(eid or prefix)), **attrs)
+        attrs = item.get('attribs', {})
+        eid = self.ids.make(prefix, item)
+        if eid and not self.ids.is_unnecessary(prefix, item):
+            attrs['eId'] = eid
+        return m(item['name'], *self.kids_to_xml(item, prefix=(eid or prefix)), **attrs)
 
     def kids_to_xml(self, parent=None, kids=None, prefix=None):
         if kids is None:
@@ -288,11 +313,15 @@ class XmlGenerator:
 
         for ref in xml.xpath('//a:*[@displaced]', namespaces={'a': ns}):
             name = ref.attrib.pop('displaced')
+            new_prefix = ref.attrib.get('eId')
 
             content = get_displaced_content(ref, name, ref.get('marker'))
             if content is not None:
+                old_prefix = content.get('eId')
+
                 # move children of the displaced element into the ref
                 for child in content:
+                    self.ids.rewrite_id_prefix(child, old_prefix, new_prefix)
                     ref.append(child)
                 content.getparent().remove(content)
             else:
@@ -300,16 +329,29 @@ class XmlGenerator:
                 # TODO: stash a warning somewhere?
                 p = etree.Element(f'{{{ns}}}p', nsmap=xml.nsmap)
                 p.text = "(content missing)"
+                p.set('eId', self.ids.make(new_prefix, {'name': 'p'}))
                 ref.append(p)
 
-        # don't lose unused displaced content. Instead, change it to a p tag
+        # don't lose unused displaced content. Instead, change it to a p tag and pull in its children
+        # as siblings
         for displaced in xml.iter(f'{{{ns}}}displaced'):
             p = etree.Element(f'{{{ns}}}p', nsmap=xml.nsmap)
             # eg. FOOTNOTE 99
             p.text = displaced.get('name').upper() + ' ' + displaced.get('marker')
+
+            # eg. part_1__displaced_2 -> part_1
+            new_prefix = displaced.attrib.get('eId').rsplit('__', 1)[0]
+            # eg. part_1__p_1
+            p.set('eId', self.ids.make(new_prefix, {'name': 'p'}))
+
             displaced.addprevious(p)
+
             for child in displaced:
+                name = child.tag.split('}', 1)[1]
+                eid = self.ids.make(new_prefix, {'name': name})
+                self.ids.rewrite_id_prefix(child, child.get('eId'), eid)
                 displaced.addprevious(child)
+
             # remove the empty element
             displaced.getparent().remove(displaced)
 

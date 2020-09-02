@@ -87,18 +87,18 @@ TABLE
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>
     <th>
-      <p>r1c1</p>
+      <p eId="table_1__p_1">r1c1</p>
     </th>
     <td>
-      <p>r1c2</p>
+      <p eId="table_1__p_2">r1c2</p>
     </td>
   </tr>
   <tr>
     <td>
-      <p>r2c1</p>
+      <p eId="table_1__p_3">r2c1</p>
     </td>
     <td>
-      <p>r2c2</p>
+      <p eId="table_1__p_4">r2c2</p>
     </td>
   </tr>
 </table>
@@ -184,18 +184,18 @@ TABLE
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>
     <td colspan="2">
-      <p>r1c1</p>
+      <p eId="table_1__p_1">r1c1</p>
     </td>
     <td rowspan="1" colspan="3&quot;">
-      <p>r1c2</p>
+      <p eId="table_1__p_2">r1c2</p>
     </td>
   </tr>
   <tr>
     <td a="">
-      <p>r2c1</p>
+      <p eId="table_1__p_3">r2c1</p>
     </td>
     <td>
-      <p>r2c2</p>
+      <p eId="table_1__p_4">r2c2</p>
     </td>
   </tr>
 </table>
@@ -339,21 +339,21 @@ SECTION 1.
           <blockList eId="sec_1__table_1__list_1">
             <item eId="sec_1__table_1__list_1__item_a">
               <num>(a)</num>
-              <p>item a</p>
+              <p eId="sec_1__table_1__list_1__item_a__p_1">item a</p>
               <blockList eId="sec_1__table_1__list_1__item_a__list_1">
                 <item eId="sec_1__table_1__list_1__item_a__list_1__item_i">
                   <num>(i)</num>
-                  <p>item a-i</p>
+                  <p eId="sec_1__table_1__list_1__item_a__list_1__item_i__p_1">item a-i</p>
                 </item>
                 <item eId="sec_1__table_1__list_1__item_a__list_1__item_ii">
                   <num>(ii)</num>
-                  <p>item a-ii</p>
+                  <p eId="sec_1__table_1__list_1__item_a__list_1__item_ii__p_1">item a-ii</p>
                 </item>
               </blockList>
             </item>
             <item eId="sec_1__table_1__list_1__item_b">
               <num>(b)</num>
-              <p>item b</p>
+              <p eId="sec_1__table_1__list_1__item_b__p_1">item b</p>
             </item>
           </blockList>
         </td>
@@ -421,11 +421,11 @@ TABLE
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>
     <td>
-      <p>one</p>
-      <p>two</p>
+      <p eId="table_1__p_1">one</p>
+      <p eId="table_1__p_2">two</p>
     </td>
     <td>
-      <p>three</p>
+      <p eId="table_1__p_3">three</p>
     </td>
   </tr>
 </table>

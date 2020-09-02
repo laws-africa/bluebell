@@ -47,8 +47,8 @@ there
         self.assertEqual("""<judgment xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <judgmentBody>
     <arguments>
-      <p>hello</p>
-      <p>there</p>
+      <p eId="arguments__p_1">hello</p>
+      <p eId="arguments__p_2">there</p>
     </arguments>
   </judgmentBody>
 </judgment>

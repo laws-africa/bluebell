@@ -209,7 +209,7 @@ hello ++FOOTNOTE 1++ there
 
         xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">hello <authorialNote marker="1" placement="bottom" eId="authorialNote_1"><p>(content missing)</p></authorialNote> there</p>
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">hello <authorialNote marker="1" placement="bottom" eId="p_1__authorialNote_1"><p eId="p_1__authorialNote_1__p_1">(content missing)</p></authorialNote> there</p>
 """, xml)
 
     def test_footnote_owner_missing(self):
@@ -225,9 +225,9 @@ FOOTNOTE 99
         xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<remedies xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
-  <p>some content</p>
-  <p>FOOTNOTE 99</p>
-  <p>a footnote without a parent</p>
+  <p eId="remedies__p_1">some content</p>
+  <p eId="remedies__p_2">FOOTNOTE 99</p>
+  <p eId="remedies__p_3">a footnote without a parent</p>
 </remedies>
 """, xml)
 
@@ -299,9 +299,9 @@ PART 1
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
   <num>1</num>
   <content>
-    <p>this section [<authorialNote marker="1" placement="bottom" eId="part_1__authorialNote_1"><p>which isn't very interesting</p></authorialNote>] uses a footnote.</p>
-    <p>FOOTNOTE 2</p>
-    <p>which is not used</p>
+    <p eId="part_1__p_1">this section [<authorialNote marker="1" placement="bottom" eId="part_1__p_1__authorialNote_1"><p eId="part_1__p_1__authorialNote_1__p_1">which isn't very interesting</p></authorialNote>] uses a footnote.</p>
+    <p eId="part_1__p_2">FOOTNOTE 2</p>
+    <p eId="part_1__p_3">which is not used</p>
   </content>
 </part>
 """, xml)
@@ -327,8 +327,8 @@ FOOTNOTE 1
         xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<preamble xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
-  <p>First reference to the Sustainable Development Goals,<sup><authorialNote marker="1" placement="bottom" eId="preamble__authorialNote_1"><p>General Assembly resolution 70/1, annex.</p></authorialNote></sup></p>
-  <p>Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,<sup><authorialNote marker="1" placement="bottom" eId="preamble__authorialNote_2"><p>General Assembly resolution 70/1, annex.</p></authorialNote></sup></p>
+  <p eId="preamble__p_1">First reference to the Sustainable Development Goals,<sup><authorialNote marker="1" placement="bottom" eId="preamble__p_1__authorialNote_1"><p eId="preamble__p_1__authorialNote_1__p_1">General Assembly resolution 70/1, annex.</p></authorialNote></sup></p>
+  <p eId="preamble__p_2">Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,<sup><authorialNote marker="1" placement="bottom" eId="preamble__p_2__authorialNote_1"><p eId="preamble__p_2__authorialNote_1__p_1">General Assembly resolution 70/1, annex.</p></authorialNote></sup></p>
 </preamble>
 """, xml)
 
