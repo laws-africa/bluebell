@@ -10,7 +10,7 @@ def many_to_dict(items):
             # recurse into children directly
             kids.extend(item.to_children())
         else:
-            kids.extend(c.to_dict() for c in item.content)
+            kids.extend(many_to_dict(c for c in item.content))
     return kids
 
 
