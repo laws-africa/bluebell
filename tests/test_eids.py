@@ -111,3 +111,59 @@ PARA 2.
   </mainBody>
 </doc>
 """, xml)
+
+    def test_eids_duplicate_num(self):
+        tree = self.parse("""
+PARA 2.
+    Second para.
+
+PARA 2.
+    Another para with the num 2.
+
+PARA 2.3..74.5.
+    Interesting number.
+
+PARA 2.3..74.5.
+    Duplicate interesting number.
+
+PARA 2.3..74.5_1
+    Highly unlikely duplicate of eId of previous.
+""", 'doc')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <mainBody>
+    <paragraph eId="para_2">
+      <num>2.</num>
+      <content>
+        <p eId="para_2__p_1">Second para.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_2_1">
+      <num>2.</num>
+      <content>
+        <p eId="para_2_1__p_1">Another para with the num 2.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_2.3..74.5">
+      <num>2.3..74.5.</num>
+      <content>
+        <p eId="para_2.3..74.5__p_1">Interesting number.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_2.3..74.5_1">
+      <num>2.3..74.5.</num>
+      <content>
+        <p eId="para_2.3..74.5_1__p_1">Duplicate interesting number.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_2.3..74.5_1_1">
+      <num>2.3..74.5_1</num>
+      <content>
+        <p eId="para_2.3..74.5_1_1__p_1">Highly unlikely duplicate of eId of previous.</p>
+      </content>
+    </paragraph>
+  </mainBody>
+</doc>
+""", xml)

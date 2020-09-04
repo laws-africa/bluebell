@@ -103,6 +103,9 @@ class IdGenerator:
             if num:
                 eid = f'{eid}_{num}'
 
+        if eid in self.counters.keys():
+            eid += '_1'
+
         return eid
 
     def reset(self):
