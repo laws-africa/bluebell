@@ -268,11 +268,15 @@ class BlockItem:
 
 class Table:
     def to_dict(self):
-        return {
+        info = {
             'type': 'element',
             'name': 'table',
             'children': [r.to_dict() for r in self.rows],
         }
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+
+        return info
 
 
 class TableRow:
@@ -305,7 +309,6 @@ class TableCell:
             'name': self.names[self.name.text],
             'children': kids,
         }
-
         if self.attrs.text:
             info['attribs'] = self.attrs.to_dict()
 
@@ -361,6 +364,7 @@ class EmbeddedStructure:
         return {
             'type': 'element',
             'name': 'embeddedStructure',
+            'attribs': self.attrs.to_dict() if self.attrs.text else {},
             'children': many_to_dict(self.content),
         }
 
