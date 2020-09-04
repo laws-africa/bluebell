@@ -19,6 +19,11 @@ class IdGenerator:
                          " remedies".split())
     """ Elements for which an id is optional. """
 
+    nn_unnecessary = set("attachment authorialNote blockList container"
+                         " displaced embeddedStructure hcontainer"
+                         " hierarchicalStructure p table".split())
+    """ Elements for which a num is never expected. """
+
     aliases = {
         'alinea': 'al',
         'amendmentBody': 'body',
@@ -92,6 +97,8 @@ class IdGenerator:
                 num = self.clean_num(item.get('num'))
             else:
                 num = self.incr(prefix, name)
+                if self.needs_nn(name):
+                    num = f'nn-{num}'
 
             if num:
                 eid = f'{eid}_{num}'
@@ -103,6 +110,9 @@ class IdGenerator:
 
     def needs_num(self, name):
         return name not in self.id_unnecessary
+
+    def needs_nn(self, name):
+        return name not in self.nn_unnecessary
 
     def clean_num(self, num):
         return self.num_strip_re.sub('', num).strip('.')
