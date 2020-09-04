@@ -382,3 +382,30 @@ QUOTE
                 }]
             }]
         }, tree.to_dict())
+
+    def test_quote_with_attrs(self):
+        tree = self.parse("""
+QUOTE{startQuote "}
+
+  line one
+""", 'embedded_structure')
+        self.assertEqual({
+            'name': 'embeddedStructure',
+            'type': 'element',
+            'attribs': {'startQuote': '"'},
+            'children': [{
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'line one',
+                }]
+            }]
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<embeddedStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" startQuote="&quot;" eId="embeddedStructure_1">
+  <p eId="embeddedStructure_1__p_1">line one</p>
+</embeddedStructure>
+""", xml)

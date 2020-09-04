@@ -24,7 +24,7 @@ CHAP 1 - Heading
 
         (ii) item (b)(ii)
 
-      TABLE
+      TABLE{class my-table}
         TR
           TC{colspan 2|rowspan 3}
             The Heading
