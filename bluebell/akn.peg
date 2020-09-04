@@ -73,7 +73,7 @@ grammar akn
                         #   eg: heading
                         #       num -
                         #       num - heading
-  hier_element_heading <- space num:[^\n-]* heading:('-' space content:inline*)? <HierElementHeading>
+  hier_element_heading <- space num:[^\n\s]* heading:(space '-' space content:inline*)? <HierElementHeading>
 
   hier_block_element <- hier_element / block_element
 
