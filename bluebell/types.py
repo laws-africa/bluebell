@@ -361,13 +361,15 @@ class Line:
 
 class EmbeddedStructure:
     def to_dict(self):
-        return {
+        info = {
             'type': 'element',
             'name': 'embeddedStructure',
-            'attribs': self.attrs.to_dict() if self.attrs.text else {},
             'children': many_to_dict(self.content),
         }
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
 
+        return info
 
 class FootnoteRef:
     def to_dict(self):
