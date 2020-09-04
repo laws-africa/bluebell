@@ -166,7 +166,7 @@
     </xsl:if>
     <xsl:if test="a:subheading">
       <xsl:text>&#10;</xsl:text>
-      <xsl:apply-templates select="./a:subheading">
+      <xsl:apply-templates select="a:subheading">
         <xsl:with-param name="indent" select="$indent + 1" />
       </xsl:apply-templates>
     </xsl:if>
@@ -244,14 +244,6 @@
     </xsl:apply-templates>
 
     <xsl:text>&#10;&#10;</xsl:text>
-  </xsl:template>
-
-  <xsl:template match="a:list">
-    <xsl:if test="a:intro != ''">
-      <xsl:apply-templates select="a:intro" />
-      <xsl:text>&#10;&#10;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="./*[not(self::a:intro)]" />
   </xsl:template>
 
   <xsl:template match="a:embeddedStructure">
@@ -390,7 +382,7 @@
     <xsl:text>&#10;</xsl:text>
 
     <xsl:if test="a:subheading">
-      <xsl:apply-templates select="./a:subheading">
+      <xsl:apply-templates select="a:subheading">
         <xsl:with-param name="indent" select="$indent + 1" />
       </xsl:apply-templates>
       <xsl:text>&#10;</xsl:text>
@@ -413,7 +405,11 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:apply-templates/>
+
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
+
     <xsl:text>&#10;&#10;</xsl:text>
 
     <xsl:apply-templates select=".//a:authorialNote" mode="content">
@@ -488,14 +484,22 @@
        ............................................................................... -->
 
   <xsl:template match="a:remark">
+    <xsl:param name="indent">0</xsl:param>
+
     <xsl:text>[</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
     <xsl:text>]</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:ref">
+    <xsl:param name="indent">0</xsl:param>
+
     <xsl:text>[</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
     <xsl:text>](</xsl:text>
     <xsl:value-of select="@href" />
     <xsl:text>)</xsl:text>
@@ -510,32 +514,52 @@
   </xsl:template>
 
   <xsl:template match="a:i">
+    <xsl:param name="indent">0</xsl:param>
+
     <xsl:text>//</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
     <xsl:text>//</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:b">
+    <xsl:param name="indent">0</xsl:param>
+
     <xsl:text>**</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
     <xsl:text>**</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:u">
+    <xsl:param name="indent">0</xsl:param>
+
     <xsl:text>__</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
     <xsl:text>__</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:sup">
+    <xsl:param name="indent">0</xsl:param>
+
     <xsl:text>^^</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
     <xsl:text>^^</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:sub">
+    <xsl:param name="indent">0</xsl:param>
+
     <xsl:text>_^</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
     <xsl:text>^_</xsl:text>
   </xsl:template>
 
