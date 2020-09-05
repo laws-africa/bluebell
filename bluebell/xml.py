@@ -103,6 +103,7 @@ class IdGenerator:
             if num:
                 eid = f'{eid}_{num}'
 
+        # ensure uniqueness
         while eid in self.counters:
             eid += '_1'
 
