@@ -155,3 +155,44 @@ CONCLUSIONS
                 }],
             }],
         }, tree.to_dict())
+
+    def test_multiple_indents(self):
+        tree = self.parse("""
+a
+  b
+    c
+      d
+""", 'main_body')
+        self.assertEqual({
+            'name': 'mainBody',
+            'type': 'element',
+            'children': [{
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'a',
+                }]
+            }, {
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'b',
+                }]
+            }, {
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'c',
+                }]
+            }, {
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': 'd',
+                }]
+            }]
+        }, tree.to_dict())
