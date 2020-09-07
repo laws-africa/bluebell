@@ -14,7 +14,7 @@ ARGUMENTS
 
   (b) aoeu
 
-  QUOTE
+  QUOTE{startQuote "}
 
     some quoted text
 

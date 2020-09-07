@@ -106,7 +106,7 @@ TABLE
 
     def test_basic_attribs(self):
         tree = self.parse("""
-TABLE
+TABLE{class my-table}
   TR
     TC{colspan 2}
       r1c1
@@ -121,6 +121,7 @@ TABLE
         self.assertEqual({
             'type': 'element',
             'name': 'table',
+            'attribs': {'class': 'my-table'},
             'children': [{
                 'type': 'element',
                 'name': 'tr',
@@ -181,7 +182,7 @@ TABLE
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
+        self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" class="my-table" eId="table_1">
   <tr>
     <td colspan="2">
       <p eId="table_1__p_1">r1c1</p>
