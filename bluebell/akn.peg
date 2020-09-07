@@ -266,7 +266,7 @@ grammar akn
   # Subflows (that go from inlines into nested complex structures)
   # ------------------------------------------------------------------------------
 
-  embedded_structure <- 'QUOTE' eol
+  embedded_structure <- 'QUOTE' attrs:block_attrs? eol
                         indent
                           content:hier_block_element+
                         dedent
