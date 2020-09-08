@@ -62,6 +62,7 @@ class IdGenerator:
 
     def __init__(self):
         self.counters = {}
+        self.eid_counter = {}
 
     def incr(self, prefix, name):
         sub = self.counters.setdefault(prefix, {})
@@ -94,17 +95,30 @@ class IdGenerator:
         if self.needs_num(name):
             if item.get('num'):
                 num = self.clean_num(item.get('num'))
+            elif self.needs_nn(name):
+                num = 'nn'
             else:
                 num = self.incr(prefix, name)
-                if self.needs_nn(name):
-                    num = f'nn-{num}'
 
-            if num:
-                eid = f'{eid}_{num}'
+            provisional_eid = f'{eid}_{num}'
+            eid = self.ensure_unique(provisional_eid, num == 'nn')
 
-        # ensure uniqueness
-        while eid in self.counters:
-            eid += '_1'
+        return eid
+
+    def ensure_unique(self, eid, nn):
+        def update_eid_counter(eid):
+            # number of elements with this eid, including this one
+            count = self.eid_counter.get(eid, 0) + 1
+            # stash / update the count
+            self.eid_counter[eid] = count
+            return count
+
+        count = update_eid_counter(eid)
+        # if this eid was already taken, or the element is unnumbered, increment it
+        if count > 1 or nn:
+            eid += f'_{count}'
+            # stash this as well
+            update_eid_counter(eid)
 
         return eid
 

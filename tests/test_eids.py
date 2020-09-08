@@ -80,9 +80,9 @@ PARA 2.
 
         self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <mainBody>
-    <paragraph eId="para_nn-1">
+    <paragraph eId="para_nn_1">
       <content>
-        <p eId="para_nn-1__p_1">Intro</p>
+        <p eId="para_nn_1__p_1">Intro</p>
       </content>
     </paragraph>
     <paragraph eId="para_1">
@@ -97,9 +97,9 @@ PARA 2.
         <p eId="para_1A__p_1">Added in later</p>
       </content>
     </paragraph>
-    <paragraph eId="para_nn-2">
+    <paragraph eId="para_nn_2">
       <content>
-        <p eId="para_nn-2__p_1">Unnumbered</p>
+        <p eId="para_nn_2__p_1">Unnumbered</p>
       </content>
     </paragraph>
     <paragraph eId="para_2">
@@ -126,7 +126,7 @@ PARA 2.3..74.5.
 PARA 2.3..74.5.
     Duplicate interesting number.
 
-PARA 2.3..74.5_1
+PARA 2.3..74.5_2
     Highly unlikely duplicate of eId of previous.
 """, 'doc')
 
@@ -140,10 +140,10 @@ PARA 2.3..74.5_1
         <p eId="para_2__p_1">Second para.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_2_1">
+    <paragraph eId="para_2_2">
       <num>2.</num>
       <content>
-        <p eId="para_2_1__p_1">Another para with the num 2.</p>
+        <p eId="para_2_2__p_1">Another para with the num 2.</p>
       </content>
     </paragraph>
     <paragraph eId="para_2.3..74.5">
@@ -152,16 +152,16 @@ PARA 2.3..74.5_1
         <p eId="para_2.3..74.5__p_1">Interesting number.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_2.3..74.5_1">
+    <paragraph eId="para_2.3..74.5_2">
       <num>2.3..74.5.</num>
       <content>
-        <p eId="para_2.3..74.5_1__p_1">Duplicate interesting number.</p>
+        <p eId="para_2.3..74.5_2__p_1">Duplicate interesting number.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_2.3..74.5_1_1">
-      <num>2.3..74.5_1</num>
+    <paragraph eId="para_2.3..74.5_2_2">
+      <num>2.3..74.5_2</num>
       <content>
-        <p eId="para_2.3..74.5_1_1__p_1">Highly unlikely duplicate of eId of previous.</p>
+        <p eId="para_2.3..74.5_2_2__p_1">Highly unlikely duplicate of eId of previous.</p>
       </content>
     </paragraph>
   </mainBody>
