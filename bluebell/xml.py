@@ -19,10 +19,9 @@ class IdGenerator:
                          " remedies".split())
     """ Elements for which an id is optional. """
 
-    nn_unnecessary = set("attachment authorialNote blockList container"
-                         " displaced embeddedStructure hcontainer"
-                         " hierarchicalStructure p table".split())
-    """ Elements for which a num is never expected. """
+    # TODO: complete this list
+    num_expected = set("chapter item paragraph part section subparagraph subpart subsection".split())
+    """ Elements for which a num is expected. """
 
     aliases = {
         'alinea': 'al',
@@ -116,7 +115,7 @@ class IdGenerator:
         return name not in self.id_unnecessary
 
     def needs_nn(self, name):
-        return name not in self.nn_unnecessary
+        return name in self.num_expected
 
     def clean_num(self, num):
         return self.num_strip_re.sub('', num).strip('.')
