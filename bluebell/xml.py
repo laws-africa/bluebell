@@ -118,19 +118,17 @@ class IdGenerator:
         return num
 
     def ensure_unique(self, eid, nn):
-        def update_eid_counter(eid):
-            # number of elements with this eid, including this one
-            count = self.eid_counter.get(eid, 0) + 1
-            # stash / update the count
-            self.eid_counter[eid] = count
-            return count
+        # update counter with number of elements with this eid, including this one
+        count = self.eid_counter[eid] = self.eid_counter.get(eid, 0) + 1
 
-        count = update_eid_counter(eid)
-        # if this eid was already taken, or the element is unnumbered, increment it
-        if count > 1 or nn:
-            eid += f'_{count}'
-            # stash this as well
-            update_eid_counter(eid)
+        # eid must be unique, and unnumbered elements must end with _{count} regardless
+        if count == 1 and (not nn or (nn and not eid.endswith('nn'))):
+            return eid
+
+        # if it's not unique, or the element is unnumbered,
+        # include the count for disambiguation and check for uniqueness
+        if nn or count > 1:
+            eid = self.ensure_unique(f'{eid}_{count}', nn)
 
         return eid
 
