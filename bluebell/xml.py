@@ -19,8 +19,10 @@ class IdGenerator:
                          " remedies".split())
     """ Elements for which an id is optional. """
 
-    num_expected = set("article book chapter clause item paragraph part point rule section"
-                       " subchapter subclause subparagraph subpart subrule subsection tome".split())
+    num_expected = set("alinea article book chapter clause division indent item level list"
+                       " paragraph part point proviso rule section subchapter subclause"
+                       " subdivision sublist subparagraph subpart subrule subsection subtitle"
+                       " title tome transitional".split())
     """ Elements for which a num is expected. """
 
     aliases = {
