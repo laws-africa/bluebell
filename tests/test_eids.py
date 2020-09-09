@@ -167,3 +167,57 @@ PARA 2.3..74.5_2
   </mainBody>
 </doc>
 """, xml)
+
+    def test_eids_duplicate_no_num(self):
+        tree = self.parse("""
+PARA
+    Unnumbered para.
+
+PARA
+    Second unnumbered para.
+
+PARA nn_2
+    Para nn_2, which is the previous para's eId.
+
+PARA nn_2_2
+    Para nn_2_2, which is the previous para's eId.
+
+PARA nn_2_2
+    Another para nn_2_2.
+""", 'doc')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <mainBody>
+    <paragraph eId="para_nn_1">
+      <content>
+        <p eId="para_nn_1__p_1">Unnumbered para.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_nn_2">
+      <content>
+        <p eId="para_nn_2__p_1">Second unnumbered para.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_nn_2_2">
+      <num>nn_2</num>
+      <content>
+        <p eId="para_nn_2_2__p_1">Para nn_2, which is the previous para's eId.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_nn_2_2_2">
+      <num>nn_2_2</num>
+      <content>
+        <p eId="para_nn_2_2_2__p_1">Para nn_2_2, which is the previous para's eId.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_nn_2_2_3">
+      <num>nn_2_2</num>
+      <content>
+        <p eId="para_nn_2_2_3__p_1">Another para nn_2_2.</p>
+      </content>
+    </paragraph>
+  </mainBody>
+</doc>
+""", xml)
