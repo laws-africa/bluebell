@@ -95,13 +95,14 @@ class IdGenerator:
         eid = eid + self.aliases.get(name, name)
 
         if self.needs_num(name):
-            num = self.get_num(item, prefix, name)
-            eid = self.ensure_unique(f'{eid}_{num}', num == 'nn')
+            num, nn = self.get_num(item, prefix, name)
+            eid = self.ensure_unique(f'{eid}_{num}', nn)
 
         return eid
 
     def get_num(self, item, prefix, name):
         num = None
+        nn = False
 
         # e.g. PARA (a)
         if item.get('num'):
@@ -110,12 +111,13 @@ class IdGenerator:
         # e.g. PARA, or num was cleaned to ''
         if not num and self.needs_nn(name):
             num = 'nn'
+            nn = True
 
         # produce e.g. hcontainer_1
         if not num:
             num = self.incr(prefix, name)
 
-        return num
+        return num, nn
 
     def ensure_unique(self, eid, nn):
         # update counter with number of elements with this eid, including this one
