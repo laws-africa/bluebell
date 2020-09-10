@@ -124,13 +124,12 @@ class IdGenerator:
         count = self.eid_counter[eid] = self.eid_counter.get(eid, 0) + 1
 
         # eid must be unique, and unnumbered elements must end with _{count} regardless
-        if count == 1 and (not nn or not eid.endswith('nn')):
+        if count == 1 and not nn:
             return eid
 
         # if it's not unique, or the element is unnumbered,
         # include the count for disambiguation and check for uniqueness
-        if nn or count > 1:
-            eid = self.ensure_unique(f'{eid}_{count}', nn)
+        eid = self.ensure_unique(f'{eid}_{count}', nn=False)
 
         return eid
 

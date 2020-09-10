@@ -176,6 +176,9 @@ PARA
 PARA
     Second unnumbered para.
 
+PARA (nn)
+    Perfectly possible paragraph numbering.
+
 PARA nn_2
     Para nn_2, which is the previous para's eId.
 
@@ -200,6 +203,12 @@ PARA nn_2_2
         <p eId="para_nn_2__p_1">Second unnumbered para.</p>
       </content>
     </paragraph>
+    <paragraph eId="para_nn_3">
+      <num>(nn)</num>
+      <content>
+        <p eId="para_nn_3__p_1">Perfectly possible paragraph numbering.</p>
+      </content>
+    </paragraph>
     <paragraph eId="para_nn_2_2">
       <num>nn_2</num>
       <content>
@@ -216,6 +225,52 @@ PARA nn_2_2
       <num>nn_2_2</num>
       <content>
         <p eId="para_nn_2_2_3__p_1">Another para nn_2_2.</p>
+      </content>
+    </paragraph>
+  </mainBody>
+</doc>
+""", xml)
+
+    def test_eids_nn(self):
+        tree = self.parse("""
+PARA (mm)
+    Perfectly possible paragraph mm.
+
+PARA (nn)
+    Perfectly possible paragraph nn.
+
+PARA (oo)
+    Perfectly possible paragraph oo.
+
+PARA
+    Unnumbered para.
+""", 'doc')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <mainBody>
+    <paragraph eId="para_mm">
+      <num>(mm)</num>
+      <content>
+        <p eId="para_mm__p_1">Perfectly possible paragraph mm.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_nn">
+      <num>(nn)</num>
+      <content>
+        <p eId="para_nn__p_1">Perfectly possible paragraph nn.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_oo">
+      <num>(oo)</num>
+      <content>
+        <p eId="para_oo__p_1">Perfectly possible paragraph oo.</p>
+      </content>
+    </paragraph>
+    <paragraph eId="para_nn_2">
+      <content>
+        <p eId="para_nn_2__p_1">Unnumbered para.</p>
       </content>
     </paragraph>
   </mainBody>
