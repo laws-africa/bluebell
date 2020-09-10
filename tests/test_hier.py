@@ -159,27 +159,27 @@ PART
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_nn_1">
   <intro>
-    <p eId="part_1__intro__p_1">some intro text</p>
+    <p eId="part_nn_1__intro__p_1">some intro text</p>
   </intro>
-  <section eId="part_1__sec_1">
+  <section eId="part_nn_1__sec_1">
     <num>1</num>
     <content>
-      <p eId="part_1__sec_1__p_1">section 1 text</p>
+      <p eId="part_nn_1__sec_1__p_1">section 1 text</p>
     </content>
   </section>
-  <container name="container" eId="part_1__container_1">
-    <p eId="part_1__container_1__p_1">some interstitial text</p>
+  <container name="container" eId="part_nn_1__container_1">
+    <p eId="part_nn_1__container_1__p_1">some interstitial text</p>
   </container>
-  <section eId="part_1__sec_2">
+  <section eId="part_nn_1__sec_2">
     <num>2</num>
     <content>
-      <p eId="part_1__sec_2__p_1">section 2 text</p>
+      <p eId="part_nn_1__sec_2__p_1">section 2 text</p>
     </content>
   </section>
   <wrapUp>
-    <p eId="part_1__wrapup__p_1">conclusion</p>
+    <p eId="part_nn_1__wrapup__p_1">conclusion</p>
   </wrapUp>
 </part>
 """, xml)
@@ -203,24 +203,24 @@ PART
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_nn_1">
   <intro>
-    <p eId="part_1__intro__p_1">some intro text</p>
+    <p eId="part_nn_1__intro__p_1">some intro text</p>
   </intro>
-  <section eId="part_1__sec_1">
+  <section eId="part_nn_1__sec_1">
     <num>1</num>
     <content>
-      <p eId="part_1__sec_1__p_1">section 1 text</p>
+      <p eId="part_nn_1__sec_1__p_1">section 1 text</p>
     </content>
   </section>
-  <section eId="part_1__sec_2">
+  <section eId="part_nn_1__sec_2">
     <num>2</num>
     <content>
-      <p eId="part_1__sec_2__p_1">section 2 text</p>
+      <p eId="part_nn_1__sec_2__p_1">section 2 text</p>
     </content>
   </section>
   <wrapUp>
-    <p eId="part_1__wrapup__p_1">conclusion</p>
+    <p eId="part_nn_1__wrapup__p_1">conclusion</p>
   </wrapUp>
 </part>
 """, xml)
@@ -240,17 +240,17 @@ PART
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
-  <section eId="part_1__sec_1">
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_nn_1">
+  <section eId="part_nn_1__sec_1">
     <num>1</num>
     <content>
-      <p eId="part_1__sec_1__p_1">section 1 text</p>
+      <p eId="part_nn_1__sec_1__p_1">section 1 text</p>
     </content>
   </section>
-  <section eId="part_1__sec_2">
+  <section eId="part_nn_1__sec_2">
     <num>2</num>
     <content>
-      <p eId="part_1__sec_2__p_1">section 2 text</p>
+      <p eId="part_nn_1__sec_2__p_1">section 2 text</p>
     </content>
   </section>
 </part>

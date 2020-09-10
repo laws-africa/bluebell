@@ -19,6 +19,12 @@ class IdGenerator:
                          " remedies".split())
     """ Elements for which an id is optional. """
 
+    num_expected = set("alinea article book chapter clause division indent item level list"
+                       " paragraph part point proviso rule section subchapter subclause"
+                       " subdivision sublist subparagraph subpart subrule subsection subtitle"
+                       " title tome transitional".split())
+    """ Elements for which a num is expected. """
+
     aliases = {
         'alinea': 'al',
         'amendmentBody': 'body',
@@ -58,6 +64,7 @@ class IdGenerator:
 
     def __init__(self):
         self.counters = {}
+        self.eid_counter = {}
 
     def incr(self, prefix, name):
         sub = self.counters.setdefault(prefix, {})
@@ -88,21 +95,50 @@ class IdGenerator:
         eid = eid + self.aliases.get(name, name)
 
         if self.needs_num(name):
-            if item.get('num'):
-                num = self.clean_num(item.get('num'))
-            else:
-                num = self.incr(prefix, name)
-
-            if num:
-                eid = f'{eid}_{num}'
+            num, nn = self.get_num(item, prefix, name)
+            eid = self.ensure_unique(f'{eid}_{num}', nn)
 
         return eid
+
+    def get_num(self, item, prefix, name):
+        num = None
+        nn = False
+
+        # e.g. PARA (a)
+        if item.get('num'):
+            num = self.clean_num(item.get('num'))
+
+        # e.g. PARA, or num was cleaned to ''
+        if not num and self.needs_nn(name):
+            num = 'nn'
+            nn = True
+
+        # produce e.g. hcontainer_1
+        if not num:
+            num = self.incr(prefix, name)
+
+        return num, nn
+
+    def ensure_unique(self, eid, nn):
+        # update counter with number of elements with this eid, including this one
+        count = self.eid_counter[eid] = self.eid_counter.get(eid, 0) + 1
+
+        # eid must be unique, and unnumbered elements must end with _{count} regardless
+        if count == 1 and not nn:
+            return eid
+
+        # if it's not unique, or the element is unnumbered,
+        # include the count for disambiguation and check for uniqueness
+        return self.ensure_unique(f'{eid}_{count}', nn=False)
 
     def reset(self):
         self.counters.clear()
 
     def needs_num(self, name):
         return name not in self.id_unnecessary
+
+    def needs_nn(self, name):
+        return name in self.num_expected
 
     def clean_num(self, num):
         return self.num_strip_re.sub('', num).strip('.')
