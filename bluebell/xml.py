@@ -129,9 +129,7 @@ class IdGenerator:
 
         # if it's not unique, or the element is unnumbered,
         # include the count for disambiguation and check for uniqueness
-        eid = self.ensure_unique(f'{eid}_{count}', nn=False)
-
-        return eid
+        return self.ensure_unique(f'{eid}_{count}', nn=False)
 
     def reset(self):
         self.counters.clear()
