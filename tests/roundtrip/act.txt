@@ -10,7 +10,9 @@ CHAP 1 - Heading
 
     some **text** at //the start// with **multiple //types// of** markup
 
-    include ^^superscripts^^ and _^subscripts^_ which are fun
+    include {{^superscripts}} and {{_subscripts}} which are fun
+
+    an {{IMG /foo.png description}} image
 
     SUBSEC 1
 

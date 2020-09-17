@@ -1,6 +1,6 @@
 PREAMBLE
 
-  some ++FOOTNOTE 1++ text
+  some {{FOOTNOTE 1}} text
 
   FOOTNOTE 1
 
@@ -12,7 +12,7 @@ CHAP 1 - Heading
 
   SEC 1 - Section
 
-    some text at ++FOOTNOTE 1++ the start
+    some text at {{FOOTNOTE 1}} the start
 
     FOOTNOTE 1
 
@@ -20,7 +20,7 @@ CHAP 1 - Heading
 
     SUBSEC 1
 
-      list intro++FOOTNOTE 2++ with ++FOOTNOTE 3++ two footnotes
+      list intro{{FOOTNOTE 2}} with {{FOOTNOTE 3}} two footnotes
 
       FOOTNOTE 2
 
@@ -38,7 +38,7 @@ CHAP 1 - Heading
 
         (ii) item (b)(ii)
 
-      (c) item c with ++FOOTNOTE 3++ and ++FOOTNOTE 4++
+      (c) item c with {{FOOTNOTE 3}} and {{FOOTNOTE 4}}
 
         FOOTNOTE 3
 
