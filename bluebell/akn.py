@@ -607,9 +607,9 @@ class Grammar(object):
     REGEX_4 = re.compile('^[^\\n|}]')
     REGEX_5 = re.compile('^[^ \\n]')
     REGEX_6 = re.compile('^[^\\n]')
-    REGEX_7 = re.compile('^[^ ]')
+    REGEX_7 = re.compile('^[^ \\n]')
     REGEX_8 = re.compile('^[^\\n]')
-    REGEX_9 = re.compile('^[^ ]')
+    REGEX_9 = re.compile('^[^ \\n]')
     REGEX_10 = re.compile('^[^\\n]')
 
     def _read_root(self):
@@ -5506,7 +5506,7 @@ class Grammar(object):
                                 self._failure = self._offset
                                 self._expected = []
                             if self._offset == self._failure:
-                                self._expected.append('[^ ]')
+                                self._expected.append('[^ \\n]')
                         if address6 is not FAILURE:
                             elements2.append(address6)
                         else:
@@ -5921,7 +5921,7 @@ class Grammar(object):
                             self._failure = self._offset
                             self._expected = []
                         if self._offset == self._failure:
-                            self._expected.append('[^ ]')
+                            self._expected.append('[^ \\n]')
                     if address5 is not FAILURE:
                         elements2.append(address5)
                     else:

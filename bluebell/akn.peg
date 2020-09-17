@@ -302,7 +302,7 @@ grammar akn
   # generic-style inlines: {{...}}
 
                      # {{IMG src description}}
-  image             <- '{{IMG' space? href:(!'}}' [^ ])+ content:(!'}}' [^\n])* '}}' <Image>
+  image             <- '{{IMG' space? href:(!'}}' [^ \n])+ content:(!'}}' [^\n])* '}}' <Image>
 
                      # {{^foo}}
   sup               <- '{{^' content:(!'}}' inline)+ '}}' <Sup>
@@ -311,7 +311,7 @@ grammar akn
   sub               <- '{{_' content:(!'}}' inline)+ '}}' <Sub>
 
                      # {{>href text}}
-  ref               <- '{{>' href:(!'}}' [^ ])* ' '? content:(!'}}' inline)* '}}' <Ref>
+  ref               <- '{{>' href:(!'}}' [^ \n])* ' '? content:(!'}}' inline)* '}}' <Ref>
 
                      # {{FOOTNOTE 9}}
   footnote_ref      <- '{{FOOTNOTE' space marker:(!'}}' [^\n])+ '}}' <FootnoteRef>

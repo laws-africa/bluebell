@@ -149,3 +149,18 @@ class InlineTestCase(ParserSupport, TestCase):
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">{{IMG }} {{IMG}}</p>
 """, xml)
+
+    def test_image_broken(self):
+        tree = self.parse("""{{IMG
+ }}
+""", 'statement')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<statement xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <mainBody>
+    <p eId="p_1">{{IMG</p>
+    <p eId="p_2">}}</p>
+  </mainBody>
+</statement>
+""", xml)
