@@ -495,10 +495,7 @@ class Ref:
             'attribs': {
                 'href': self.href.text,
             },
-            'children': [{
-                'type': 'text',
-                'value': self.content.text,
-            }],
+            'children': Inline.many_to_dict(x.inline for x in self.content.elements),
         }
 
 
@@ -506,7 +503,7 @@ class Image:
     def to_dict(self):
         attribs = {'src': self.href.text}
         if self.content.text:
-            attribs['alt'] = self.content.text
+            attribs['alt'] = self.content.text.strip()
 
         return {
             'type': 'marker',

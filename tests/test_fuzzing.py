@@ -40,6 +40,12 @@ class FuzzingTestCase(ParserSupport, TestCase):
     TR
     TH
     TC
+    {{
+    {{^
+    {{_
+    {{IMG
+    {{>
+    }}
     """.strip().split()
 
     separators = [
