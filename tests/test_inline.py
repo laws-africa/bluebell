@@ -70,6 +70,18 @@ class InlineTestCase(ParserSupport, TestCase):
 </p>
 """, xml)
 
+    def test_inlines_with_remark(self):
+        tree = self.parse("""
+**bold {{^super [[foo {{>/bar link}} end]]}} [[and another]]**
+""", 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <b>bold <sup>super <remark status="editorial">[foo <ref href="/bar">link</ref> end]</remark></sup> <remark status="editorial">[and another]</remark></b>
+</p>
+""", xml)
+
     def test_ref(self):
         tree = self.parse("""
 {{>https://example.com a link}}
@@ -163,4 +175,73 @@ class InlineTestCase(ParserSupport, TestCase):
     <p eId="p_2">}}</p>
   </mainBody>
 </statement>
+""", xml)
+
+    def test_sup(self):
+        tree = self.parse("""
+        {{^su}per}}
+        """, 'line')
+
+        self.assertEqual({
+            'name': 'p',
+            'type': 'content',
+            'children': [{
+                'type': 'inline',
+                'name': 'sup',
+                'children': [
+                    {'type': 'text', 'value': 'su'},
+                    {'type': 'text', 'value': '}'},
+                    {'type': 'text', 'value': 'per'},
+                ]
+            }]
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <sup>su}per</sup>
+</p>
+""", xml)
+
+    def test_sup_nested(self):
+        tree = self.parse("""
+{{^super {{_s}ub}} **bo*ld**}}
+""", 'line')
+
+        self.assertEqual({
+            'name': 'p',
+            'type': 'content',
+            'children': [{
+                'type': 'inline',
+                'name': 'sup',
+                'children': [
+                    {'type': 'text', 'value': 'super '},
+                    {
+                        'type': 'inline',
+                        'name': 'sub',
+                        'children': [
+                            {'type': 'text', 'value': 's'},
+                            {'type': 'text', 'value': '}'},
+                            {'type': 'text', 'value': 'ub'},
+                        ]
+                    },
+                    {'type': 'text', 'value': ' '},
+                    {
+                        'type': 'inline',
+                        'name': 'b',
+                        'children': [
+                            {'type': 'text', 'value': 'bo'},
+                            {'type': 'text', 'value': '*'},
+                            {'type': 'text', 'value': 'ld'},
+                        ]
+                    }
+                ]
+            }]
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <sup>super <sub>s}ub</sub> <b>bo*ld</b></sup>
+</p>
 """, xml)

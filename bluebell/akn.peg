@@ -280,12 +280,25 @@ grammar akn
   # ------------------------------------------------------------------------------ 
   # Inlines and markers
   # ------------------------------------------------------------------------------ 
-  
-  inline            <- inline_marker / [^\n]
+
+  # inlines that are not nested, and so we don't need to be careful of the closing }}
+  inline            <- inline_start / inline_marker / [^\n] <InlineText>
+
+  # !!! NB: Every non-special character goes through this rule and so it's heavily used.
+  #         The code generated for this rule is customised by Parser in parser.py
+  #         in order to greatly improve its performance. If this regex changes, it MUST
+  #         also be updated in Parser.INLINE_START_RE.
+  inline_start      <- [^*/_{[\n]+
+
+  # inlines that ARE nested, and so we must guard against the closing }}
+  inline_nested     <- [^*/_{[\n}]+ / (!'}}' inline_marker / [^\n]) <InlineText>
+
+  # inline remarks are the only inline that have a unique closing marker: ]]
+  inline_end_remark <- [^*/_{[\n\]]+ / (!']]' inline_marker / [^\n]) <InlineText>
 
   inline_marker     <- bold / image / italics / underline / sup / sub / remark / ref / footnote_ref
 
-  # special case inlines that can't logically contain themselves
+  # special case inlines that can't logically contain themselves, and so their openers and closers are symmetric
 
                      # **foo**
   bold              <- '**' content:(!'**' inline)+ '**' <Bold>
@@ -297,24 +310,28 @@ grammar akn
   underline         <- '__' content:(!'__' inline)+ '__' <Underline>
 
                      # [[remark]]
-  remark            <- '[[' content:(!']]' inline)+ ']]' <Remark>
+  remark            <- '[[' content:(!']]' inline_nested:inline_end_remark)+ ']]' <Remark>
 
   # generic-style inlines: {{...}}
 
                      # {{IMG src description}}
-  image             <- '{{IMG' space? href:(!'}}' [^ \n])+ content:(!'}}' [^\n])* '}}' <Image>
+  image             <- inline_open 'IMG' space? href:(!inline_close [^ \n])+ content:(!inline_close [^\n])* inline_close <Image>
 
                      # {{^foo}}
-  sup               <- '{{^' content:(!'}}' inline)+ '}}' <Sup>
+  sup               <- inline_open '^' content:(!inline_close inline_nested)+ inline_close <Sup>
 
                      # {{_foo}}
-  sub               <- '{{_' content:(!'}}' inline)+ '}}' <Sub>
+  sub               <- inline_open '_' content:(!inline_close inline_nested)+ inline_close <Sub>
 
                      # {{>href text}}
-  ref               <- '{{>' href:(!'}}' [^ \n])* ' '? content:(!'}}' inline)* '}}' <Ref>
+  ref               <- inline_open '>' href:(!inline_close [^ \n])* ' '? content:(!inline_close inline_nested)* inline_close <Ref>
 
                      # {{FOOTNOTE 9}}
-  footnote_ref      <- '{{FOOTNOTE' space marker:(!'}}' [^\n])+ '}}' <FootnoteRef>
+  footnote_ref      <- inline_open 'FOOTNOTE' space marker:(!inline_close [^\n])+ inline_close <FootnoteRef>
+
+  inline_open       <- '{{'
+
+  inline_close      <- '}}'
 
   # ------------------------------------------------------------------------------
   # Terminals

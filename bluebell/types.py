@@ -79,7 +79,7 @@ class Longtitle:
             'children': [{
                 'type': 'content',
                 'name': 'p',
-                'children': Inline.many_to_dict(k for k in self.content),
+                'children': InlineText.many_to_dict(k for k in self.content),
             }]
         }
 
@@ -89,7 +89,7 @@ class Crossheading:
         return {
             'type': 'element',
             'name': 'crossHeading',
-            'children': Inline.many_to_dict(k for k in self.content),
+            'children': InlineText.many_to_dict(k for k in self.content),
         }
 
 
@@ -160,7 +160,7 @@ class HierElement:
 class HierElementHeading:
     def heading_to_dict(self):
         if hasattr(self.heading, 'content') and self.heading.content.text.strip():
-            return Inline.many_to_dict(x for x in self.heading.content)
+            return InlineText.many_to_dict(x for x in self.heading.content)
 
 
 class Attachments:
@@ -205,7 +205,7 @@ class Attachment:
 class AttachmentHeading:
     def heading_to_dict(self):
         if self.content.text:
-            return Inline.many_to_dict(x for x in self.content)
+            return InlineText.many_to_dict(x for x in self.content)
 
 
 class Introduction(HierBlockIndentElement):
@@ -341,7 +341,7 @@ class BlockAttr:
 
 class Heading:
     def to_dict(self):
-        return Inline.many_to_dict(k for k in self.content)
+        return InlineText.many_to_dict(k for k in self.content)
 
 
 # TODO: document content and inline types
@@ -350,7 +350,7 @@ class Line:
         return {
             'type': 'content',
             'name': 'p',
-            'children': Inline.many_to_dict(self.content.elements),
+            'children': InlineText.many_to_dict(self.content.elements),
         }
 
 
@@ -370,6 +370,7 @@ class EmbeddedStructure:
             info['attribs'] = self.attrs.to_dict()
 
         return info
+
 
 class FootnoteRef:
     def to_dict(self):
@@ -406,14 +407,14 @@ class Footnote:
 # ------------------------------------------------------------------------------
 
 
-class Inline:
-    name = None
-
+class InlineText:
     def to_dict(self):
+        if hasattr(self, 'inline_marker'):
+            return self.inline_marker.to_dict()
+
         return {
-            'type': 'inline',
-            'name': self.name,
-            'children': Inline.many_to_dict(x.inline for x in self.content.elements),
+            'type': 'text',
+            'value': self.elements[0].text if self.elements else self.text,
         }
 
     @classmethod
@@ -445,15 +446,37 @@ class Inline:
         return merged
 
 
-class Bold(Inline):
+class Inline:
+    name = None
+
+    def to_dict(self):
+        return {
+            'type': 'inline',
+            'name': self.name,
+            'children': InlineText.many_to_dict(x.inline_nested for x in self.content),
+        }
+
+
+class SymmetricInline:
+    name = None
+
+    def to_dict(self):
+        return {
+            'type': 'inline',
+            'name': self.name,
+            'children': InlineText.many_to_dict(x.inline for x in self.content),
+        }
+
+
+class Bold(SymmetricInline):
     name = 'b'
 
 
-class Italics(Inline):
+class Italics(SymmetricInline):
     name = 'i'
 
 
-class Underline(Inline):
+class Underline(SymmetricInline):
     name = 'u'
 
 
@@ -495,7 +518,7 @@ class Ref:
             'attribs': {
                 'href': self.href.text,
             },
-            'children': Inline.many_to_dict(x.inline for x in self.content.elements),
+            'children': InlineText.many_to_dict(x.inline_nested for x in self.content),
         }
 
 

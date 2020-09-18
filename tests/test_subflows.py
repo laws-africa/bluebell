@@ -183,10 +183,12 @@ hello {{FOOTNOTE }} there
         self.assertEqual({
             'type': 'content',
             'name': 'p',
-            'children': [{
-                'type': 'text',
-                'value': 'hello {{FOOTNOTE }} there'
-            }],
+            'children': [
+                {'type': 'text', 'value': 'hello '},
+                {'type': 'text', 'value': '{'},
+                {'type': 'text', 'value': '{'},
+                {'type': 'text', 'value': 'FOOTNOTE }} there'},
+            ],
         }, tree.to_dict())
 
         tree = self.parse("""
@@ -196,10 +198,12 @@ hello {{FOOTNOTE }} }} there
         self.assertEqual({
             'type': 'content',
             'name': 'p',
-            'children': [{
-                'type': 'text',
-                'value': 'hello {{FOOTNOTE }} }} there'
-            }],
+            'children': [
+                {'type': 'text', 'value': 'hello '},
+                {'type': 'text', 'value': '{'},
+                {'type': 'text', 'value': '{'},
+                {'type': 'text', 'value': 'FOOTNOTE }} }} there'},
+            ],
         }, tree.to_dict())
 
     def test_footnote_content_missing(self):
@@ -254,7 +258,10 @@ PART 1
                 'name': 'p',
                 'children': [{
                     'type': 'text',
-                    'value': 'this section [',
+                    'value': 'this section ',
+                }, {
+                    'type': 'text',
+                    'value': '[',
                 }, {
                     'type': 'element',
                     'name': 'authorialNote',
