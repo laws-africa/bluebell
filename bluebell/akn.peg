@@ -280,17 +280,19 @@ grammar akn
   # ------------------------------------------------------------------------------ 
   # Inlines and markers
   # ------------------------------------------------------------------------------ 
-  
-  inline            <- [^*/_{[\n]+ / inline_marker / [^\n]
 
-  # TODO: make remark a normal inline, otherwise nested a remark in an inline is busted
-  inline_end_remark <- [^*/_{[\n\]]+ / (!']]' inline_marker / [^\n])
+  # inlines that are not nested, and so we don't need to be careful of the closing }}
+  inline            <- [^*/_{[\n]+ / inline_marker / [^\n] <InlineText>
 
-  inline_nested     <- [^*/_{[\n}]+ / (!'}}' inline_marker / [^\n]) <InlineNested>
+  # inlines that ARE nested, and so we must guard against the closing }}
+  inline_nested     <- [^*/_{[\n}]+ / (!'}}' inline_marker / [^\n]) <InlineText>
+
+  # inline remarks are the only inline that have a unique closing marker: ]]
+  inline_end_remark <- [^*/_{[\n\]]+ / (!']]' inline_marker / [^\n]) <InlineText>
 
   inline_marker     <- bold / image / italics / underline / sup / sub / remark / ref / footnote_ref
 
-  # special case inlines that can't logically contain themselves
+  # special case inlines that can't logically contain themselves, and so their openers and closers are symmetric
 
                      # **foo**
   bold              <- '**' content:(!'**' inline)+ '**' <Bold>
@@ -302,7 +304,7 @@ grammar akn
   underline         <- '__' content:(!'__' inline)+ '__' <Underline>
 
                      # [[remark]]
-  remark            <- '[[' content:(!']]' inline_end_remark)+ ']]' <Remark>
+  remark            <- '[[' content:(!']]' inline_nested:inline_end_remark)+ ']]' <Remark>
 
   # generic-style inlines: {{...}}
 
@@ -316,7 +318,7 @@ grammar akn
   sub               <- '{{_' content:(!'}}' inline_nested)+ '}}' <Sub>
 
                      # {{>href text}}
-  ref               <- '{{>' href:(!'}}' [^ \n])* ' '? content:inline_nested* '}}' <Ref>
+  ref               <- '{{>' href:(!'}}' [^ \n])* ' '? content:(!'}}' inline_nested)* '}}' <Ref>
 
                      # {{FOOTNOTE 9}}
   footnote_ref      <- '{{FOOTNOTE' space marker:(!'}}' [^\n])+ '}}' <FootnoteRef>
