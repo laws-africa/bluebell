@@ -70,6 +70,18 @@ class InlineTestCase(ParserSupport, TestCase):
 </p>
 """, xml)
 
+    def test_inlines_with_remark(self):
+        tree = self.parse("""
+**bold {{^super [[foo {{>/bar link}} end]]}} [[and another]]**
+""", 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <b>bold <sup>super <remark status="editorial">[foo <ref href="/bar">link</ref> end]</remark></sup> <remark status="editorial">[and another]</remark></b>
+</p>
+""", xml)
+
     def test_ref(self):
         tree = self.parse("""
 {{>https://example.com a link}}
@@ -218,7 +230,9 @@ class InlineTestCase(ParserSupport, TestCase):
                         'type': 'inline',
                         'name': 'b',
                         'children': [
-                            {'type': 'text', 'value': 'bo*ld'},
+                            {'type': 'text', 'value': 'bo'},
+                            {'type': 'text', 'value': '*'},
+                            {'type': 'text', 'value': 'ld'},
                         ]
                     }
                 ]
