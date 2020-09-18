@@ -1,7 +1,7 @@
 import re
 import os.path
 
-from .akn import Parser, FAILURE, ParseError, format_error
+from .akn import Parser as BaseParser, FAILURE, ParseError, format_error, TreeNode
 import bluebell.types as types
 from bluebell.xml import XmlGenerator
 from lxml import etree
@@ -9,6 +9,53 @@ from lxml import etree
 
 INDENT = '\x0E'  # ascii SHIFT-IN character
 DEDENT = '\x0F'  # ascii SHIFT_OUT character
+
+
+class Parser(BaseParser):
+    # Note: we remove the '^' anchor and use re.match rather than re.search to match against it
+    INLINE_START_RE = re.compile('[^*/_{[\\n]+')
+
+    def _read_inline_start(self):
+        """ This is a customised version of _read_inline_start that is optimised to let the regular expression
+        match multiple times, rather than manually looping over it. This provides a huge speed improvement.
+        """
+        address0, index0 = FAILURE, self._offset
+        cached = self._cache['inline_start'].get(index0)
+        if cached:
+            self._offset = cached[1]
+            return cached[0]
+        remaining0, index1, elements0, address1 = 1, self._offset, [], True
+        while address1 is not FAILURE:
+            # ** CUSTOM START
+            chunk0 = self._input[self._offset:]
+            decr = 1
+            m = self.INLINE_START_RE.match(chunk0)
+            if m:
+                address1 = TreeNode(self._input[self._offset + m.start():self._offset + m.end()], self._offset, [])
+                self._offset = self._offset + m.end()
+                decr = m.end()
+                # ** CUSTOM END
+            else:
+                address1 = FAILURE
+                if self._offset > self._failure:
+                    self._failure = self._offset
+                    self._expected = []
+                if self._offset == self._failure:
+                    self._expected.append('[^*/_{[\\n]')
+            if address1 is not FAILURE:
+                elements0.append(address1)
+                remaining0 -= decr
+                # ** CUSTOM START
+                # we matched and cannot match again, stop looping
+                break
+                # ** CUSTOM END
+        if remaining0 <= 0:
+            address0 = TreeNode(self._input[index1:self._offset], index1, elements0)
+            self._offset = self._offset
+        else:
+            address0 = FAILURE
+        self._cache['inline_start'][index0] = (address0, self._offset)
+        return address0
 
 
 class AkomaNtosoParser:
