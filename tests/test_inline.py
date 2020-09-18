@@ -35,7 +35,7 @@ class InlineTestCase(ParserSupport, TestCase):
 
     def test_remark_with_inlines(self):
         tree = self.parse("""
-[[[a link](https://example.com)]]
+[[{{>https://example.com a link}}]]
 """, 'line')
 
         self.assertEqual({
@@ -68,4 +68,99 @@ class InlineTestCase(ParserSupport, TestCase):
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <remark status="editorial">[<ref href="https://example.com">a link</ref>]</remark>
 </p>
+""", xml)
+
+    def test_ref(self):
+        tree = self.parse("""
+{{>https://example.com a link}}
+        """, 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <ref href="https://example.com">a link</ref>
+</p>
+""", xml)
+
+    def test_ref_nested(self):
+        tree = self.parse("""
+{{>https://example.com  a link{{^2}} **with stuff**}}
+""", 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <ref href="https://example.com"> a link<sup>2</sup> <b>with stuff</b></ref>
+</p>
+""", xml)
+
+    def test_ref_no_text(self):
+        tree = self.parse("""
+{{>https://example.com}}
+        """, 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <ref href="https://example.com"/>
+</p>
+""", xml)
+
+    def test_ref_no_href(self):
+        tree = self.parse("""
+{{> link text}}
+        """, 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <ref href="">link text</ref>
+</p>
+""", xml)
+
+    def test_images(self):
+        tree = self.parse("""
+{{IMG /foo.png}} {{IMG/foo.png}} {{IMGfoo.png}}
+        """, 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1"><img src="/foo.png"/> <img src="/foo.png"/> <img src="foo.png"/></p>
+""", xml)
+
+    def test_images_with_alt(self):
+        tree = self.parse("""
+{{IMG /foo.png  description text }}
+        """, 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <img src="/foo.png" alt="description text"/>
+</p>
+""", xml)
+
+    def test_image_no_src(self):
+        tree = self.parse("""
+{{IMG }} {{IMG}}
+        """, 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">{{IMG }} {{IMG}}</p>
+""", xml)
+
+    def test_image_broken(self):
+        tree = self.parse("""{{IMG
+ }}
+""", 'statement')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<statement xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <mainBody>
+    <p eId="p_1">{{IMG</p>
+    <p eId="p_2">}}</p>
+  </mainBody>
+</statement>
 """, xml)
