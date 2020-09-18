@@ -238,7 +238,6 @@ grammar akn
   #       text
   # ------------------------------------------------------------------------------
 
-                     # TODO
   table             <- 'TABLE' attrs:block_attrs? eol
                        indent
                          rows:table_row+
@@ -286,11 +285,7 @@ grammar akn
 
   inline_marker     <- bold / image / italics / underline / sup / sub / remark / ref / footnote_ref
 
-                     # images like markdown
-                     # eg. ![title text](image url)
-                     #
-                     # the title text is optional, but the enclosing square brackets aren't
-  image             <- '![' content:(!'](' [^\n])* '](' href:([^)\n]+) ')' <Image>
+  # special case inlines that can't logically contain themselves
 
                      # **foo**
   bold              <- '**' content:(!'**' inline)+ '**' <Bold>
@@ -298,24 +293,28 @@ grammar akn
                      # //foo//
   italics           <- '//' content:(!'//' inline)+ '//' <Italics>
 
-                     # ^^foo^^
-  sup               <- '^^' content:(!'^^' inline)+ '^^' <Sup>
-
-                     # _^foo^_
-  sub               <- '_^' content:(!'^_' inline)+ '^_' <Sub>
-
                      # __foo__
   underline         <- '__' content:(!'__' inline)+ '__' <Underline>
 
                      # [[remark]]
   remark            <- '[[' content:(!']]' inline)+ ']]' <Remark>
 
-                     # [text](href)
-  ref               <- '[' content:(!'](' [^\n])* '](' href:[^)\n]* ')' <Ref>
+  # generic-style inlines: {{...}}
 
-                     # ++FOOTNOTE 9++
-                     # TODO: change ++ to { and }
-  footnote_ref      <- '++FOOTNOTE' space marker:(!'++' [^\n])+ '++' <FootnoteRef>
+                     # {{IMG src description}}
+  image             <- '{{IMG' space? href:(!'}}' [^ \n])+ content:(!'}}' [^\n])* '}}' <Image>
+
+                     # {{^foo}}
+  sup               <- '{{^' content:(!'}}' inline)+ '}}' <Sup>
+
+                     # {{_foo}}
+  sub               <- '{{_' content:(!'}}' inline)+ '}}' <Sub>
+
+                     # {{>href text}}
+  ref               <- '{{>' href:(!'}}' [^ \n])* ' '? content:(!'}}' inline)* '}}' <Ref>
+
+                     # {{FOOTNOTE 9}}
+  footnote_ref      <- '{{FOOTNOTE' space marker:(!'}}' [^\n])+ '}}' <FootnoteRef>
 
   # ------------------------------------------------------------------------------
   # Terminals

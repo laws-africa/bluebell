@@ -152,7 +152,7 @@ FOOTNOTE 99a
 
     def test_footnote_marker(self):
         tree = self.parse("""
-hello ++FOOTNOTE 9 9 ++ there
+hello {{FOOTNOTE 9 9 }} there
 """, 'line')
 
         self.assertEqual({
@@ -177,7 +177,7 @@ hello ++FOOTNOTE 9 9 ++ there
 
     def test_footnote_marker_incomplete(self):
         tree = self.parse("""
-hello ++FOOTNOTE ++ there
+hello {{FOOTNOTE }} there
 """, 'line')
 
         self.assertEqual({
@@ -185,12 +185,12 @@ hello ++FOOTNOTE ++ there
             'name': 'p',
             'children': [{
                 'type': 'text',
-                'value': 'hello ++FOOTNOTE ++ there'
+                'value': 'hello {{FOOTNOTE }} there'
             }],
         }, tree.to_dict())
 
         tree = self.parse("""
-hello ++FOOTNOTE ++ ++ there
+hello {{FOOTNOTE }} }} there
 """, 'line')
 
         self.assertEqual({
@@ -198,13 +198,13 @@ hello ++FOOTNOTE ++ ++ there
             'name': 'p',
             'children': [{
                 'type': 'text',
-                'value': 'hello ++FOOTNOTE ++ ++ there'
+                'value': 'hello {{FOOTNOTE }} }} there'
             }],
         }, tree.to_dict())
 
     def test_footnote_content_missing(self):
         tree = self.parse("""
-hello ++FOOTNOTE 1++ there
+hello {{FOOTNOTE 1}} there
 """, 'line')
 
         xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
@@ -234,7 +234,7 @@ FOOTNOTE 99
     def test_footnote_xml(self):
         tree = self.parse("""
 PART 1
-  this section [++FOOTNOTE 1++] uses a footnote.
+  this section [{{FOOTNOTE 1}}] uses a footnote.
   
   FOOTNOTE 1
   
@@ -310,13 +310,13 @@ PART 1
         tree = self.parse("""
 PREAMBLE
 
-First reference to the Sustainable Development Goals,^^++FOOTNOTE 1++^^
+First reference to the Sustainable Development Goals,{{^{{FOOTNOTE 1}}}}
 
 FOOTNOTE 1
 
   General Assembly resolution 70/1, annex.
 
-Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,^^++FOOTNOTE 1++^^
+Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,{{^{{FOOTNOTE 1}}}}
 
 FOOTNOTE 1
 
@@ -335,13 +335,13 @@ FOOTNOTE 1
         text = self.parser.unparse(xml)
         self.assertEqual("""PREAMBLE
 
-  First reference to the Sustainable Development Goals,^^++FOOTNOTE 1++^^
+  First reference to the Sustainable Development Goals,{{^{{FOOTNOTE 1}}}}
 
   FOOTNOTE 1
 
     General Assembly resolution 70/1, annex.
 
-  Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,^^++FOOTNOTE 1++^^
+  Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,{{^{{FOOTNOTE 1}}}}
 
   FOOTNOTE 1
 

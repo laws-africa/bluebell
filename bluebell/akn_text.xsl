@@ -265,9 +265,9 @@
        2. the content, as a block element (mode=content)
   -->
   <xsl:template match="a:authorialNote">
-    <xsl:text>++FOOTNOTE </xsl:text>
+    <xsl:text>{{FOOTNOTE </xsl:text>
     <xsl:value-of select="@marker"/>
-    <xsl:text>++</xsl:text>
+    <xsl:text>}}</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:authorialNote" mode="content">
@@ -508,11 +508,13 @@
   </xsl:template>
 
   <xsl:template match="a:img">
-    <xsl:text>![</xsl:text>
-    <xsl:value-of select="@alt" />
-    <xsl:text>](</xsl:text>
+    <xsl:text>{{IMG </xsl:text>
     <xsl:value-of select="@src" />
-    <xsl:text>)</xsl:text>
+    <xsl:if test="@alt">
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="@alt" />
+    </xsl:if>
+    <xsl:text>}}</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:i">
@@ -548,21 +550,21 @@
   <xsl:template match="a:sup">
     <xsl:param name="indent">0</xsl:param>
 
-    <xsl:text>^^</xsl:text>
+    <xsl:text>{{^</xsl:text>
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
-    <xsl:text>^^</xsl:text>
+    <xsl:text>}}</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:sub">
     <xsl:param name="indent">0</xsl:param>
 
-    <xsl:text>_^</xsl:text>
+    <xsl:text>{{_</xsl:text>
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
-    <xsl:text>^_</xsl:text>
+    <xsl:text>}}</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:eol">
