@@ -413,7 +413,7 @@ class Inline:
         return {
             'type': 'inline',
             'name': self.name,
-            'children': Inline.many_to_dict(x.inline for x in self.content.elements),
+            'children': Inline.many_to_dict(x.inline_nested for x in self.content),
         }
 
     @classmethod
@@ -445,15 +445,37 @@ class Inline:
         return merged
 
 
-class Bold(Inline):
+class SpecialInline:
+    name = None
+
+    def to_dict(self):
+        return {
+            'type': 'inline',
+            'name': self.name,
+            'children': Inline.many_to_dict(x.inline for x in self.content),
+        }
+
+
+class InlineNested:
+    def to_dict(self):
+        if hasattr(self, 'inline_marker'):
+            return self.inline_marker.to_dict()
+
+        return {
+            'type': 'text',
+            'value': self.elements[0].text if self.elements else self.text,
+        }
+
+
+class Bold(SpecialInline):
     name = 'b'
 
 
-class Italics(Inline):
+class Italics(SpecialInline):
     name = 'i'
 
 
-class Underline(Inline):
+class Underline(SpecialInline):
     name = 'u'
 
 

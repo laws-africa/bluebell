@@ -281,7 +281,12 @@ grammar akn
   # Inlines and markers
   # ------------------------------------------------------------------------------ 
   
-  inline            <- inline_marker / [^\n]
+  inline            <- [^*/_{[\n]+ / inline_marker / [^\n]
+
+  # TODO: make remark a normal inline, otherwise nested a remark in an inline is busted
+  inline_end_remark <- [^*/_{[\n\]]+ / (!']]' inline_marker / [^\n])
+
+  inline_nested     <- [^*/_{[\n}]+ / (!'}}' inline_marker / [^\n]) <InlineNested>
 
   inline_marker     <- bold / image / italics / underline / sup / sub / remark / ref / footnote_ref
 
@@ -297,7 +302,7 @@ grammar akn
   underline         <- '__' content:(!'__' inline)+ '__' <Underline>
 
                      # [[remark]]
-  remark            <- '[[' content:(!']]' inline)+ ']]' <Remark>
+  remark            <- '[[' content:(!']]' inline_end_remark)+ ']]' <Remark>
 
   # generic-style inlines: {{...}}
 
@@ -305,13 +310,13 @@ grammar akn
   image             <- '{{IMG' space? href:(!'}}' [^ \n])+ content:(!'}}' [^\n])* '}}' <Image>
 
                      # {{^foo}}
-  sup               <- '{{^' content:(!'}}' inline)+ '}}' <Sup>
+  sup               <- '{{^' content:(!'}}' inline_nested)+ '}}' <Sup>
 
                      # {{_foo}}
-  sub               <- '{{_' content:(!'}}' inline)+ '}}' <Sub>
+  sub               <- '{{_' content:(!'}}' inline_nested)+ '}}' <Sub>
 
                      # {{>href text}}
-  ref               <- '{{>' href:(!'}}' [^ \n])* ' '? content:(!'}}' inline)* '}}' <Ref>
+  ref               <- '{{>' href:(!'}}' [^ \n])* ' '? content:inline_nested* '}}' <Ref>
 
                      # {{FOOTNOTE 9}}
   footnote_ref      <- '{{FOOTNOTE' space marker:(!'}}' [^\n])+ '}}' <FootnoteRef>
