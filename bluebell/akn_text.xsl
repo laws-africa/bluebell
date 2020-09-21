@@ -498,7 +498,7 @@
   <xsl:template match="a:ref">
     <xsl:param name="indent">0</xsl:param>
 
-    <xsl:text>{{></xsl:text>
+    <xsl:text>{{&gt;</xsl:text>
     <xsl:value-of select="@href" />
     <xsl:text> </xsl:text>
     <xsl:apply-templates>
