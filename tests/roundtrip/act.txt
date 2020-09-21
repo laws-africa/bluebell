@@ -18,7 +18,7 @@ CHAP 1 - Heading
 
       list __intro__
 
-      (a) item (a)
+      (a) item (a) with a {{>http://example.com link}}
 
       (b) 
 
