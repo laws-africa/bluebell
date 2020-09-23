@@ -8,7 +8,7 @@ import lxml.etree as etree
 class IdGenerator:
     """ Support class for generating ID elements when building an XML document.
     """
-    num_strip_re = re.compile(r'[ ()[\]]')
+    num_strip_re = re.compile(r'[ ()\[\]]')
 
     id_exempt = set("act amendment amendmentList bill debate debateReport doc documentCollection judgment"
                     " officialGazette portion statement body mainBody judgmentBody attachments"
