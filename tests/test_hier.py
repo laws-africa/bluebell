@@ -17,6 +17,7 @@ there
         self.assertEqual({
             'type': 'element',
             'name': 'hierarchicalStructure',
+            'attribs': {'name': 'hierarchicalStructure'},
             'children': [{
                 'type': 'element',
                 'name': 'body',
@@ -45,7 +46,7 @@ there
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="hierarchicalStructure_1">
+        self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="hierarchicalStructure" eId="hierarchicalStructure_1">
   <body>
     <hcontainer name="hcontainer" eId="hierarchicalStructure_1__hcontainer_1">
       <p eId="hierarchicalStructure_1__hcontainer_1__p_1">hello</p>
