@@ -246,8 +246,8 @@
     <xsl:text>&#10;&#10;</xsl:text>
   </xsl:template>
 
-  <!-- we only support embeddedStructure as a block quote, as the immediate child of a p tag -->
-  <xsl:template match="a:p/a:embeddedStructure">
+  <!-- block quotes as embeddedStructure -->
+  <xsl:template match="a:embeddedStructure">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:call-template name="indent">
@@ -401,9 +401,8 @@
        Content elements
        ............................................................................... -->
 
-  <!-- Ignore p tags that are just wrappers around embeddedStructure elements, because we only
-       support embeddedStructures wrapped in p tags, and they are handled elsewhere. -->
-  <xsl:template match="a:p[not(a:embeddedStructure)]">
+  <!-- p tags must end with a blank line -->
+  <xsl:template match="a:p">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:call-template name="indent">
@@ -414,7 +413,6 @@
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
 
-    <!-- p tags must end with a blank line -->
     <xsl:text>&#10;&#10;</xsl:text>
 
     <xsl:apply-templates select=".//a:authorialNote" mode="content">

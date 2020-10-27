@@ -18,10 +18,11 @@ QUOTE
     PART 1 - Heading
     
         part 1 text
-""", 'embedded_structure')
+""", 'block_quote')
         self.assertEqual({
             'type': 'element',
-            'name': 'p',
+            'name': 'block',
+            'attribs': {'name': 'quote'},
             'children': [{
                 'name': 'embeddedStructure',
                 'type': 'element',
@@ -92,7 +93,8 @@ something else
                 }]
             }, {
                 'type': 'element',
-                'name': 'p',
+                'name': 'block',
+                'attribs': {'name': 'quote'},
                 'children': [{
                     'name': 'embeddedStructure',
                     'type': 'element',
@@ -373,10 +375,11 @@ QUOTE
   QUOTE
   
     line two
-""", 'embedded_structure')
+""", 'block_quote')
         self.assertEqual({
             'type': 'element',
-            'name': 'p',
+            'name': 'block',
+            'attribs': {'name': 'quote'},
             'children': [{
                 'name': 'embeddedStructure',
                 'type': 'element',
@@ -389,7 +392,8 @@ QUOTE
                     }]
                 }, {
                     'type': 'element',
-                    'name': 'p',
+                    'name': 'block',
+                    'attribs': {'name': 'quote'},
                     'children': [{
                         'name': 'embeddedStructure',
                         'type': 'element',
@@ -411,10 +415,11 @@ QUOTE
 QUOTE{startQuote "}
 
   line one
-""", 'embedded_structure')
+""", 'block_quote')
         self.assertEqual({
             'type': 'element',
-            'name': 'p',
+            'name': 'block',
+            'attribs': {'name': 'quote'},
             'children': [{
                 'name': 'embeddedStructure',
                 'type': 'element',
@@ -432,9 +437,9 @@ QUOTE{startQuote "}
 
         xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <embeddedStructure startQuote="&quot;" eId="p_1__embeddedStructure_1">
-    <p eId="p_1__embeddedStructure_1__p_1">line one</p>
+        self.assertEqual("""<block xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="quote" eId="block_1">
+  <embeddedStructure startQuote="&quot;" eId="block_1__embeddedStructure_1">
+    <p eId="block_1__embeddedStructure_1__p_1">line one</p>
   </embeddedStructure>
-</p>
+</block>
 """, xml)
