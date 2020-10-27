@@ -359,7 +359,7 @@ class Line:
 # ------------------------------------------------------------------------------
 
 
-class EmbeddedStructure:
+class BlockQuote:
     def to_dict(self):
         info = {
             'type': 'element',
@@ -369,10 +369,11 @@ class EmbeddedStructure:
         if self.attrs.text:
             info['attribs'] = self.attrs.to_dict()
 
-        # embedded structure as block quote must be wrapped in a p (or other block) tag
+        # embeddedStructure is an inline element, so wrap it in a block
         return {
             'type': 'element',
-            'name': 'p',
+            'name': 'block',
+            'attribs': {'name': 'quote'},
             'children': [info],
         }
 
