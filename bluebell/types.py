@@ -369,7 +369,7 @@ class EmbeddedStructure:
         if self.attrs.text:
             info['attribs'] = self.attrs.to_dict()
 
-        # embedded structure as block quotes must be wrapped in a p (or other block) tag
+        # embedded structure as block quote must be wrapped in a p (or other block) tag
         return {
             'type': 'element',
             'name': 'p',
