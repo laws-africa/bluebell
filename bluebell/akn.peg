@@ -257,7 +257,7 @@ grammar akn
 
   block_attr        <- attr_name value:(space attr_value)? <BlockAttr>
 
-  attr_name         <- [^ \n|}]+
+  attr_name         <- [^ \n|{}]+
 
   attr_value        <- [^\n|}]*
 
