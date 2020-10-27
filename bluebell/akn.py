@@ -626,7 +626,7 @@ FAILURE = object()
 class Grammar(object):
     REGEX_1 = re.compile('^[^\\n-]')
     REGEX_2 = re.compile('^[^)]')
-    REGEX_3 = re.compile('^[^ \\n|}]')
+    REGEX_3 = re.compile('^[^ \\n|{}]')
     REGEX_4 = re.compile('^[^\\n|}]')
     REGEX_5 = re.compile('^[^ \\n]')
     REGEX_6 = re.compile('^[^\\n]')
@@ -4702,7 +4702,7 @@ class Grammar(object):
                     self._failure = self._offset
                     self._expected = []
                 if self._offset == self._failure:
-                    self._expected.append('[^ \\n|}]')
+                    self._expected.append('[^ \\n|{}]')
             if address1 is not FAILURE:
                 elements0.append(address1)
                 remaining0 -= 1
