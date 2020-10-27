@@ -1,6 +1,8 @@
 from unittest import TestCase
 
 from lxml import etree
+
+from bluebell.akn import ParseError
 from tests.support import ParserSupport
 
 
@@ -416,3 +418,20 @@ QUOTE{startQuote "}
   <p eId="embeddedStructure_1__p_1">line one</p>
 </embeddedStructure>
 """, xml)
+
+    def test_quote_curlies(self):
+        # shouldn't be able to parse this double opening curlies, since
+        # an attribute name can't start with {
+        with self.assertRaises(ParseError):
+            tree = self.parse("""
+    QUOTE{{startQuote "}
+        some text
+    """, 'embedded_structure')
+
+        # shouldn't be able to parse this double opening curlies, since
+        # an attribute name can't start with }
+        with self.assertRaises(ParseError):
+            tree = self.parse("""
+    QUOTE{}startQuote "}
+        some text
+    """, 'embedded_structure')
