@@ -453,7 +453,7 @@ QUOTE{startQuote "}
             tree = self.parse("""
     QUOTE{{startQuote "}
         some text
-    """, 'embedded_structure')
+    """, 'block_quote')
 
         # shouldn't be able to parse this double opening curlies, since
         # an attribute name can't start with }
@@ -461,4 +461,4 @@ QUOTE{startQuote "}
             tree = self.parse("""
     QUOTE{}startQuote "}
         some text
-    """, 'embedded_structure')
+    """, 'block_quote')
