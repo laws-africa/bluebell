@@ -66,7 +66,6 @@ class AkomaNtosoParser:
     indent_size = 2
 
     line_re = re.compile(r'^([ ]*)([^ \n])', re.M)
-    # empty lines at the start
     trailing_ws_re = re.compile(r' +$', re.M)
 
     def __init__(self, frbr_uri, eid_prefix=''):
