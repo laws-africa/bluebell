@@ -66,7 +66,6 @@ class AkomaNtosoParser:
     indent_size = 2
 
     line_re = re.compile(r'^([ ]*)([^ \n])', re.M)
-    leading_ws_re = re.compile(r'^(\s+\n)[^\n]*\S')
     trailing_ws_re = re.compile(r' +$', re.M)
 
     def __init__(self, frbr_uri, eid_prefix=''):
@@ -105,10 +104,9 @@ class AkomaNtosoParser:
         # tabs to spaces
         text = text.replace('\t', ' ' * self.indent_size)
 
-        # strip leading whitespace at start
-        m = self.leading_ws_re.match(text)
-        if m:
-            text = text[m.end(1):]
+        # strip leading and trailing whitespace
+        # any initial indent is effectively ignored
+        text = text.strip()
 
         # strip trailing whitespace on lines
         text = self.trailing_ws_re.sub('', text)

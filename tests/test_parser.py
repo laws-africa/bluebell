@@ -38,6 +38,14 @@ class ParserTestCase(ParserSupport, TestCase):
             "b\nanother line\n",
             self.parser.pre_parse("  \n  \t\n  \n\t\n b\nanother line\n")
         )
+        self.assertEqual(
+            "a line\n",
+            self.parser.pre_parse("\na line\n")
+        )
+        self.assertEqual(
+            "a line\n",
+            self.parser.pre_parse("\n\n\na line\n")
+        )
 
     def test_pre_parse_simple(self):
         self.assertEqual(
@@ -51,13 +59,10 @@ class ParserTestCase(ParserSupport, TestCase):
             self.parser.pre_parse("  hello"),
         )
 
-        self.assertEqual("""
-one
+        self.assertEqual("""one
 {
 two
 three
-
-
 }
 """,
             self.parser.pre_parse("""
@@ -70,8 +75,7 @@ one
 
     def test_pre_parse_inconsistent_nesting(self):
         self.parser.indent_size = 4
-        self.assertEqual("""
-one
+        self.assertEqual("""one
 {
 two
 three
@@ -90,8 +94,7 @@ one
 """))
 
     def test_pre_parse_tables(self):
-        self.assertEqual("""
-SECTION 1.
+        self.assertEqual("""SECTION 1.
 
 {
 SUBSECTION (a)
