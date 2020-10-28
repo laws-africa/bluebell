@@ -21,34 +21,6 @@
        Functions / helper templates
        ............................................................................... -->
 
-  <!-- adds a backslash to the start of the value param, if necessary -->
-  <xsl:template name="escape">
-    <xsl:param name="value"/>
-
-    <xsl:variable name="prefix" select="translate(substring($value, 1, 13), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')" />
-    <!-- '(' is considered special, so translate numbers into '(' so we can find and escape them -->
-    <xsl:variable name="numprefix" select="translate(substring($value, 1, 3), '1234567890', '((((((((((')" />
-
-    <!-- p tags must escape initial content that looks like a block element marker -->
-    <xsl:if test="$prefix = 'BODY' or
-                  $prefix = 'PREAMBLE' or
-                  $prefix = 'PREFACE' or
-                  starts-with($prefix, 'CHAPTER ') or
-                  starts-with($prefix, 'PART ') or
-                  starts-with($prefix, 'SUBPART ') or
-                  starts-with($prefix, 'PARA ') or
-                  starts-with($prefix, 'ARTICLE ') or
-                  starts-with($prefix, 'SCHEDULE ') or
-                  starts-with($prefix, 'HEADING ') or
-                  starts-with($prefix, 'SUBHEADING ') or
-                  starts-with($prefix, 'LONGTITLE ') or
-                  starts-with($prefix, 'CROSSHEADING ') or
-                  starts-with($prefix, '{|')">
-      <xsl:text>\</xsl:text>
-    </xsl:if>
-    <xsl:value-of select="$value"/>
-  </xsl:template>
-
   <!-- convert a string to uppercase -->
   <xsl:variable name="lowercase" select="'abcdefghijklmnopqrstuvwxyz'" />
   <xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
@@ -574,17 +546,6 @@
 
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
-    </xsl:call-template>
-  </xsl:template>
-
-  <!-- ...............................................................................
-       Text
-       ............................................................................... -->
-
-  <!-- first text nodes of these elems must be escaped if they have special chars -->
-  <xsl:template match="a:p/text()[not(preceding-sibling::*)] | a:listIntroduction/text()[not(preceding-sibling::*)] | a:intro/text()[not(preceding-sibling::*)]">
-    <xsl:call-template name="escape">
-      <xsl:with-param name="value" select="." />
     </xsl:call-template>
   </xsl:template>
 
