@@ -38,6 +38,14 @@ class ParserTestCase(ParserSupport, TestCase):
             "b\nanother line\n",
             self.parser.pre_parse("  \n  \t\n  \n\t\n b\nanother line\n")
         )
+        self.assertEqual(
+            "a line\n",
+            self.parser.pre_parse("\na line\n")
+        )
+        self.assertEqual(
+            "a line\n",
+            self.parser.pre_parse("\n\n\na line\n")
+        )
 
     def test_pre_parse_simple(self):
         self.assertEqual(
