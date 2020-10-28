@@ -20,47 +20,52 @@ QUOTE
     PART 1 - Heading
     
         part 1 text
-""", 'embedded_structure')
+""", 'block_quote')
         self.assertEqual({
-            'name': 'embeddedStructure',
             'type': 'element',
+            'name': 'block',
+            'attribs': {'name': 'quote'},
             'children': [{
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': 'some text',
-                }]
-            }, {
-                'name': 'blockList',
-                'type': 'block',
-                'children': [{
-                    'type': 'block',
-                    'name': 'item',
-                    'num': '(a)',
-                    'children': [{
-                        'name': 'p',
-                        'type': 'content',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'list item',
-                        }]
-                    }]
-                }]
-            }, {
-                'name': 'part',
-                'type': 'hier',
-                'num': '1',
-                'heading': [{
-                    'type': 'text',
-                    'value': 'Heading',
-                }],
+                'name': 'embeddedStructure',
+                'type': 'element',
                 'children': [{
                     'name': 'p',
                     'type': 'content',
                     'children': [{
                         'type': 'text',
-                        'value': 'part 1 text',
+                        'value': 'some text',
+                    }]
+                }, {
+                    'name': 'blockList',
+                    'type': 'block',
+                    'children': [{
+                        'type': 'block',
+                        'name': 'item',
+                        'num': '(a)',
+                        'children': [{
+                            'name': 'p',
+                            'type': 'content',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'list item',
+                            }]
+                        }]
+                    }]
+                }, {
+                    'name': 'part',
+                    'type': 'hier',
+                    'num': '1',
+                    'heading': [{
+                        'type': 'text',
+                        'value': 'Heading',
+                    }],
+                    'children': [{
+                        'name': 'p',
+                        'type': 'content',
+                        'children': [{
+                            'type': 'text',
+                            'value': 'part 1 text',
+                        }]
                     }]
                 }]
             }]
@@ -89,14 +94,19 @@ something else
                     'value': 'some text',
                 }]
             }, {
-                'name': 'embeddedStructure',
                 'type': 'element',
+                'name': 'block',
+                'attribs': {'name': 'quote'},
                 'children': [{
-                    'name': 'p',
-                    'type': 'content',
+                    'name': 'embeddedStructure',
+                    'type': 'element',
                     'children': [{
-                        'type': 'text',
-                        'value': 'quoted',
+                        'name': 'p',
+                        'type': 'content',
+                        'children': [{
+                            'type': 'text',
+                            'value': 'quoted',
+                        }]
                     }]
                 }],
             }, {
@@ -367,18 +377,12 @@ QUOTE
   QUOTE
   
     line two
-""", 'embedded_structure')
+""", 'block_quote')
         self.assertEqual({
-            'name': 'embeddedStructure',
             'type': 'element',
+            'name': 'block',
+            'attribs': {'name': 'quote'},
             'children': [{
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': 'line one',
-                }]
-            }, {
                 'name': 'embeddedStructure',
                 'type': 'element',
                 'children': [{
@@ -386,7 +390,23 @@ QUOTE
                     'type': 'content',
                     'children': [{
                         'type': 'text',
-                        'value': 'line two',
+                        'value': 'line one',
+                    }]
+                }, {
+                    'type': 'element',
+                    'name': 'block',
+                    'attribs': {'name': 'quote'},
+                    'children': [{
+                        'name': 'embeddedStructure',
+                        'type': 'element',
+                        'children': [{
+                            'name': 'p',
+                            'type': 'content',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'line two',
+                            }]
+                        }]
                     }]
                 }]
             }]
@@ -397,26 +417,33 @@ QUOTE
 QUOTE{startQuote "}
 
   line one
-""", 'embedded_structure')
+""", 'block_quote')
         self.assertEqual({
-            'name': 'embeddedStructure',
             'type': 'element',
-            'attribs': {'startQuote': '"'},
+            'name': 'block',
+            'attribs': {'name': 'quote'},
             'children': [{
-                'name': 'p',
-                'type': 'content',
+                'name': 'embeddedStructure',
+                'type': 'element',
+                'attribs': {'startQuote': '"'},
                 'children': [{
-                    'type': 'text',
-                    'value': 'line one',
+                    'name': 'p',
+                    'type': 'content',
+                    'children': [{
+                        'type': 'text',
+                        'value': 'line one',
+                    }]
                 }]
             }]
         }, tree.to_dict())
 
         xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<embeddedStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" startQuote="&quot;" eId="embeddedStructure_1">
-  <p eId="embeddedStructure_1__p_1">line one</p>
-</embeddedStructure>
+        self.assertEqual("""<block xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="quote" eId="block_1">
+  <embeddedStructure startQuote="&quot;" eId="block_1__embeddedStructure_1">
+    <p eId="block_1__embeddedStructure_1__p_1">line one</p>
+  </embeddedStructure>
+</block>
 """, xml)
 
     def test_quote_curlies(self):
