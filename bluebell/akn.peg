@@ -197,7 +197,7 @@ grammar akn
 
   nested_block_element <- indent content:block_element+ dedent <NestedBlockElement>
 
-  block_elements    <- block_list / table / longtitle / footnote / embedded_structure / line
+  block_elements    <- block_list / table / longtitle / footnote / block_quote / line
 
   block_list        <- block_item+ <BlockList>
 
@@ -265,11 +265,11 @@ grammar akn
   # Subflows (that go from inlines into nested complex structures)
   # ------------------------------------------------------------------------------
 
-  embedded_structure <- 'QUOTE' attrs:block_attrs? eol
+  block_quote       <- 'QUOTE' attrs:block_attrs? eol
                         indent
                           content:hier_block_element+
                         dedent
-                        <EmbeddedStructure>
+                        <BlockQuote>
 
   footnote          <- 'FOOTNOTE' space marker:([^ \n]+) space? eol
                        indent

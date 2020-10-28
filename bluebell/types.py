@@ -359,7 +359,7 @@ class Line:
 # ------------------------------------------------------------------------------
 
 
-class EmbeddedStructure:
+class BlockQuote:
     def to_dict(self):
         info = {
             'type': 'element',
@@ -369,7 +369,13 @@ class EmbeddedStructure:
         if self.attrs.text:
             info['attribs'] = self.attrs.to_dict()
 
-        return info
+        # embeddedStructure is an inline element, so wrap it in a block
+        return {
+            'type': 'element',
+            'name': 'block',
+            'attribs': {'name': 'quote'},
+            'children': [info],
+        }
 
 
 class FootnoteRef:
@@ -544,6 +550,7 @@ class DocumentRoot:
     name = None
     is_root = True
     children = []
+    required_children = set()
 
     def to_dict(self):
         kids = []
@@ -551,10 +558,16 @@ class DocumentRoot:
             node = getattr(self, tag, None)
             if node and node.text:
                 kids.append(node.to_dict())
+            elif tag in self.required_children:
+                kids.append({
+                    'type': 'element',
+                    'name': tag,
+                })
 
         return {
             'type': 'element',
             'name': self.name,
+            'attribs': {'name': self.name},
             'children': kids,
         }
 
@@ -574,6 +587,7 @@ class Bill(HierarchicalStructure):
 
 class Judgment(DocumentRoot):
     children = ['header', 'judgment_body', 'conclusions', 'attachments']
+    required_children = ['header']
     name = 'judgment'
 
 

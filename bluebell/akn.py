@@ -3719,7 +3719,7 @@ class Grammar(object):
                     address0 = self._read_footnote()
                     if address0 is FAILURE:
                         self._offset = index1
-                        address0 = self._read_embedded_structure()
+                        address0 = self._read_block_quote()
                         if address0 is FAILURE:
                             self._offset = index1
                             address0 = self._read_line()
@@ -4746,9 +4746,9 @@ class Grammar(object):
         self._cache['attr_value'][index0] = (address0, self._offset)
         return address0
 
-    def _read_embedded_structure(self):
+    def _read_block_quote(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['embedded_structure'].get(index0)
+        cached = self._cache['block_quote'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -4828,8 +4828,8 @@ class Grammar(object):
             self._offset = self._offset
         if address0 is not FAILURE:
             cls0 = type(address0)
-            address0.__class__ = type(cls0.__name__ + 'EmbeddedStructure', (cls0, self._types.EmbeddedStructure), {})
-        self._cache['embedded_structure'][index0] = (address0, self._offset)
+            address0.__class__ = type(cls0.__name__ + 'BlockQuote', (cls0, self._types.BlockQuote), {})
+        self._cache['block_quote'][index0] = (address0, self._offset)
         return address0
 
     def _read_footnote(self):

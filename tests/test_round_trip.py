@@ -1,6 +1,9 @@
 import os.path
 from unittest import TestCase
 
+from lxml import etree
+from cobalt import StructuredDocument
+from cobalt.schemas import assert_validates
 from tests.support import print_with_lines, ParserSupport
 
 
@@ -24,6 +27,10 @@ class RoundTripTestCase(ParserSupport, TestCase):
         actual = self.parser.unparse(xml)
 
         self.assertMultiLineEqual(input, actual)
+
+        # ensure it validates
+        doc = StructuredDocument.for_document_type(root)(etree.tostring(xml, encoding='unicode'))
+        assert_validates(doc, strict=False)
 
     def test_act(self):
         self.roundtrip('act', 'act')

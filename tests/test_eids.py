@@ -78,7 +78,7 @@ PARA 2.
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="doc">
   <mainBody>
     <paragraph eId="para_nn_1">
       <content>
@@ -132,7 +132,7 @@ PARA 2.3..74.5_2
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="doc">
   <mainBody>
     <paragraph eId="para_2">
       <num>2.</num>
@@ -191,7 +191,7 @@ PARA nn_2_2
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="doc">
   <mainBody>
     <paragraph eId="para_nn_1">
       <content>
@@ -248,7 +248,7 @@ PARA
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+        self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="doc">
   <mainBody>
     <paragraph eId="para_mm">
       <num>(mm)</num>

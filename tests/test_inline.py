@@ -169,7 +169,7 @@ class InlineTestCase(ParserSupport, TestCase):
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<statement xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+        self.assertEqual("""<statement xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="statement">
   <mainBody>
     <p eId="p_1">{{IMG</p>
     <p eId="p_2">}}</p>
