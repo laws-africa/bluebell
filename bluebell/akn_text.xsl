@@ -21,6 +21,174 @@
        Functions / helper templates
        ............................................................................... -->
 
+  <!-- replaces "value" in "text" with "replacement" -->
+  <xsl:template name="string-replace-all">
+    <xsl:param name="text" />
+    <xsl:param name="value" />
+    <xsl:param name="replacement" />
+
+    <xsl:choose>
+      <xsl:when test="$text = '' or $value = '' or not($value)">
+        <xsl:value-of select="$text" />
+      </xsl:when>
+      <xsl:when test="contains($text, $value)">
+        <xsl:value-of select="substring-before($text, $value)"/>
+        <xsl:value-of select="$replacement" />
+        <xsl:call-template name="string-replace-all">
+          <xsl:with-param name="text" select="substring-after($text, $value)" />
+          <xsl:with-param name="value" select="$value" />
+          <xsl:with-param name="replacement" select="$replacement" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Escape inline markers with a backslash -->
+  <xsl:template name="escape-inlines">
+    <xsl:param name="text" />
+
+    <!-- This works from the inside out, first escaping \ chars themselves, then escaping
+         the different types of inline markers -->
+    <xsl:call-template name="string-replace-all">
+      <xsl:with-param name="text">
+        <xsl:call-template name="string-replace-all">
+          <xsl:with-param name="text">
+            <xsl:call-template name="string-replace-all">
+              <xsl:with-param name="text">
+                <xsl:call-template name="string-replace-all">
+                  <xsl:with-param name="text">
+                    <xsl:call-template name="string-replace-all">
+                      <xsl:with-param name="text">
+                        <xsl:call-template name="string-replace-all">
+                          <xsl:with-param name="text">
+                            <xsl:call-template name="string-replace-all">
+                              <xsl:with-param name="text">
+                                <xsl:call-template name="string-replace-all">
+                                  <xsl:with-param name="text" select="$text" />
+                                  <xsl:with-param name="value">\</xsl:with-param>
+                                  <xsl:with-param name="replacement">\\</xsl:with-param>
+                                </xsl:call-template>
+                              </xsl:with-param>
+                              <xsl:with-param name="value">**</xsl:with-param>
+                              <xsl:with-param name="replacement">\**</xsl:with-param>
+                            </xsl:call-template>
+                          </xsl:with-param>
+                          <xsl:with-param name="value">//</xsl:with-param>
+                          <xsl:with-param name="replacement">\//</xsl:with-param>
+                        </xsl:call-template>
+                      </xsl:with-param>
+                      <xsl:with-param name="value">__</xsl:with-param>
+                      <xsl:with-param name="replacement">\__</xsl:with-param>
+                    </xsl:call-template>
+                  </xsl:with-param>
+                  <xsl:with-param name="value">{{</xsl:with-param>
+                  <xsl:with-param name="replacement">\{{</xsl:with-param>
+                </xsl:call-template>
+              </xsl:with-param>
+              <xsl:with-param name="value">}}</xsl:with-param>
+              <xsl:with-param name="replacement">\}}</xsl:with-param>
+            </xsl:call-template>
+          </xsl:with-param>
+          <xsl:with-param name="value">[[</xsl:with-param>
+          <xsl:with-param name="replacement">\[[</xsl:with-param>
+        </xsl:call-template>
+      </xsl:with-param>
+      <xsl:with-param name="value">]]</xsl:with-param>
+      <xsl:with-param name="replacement">\]]</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <!-- Escape prefixes with a backslash -->
+  <xsl:template name="escape-prefixes">
+    <xsl:param name="text" />
+
+    <xsl:variable name="slash">
+      <!-- p tags must escape initial content that looks like a block element marker -->
+      <!-- TODO: all keywords -->
+      <xsl:if test="$text = 'ARGUMENTS' or
+                    $text = 'BACKGROUND' or
+                    $text = 'BODY' or
+                    $text = 'CONCLUSIONS' or
+                    $text = 'DECISION' or
+                    $text = 'INTRODUCTION' or
+                    $text = 'MOTIVATION' or
+                    $text = 'PREAMBLE' or
+                    $text = 'PREFACE' or
+                    $text = 'REMEDIES' or
+                    starts-with($text, 'ALINEA') or
+                    starts-with($text, 'ANNEXURE') or
+                    starts-with($text, 'APPENDEX') or
+                    starts-with($text, 'ART') or
+                    starts-with($text, 'ARTICLE') or
+                    starts-with($text, 'ATTACHMENT') or
+                    starts-with($text, 'BOOK') or
+                    starts-with($text, 'CHAP') or
+                    starts-with($text, 'CHAPTER') or
+                    starts-with($text, 'CLAUSE') or
+                    starts-with($text, 'CROSSHEADING') or
+                    starts-with($text, 'DIVISION') or
+                    starts-with($text, 'FOOTNOTE') or
+                    starts-with($text, 'HEADING') or
+                    starts-with($text, 'INDENT') or
+                    starts-with($text, 'LEVEL') or
+                    starts-with($text, 'LIST') or
+                    starts-with($text, 'LONGTITLE') or
+                    starts-with($text, 'PARA') or
+                    starts-with($text, 'PARAGRAPH') or
+                    starts-with($text, 'PART') or
+                    starts-with($text, 'POINT') or
+                    starts-with($text, 'PROVISO') or
+                    starts-with($text, 'QUOTE') or
+                    starts-with($text, 'RULE') or
+                    starts-with($text, 'SCHEDULE') or
+                    starts-with($text, 'SEC') or
+                    starts-with($text, 'SECTION') or
+                    starts-with($text, 'SUBCHAP') or
+                    starts-with($text, 'SUBCHAPTER') or
+                    starts-with($text, 'SUBCLAUSE') or
+                    starts-with($text, 'SUBDIVISION') or
+                    starts-with($text, 'SUBHEADING') or
+                    starts-with($text, 'SUBLIST') or
+                    starts-with($text, 'SUBPARA') or
+                    starts-with($text, 'SUBPARAGRAPH') or
+                    starts-with($text, 'SUBPART') or
+                    starts-with($text, 'SUBRULE') or
+                    starts-with($text, 'SUBSEC') or
+                    starts-with($text, 'SUBSECTION') or
+                    starts-with($text, 'SUBTITLE') or
+                    starts-with($text, 'TABLE') or
+                    starts-with($text, 'TD') or
+                    starts-with($text, 'TH') or
+                    starts-with($text, 'TITLE') or
+                    starts-with($text, 'TOME') or
+                    starts-with($text, 'TR') or
+                    starts-with($text, 'TRANSITIONAL') or
+                    starts-with($text, '(')">
+        <xsl:text>\</xsl:text>
+      </xsl:if>
+    </xsl:variable>
+
+    <xsl:value-of select="concat($slash, $text)" />
+  </xsl:template>
+
+  <!-- adds a backslash to the start of the text param, if necessary -->
+  <xsl:template name="escape">
+    <xsl:param name="text"/>
+
+    <xsl:variable name="escaped">
+      <xsl:call-template name="escape-inlines">
+        <xsl:with-param name="text" select="$text" />
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:call-template name="escape-prefixes">
+      <xsl:with-param name="text" select="$escaped" />
+    </xsl:call-template>
+  </xsl:template>
+
   <!-- convert a string to uppercase -->
   <xsl:variable name="lowercase" select="'abcdefghijklmnopqrstuvwxyz'" />
   <xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
@@ -547,6 +715,18 @@
 
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+  </xsl:template>
+
+  <!-- ...............................................................................
+       Text
+       ............................................................................... -->
+
+  <!-- first text nodes of these elems must be escaped if they have special chars -->
+  <xsl:template match="a:*[self::a:p or self::a:listIntroduction or self::a:listWrapUp]
+                       /text()[not(preceding-sibling::*)]">
+    <xsl:call-template name="escape">
+      <xsl:with-param name="text" select="." />
     </xsl:call-template>
   </xsl:template>
 
