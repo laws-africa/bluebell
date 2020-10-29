@@ -221,7 +221,7 @@ class XmlGenerator:
             #   ...
             # hier
             #   ...
-            # container
+            # hcontainer
             #   ...
             # hier
             #   ...
@@ -251,8 +251,8 @@ class XmlGenerator:
                         kids.append(m.wrapUp(*make_group(eid + '__wrapup')))
                     else:
                         # more groups to come, use a container
-                        container_eid = self.ids.make(eid, {'name': 'container'})
-                        kids.append(m.container(*make_group(container_eid), name="container", eId=container_eid))
+                        hcontainer_eid = self.ids.make(eid, {'name': 'hcontainer'})
+                        kids.append(m.hcontainer(m.content(*make_group(hcontainer_eid)), name="hcontainer", eId=hcontainer_eid))
                 else:
                     # before hier
                     kids.append(m.intro(*make_group(eid + '__intro')))
