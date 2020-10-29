@@ -46,6 +46,7 @@ class FuzzingTestCase(ParserSupport, TestCase):
     {{IMG
     {{>
     }}
+    \\
     """.strip().split()
 
     separators = [
