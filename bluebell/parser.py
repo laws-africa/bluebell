@@ -13,7 +13,7 @@ DEDENT = '\x0F'  # ascii SHIFT_OUT character
 
 class Parser(BaseParser):
     # Note: we remove the '^' anchor and use re.match rather than re.search to match against it
-    INLINE_START_RE = re.compile('[^*/_{[\\n]+')
+    INLINE_START_RE = re.compile(r'[^*/_{[\n\\]+')
 
     def _read_inline_start(self):
         """ This is a customised version of _read_inline_start that is optimised to let the regular expression
