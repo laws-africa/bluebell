@@ -170,9 +170,11 @@ PART
       <p eId="part_nn_1__sec_1__p_1">section 1 text</p>
     </content>
   </section>
-  <container name="container" eId="part_nn_1__container_1">
-    <p eId="part_nn_1__container_1__p_1">some interstitial text</p>
-  </container>
+  <hcontainer name="hcontainer" eId="part_nn_1__hcontainer_1">
+    <content>
+      <p eId="part_nn_1__hcontainer_1__p_1">some interstitial text</p>
+    </content>
+  </hcontainer>
   <section eId="part_nn_1__sec_2">
     <num>2</num>
     <content>
