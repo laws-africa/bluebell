@@ -6,6 +6,8 @@ BODY
 
 CHAP 1 - Heading
 
+  intro
+
   SEC 1 - Section
 
     some **text** at //the start// with **multiple //types// of** markup
@@ -40,4 +42,12 @@ CHAP 1 - Heading
 
           TC
             cell 2
+
+  text in the middle
+
+  SEC 2
+
+    some text
+
+  wrap up
 
