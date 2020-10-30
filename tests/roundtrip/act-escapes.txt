@@ -28,7 +28,7 @@ CHAP 1 - Heading
 
     \PART A should be escaped
 
-    list __intro__
+    list \__intro\__
 
     \(a) item (a) with a \{{>http:\//example.com link\}}
 
