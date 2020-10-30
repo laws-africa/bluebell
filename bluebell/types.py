@@ -432,7 +432,11 @@ class InlineText:
 
         for item in items:
             if not hasattr(item, 'to_dict'):
-                text.append(item.text)
+                # an char escaped with a backslash is just the char
+                if item.text[0] == '\\':
+                    text.append(item.text[1:])
+                else:
+                    text.append(item.text)
 
             else:
                 if text:

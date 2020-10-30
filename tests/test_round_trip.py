@@ -43,3 +43,6 @@ class RoundTripTestCase(ParserSupport, TestCase):
 
     def test_act_footnotes(self):
         self.roundtrip('act-footnotes', 'act')
+
+    def test_act_escapes(self):
+        self.roundtrip('act-escapes', 'act')
