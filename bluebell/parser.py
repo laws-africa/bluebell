@@ -13,14 +13,14 @@ DEDENT = '\x0F'  # ascii SHIFT_OUT character
 
 class Parser(BaseParser):
     # Note: we remove the '^' anchor and use re.match rather than re.search to match against it
-    INLINE_START_RE = re.compile(r'[^*/_{[\n\\]+')
+    NON_INLINE_START_RE = re.compile(r'[^*/_{[\n\\]+')
 
-    def _read_inline_start(self):
-        """ This is a customised version of _read_inline_start that is optimised to let the regular expression
+    def _read_non_inline_start(self):
+        """ This is a customised version of _read_non_inline_start that is optimised to let the regular expression
         match multiple times, rather than manually looping over it. This provides a huge speed improvement.
         """
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['inline_start'].get(index0)
+        cached = self._cache['non_inline_start'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -29,7 +29,7 @@ class Parser(BaseParser):
             # ** CUSTOM START
             chunk0 = self._input[self._offset:]
             decr = 1
-            m = self.INLINE_START_RE.match(chunk0)
+            m = self.NON_INLINE_START_RE.match(chunk0)
             if m:
                 address1 = TreeNode(self._input[self._offset + m.start():self._offset + m.end()], self._offset, [])
                 self._offset = self._offset + m.end()
@@ -54,7 +54,7 @@ class Parser(BaseParser):
             self._offset = self._offset
         else:
             address0 = FAILURE
-        self._cache['inline_start'][index0] = (address0, self._offset)
+        self._cache['non_inline_start'][index0] = (address0, self._offset)
         return address0
 
 

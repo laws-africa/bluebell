@@ -282,13 +282,15 @@ grammar akn
   # ------------------------------------------------------------------------------ 
 
   # inlines that are not nested, and so we don't need to be careful of the closing }}
-  inline            <- inline_start / escape / inline_marker / [^\n] <InlineText>
+  inline            <- non_inline_start / escape / inline_marker / [^\n] <InlineText>
 
+  # match as much text as possible that isn't potentially a special inline or escape marker.
+  #
   # !!! NB: Every non-special character goes through this rule and so it's heavily used.
   #         The code generated for this rule is customised by Parser in parser.py
   #         in order to greatly improve its performance. If this regex changes, it MUST
-  #         also be updated in Parser.INLINE_START_RE.
-  inline_start      <- [^*/_{[\n\\]+
+  #         also be updated in Parser.NON_INLINE_START_RE.
+  non_inline_start  <- [^*/_{[\n\\]+
 
   # inlines that ARE nested, and so we must guard against the closing }}
   inline_nested     <- [^*/_{[\n\\}]+ / escape / (!'}}' inline_marker / [^\n]) <InlineText>

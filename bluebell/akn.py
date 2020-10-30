@@ -4962,7 +4962,7 @@ class Grammar(object):
             self._offset = cached[1]
             return cached[0]
         index1 = self._offset
-        address0 = self._read_inline_start()
+        address0 = self._read_non_inline_start()
         if address0 is FAILURE:
             self._offset = index1
             address0 = self._read_escape()
@@ -4992,9 +4992,9 @@ class Grammar(object):
         self._cache['inline'][index0] = (address0, self._offset)
         return address0
 
-    def _read_inline_start(self):
+    def _read_non_inline_start(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['inline_start'].get(index0)
+        cached = self._cache['non_inline_start'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -5021,7 +5021,7 @@ class Grammar(object):
             self._offset = self._offset
         else:
             address0 = FAILURE
-        self._cache['inline_start'][index0] = (address0, self._offset)
+        self._cache['non_inline_start'][index0] = (address0, self._offset)
         return address0
 
     def _read_inline_nested(self):
