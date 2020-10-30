@@ -1,0 +1,42 @@
+PREAMBLE
+
+  \PREAMBLE
+
+  some preamble text
+
+BODY
+
+CHAP 1 - Heading
+
+  \PART in intro
+
+  SEC 1 - Section
+
+    a plain \\ backslash
+
+    some \**text\** at \//the start\// with \**multiple \//types\// of\** markup
+
+    some \[[remarks\]] and some \__underline\__
+
+    include \{{^superscripts\}} and \{{_subscripts\}} which are fun
+
+    an \{{IMG /foo.png description\}} image
+
+  \PART in the middle
+
+  SEC 2
+
+    \PART A should be escaped
+
+    list \__intro\__
+
+    \(a) item (a) with a \{{>http:\//example.com link\}}
+
+    \CHAPTER.foo
+
+    \QUOTE{}
+
+  \FOOTNOTE 1
+
+  \TABLE in wrapup
+
