@@ -46,3 +46,6 @@ class RoundTripTestCase(ParserSupport, TestCase):
 
     def test_act_escapes(self):
         self.roundtrip('act-escapes', 'act')
+
+    def test_eids(self):
+        self.roundtrip('eids', 'statement')
