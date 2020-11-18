@@ -133,6 +133,7 @@ class IdGenerator:
 
     def reset(self):
         self.counters.clear()
+        self.eid_counter.clear()
 
     def needs_num(self, name):
         return name not in self.id_unnecessary
