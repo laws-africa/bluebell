@@ -1,0 +1,465 @@
+PREFACE
+
+  Here is a document:
+
+  QUOTE{startQuote “}
+
+    PARA A - Heading
+
+      SUBPARA i
+
+        Content
+
+      SUBPARA ii
+
+        Content{{FOOTNOTE x}}”.
+
+        FOOTNOTE x
+
+          Here's a footnote, and it Also includes a quote:
+
+          QUOTE{startQuote “}
+
+            PARA A - Heading
+
+              SUBPARA i
+
+                Content
+
+              SUBPARA ii
+
+                Content”.
+
+PREAMBLE
+
+  //The Conference of the Parties//
+
+  Preamble 1
+
+  Preamble 2
+
+  Preamble 3
+
+BODY
+
+TABLE
+  TR
+    TH
+      Head 1
+
+    TH
+      Head 2
+
+  TR
+    TC
+      Intro text:
+
+      QUOTE
+
+        Text of quote.
+
+    TC
+      QUOTE
+
+        Text of quote.
+
+QUOTE
+
+  Text of quote, introducing this table:
+
+  TABLE
+    TR
+      TH
+        Head
+
+    TR
+      TC
+        Content
+
+DIVISION 1 - Strategy for implementing the programme of work on technology transfer and technological and scientific cooperation
+
+  PARA 1.
+
+    //Notes with appreciation// the work of the Ad Hoc Technical Expert Group on Technology Transfer and Scientific and Technological Cooperation, which met in Geneva, from 10 to 12 September 2007, as well as the cooperation of the United Nations Conference on Trade and Development and of the United Nations Environment Programme, and the financial support provided by the Government of Spain, for the organization of the meeting of the Expert Group;
+
+    SUBDIVISION A. - Subdiv
+
+      PARA 1.1 - Heading
+
+        Content:
+
+        SUBPARA a
+
+          Content
+
+        SUBPARA b
+
+          Content
+
+        Wrap
+
+      PARA 1.2
+
+        SUBPARA a
+
+          SUBPARA i
+
+            Content
+
+          SUBPARA ii
+
+            LIST
+
+              POINT 1
+
+                Content
+
+              POINT 2
+
+                Content
+
+              Wrap
+
+            Rando text in subpara ii
+
+          Rando text in subpara a
+
+        Rando text in para 1.2
+
+      Rando text in Subdiv A
+
+    Rando text in para 1
+
+  Rando text in Div 1
+
+Rando standalone text.
+
+PARA 2.
+
+  //Takes note of// the strategy for the practical implementation of the programme of work on technology transfer and scientific and technological cooperation developed by the Expert Group as annexed to the present decision, as a preliminary basis for concrete activities by Parties and international organizations;
+
+PARA 3.
+
+  //Reiterates// the need for immediate implementation of the programme of work on technology transfer and scientific and technological cooperation;
+
+PARA 4.
+
+  //Requests// the Executive Secretary to compile and analyse, in cooperation with relevant organizations and initiatives, information and good practices on the process of identifying modes of cooperation on science, technology and innovation, technologies, technology needs assessments and existing technology transfer agreements, and to make this information available through the clearing-house mechanism of the Convention;
+
+DIVISION - Biodiversity Technology Initiative
+
+  Intro text
+
+  PARA 5.
+
+    //Takes note// of the exploration contained in the note by the Executive Secretary of possibilities of developing a Biodiversity Technology Initiative (BTI), taking into account the Climate Technology Initiative (CTI) (UNEP/CBD/COP/9/18/Add.1), bearing in mind that the Biodiversity Technology Initiative would facilitate enhanced interaction with Parties with identified capacity/technology building needs and international organizations, Parties, or other relevant organizations, which could assist in capacity‑building and technology transfer;
+
+  Rando text between paragraphs
+
+  PARA 6.
+
+    //Requests// the Executive Secretary, in cooperation with relevant partner organizations, to:
+
+    (a) Identify options for activities to be included in a prospective Biodiversity Technology Initiative as well as for the structure, functioning and governance of a Biodiversity Technology Initiative;
+
+    (b) Complete, as necessary, the list of criteria for selecting the host institution of the Biodiversity Technology Initiative, bearing in mind the possibility of the Initiative being hosted by the Secretariat of the Convention;
+
+    and to submit the options and the list of criteria to the Ad Hoc Open-ended Working Group on Review of Implementation of the Convention at its third meeting for its consideration;
+
+  Rando text between paragraphs
+
+  PARA 7.
+
+    //Requests// the Ad Hoc Open-ended Working Group on Review of Implementation of the Convention at its third meeting to review the options and the list of criteria referred to above with a view to finalize them for consideration by the Conference of the Parties at its tenth meeting;
+
+  Rando text after paragraphs
+
+DIVISION - Technical study on the role of intellectual property rights in technology transfer in the context of the Convention
+
+  Intro
+
+  PARA 8.
+
+    //Takes note// of the technical study on the role of intellectual property rights in technology transfer in the context of the Convention (UNEP/CBD/COP/9/INF/7);
+
+  PARA 9.
+
+    //Requests// the Executive Secretary to explore options for fast-tracking to allow for quicker financing and access by developing countries to relevant technologies in the public domain, the transfer and application of which does not involve intellectual property rights issues; 
+
+  PARA 10.
+
+    //Notes with appreciation// the cooperation of the United Nations Conference on Trade and Development and the World Intellectual Property Organization in the preparation of the study referred to in para 8 above;
+
+  PARA 11.
+
+    //Recalling// Article 16 paragraphs 2, 3 and 5 of the Convention, //invites// relevant international organizations and initiatives, research institutions at all levels, and non-governmental organizations, to undertake further research on the role of intellectual property rights in technology transfer in the context of the Convention, such as:
+
+    (a) More in-depth analysis of new open-source-based modes of innovation, as well as other additional options to intellectual property rights;
+
+    (b) More empirical studies on the extent of use of patent data information in research and development in different sectors;
+
+    (c) Further empirical analysis on the scope and extent of patent clustering on technologies and other associated biological materials that are necessary inputs to desired technology development processes and on how prospective technology users in developing countries cope with patent clustering;
+
+    (d) Further examination by relevant international organizations of the overall trends in the application of the flexibilities provided by the Agreement on Trade-related Aspects of Intellectual Property Rights (TRIPs);
+
+  Wrap-up
+
+DIVISION - Information systems
+
+  PARA 12.
+
+    //Takes note// of the progress made in enhancing the clearing-house mechanism as a key mechanism in technology transfer and technological and scientific cooperation, including provision of information on patent registry systems, and //requests// the Executive Secretary to continue the work, including by preparing offline tools for information dissemination, such as brochures and CD-Roms;
+
+DIVISION - Cooperation
+
+  PARA 13.
+
+    //Encourages// Parties to engage in South-South technology transfer and cooperation on science, technology and innovation, as well as explore alternative models for triangular, regional or multilateral cooperation, as complementary mechanisms to North-South activities;
+
+  PARA 14.
+
+    //Underlining// the importance of establishing or strengthening cooperation with relevant processes in other conventions and international organizations, with a view to ensure consistency and mutual supportiveness, maximize possible synergy, and avoid duplication of work, //requests// the Executive Secretary to:
+
+    (a) Facilitate national, regional and international information exchange through to the clearing-house mechanism, including, as appropriate, through interoperability mechanisms;
+
+    (b) Continue to exchange information on activities with other relevant expert bodies, such as the Expert Group on Technology Transfer under the United Nations Framework Convention on Climate Change, as well as through the joint liaison groups of the three Rio conventions and the biodiversity‑related conventions;
+
+    (c) Explore options for joint workshops with other conventions on, for instance, technologies of joint interest and relevance;
+
+    (d) Cooperate with the United Nations Environment Programme (UNEP) and the Bali Strategic Plan for Technology Support and Capacity-Building with a view to identify why possible collaborative activities and options for synergies;
+
+DIVISION - Funding mechanisms
+
+  PARA 15.
+
+    //Decides// that the strategy for resource mobilization shall fully reflect the needs of developing country Parties for access to and transfer of technology and their innovation needs, and related scientific and institutional capacity-building needs, for effective implementation of the Convention;
+
+  PARA 16.
+
+    //Urges// Parties and other Governments to honour their commitments related to finance and technology transfer under Agenda 21, and reiterated at the World Summit, by intensifying their contribution to technology transfer and cooperation on science, technology and innovation, and //urges// Parties to fully implement their obligations under Articles 16 to 19 of the Convention;
+
+  PARA 17.
+
+    //Requests// the Global Environment Facility to:
+
+    (a) Provide support to developing country Parties in the preparation of national assessments of technology needs for implementation of the Convention;
+
+    (b) Continue to support ongoing national programmes for the conservation and sustainable use of biodiversity through improved access to and transfer of technology and innovation;
+
+    (c) Consider possibilities to provide funding under enabling activities for the provision of capacity-building, where needed, on, //inter alia//:
+
+      (i) Technologies for conservation and sustainable use;
+
+      (ii) Governance and regulatory frameworks associated with access and transfer of technology and innovation.
+
+ANNEXURE Annex
+  SUBHEADING Strategy for the practical implementation of the programme of work on technology transfer and scientific and technological cooperation
+
+  DIVISION I. - Objectives and background
+
+    PARA 1.
+
+      The strategy for practical implementation of the programme of work has been developed to assist and facilitate efforts to further implement Articles 16 to 19 of the Convention on Biological Diversity. The Strategy explores a number of voluntary ways and means that are aimed at creating a coherent and sustainable approach to technology transfer and scientific and technological cooperation, in accordance with the provisions of the Convention, and relevant international and domestic obligations.
+
+    PARA 2.
+
+      The present framework identifies strategic activities for the practical implementation of the programme of work on technology transfer and scientific and technological cooperation. The programme of work was adopted by the Conference of the Parties at its seventh meeting held in Kuala Lumpur in February 2004, in order to develop meaningful and effective action to enhance the implementation of Articles 16 to 19 as well as related provisions of the Convention, by promoting and facilitating the transfer of and access to technologies from developed to developing countries as well as among developing countries and other Parties. According to Article 16 paragraph 1, of the Convention, relevant technologies under the Convention are those that contribute to meeting the three objectives of the Convention, that is, technologies that are relevant to the conservation and sustainable use of biodiversity or make use of genetic resources and do not cause significant damage to the environment.
+
+    PARA 3.
+
+      Biodiversity is under massive and increasing pressure as a result of global changes such as population growth, poverty alleviation, reduction of available arable land and water, environmental stress, climate change, and the need for renewable resources, and this requires that the full range of technologies, ranging from traditional to modern technologies, is made widely available in order to address the challenges associated with the implementation of the three objectives of the Convention. Much scientific and technological cooperation, including the transfer of technologies, is already being undertaken, in particular on a smaller scale. The present strategy aims to increase the visibility of such cooperation, and to enhance the efficiency and effectiveness of technology transfer and scientific and technological cooperation under the Convention.
+
+  DIVISION II. - Conceptualizing and defining technology transfer and scientific and technological cooperation
+
+    PARA 4.
+
+      It is important to recognize the crucial **links between technology transfer and scientific and technological cooperation** – the two elements addressed by the programme of work. Technology transfer, in particular in the context of the third objective of the Convention, will not be effective as an on-off and one-way activity, but needs to be **embedded in a participatory decision-making process** as well as in **integrated, long-term scientific and technological cooperation,** which may involve the joint development of new technologies and, as based on reciprocity, would also provide a key mechanism for the effective building or enhancement of capacity in developing countries and countries with economies in transition.
+
+    PARA 5.
+
+      The concrete process leading to technology transfer, as well as the cooperative mechanisms applied, will necessarily differ in accordance with the largely varying socio-economic and cultural conditions among countries, as well as the type of technologies transferred. Hence, this process needs to be **flexible, participatory, and demand-driven,** moving along different cells of matrices of potential types of technologies and cooperative mechanisms.
+
+    PARA 6.
+
+      The concept of technology as generally understood under the Convention includes both **“hard” and “soft” technology**. The notion of hard technology refers to the actual machinery and other physical hardware that is transferred, while the category of soft technology refers to technological information or know-how. Such “soft” technology is often transferred within long-term scientific and technological cooperation including though joint research and innovation which move ideas from invention to new products, processes and services.
+
+    PARA 7.
+
+      Consistent with the programme of work, **local solutions to local issues** should be identified and their transfer and use facilitated, as the most innovative solutions are often developed locally, but remain unknown to the a wider community of potential users even though they could be transferred comparatively easily.
+
+    PARA 8.
+
+      Strategic activities can be distinguished according to whether they focus on fostering the //provision// of technologies or on the //reception, adaptation and diffusion// of technologies. While many countries may be mainly providing or mainly receiving technologies, it has to be borne in mind that individual countries may sometimes simultaneously provide and receive technologies from abroad. The programme of work recognizes that **enabling environments are necessary in both developed and developing countries** as a tool to promote and facilitate the successful and sustainable transfer of technologies for the purpose of the Convention on Biological Diversity. Consequently, the strategic elements identified below cover measures to be taken both on the providing as well as on the receiving end.
+
+    PARA 9.
+
+      Development of a strategy for implementing the programme of work on technology transfer and scientific and technological cooperation suggests applying a rational, structured approach. However, the reality of effective technology transfer is to take advantage of opportunities as they arise, implying that the **implementation of the strategy should not delay the immediate transfer of relevant technologies** in those cases where technology needs and opportunities are identified and the institutional, administrative, policy and legal environment does not prevent their successful transfer and adaptation.
+
+  DIVISION III. - Enabling environment on the receiving end
+
+    PARA 10.
+
+      Based on knowledge of the range of available technologies, **assess priority technology needs through consultative multi-stakeholder processes** on the local, national or regional level, possibly in collaboration with regional or international organizations.
+
+    PARA 11.
+
+      Design and implement **policies and regulations** of relevance to the transfer and application of technology that are **consistent, clear to all relevant actors, and conducive** to the transfer of technology.
+
+    PARA 12.
+
+      Design and implement an **institutional and administrative framework and governance system** which is **conducive to technology transfer** by ensuring, //inter alia,// through effective **internal coordination**, that administrative processes do not put an onerous administrative burden on prospective technology users and providers.
+
+    PARA 13.
+
+      Consider the designation of appropriate existing institutions that could act, in close cooperation with National Focal Points to the Convention and to its clearing-house mechanism, as a **central consulting point on technology access and transfer** for other national or international actors to turn to. This function could also be assumed, as appropriate, by the national focal points to the clearing house mechanism.
+
+    PARA 14.
+
+      Consider the use of **incentives** to encourage foreign actors to provide access to and transfer of technology to domestic public or private institutions.
+
+    PARA 15.
+
+      Generate an **environment conducive to the application of a participatory approach**, including by establishing mechanisms for effective public information and public participation.
+
+  DIVISION IV. - Enabling environment on the providing end
+
+    PARA 16.
+
+      Provide, through multiple channels, **information on available technologies**, including on projected costs, risks, benefits, constraints; necessary infrastructure, personnel, capacity; sustainability, etc., in particular those which are available on a short-term basis (see also section V below).
+
+    PARA 17.
+
+      **Pre-assess the adaptability of prospective technologies** to be transferred.
+
+    PARA 18.
+
+      **Be aware, foster understanding of, and comply with relevant regulations** of recipient countries – build trust.
+
+    PARA 19.
+
+      **Recognize, and act on, any capacity-building needs** of recipients and ensure sustainability of the transferred technology.
+
+    PARA 20.
+
+      Consider the designation of appropriate existing institutions that could act, in close cooperation with National Focal Points to the Convention and to its clearing-house mechanism, as a **central consulting point on technology access and transfer** for other national or international actors to turn to, and which could also monitor and follow-up on the activities enumerated in this strategy. These functions could also be assumed, as appropriate, by the National Focal Points to the clearing-house mechanism.
+
+    PARA 21.
+
+      Establish or strengthen programmes that **enhance access to capital markets**, in particular for small and medium enterprises in recipient countries, for instance through the establishment of small-scale loan facilities that provide seed capital, the bundling of projects, or the provision of collateral and/or performance guarantees.
+
+    PARA 22.
+
+      Bearing in mind the important role of the private sector in technology transfer, consider the use of measures and mechanisms that **provide incentives** to the private sector to enhance the transfer of pertinent technology, in accordance with international law, for instance:
+
+      (a) The use or adaptation of existing provisions in domestic tax systems on **tax breaks or deferrals for charitable activities**, with a view to provide adequate incentives for private companies to engage in the transfer of relevant technologies and related capacity-building activities;
+
+      (b) The adaptation of existing guidelines for eligibility to **research-oriented tax breaks or deferrals** with a view to generate incentives for private‑sector actors that engage in research making use of genetic resources, to implement adequate mechanisms for the promotion and advancement of priority access to the results and benefits arising from the biotechnologies that result from such research, in accordance with Article 19, paragraph 2, of the Convention;
+
+      (c) The application of **subsidized export credits or loan guarantees** that act as insurance against risks in international transactions with a view to provide incentives to private sector actors to engage in technology transfer for the purpose of the Convention.
+
+    PARA 23.
+
+      Review the **principles and guidelines that govern the funding of public research institutions** and develop them further with a view to provide adequate incentives to follow the pertinent provisions and guidance of the Convention on technology transfer. In particular, the guidelines could foresee the implementation of adequate mechanisms for the promotion and advancement of priority access to the results and benefits arising from the biotechnologies that result from such research, in accordance with Article 19 (2) of the Convention.
+
+    PARA 24.
+
+      Incite relevant institutions to **provide funds** (see also section VII below).
+
+  DIVISION V. - Facilitating mechanisms
+
+    PARA 25.
+
+      Generate and disseminate **information on available relevant technologies,** including small-scale technologies that were developed locally, by, //inter alia//:
+
+      (a) Establishing or strengthening relevant **databases;**
+
+      (b) **Strengthening the clearing-house mechanism** of the Convention as a central gateway for technology transfer and scientific and technological cooperation, in accordance with element 2 of the programme of work, by **linking relevant databases** to the clearing-house mechanism, **establishing interoperability** as appropriate, and by the more active use of the clearing-house mechanism as a **communication platform;**
+
+      (c) Using **offline tools for information dissemination,** such as print material as well as CD‑Roms;
+
+      (d) Convening **technology fairs** and **workshops.**
+
+    PARA 26.
+
+      Encourage the work of **intermediate institutions** and **networks** with pertinent experience in different areas, such as CGIAR, which can assist in the establishment of partnerships by, //inter alia//: translating priority needs of countries into clearly formulated requests for technology transfer, facilitating fact-based negotiations of transfer agreements, and facilitating access to financing facilities.
+
+    PARA 27.
+
+      Compile and analyse, in cooperation with relevant organizations and initiatives and with assistance by the expert group on technology transfer, existing **technology transfer agreements** or **technology transfer provisions/clauses** in other agreements, including regional or bilateral trade agreements, such as for instance contractual agreements relating to access to genetic resources and associated traditional knowledge and the fair and equitable sharing of benefits arising out of their utilization. This compilation and analysis could also include existing templates for standard technology transfer agreements/provisions/clauses, and could be used to develop **international guidance** that could act as reference for good/best practice on the application of technology transfer agreements/provisions/clauses.
+
+    PARA 28.
+
+      Encourage the development of **cooperative partnershipsand/or networks** involving governmental agencies, public and private research institutions, the private sector, non-governmental organizations, indigenous and local communities and national and local stakeholders, including south‑south cooperation and alternative models for triangular, regional or multilateral cooperation, through, among others:
+
+      (a) Support the establishment of **research consortia** among research institutions in developing countries, including through for instance the establishment and work of patent pools or intellectual property commercialization agents;
+
+      (b) Foster scientific and technological cooperation between universities and other research institutions of developed and developing countries, including the establishment of academic exchange programmes in particular at postgraduate and postdoctoral levels as well as other programmes which enhance the mobility of researchers, the establishment of doctorate programmes in developing countries, and the access to, and building of, research and innovation infrastructure, through for instance the establishment and financing of **twinning arrangements;**
+
+      (c) Promote the interaction between universities and other institutions of education and training as well as of research and development on the one side and the private sector on the other side, through **alliances, joint ventures** or **public-private partnerships;**
+
+      (d) Support the set-up of long-term technological cooperation between private firms in developed and developing countries, including the co-financing of local businesses with little or no access to long-term investment capital, through for instance the establishment and strengthening of so-called **matchmaking programmes;**
+
+    PARA 29.
+
+      Establish or strengthen **cooperation with relevant processes** in other conventions and international organizations, with a view to ensure consistency and mutual supportiveness, maximize possible synergy, and avoid duplication of work, by:
+
+      (i) **Linking relevant existing systems** of national, regional and international information exchange to the clearing-house mechanism, including, as appropriate, through interoperability mechanisms;
+
+      (ii) Continuing to **exchange information** on activities with other relevant expert bodies, such as the Expert Group on Technology Transfer under the United Nations Framework Convention on Climate Change, as well as through the joint liaison groups of the three Rio conventions and the biodiversity-related conventions;
+
+      (iii) Exploring options for **joint workshops** with other conventions, for instance on technologies of joint interest and relevance;
+
+      (iv) Cooperating with the United Nations Environment Programme (UNEP) to explore the nature and scope of the **Bali Strategic Plan for Technology Support and Capacity‑Building** with a view to identify possible collaborative activities and options to synergize.
+
+  DIVISION VI. - The role of champions and the possible establishment of a Biodiversity Technology Initiative
+
+    PARA 30.
+
+      Committed Parties and organizations that act as **champions of technology transfer** can play an important role in promoting and supporting the effective implementation of Articles 16 to 19 and the programme of work on technology transfer and scientific and technological cooperation, in particular if competitive mechanisms are put in place. For example, the Climate Technology Initiative (CTI), which was launched in 1995 by 23 OECD/International Energy Agency member countries and the European Commission to support the technology-related objectives of the United Nations Framework Convention on Climate Change, indicates the useful role of such an international network of champions for the effective implementation of provisions on technology transfer. The establishment of a similar **‘Biodiversity Technology Initiative’** would be useful and welcome if effectively contributing to the implementation of the present strategy. Several open questions remain, including on the funding needs, the potential portfolio of activities, and other questions as identified in the report prepared by the Executive Secretary for consideration by the ninth meeting of the Conference of the Parties. {{^{{FOOTNOTE 1}}}}
+
+      FOOTNOTE 1
+
+        UNEP/CBD/COP/9/18/Add. 1.
+
+    PARA 31.
+
+      A **Biodiversity Award** could be established for the best contribution made by projects, individuals, non-governmental organizations, Governments (including local governments) etc, to attaining the 2010 biodiversity target, including best practices on technology transfer and scientific and technological cooperation. The international award would highlight and recognize relevant good practices that could be replicated (with modifications as appropriate) by others in the future.
+
+  DIVISION VII. - Funding mechanisms
+
+    PARA 32.
+
+      After a decade of continuous recognition of the continual need for the effective transfer of technologies of relevance for conservation and sustainable use of biodiversity or make use of genetic resources and do not cause significant damage to the environment, including biotechnology and traditional technologies, the Ad Hoc Technical Expert Group on Technology Transfer and Scientific and Technological Cooperation is amazed to note that:
+
+      (i) Implementing the objectives of the Convention has not been the aim of many existing technology transfer activities and mechanisms;
+
+      (ii) There is a lack of synergy among existing funding mechanisms dedicated to technology transfer for the implementation of the objectives of the Convention; and
+
+      (iii) The long-standing needs of many countries with regard to the implementation of the objectives of the Convention have not been well-addressed.
+
+    PARA 33.
+
+      Underlining the need for a **diversity of sustainable funding mechanisms** such as the Global Environmental Facility, bi- and multilateral funding organizations, private charitable foundations, and others, there is a need to:
+
+      (i) **Think creatively** about fund-raising, for instance by mobilizing //pro bono// activities; use technology fairs for mobilizing seed money, etc;
+
+      (ii) **Cluster funding needs** with other Rio conventions and biodiversity-related conventions, at all levels;
+
+      (iii) **Integrate technology transfer** modules into existing capacity‑building and training programmes;
+
+      (iv) **Raise the biodiversity agenda,** and subsequent funding needs, within existing funding programmes;
+
+    PARA 34.
+
+      Generate **information on potential funding sources** for different sectors, thus creating awareness of available funding.
+
+    PARA 35.
+
+      Sustainable funding //inter alia //needs to be provided:
+
+      (i) For **training of technology transfer personnel;**
+
+      (ii) For the **establishment and maintenance of databases** on available technologies as well as on transactional instruments;
+
+      (iii) For the proposed **Biodiversity Technology Initiative.**
+
