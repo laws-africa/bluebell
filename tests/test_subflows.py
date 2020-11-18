@@ -462,3 +462,14 @@ QUOTE{startQuote "}
     QUOTE{}startQuote "}
         some text
     """, 'block_quote')
+
+    def test_quote_unparsed(self):
+        # quotes should be correctly indented when unparsed
+        xml = '''<block xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="quote" eId="block_1"><embeddedStructure startQuote="&quot;" eId="block_1__embeddedStructure_1"><p eId="block_1__embeddedStructure_1__p_1">line one</p></embeddedStructure></block>
+'''
+        unparsed = self.parser.unparse(xml)
+        self.assertEqual('''QUOTE{startQuote "}
+
+  line one
+
+''', unparsed)
