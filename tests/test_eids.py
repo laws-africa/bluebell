@@ -1,7 +1,12 @@
+import datetime
+import os
+import re
 from unittest import TestCase
 
 from lxml import etree
-from .support import ParserSupport
+from cobalt import StructuredDocument
+from cobalt.schemas import assert_validates
+from tests.support import ParserSupport
 
 
 class IdGeneratorTestCase(ParserSupport, TestCase):
@@ -276,3 +281,33 @@ PARA
   </mainBody>
 </doc>
 """, xml)
+
+    def roundtrip_xml(self, file_in, root='statement'):
+        dir = os.path.join(os.path.dirname(__file__), 'roundtrip')
+        fname = os.path.join(dir, f'{file_in}.xml')
+        with open(fname, 'rt') as f:
+            xml_in_pretty = f.read().replace('TODAY', str(datetime.date.today()))
+        xml_in = re.sub(r'\n\s*', '', xml_in_pretty)
+
+        # ensure xml_in validates
+        doc = StructuredDocument.for_document_type(root)(xml_in)
+        assert_validates(doc, strict=False)
+
+        unparsed = self.parser.unparse(xml_in)
+        text = self.parser.pre_parse(unparsed)
+        xml_out = self.parser.parse_to_xml(text, root)
+        xml_out_pretty = etree.tostring(xml_out, encoding='unicode', pretty_print=True)
+
+        # ensure xml_out validates
+        doc = StructuredDocument.for_document_type(root)(xml_out_pretty)
+        assert_validates(doc, strict=False)
+
+        self.assertMultiLineEqual(xml_in_pretty, xml_out_pretty)
+
+    def test_eids_against_js_basic(self):
+        # should not change a document with correct eids (see bluebell-monaco/tests/eids.js)
+        self.roundtrip_xml('eids_basic')
+
+    def test_eids_against_js_edge(self):
+        # should not change a document with correct eids (see bluebell-monaco/tests/eids.js)
+        self.roundtrip_xml('eids_edge')
