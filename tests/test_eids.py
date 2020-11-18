@@ -304,8 +304,10 @@ PARA
 
         self.assertMultiLineEqual(xml_in_pretty, xml_out_pretty)
 
-    def test_eids_against_js(self):
+    def test_eids_against_js_basic(self):
         # should not change a document with correct eids (see bluebell-monaco/tests/eids.js)
         self.roundtrip_xml('eids_basic')
-        self.parser.generator.ids.reset()
+
+    def test_eids_against_js_edge(self):
+        # should not change a document with correct eids (see bluebell-monaco/tests/eids.js)
         self.roundtrip_xml('eids_edge')
