@@ -226,8 +226,8 @@
        Main structures
        ............................................................................... -->
 
-  <!-- TODO all document types -->
-  <xsl:template match="a:meta" />
+  <!-- ignore these elements -->
+  <xsl:template match="a:meta | a:judgment/a:header" />
 
   <!-- ...............................................................................
        Containers and hierarchical elements
