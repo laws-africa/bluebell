@@ -98,7 +98,6 @@
       </xsl:with-param>
       <xsl:with-param name="value"><xsl:value-of select="']]'" /></xsl:with-param>
       <xsl:with-param name="replacement"><xsl:value-of select="'\]]'" /></xsl:with-param>
-
     </xsl:call-template>
   </xsl:template>
 
@@ -168,7 +167,7 @@
                     starts-with($text, 'TR') or
                     starts-with($text, 'TRANSITIONAL') or
                     starts-with($text, '(')">
-        <xsl:text>\</xsl:text>
+        <xsl:value-of select="'\'" />
       </xsl:if>
     </xsl:variable>
 
@@ -226,8 +225,8 @@
        Main structures
        ............................................................................... -->
 
-  <!-- TODO all document types -->
-  <xsl:template match="a:meta" />
+  <!-- ignore these elements -->
+  <xsl:template match="a:meta | a:judgment/a:header" />
 
   <!-- ...............................................................................
        Containers and hierarchical elements
