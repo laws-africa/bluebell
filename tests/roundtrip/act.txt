@@ -51,3 +51,12 @@ CHAP 1 - Heading
 
   wrap up
 
+ANNEXURE Annex 1
+
+  Some content
+
+ANNEXURE Annex 2
+  SUBHEADING Subheading
+
+  Some content 2
+

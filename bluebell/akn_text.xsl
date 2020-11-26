@@ -523,16 +523,20 @@
       <xsl:text> </xsl:text>
       <xsl:apply-templates select="a:heading" />
     </xsl:if>
-    <xsl:text>&#10;</xsl:text>
 
     <xsl:if test="a:subheading">
+      <xsl:text>&#10;</xsl:text>
       <xsl:apply-templates select="a:subheading">
         <xsl:with-param name="indent" select="$indent + 1" />
       </xsl:apply-templates>
-      <xsl:text>&#10;</xsl:text>
     </xsl:if>
 
-    <xsl:text>&#10;</xsl:text>
+    <xsl:text>&#10;&#10;</xsl:text>
+
+    <xsl:apply-templates select="a:heading//a:authorialNote | a:subheading//a:authorialNote" mode="content">
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
+
     <xsl:apply-templates select="a:doc">
       <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
