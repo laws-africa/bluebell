@@ -48,3 +48,33 @@ CHAP 1 - Heading
 
           footnote four
 
+  CROSSHEADING Heading {{FOOTNOTE 1}}
+
+  FOOTNOTE 1
+
+    footnote 1 crossheading text
+
+  SEC 1 - Heading {{FOOTNOTE 2}}
+    SUBHEADING Subheading {{FOOTNOTE 3}}
+
+    FOOTNOTE 2
+
+      footnote 2 heading text
+
+    FOOTNOTE 3
+
+      footnote 3 subheading text
+
+ANNEXURE Annex {{FOOTNOTE 1}}
+  SUBHEADING Annex subheading {{FOOTNOTE 2}}
+
+  FOOTNOTE 1
+
+    Annex heading footnote text
+
+  FOOTNOTE 2
+
+    Annex subheading footnote text
+
+  Some content
+
