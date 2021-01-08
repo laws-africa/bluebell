@@ -127,22 +127,22 @@ PARA 2.3..74.5_2
         <p eId="para_2_2__p_1">Another para with the num 2.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_2.3..74.5">
+    <paragraph eId="para_2-3-74-5">
       <num>2.3..74.5.</num>
       <content>
-        <p eId="para_2.3..74.5__p_1">Interesting number.</p>
+        <p eId="para_2-3-74-5__p_1">Interesting number.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_2.3..74.5_2">
+    <paragraph eId="para_2-3-74-5_2">
       <num>2.3..74.5.</num>
       <content>
-        <p eId="para_2.3..74.5_2__p_1">Duplicate interesting number.</p>
+        <p eId="para_2-3-74-5_2__p_1">Duplicate interesting number.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_2.3..74.5_2_2">
+    <paragraph eId="para_2-3-74-5-2">
       <num>2.3..74.5_2</num>
       <content>
-        <p eId="para_2.3..74.5_2_2__p_1">Highly unlikely duplicate of eId of previous.</p>
+        <p eId="para_2-3-74-5-2__p_1">Highly unlikely duplicate of eId of previous.</p>
       </content>
     </paragraph>
   </mainBody>
@@ -165,9 +165,6 @@ PARA nn_2
 
 PARA nn_2_2
     Para nn_2_2, which is the previous para's eId.
-
-PARA nn_2_2
-    Another para nn_2_2.
 """, 'doc')
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
@@ -190,22 +187,16 @@ PARA nn_2_2
         <p eId="para_nn_3__p_1">Perfectly possible paragraph numbering.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_nn_2_2">
+    <paragraph eId="para_nn-2">
       <num>nn_2</num>
       <content>
-        <p eId="para_nn_2_2__p_1">Para nn_2, which is the previous para's eId.</p>
+        <p eId="para_nn-2__p_1">Para nn_2, which is the previous para's eId.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_nn_2_2_2">
+    <paragraph eId="para_nn-2-2">
       <num>nn_2_2</num>
       <content>
-        <p eId="para_nn_2_2_2__p_1">Para nn_2_2, which is the previous para's eId.</p>
-      </content>
-    </paragraph>
-    <paragraph eId="para_nn_2_2_3">
-      <num>nn_2_2</num>
-      <content>
-        <p eId="para_nn_2_2_3__p_1">Another para nn_2_2.</p>
+        <p eId="para_nn-2-2__p_1">Para nn_2_2, which is the previous para's eId.</p>
       </content>
     </paragraph>
   </mainBody>

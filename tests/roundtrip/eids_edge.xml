@@ -116,67 +116,67 @@
           <subdivision eId="dvs_1__para_1__subdvs_A">
             <num>A.</num>
             <heading>Subdiv</heading>
-            <paragraph eId="dvs_1__para_1__subdvs_A__para_1.1">
+            <paragraph eId="dvs_1__para_1__subdvs_A__para_1-1">
               <num>1.1</num>
               <heading>Heading</heading>
               <intro>
-                <p eId="dvs_1__para_1__subdvs_A__para_1.1__intro__p_1">Content:</p>
+                <p eId="dvs_1__para_1__subdvs_A__para_1-1__intro__p_1">Content:</p>
               </intro>
-              <subparagraph eId="dvs_1__para_1__subdvs_A__para_1.1__subpara_a">
+              <subparagraph eId="dvs_1__para_1__subdvs_A__para_1-1__subpara_a">
                 <num>a</num>
                 <content>
-                  <p eId="dvs_1__para_1__subdvs_A__para_1.1__subpara_a__p_1">Content</p>
+                  <p eId="dvs_1__para_1__subdvs_A__para_1-1__subpara_a__p_1">Content</p>
                 </content>
               </subparagraph>
-              <subparagraph eId="dvs_1__para_1__subdvs_A__para_1.1__subpara_b">
+              <subparagraph eId="dvs_1__para_1__subdvs_A__para_1-1__subpara_b">
                 <num>b</num>
                 <content>
-                  <p eId="dvs_1__para_1__subdvs_A__para_1.1__subpara_b__p_1">Content</p>
+                  <p eId="dvs_1__para_1__subdvs_A__para_1-1__subpara_b__p_1">Content</p>
                 </content>
               </subparagraph>
               <wrapUp>
-                <p eId="dvs_1__para_1__subdvs_A__para_1.1__wrapup__p_1">Wrap</p>
+                <p eId="dvs_1__para_1__subdvs_A__para_1-1__wrapup__p_1">Wrap</p>
               </wrapUp>
             </paragraph>
-            <paragraph eId="dvs_1__para_1__subdvs_A__para_1.2">
+            <paragraph eId="dvs_1__para_1__subdvs_A__para_1-2">
               <num>1.2</num>
-              <subparagraph eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a">
+              <subparagraph eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a">
                 <num>a</num>
-                <subparagraph eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__subpara_i">
+                <subparagraph eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__subpara_i">
                   <num>i</num>
                   <content>
-                    <p eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__subpara_i__p_1">Content</p>
+                    <p eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__subpara_i__p_1">Content</p>
                   </content>
                 </subparagraph>
-                <subparagraph eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__subpara_ii">
+                <subparagraph eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__subpara_ii">
                   <num>ii</num>
-                  <list eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__subpara_ii__list_nn_1">
-                    <point eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__subpara_ii__list_nn_1__point_1">
+                  <list eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__subpara_ii__list_nn_1">
+                    <point eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__subpara_ii__list_nn_1__point_1">
                       <num>1</num>
                       <content>
-                        <p eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__subpara_ii__list_nn_1__point_1__p_1">Content</p>
+                        <p eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__subpara_ii__list_nn_1__point_1__p_1">Content</p>
                       </content>
                     </point>
-                    <point eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__subpara_ii__list_nn_1__point_2">
+                    <point eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__subpara_ii__list_nn_1__point_2">
                       <num>2</num>
                       <content>
-                        <p eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__subpara_ii__list_nn_1__point_2__p_1">Content</p>
+                        <p eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__subpara_ii__list_nn_1__point_2__p_1">Content</p>
                       </content>
                     </point>
                     <wrapUp>
-                      <p eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__subpara_ii__list_nn_1__wrapup__p_1">Wrap</p>
+                      <p eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__subpara_ii__list_nn_1__wrapup__p_1">Wrap</p>
                     </wrapUp>
                   </list>
                   <wrapUp>
-                    <p eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__subpara_ii__wrapup__p_1">Rando text in subpara ii</p>
+                    <p eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__subpara_ii__wrapup__p_1">Rando text in subpara ii</p>
                   </wrapUp>
                 </subparagraph>
                 <wrapUp>
-                  <p eId="dvs_1__para_1__subdvs_A__para_1.2__subpara_a__wrapup__p_1">Rando text in subpara a</p>
+                  <p eId="dvs_1__para_1__subdvs_A__para_1-2__subpara_a__wrapup__p_1">Rando text in subpara a</p>
                 </wrapUp>
               </subparagraph>
               <wrapUp>
-                <p eId="dvs_1__para_1__subdvs_A__para_1.2__wrapup__p_1">Rando text in para 1.2</p>
+                <p eId="dvs_1__para_1__subdvs_A__para_1-2__wrapup__p_1">Rando text in para 1.2</p>
               </wrapUp>
             </paragraph>
             <wrapUp>
