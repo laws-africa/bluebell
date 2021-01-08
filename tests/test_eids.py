@@ -13,55 +13,31 @@ class IdGeneratorTestCase(ParserSupport, TestCase):
     maxDiff = None
 
     def test_clean_num(self):
-        self.assertEqual(
-            "",
-            self.generator.ids.clean_num(""),
-        )
+        self.assertEqual("", self.generator.ids.clean_num(""))
+        self.assertEqual("", self.generator.ids.clean_num(" "))
+        self.assertEqual("", self.generator.ids.clean_num("( )"))
+        self.assertEqual("123-4-5", self.generator.ids.clean_num("(123.4-5)"))
+        self.assertEqual("312-32-7", self.generator.ids.clean_num("312.32.7"))
+        self.assertEqual("312-32-7", self.generator.ids.clean_num("312-32-7"))
+        self.assertEqual("312-32-7", self.generator.ids.clean_num("312_32_7"))
+        self.assertEqual("6", self.generator.ids.clean_num("(6)"))
+        self.assertEqual("16", self.generator.ids.clean_num("[16]"))
+        self.assertEqual("i", self.generator.ids.clean_num("(i)"))
+        self.assertEqual("i", self.generator.ids.clean_num("[i]"))
+        self.assertEqual("2bis", self.generator.ids.clean_num("(2bis)"))
+        self.assertEqual("1-2", self.generator.ids.clean_num('"1.2.'))
+        self.assertEqual("1-2", self.generator.ids.clean_num("1.2."))
+        self.assertEqual("2-3", self.generator.ids.clean_num("“2.3"))
+        self.assertEqual("2-3", self.generator.ids.clean_num("2,3"))
+        self.assertEqual("2-3-4", self.generator.ids.clean_num("2,3, 4,"))
+        self.assertEqual("3abis", self.generator.ids.clean_num("3a bis"))
+        self.assertEqual("3é", self.generator.ids.clean_num("3é"))
+        self.assertEqual("3a-4-9", self.generator.ids.clean_num(" -3a--4,9"))
 
-        self.assertEqual(
-            "",
-            self.generator.ids.clean_num(" "),
-        )
-
-        self.assertEqual(
-            "",
-            self.generator.ids.clean_num("( )"),
-        )
-
-        self.assertEqual(
-            "6",
-            self.generator.ids.clean_num("(6)"),
-        )
-
-        self.assertEqual(
-            "16",
-            self.generator.ids.clean_num("[16]"),
-        )
-
-        self.assertEqual(
-            "123.4-5",
-            self.generator.ids.clean_num("(123.4-5)"),
-        )
-
-        self.assertEqual(
-            "12",
-            self.generator.ids.clean_num("(12)"),
-        )
-
-        self.assertEqual(
-            "312.32.7",
-            self.generator.ids.clean_num("312.32.7"),
-        )
-
-        self.assertEqual(
-            "312-32-7",
-            self.generator.ids.clean_num("312-32-7"),
-        )
-
-        self.assertEqual(
-            "312_32_7",
-            self.generator.ids.clean_num("312_32_7"),
-        )
+        # hebrew aleph
+        self.assertEqual("א", self.generator.ids.clean_num("(א)"))
+        # chinese 3
+        self.assertEqual("三", self.generator.ids.clean_num("(三)"))
 
     def test_eids_no_num(self):
         tree = self.parse("""
