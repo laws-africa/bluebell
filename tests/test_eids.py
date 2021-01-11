@@ -161,10 +161,13 @@ PARA (nn)
     Perfectly possible paragraph numbering.
 
 PARA nn_2
-    Para nn_2, which is the previous para's eId.
+    Para nn_2, which is the second para's eId.
 
-PARA nn_2_2
-    Para nn_2_2, which is the previous para's eId.
+PARA nn_2
+    Para nn_2, which is a dup of the second para's eId.
+
+PARA nn-2
+    Para nn-2, which we don't currently support because we don't like hyphens in numbers
 """, 'doc')
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
@@ -190,15 +193,17 @@ PARA nn_2_2
     <paragraph eId="para_nn-2">
       <num>nn_2</num>
       <content>
-        <p eId="para_nn-2__p_1">Para nn_2, which is the previous para's eId.</p>
+        <p eId="para_nn-2__p_1">Para nn_2, which is the second para's eId.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_nn-2-2">
-      <num>nn_2_2</num>
+    <paragraph eId="para_nn-2_2">
+      <num>nn_2</num>
       <content>
-        <p eId="para_nn-2-2__p_1">Para nn_2_2, which is the previous para's eId.</p>
+        <p eId="para_nn-2_2__p_1">Para nn_2, which is a dup of the second para's eId.</p>
       </content>
     </paragraph>
+    <p eId="p_1">PARA nn-2</p>
+    <p eId="p_2">Para nn-2, which we don't currently support because we don't like hyphens in numbers</p>
   </mainBody>
 </doc>
 """, xml)
