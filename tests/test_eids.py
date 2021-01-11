@@ -13,55 +13,31 @@ class IdGeneratorTestCase(ParserSupport, TestCase):
     maxDiff = None
 
     def test_clean_num(self):
-        self.assertEqual(
-            "",
-            self.generator.ids.clean_num(""),
-        )
+        self.assertEqual("", self.generator.ids.clean_num(""))
+        self.assertEqual("", self.generator.ids.clean_num(" "))
+        self.assertEqual("", self.generator.ids.clean_num("( )"))
+        self.assertEqual("123-4-5", self.generator.ids.clean_num("(123.4-5)"))
+        self.assertEqual("312-32-7", self.generator.ids.clean_num("312.32.7"))
+        self.assertEqual("312-32-7", self.generator.ids.clean_num("312-32-7"))
+        self.assertEqual("312-32-7", self.generator.ids.clean_num("312_32_7"))
+        self.assertEqual("6", self.generator.ids.clean_num("(6)"))
+        self.assertEqual("16", self.generator.ids.clean_num("[16]"))
+        self.assertEqual("i", self.generator.ids.clean_num("(i)"))
+        self.assertEqual("i", self.generator.ids.clean_num("[i]"))
+        self.assertEqual("2bis", self.generator.ids.clean_num("(2bis)"))
+        self.assertEqual("1-2", self.generator.ids.clean_num('"1.2.'))
+        self.assertEqual("1-2", self.generator.ids.clean_num("1.2."))
+        self.assertEqual("2-3", self.generator.ids.clean_num("“2.3"))
+        self.assertEqual("2-3", self.generator.ids.clean_num("2,3"))
+        self.assertEqual("2-3-4", self.generator.ids.clean_num("2,3, 4,"))
+        self.assertEqual("3abis", self.generator.ids.clean_num("3a bis"))
+        self.assertEqual("3é", self.generator.ids.clean_num("3é"))
+        self.assertEqual("3a-4-9", self.generator.ids.clean_num(" -3a--4,9"))
 
-        self.assertEqual(
-            "",
-            self.generator.ids.clean_num(" "),
-        )
-
-        self.assertEqual(
-            "",
-            self.generator.ids.clean_num("( )"),
-        )
-
-        self.assertEqual(
-            "6",
-            self.generator.ids.clean_num("(6)"),
-        )
-
-        self.assertEqual(
-            "16",
-            self.generator.ids.clean_num("[16]"),
-        )
-
-        self.assertEqual(
-            "123.4-5",
-            self.generator.ids.clean_num("(123.4-5)"),
-        )
-
-        self.assertEqual(
-            "12",
-            self.generator.ids.clean_num("(12)"),
-        )
-
-        self.assertEqual(
-            "312.32.7",
-            self.generator.ids.clean_num("312.32.7"),
-        )
-
-        self.assertEqual(
-            "312-32-7",
-            self.generator.ids.clean_num("312-32-7"),
-        )
-
-        self.assertEqual(
-            "312_32_7",
-            self.generator.ids.clean_num("312_32_7"),
-        )
+        # hebrew aleph
+        self.assertEqual("א", self.generator.ids.clean_num("(א)"))
+        # chinese 3
+        self.assertEqual("三", self.generator.ids.clean_num("(三)"))
 
     def test_eids_no_num(self):
         tree = self.parse("""
@@ -151,22 +127,22 @@ PARA 2.3..74.5_2
         <p eId="para_2_2__p_1">Another para with the num 2.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_2.3..74.5">
+    <paragraph eId="para_2-3-74-5">
       <num>2.3..74.5.</num>
       <content>
-        <p eId="para_2.3..74.5__p_1">Interesting number.</p>
+        <p eId="para_2-3-74-5__p_1">Interesting number.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_2.3..74.5_2">
+    <paragraph eId="para_2-3-74-5_2">
       <num>2.3..74.5.</num>
       <content>
-        <p eId="para_2.3..74.5_2__p_1">Duplicate interesting number.</p>
+        <p eId="para_2-3-74-5_2__p_1">Duplicate interesting number.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_2.3..74.5_2_2">
+    <paragraph eId="para_2-3-74-5-2">
       <num>2.3..74.5_2</num>
       <content>
-        <p eId="para_2.3..74.5_2_2__p_1">Highly unlikely duplicate of eId of previous.</p>
+        <p eId="para_2-3-74-5-2__p_1">Highly unlikely duplicate of eId of previous.</p>
       </content>
     </paragraph>
   </mainBody>
@@ -185,13 +161,13 @@ PARA (nn)
     Perfectly possible paragraph numbering.
 
 PARA nn_2
-    Para nn_2, which is the previous para's eId.
+    Para nn_2, which is the second para's eId.
 
-PARA nn_2_2
-    Para nn_2_2, which is the previous para's eId.
+PARA nn_2
+    Para nn_2, which is a dup of the second para's eId.
 
-PARA nn_2_2
-    Another para nn_2_2.
+PARA nn-2
+    Para nn-2, which we don't currently support because we don't like hyphens in numbers
 """, 'doc')
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
@@ -214,24 +190,20 @@ PARA nn_2_2
         <p eId="para_nn_3__p_1">Perfectly possible paragraph numbering.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_nn_2_2">
+    <paragraph eId="para_nn-2">
       <num>nn_2</num>
       <content>
-        <p eId="para_nn_2_2__p_1">Para nn_2, which is the previous para's eId.</p>
+        <p eId="para_nn-2__p_1">Para nn_2, which is the second para's eId.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_nn_2_2_2">
-      <num>nn_2_2</num>
+    <paragraph eId="para_nn-2_2">
+      <num>nn_2</num>
       <content>
-        <p eId="para_nn_2_2_2__p_1">Para nn_2_2, which is the previous para's eId.</p>
+        <p eId="para_nn-2_2__p_1">Para nn_2, which is a dup of the second para's eId.</p>
       </content>
     </paragraph>
-    <paragraph eId="para_nn_2_2_3">
-      <num>nn_2_2</num>
-      <content>
-        <p eId="para_nn_2_2_3__p_1">Another para nn_2_2.</p>
-      </content>
-    </paragraph>
+    <p eId="p_1">PARA nn-2</p>
+    <p eId="p_2">Para nn-2, which we don't currently support because we don't like hyphens in numbers</p>
   </mainBody>
 </doc>
 """, xml)

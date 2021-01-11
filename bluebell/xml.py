@@ -8,7 +8,14 @@ import lxml.etree as etree
 class IdGenerator:
     """ Support class for generating ID elements when building an XML document.
     """
-    num_strip_re = re.compile(r'[ ()[\]]')
+    # leading whitespace and punctuation
+    leading_punct_re = re.compile(r'^[\s\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~]+')
+    # trailing whitespace and punctuation
+    trailing_punct_re = re.compile(r'[\s\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~]+$')
+    # whitespace
+    whitespace_re = re.compile(r'\s')
+    # general punctuation
+    punct_re = re.compile(r'[\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~]+');
 
     id_exempt = set("act amendment amendmentList bill debate debateReport doc documentCollection judgment"
                     " officialGazette portion statement body mainBody judgmentBody attachments"
@@ -142,7 +149,31 @@ class IdGenerator:
         return name in self.num_expected
 
     def clean_num(self, num):
-        return self.num_strip_re.sub('', num).strip('.')
+        """ Clean a <num> value for use in an eId
+        See https://docs.oasis-open.org/legaldocml/akn-nc/v1.0/os/akn-nc-v1.0-os.html*_Toc531692306
+
+        "The number part of the identifiers of such elements corresponds to the
+        stripping of all final punctuation, meaningless separations as well as
+        redundant characters in the content of the <num> element. The
+        representation is case-sensitive."
+
+        Our algorithm is:
+        1. strip all leading and trailing whitespace and punctuation (using the unicode punctuation blocks)
+        2. strip all whitespace
+        3. replace all remaining punctuation with a hyphen.
+
+        The General Punctuation block is \u2000-\u206F, and the Supplemental Punctuation block is \u2E00-\u2E7F.
+
+        (i) -> i
+        1.2. -> 1-2
+        “2.3“ -> 2-3
+        3a bis -> 3abis
+        """
+        num = self.leading_punct_re.sub('', num)
+        num = self.trailing_punct_re.sub('', num)
+        num = self.whitespace_re.sub('', num)
+        num = self.punct_re.sub('-', num)
+        return num
 
     def rewrite_id_prefix(self, root, old_prefix, new_prefix):
         """ Rewrite the eId attributes of elem and its descendants to replace old_prefix with new_prefix.
