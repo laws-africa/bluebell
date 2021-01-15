@@ -78,3 +78,19 @@ ANNEXURE Annex {{FOOTNOTE 1}}
 
   Some content
 
+  TABLE
+    TR
+      TC
+        A table cell{{FOOTNOTE 1}}
+
+        FOOTNOTE 1
+
+          with a footnote
+
+      TH
+        A table header{{FOOTNOTE 1}}
+
+        FOOTNOTE 1
+
+          with a footnote
+
