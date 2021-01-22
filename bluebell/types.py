@@ -142,15 +142,7 @@ class HierElement:
             'children': many_to_dict(self.content),
         }
 
-        if self.heading.text:
-            num = self.heading.num.text.strip()
-            if num:
-                info['num'] = num
-
-            heading = self.heading.heading_to_dict()
-            if heading:
-                info['heading'] = heading
-
+        self.heading.update_dict(info)
         if self.subheading.text:
             info['subheading'] = self.subheading.to_dict()
 
@@ -158,6 +150,16 @@ class HierElement:
 
 
 class HierElementHeading:
+    def update_dict(self, info):
+        if self.text:
+            num = self.num.text.strip()
+            if num:
+                info['num'] = num
+
+            heading = self.heading_to_dict()
+            if heading:
+                info['heading'] = heading
+
     def heading_to_dict(self):
         if hasattr(self.heading, 'content') and self.heading.content.text.strip():
             return InlineText.many_to_dict(x for x in self.heading.content)
@@ -239,31 +241,51 @@ class Decision(HierBlockIndentElement):
 
 class BlockList:
     def to_dict(self):
+        kids = []
+
+        if self.intro.text:
+            kids.append({
+                'type': 'content',
+                'name': 'listIntroduction',
+                'children': InlineText.many_to_dict(self.intro.line.content),
+            })
+
+        kids.extend(c.to_dict() for c in self.items)
+
+        if self.wrapup.text:
+            kids.append({
+                'type': 'content',
+                'name': 'listWrapUp',
+                'children': InlineText.many_to_dict(self.wrapup.content),
+            })
+
         return {
             'type': 'block',
             'name': 'blockList',
-            'children': [c.to_dict() for c in self],
+            'children': kids,
         }
 
 
-class BlockItem:
+class BlockListItem:
     def to_dict(self):
         kids = []
 
-        # preamble content on the same line as the number
-        if self.preamble.text and hasattr(self.preamble, 'block_elements'):
-            kids.append(self.preamble.block_elements.to_dict())
-
         # nested blocks
-        if self.children.text:
-            kids.extend(many_to_dict(self.children.content))
+        if self.content.children.text:
+            kids.extend(many_to_dict(self.content.children))
 
-        return {
+        info = {
             'type': 'block',
             'name': 'item',
-            'num': self.num.text,
             'children': kids,
         }
+
+        self.heading.update_dict(info)
+
+        if self.content.subheading.text:
+            info['subheading'] = self.content.subheading.to_dict()
+
+        return info
 
 
 class Table:
