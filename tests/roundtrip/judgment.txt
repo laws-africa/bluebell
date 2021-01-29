@@ -4,15 +4,20 @@ BACKGROUND
 
   y
 
-  PART
+  \PART
 
-    (a) something
+  BLOCKLIST
+
+    ITEM (a)
+      something
 
 ARGUMENTS
 
   an argument
 
-  (b) aoeu
+  PARA (b)
+
+    aoeu
 
   QUOTE{startQuote "}
 
@@ -22,7 +27,9 @@ REMEDIES
 
   fixes!
 
-  (b) fixes
+  PARA (b)
+
+    fixes
 
 DECISION
 
@@ -32,5 +39,8 @@ CONCLUSIONS
 
   aou
 
-  (a) aoeu
+  BLOCKLIST
+
+    ITEM (a)
+      aoeu
 
