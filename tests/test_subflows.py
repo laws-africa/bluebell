@@ -15,7 +15,9 @@ QUOTE
 
     some text
     
-    (a) list item
+    BLOCKLIST
+      ITEM (a)
+        list item
     
     PART 1 - Heading
     
@@ -124,7 +126,9 @@ something else
 FOOTNOTE 99a
   some text
   PART 1
-    (a) item
+    BLOCKLIST
+      ITEM (a)
+        item
 """, 'footnote')
 
         self.assertEqual({

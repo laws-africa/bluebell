@@ -20,15 +20,22 @@ CHAP 1 - Heading
 
     SUBSEC 1
 
-      list __intro__
+      BLOCKLIST
 
-      (a) item (a) with a {{>http://example.com link}}
+        list __intro__
 
-      (b) 
+        ITEM (a)
+          item (a) with a {{>http://example.com link}}
 
-        (i) item (b)(i)
+        ITEM (b)
+          BLOCKLIST
 
-        (ii) item (b)(ii)
+            ITEM (i) - heading
+              item (b)(i)
+
+            ITEM (ii)
+              SUBHEADING subheading
+              item (b)(ii)
 
       TABLE{class my-table}
         TR

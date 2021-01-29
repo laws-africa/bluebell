@@ -134,10 +134,12 @@ BLOCKLIST
   <listIntroduction eId="list_1__intro_1">some intro</listIntroduction>
   <item eId="list_1__item_a">
     <num>(a)</num>
+    <heading>heading</heading>
     <p eId="list_1__item_a__p_1">item a</p>
   </item>
   <item eId="list_1__item_b">
     <num>(b)</num>
+    <subheading>subheading</subheading>
     <p eId="list_1__item_b__p_1">item b</p>
   </item>
   <listWrapUp eId="list_1__wrapup_1">and a wrap up</listWrapUp>

@@ -239,7 +239,6 @@ class XmlGenerator:
     def item_to_xml_hier(self, item, prefix):
         m = self.maker
         eid = self.ids.make(prefix, item)
-        pre = []
 
         if all(k['type'] != 'hier' for k in item['children']):
             # no hierarchy children (ie. all block/content), wrap children in <content>
@@ -289,31 +288,24 @@ class XmlGenerator:
                     # before hier
                     kids.append(m.intro(*make_group(eid + '__intro')))
 
-        if item.get('num'):
-            pre.append(m.num(item['num']))
-
-        if item.get('heading'):
-            pre.append(m.heading(*(self.item_to_xml(k, eid) for k in item['heading'])))
-
-        if item.get('subheading'):
-            pre.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
+        pre = []
+        self.add_num_heading_subheading(m, item, eid, pre)
 
         kids = pre + kids
         return m(item['name'], *kids, eId=eid, **item.get('attribs', {}))
 
     def item_to_xml_block(self, item, prefix):
         m = self.maker
-
-        # TODO: can have num, heading, subheading
-        # TODO: make this generic? what else can have num?
         eid = self.ids.make(prefix, item)
-        kids = self.kids_to_xml(item, prefix=eid)
+        kids = []
+
+        self.add_num_heading_subheading(m, item, eid, kids)
+
+        kids.extend(self.kids_to_xml(item, prefix=eid))
         if not kids:
             # block elements must have at least one content child
             kids = [m.p()]
 
-        if 'num' in item:
-            kids.insert(0, m('num', item['num']))
         return m(item['name'], eId=eid, *kids, **item.get('attribs', {}))
 
     def item_to_xml_content(self, item, prefix):
@@ -362,6 +354,16 @@ class XmlGenerator:
         if kids is None:
             kids = parent.get('children', [])
         return [self.item_to_xml(k, prefix) for k in kids]
+
+    def add_num_heading_subheading(self, m, item, eid, kids):
+        if item.get('num'):
+            kids.append(m.num(item['num']))
+
+        if item.get('heading'):
+            kids.append(m.heading(*(self.item_to_xml(k, eid) for k in item['heading'])))
+
+        if item.get('subheading'):
+            kids.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
 
     def post_process(self, xml):
         return self.resolve_displaced_content(xml)
