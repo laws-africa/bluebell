@@ -152,7 +152,7 @@ BLOCKLIST
 
   ITEM (a)
 
-    BLOCKLIST
+    BLOCKLIST{foo bar}
     
       item a
     
@@ -172,7 +172,7 @@ BLOCKLIST
   <listIntroduction eId="list_1__intro_1">some intro</listIntroduction>
   <item eId="list_1__item_a">
     <num>(a)</num>
-    <blockList eId="list_1__item_a__list_1">
+    <blockList eId="list_1__item_a__list_1" foo="bar">
       <listIntroduction eId="list_1__item_a__list_1__intro_1">item a</listIntroduction>
       <item eId="list_1__item_a__list_1__item_i">
         <num>(i)</num>
