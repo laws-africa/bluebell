@@ -349,12 +349,15 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
 
     <xsl:text>&#10;&#10;</xsl:text>
+
+    <xsl:apply-templates select=".//a:authorialNote" mode="content">
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
   </xsl:template>
 
   <!-- block quotes as embeddedStructure -->
