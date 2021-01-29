@@ -229,3 +229,59 @@ BLOCKLIST
   <listWrapUp eId="list_1__wrapup_1">wrap up with <authorialNote marker="3" placement="bottom" eId="list_1__wrapup_1__authorialNote_1"><p eId="list_1__wrapup_1__authorialNote_1__p_1">footnote 3</p></authorialNote> and <authorialNote marker="4" placement="bottom" eId="list_1__wrapup_1__authorialNote_2"><p eId="list_1__wrapup_1__authorialNote_2__p_1">footnote 4</p></authorialNote></listWrapUp>
 </blockList>
 """, xml)
+
+    def test_blocklist_single_intro(self):
+        tree = self.parse("""
+PART A
+
+  BLOCKLIST
+  
+    foo
+    
+    second intro line isn't allowed, so blocklist doesn't match at all
+
+    ITEM a
+
+      item a
+""", 'hier_element_block')
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_A">
+  <num>A</num>
+  <content>
+    <p eId="part_A__p_1">BLOCKLIST</p>
+    <p eId="part_A__p_2">foo</p>
+    <p eId="part_A__p_3">second intro line isn't allowed, so blocklist doesn't match at all</p>
+    <p eId="part_A__p_4">ITEM a</p>
+    <p eId="part_A__p_5">item a</p>
+  </content>
+</part>
+""", xml)
+
+    def test_blocklist_single_wrapup(self):
+        tree = self.parse("""
+PART A
+
+  BLOCKLIST
+
+    ITEM a
+
+      item a
+
+    foo
+
+    second wrapup line isn't allowed, so blocklist doesn't match at all
+""", 'hier_element_block')
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_A">
+  <num>A</num>
+  <content>
+    <p eId="part_A__p_1">BLOCKLIST</p>
+    <p eId="part_A__p_2">ITEM a</p>
+    <p eId="part_A__p_3">item a</p>
+    <p eId="part_A__p_4">foo</p>
+    <p eId="part_A__p_5">second wrapup line isn't allowed, so blocklist doesn't match at all</p>
+  </content>
+</part>
+""", xml)

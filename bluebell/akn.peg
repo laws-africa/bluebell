@@ -232,8 +232,8 @@ grammar akn
                          wrapup:block_list_wrapup?
                        dedent <BlockList>
 
-                     # Technically a blocklist can only have one line each of list introduction and wrapup, but
-                     # we need to be able to support text and footnote lines, so we allow multiple.
+                     # A blocklist can only have one line each of list introduction and wrapup, but
+                     # we need to be able to support a line of text and footnotes.
   block_list_intro  <- !'ITEM' line footnotes:footnote* <BlockListIntro>
 
   block_list_wrapup <- line footnotes:footnote* <BlockListWrapUp>
