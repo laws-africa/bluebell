@@ -246,20 +246,12 @@ class BlockList:
         kids = []
 
         if self.intro.text:
-            kids.append({
-                'type': 'content',
-                'name': 'listIntroduction',
-                'children': InlineText.many_to_dict(self.intro.line.content),
-            })
+            kids.append(self.intro.to_dict())
 
         kids.extend(c.to_dict() for c in self.items)
 
         if self.wrapup.text:
-            kids.append({
-                'type': 'content',
-                'name': 'listWrapUp',
-                'children': InlineText.many_to_dict(self.wrapup.content),
-            })
+            kids.append(self.wrapup.to_dict())
 
         info = {
             'type': 'block',
@@ -271,6 +263,23 @@ class BlockList:
             info['attribs'] = self.attrs.to_dict()
 
         return info
+
+
+class BlockListIntro:
+    name = 'listIntroduction'
+
+    def to_dict(self):
+        info = self.line.to_dict()
+        info['name'] = self.name
+
+        if self.footnotes.elements:
+            info['children'].extend(f.to_dict() for f in self.footnotes)
+
+        return info
+
+
+class BlockListWrapUp(BlockListIntro):
+    name = 'listWrapUp'
 
 
 class BlockListItem:

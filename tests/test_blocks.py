@@ -189,3 +189,43 @@ BLOCKLIST
   </item>
 </blockList>
 """, xml)
+
+    def test_blocklist_footnotes(self):
+        tree = self.parse("""
+BLOCKLIST
+
+  some intro with {{FOOTNOTE 1}} and {{FOOTNOTE 2}}
+
+  FOOTNOTE 1
+
+    footnote 1
+
+  FOOTNOTE 2
+
+    footnote 2
+
+  ITEM (a)
+
+    item a
+
+  wrap up with {{FOOTNOTE 3}} and {{FOOTNOTE 4}}
+
+  FOOTNOTE 3
+
+    footnote 3
+
+  FOOTNOTE 4
+
+    footnote 4
+""", 'block_list')
+        xml = etree.tostring(self.generator.xml_from_dict(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<blockList xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="list_1">
+  <listIntroduction eId="list_1__intro_1">some intro with <authorialNote marker="1" placement="bottom" eId="list_1__intro_1__authorialNote_1"><p eId="list_1__intro_1__authorialNote_1__p_1">footnote 1</p></authorialNote> and <authorialNote marker="2" placement="bottom" eId="list_1__intro_1__authorialNote_2"><p eId="list_1__intro_1__authorialNote_2__p_1">footnote 2</p></authorialNote></listIntroduction>
+  <item eId="list_1__item_a">
+    <num>(a)</num>
+    <p eId="list_1__item_a__p_1">item a</p>
+  </item>
+  <listWrapUp eId="list_1__wrapup_1">wrap up with <authorialNote marker="3" placement="bottom" eId="list_1__wrapup_1__authorialNote_1"><p eId="list_1__wrapup_1__authorialNote_1__p_1">footnote 3</p></authorialNote> and <authorialNote marker="4" placement="bottom" eId="list_1__wrapup_1__authorialNote_2"><p eId="list_1__wrapup_1__authorialNote_2__p_1">footnote 4</p></authorialNote></listWrapUp>
+</blockList>
+""", xml)

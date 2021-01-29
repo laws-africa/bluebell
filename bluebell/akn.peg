@@ -227,10 +227,16 @@ grammar akn
 
   block_list        <- 'BLOCKLIST' attrs:block_attrs? eol
                        indent
-                         intro:(!'ITEM' line)?
+                         intro:block_list_intro?
                          items:block_list_item+
-                         wrapup:line?
+                         wrapup:block_list_wrapup?
                        dedent <BlockList>
+
+                     # Technically a blocklist can only have one line each of list introduction and wrapup, but
+                     # we need to be able to support text and footnote lines, so we allow multiple.
+  block_list_intro  <- !'ITEM' line footnotes:footnote* <BlockListIntro>
+
+  block_list_wrapup <- line footnotes:footnote* <BlockListWrapUp>
 
   block_list_item   <- 'ITEM' heading:hier_element_heading? eol
                        content:(indent

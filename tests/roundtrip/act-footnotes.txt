@@ -37,6 +37,7 @@ CHAP 1 - Heading
 
         ITEM (b)
           BLOCKLIST
+
             ITEM (i)
               item (b)(i)
 
