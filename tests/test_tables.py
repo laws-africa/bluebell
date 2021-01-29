@@ -323,10 +323,16 @@ SECTION 1.
   TABLE
     TR
       TC
-        (a) item a
-          (i) item a-i
-          (ii) item a-ii
-        (b) item b
+        BLOCKLIST
+          ITEM (a)
+            item a
+            BLOCKLIST
+              ITEM (i)
+                item a-i
+              ITEM (ii)
+                item a-ii
+          ITEM (b)
+            item b
 """, 'hier_element')
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
