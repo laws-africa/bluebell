@@ -142,7 +142,9 @@ class HierElement:
             'children': many_to_dict(self.content),
         }
 
-        self.heading.update_dict(info)
+        if self.heading.text:
+            self.heading.update_dict(info)
+
         if self.subheading.text:
             info['subheading'] = self.subheading.to_dict()
 
@@ -259,11 +261,16 @@ class BlockList:
                 'children': InlineText.many_to_dict(self.wrapup.content),
             })
 
-        return {
+        info = {
             'type': 'block',
             'name': 'blockList',
             'children': kids,
         }
+
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+
+        return info
 
 
 class BlockListItem:
@@ -280,7 +287,8 @@ class BlockListItem:
             'children': kids,
         }
 
-        self.heading.update_dict(info)
+        if self.heading.text:
+            self.heading.update_dict(info)
 
         if self.content.subheading.text:
             info['subheading'] = self.content.subheading.to_dict()

@@ -314,7 +314,7 @@ class XmlGenerator:
 
         if 'num' in item:
             kids.insert(0, m('num', item['num']))
-        return m(item['name'], eId=eid, *kids)
+        return m(item['name'], eId=eid, *kids, **item.get('attribs', {}))
 
     def item_to_xml_content(self, item, prefix):
         eid = self.ids.make(prefix, item)
