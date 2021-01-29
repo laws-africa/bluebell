@@ -20,33 +20,39 @@ CHAP 1 - Heading
 
     SUBSEC 1
 
-      list intro{{FOOTNOTE 2}} with {{FOOTNOTE 3}} two footnotes
+      BLOCKLIST
 
-      FOOTNOTE 2
+        list intro{{FOOTNOTE 2}} with {{FOOTNOTE 3}} two footnotes
 
-        footnote 2 text
+        FOOTNOTE 2
 
-      FOOTNOTE 3
-
-        footnote 3 text
-
-      (a) item (a)
-
-      (b) 
-
-        (i) item (b)(i)
-
-        (ii) item (b)(ii)
-
-      (c) item c with {{FOOTNOTE 3}} and {{FOOTNOTE 4}}
+          footnote 2 text
 
         FOOTNOTE 3
 
-          footnote three
+          footnote 3 text
 
-        FOOTNOTE 4
+        ITEM (a)
+          item (a)
 
-          footnote four
+        ITEM (b)
+          BLOCKLIST
+            ITEM (i)
+              item (b)(i)
+
+            ITEM (ii)
+              item (b)(ii)
+
+        ITEM (c)
+          item c with {{FOOTNOTE 3}} and {{FOOTNOTE 4}}
+
+          FOOTNOTE 3
+
+            footnote three
+
+          FOOTNOTE 4
+
+            footnote four
 
   CROSSHEADING Heading {{FOOTNOTE 1}}
 
