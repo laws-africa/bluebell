@@ -21,7 +21,6 @@ CHAP 1 - Heading
     SUBSEC 1
 
       BLOCKLIST
-
         list __intro__
 
         ITEM (a)
@@ -29,7 +28,6 @@ CHAP 1 - Heading
 
         ITEM (b)
           BLOCKLIST
-
             ITEM (i) - heading
               item (b)(i)
 
