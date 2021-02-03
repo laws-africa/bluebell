@@ -6,7 +6,7 @@ BACKGROUND
 
   \PART
 
-  BLOCKLIST
+  ITEMS
     ITEM (a)
       something
 
@@ -37,7 +37,7 @@ CONCLUSIONS
 
   aou
 
-  BLOCKLIST
+  ITEMS
     ITEM (a)
       aoeu
 

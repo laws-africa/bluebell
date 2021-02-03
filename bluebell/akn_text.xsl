@@ -336,7 +336,7 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>BLOCKLIST&#10;</xsl:text>
+    <xsl:text>ITEMS&#10;</xsl:text>
 
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent + 1" />

@@ -20,14 +20,14 @@ CHAP 1 - Heading
 
     SUBSEC 1
 
-      BLOCKLIST
+      ITEMS
         list __intro__
 
         ITEM (a)
           item (a) with a {{>http://example.com link}}
 
         ITEM (b)
-          BLOCKLIST
+          ITEMS
             ITEM (i) - heading
               item (b)(i)
 
