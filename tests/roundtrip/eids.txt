@@ -3,7 +3,6 @@ PREFACE
   Here is a document:
 
   QUOTE{startQuote “}
-
     PARA A - Heading
 
       SUBPARA i
@@ -15,11 +14,9 @@ PREFACE
         Content{{FOOTNOTE x}}”.
 
         FOOTNOTE x
-
           Here's a footnote, and it Also includes a quote:
 
           QUOTE{startQuote “}
-
             PARA A - Heading
 
               SUBPARA i
@@ -55,16 +52,13 @@ TABLE
       Intro text:
 
       QUOTE
-
         Text of quote.
 
     TC
       QUOTE
-
         Text of quote.
 
 QUOTE
-
   Text of quote, introducing this table:
 
   TABLE
@@ -478,7 +472,6 @@ ANNEXURE Annex
       Committed Parties and organizations that act as **champions of technology transfer** can play an important role in promoting and supporting the effective implementation of Articles 16 to 19 and the programme of work on technology transfer and scientific and technological cooperation, in particular if competitive mechanisms are put in place. For example, the Climate Technology Initiative (CTI), which was launched in 1995 by 23 OECD/International Energy Agency member countries and the European Commission to support the technology-related objectives of the United Nations Framework Convention on Climate Change, indicates the useful role of such an international network of champions for the effective implementation of provisions on technology transfer. The establishment of a similar **‘Biodiversity Technology Initiative’** would be useful and welcome if effectively contributing to the implementation of the present strategy. Several open questions remain, including on the funding needs, the potential portfolio of activities, and other questions as identified in the report prepared by the Executive Secretary for consideration by the ninth meeting of the Conference of the Parties. {{^{{FOOTNOTE 1}}}}
 
       FOOTNOTE 1
-
         UNEP/CBD/COP/9/18/Add. 1.
 
     PARA 31.

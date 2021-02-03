@@ -7,7 +7,6 @@ BACKGROUND
   \PART
 
   BLOCKLIST
-
     ITEM (a)
       something
 
@@ -20,7 +19,6 @@ ARGUMENTS
     aoeu
 
   QUOTE{startQuote "}
-
     some quoted text
 
 REMEDIES
@@ -40,7 +38,6 @@ CONCLUSIONS
   aou
 
   BLOCKLIST
-
     ITEM (a)
       aoeu
 

@@ -361,13 +361,11 @@ FOOTNOTE 1
   First reference to the Sustainable Development Goals,{{^{{FOOTNOTE 1}}}}
 
   FOOTNOTE 1
-
     General Assembly resolution 70/1, annex.
 
   Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,{{^{{FOOTNOTE 1}}}}
 
   FOOTNOTE 1
-
     General Assembly resolution 70/1, annex.
 
 """, text)
@@ -473,7 +471,6 @@ QUOTE{startQuote "}
 '''
         unparsed = self.parser.unparse(xml)
         self.assertEqual('''QUOTE{startQuote "}
-
   line one
 
 ''', unparsed)
