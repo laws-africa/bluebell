@@ -4016,6 +4016,7 @@ class Grammar(object):
             return cached[0]
         index1, elements0 = self._offset, []
         address1 = FAILURE
+        index2 = self._offset
         chunk0, max0 = None, self._offset + 9
         if max0 <= self._input_size:
             chunk0 = self._input[self._offset:max0]
@@ -4029,14 +4030,31 @@ class Grammar(object):
                 self._expected = []
             if self._offset == self._failure:
                 self._expected.append('\'BLOCKLIST\'')
+        if address1 is FAILURE:
+            self._offset = index2
+            chunk1, max1 = None, self._offset + 5
+            if max1 <= self._input_size:
+                chunk1 = self._input[self._offset:max1]
+            if chunk1 == 'ITEMS':
+                address1 = TreeNode(self._input[self._offset:self._offset + 5], self._offset, [])
+                self._offset = self._offset + 5
+            else:
+                address1 = FAILURE
+                if self._offset > self._failure:
+                    self._failure = self._offset
+                    self._expected = []
+                if self._offset == self._failure:
+                    self._expected.append('\'ITEMS\'')
+            if address1 is FAILURE:
+                self._offset = index2
         if address1 is not FAILURE:
             elements0.append(address1)
             address2 = FAILURE
-            index2 = self._offset
+            index3 = self._offset
             address2 = self._read_block_attrs()
             if address2 is FAILURE:
-                address2 = TreeNode(self._input[index2:index2], index2, [])
-                self._offset = index2
+                address2 = TreeNode(self._input[index3:index3], index3, [])
+                self._offset = index3
             if address2 is not FAILURE:
                 elements0.append(address2)
                 address3 = FAILURE
@@ -4048,33 +4066,33 @@ class Grammar(object):
                     if address4 is not FAILURE:
                         elements0.append(address4)
                         address5 = FAILURE
-                        index3 = self._offset
+                        index4 = self._offset
                         address5 = self._read_block_list_intro()
                         if address5 is FAILURE:
-                            address5 = TreeNode(self._input[index3:index3], index3, [])
-                            self._offset = index3
+                            address5 = TreeNode(self._input[index4:index4], index4, [])
+                            self._offset = index4
                         if address5 is not FAILURE:
                             elements0.append(address5)
                             address6 = FAILURE
-                            remaining0, index4, elements1, address7 = 1, self._offset, [], True
+                            remaining0, index5, elements1, address7 = 1, self._offset, [], True
                             while address7 is not FAILURE:
                                 address7 = self._read_block_list_item()
                                 if address7 is not FAILURE:
                                     elements1.append(address7)
                                     remaining0 -= 1
                             if remaining0 <= 0:
-                                address6 = TreeNode(self._input[index4:self._offset], index4, elements1)
+                                address6 = TreeNode(self._input[index5:self._offset], index5, elements1)
                                 self._offset = self._offset
                             else:
                                 address6 = FAILURE
                             if address6 is not FAILURE:
                                 elements0.append(address6)
                                 address8 = FAILURE
-                                index5 = self._offset
+                                index6 = self._offset
                                 address8 = self._read_block_list_wrapup()
                                 if address8 is FAILURE:
-                                    address8 = TreeNode(self._input[index5:index5], index5, [])
-                                    self._offset = index5
+                                    address8 = TreeNode(self._input[index6:index6], index6, [])
+                                    self._offset = index6
                                 if address8 is not FAILURE:
                                     elements0.append(address8)
                                     address9 = FAILURE

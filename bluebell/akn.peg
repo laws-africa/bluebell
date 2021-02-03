@@ -225,7 +225,7 @@ grammar akn
   #   wrapup
   # ------------------------------------------------------------------------------
 
-  block_list        <- 'BLOCKLIST' attrs:block_attrs? eol
+  block_list        <- ('BLOCKLIST' / 'ITEMS') attrs:block_attrs? eol
                        indent
                          intro:block_list_intro?
                          items:block_list_item+
