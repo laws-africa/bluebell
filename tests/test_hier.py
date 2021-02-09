@@ -60,11 +60,15 @@ there
         tree = self.parse("""
 PART
 
-  (a) item a
+  BLOCKLIST
 
-    indent
+    ITEM (a)
+
+      item a
 
       indent
+
+        indent
 """, 'hier_element_block')
         self.assertEqual({
             'name': 'part',

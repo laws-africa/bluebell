@@ -199,21 +199,6 @@ grammar akn
 
   block_elements    <- block_list / table / longtitle / footnote / block_quote / line
 
-  block_list        <- block_item+ <BlockList>
-
-                     # (a)
-                     #
-                     # (a) preamble
-                     #
-                     # (a)
-                     #   (i) child
-                     #
-  block_item        <- num:('(' [^)]+ ')') preamble:(eol / (space !block_item block_elements)?)
-                       children:(indent
-                         content:block_element+
-                       dedent)?
-                       <BlockItem>
-
   longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
 
   subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
@@ -225,6 +210,40 @@ grammar akn
                      # against it, we don't have to guard at every place that
                      # could start a line.
   line              <- !dedent content:inline+ eol <Line>
+
+  # ------------------------------------------------------------------------------
+  # Block lists
+  #
+  # BLOCKLIST
+  #   intro
+  #
+  #   ITEM (a) - heading
+  #     SUBHEADING subhead
+  #
+  #     block content
+  #
+  #   wrapup
+  # ------------------------------------------------------------------------------
+
+  block_list        <- ('BLOCKLIST' / 'ITEMS') attrs:block_attrs? eol
+                       indent
+                         intro:block_list_intro?
+                         items:block_list_item+
+                         wrapup:block_list_wrapup?
+                       dedent <BlockList>
+
+                     # A blocklist can only have one line each of list introduction and wrapup, but
+                     # we need to be able to support a line of text and footnotes.
+  block_list_intro  <- !'ITEM' line footnotes:footnote* <BlockListIntro>
+
+  block_list_wrapup <- line footnotes:footnote* <BlockListWrapUp>
+
+  block_list_item   <- 'ITEM' heading:hier_element_heading? eol
+                       content:(indent
+                         subheading:subheading?
+                         children:block_element+
+                       dedent)?
+                       <BlockListItem>
 
   # ------------------------------------------------------------------------------
   # Tables
