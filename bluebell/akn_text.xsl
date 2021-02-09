@@ -272,7 +272,7 @@
   <xsl:template match="a:alinea | a:article | a:book | a:chapter | a:clause | a:division | a:indent | a:level | a:list
                        | a:paragraph | a:part | a:point | a:proviso | a:rule | a:section | a:subchapter | a:subclause
                        | a:subdivision | a:sublist | a:subparagraph | a:subpart | a:subrule | a:subsection | a:subtitle
-                       | a:title | a:tome | a:transitional">
+                       | a:title | a:tome | a:transitional | a:item">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:call-template name="indent">
@@ -310,7 +310,11 @@
         <xsl:with-param name="indent" select="$indent + 1" />
       </xsl:apply-templates>
     </xsl:if>
-    <xsl:text>&#10;&#10;</xsl:text>
+    <!-- ITEM is the exception, it doesn't get a blank line -->
+    <xsl:text>&#10;</xsl:text>
+    <xsl:if test="not(self::a:item)">
+      <xsl:text>&#10;</xsl:text>
+    </xsl:if>
 
     <xsl:apply-templates select="a:heading//a:authorialNote | a:subheading//a:authorialNote" mode="content">
       <xsl:with-param name="indent" select="$indent + 1" />
@@ -329,61 +333,31 @@
   <xsl:template match="a:blockList">
     <xsl:param name="indent">0</xsl:param>
 
-    <!-- TODO: handle listintroduction and listwrapup -->
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:text>ITEMS&#10;</xsl:text>
+
     <xsl:apply-templates>
-      <xsl:with-param name="indent" select="$indent" />
+      <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="a:item">
+  <xsl:template match="a:listIntroduction | a:listWrapUp">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:value-of select="a:num" />
-    <xsl:text> </xsl:text>
-
-    <!-- if our first content node is not a p tage, force a new line.
-         this supports nested lists where an item has no text:
-
-         (a)
-
-           (i) some text
-    -->
-    <xsl:if test="./a:*[2][not(self::a:p)]">
-      <xsl:text>&#10;&#10;</xsl:text>
-    </xsl:if>
-
-    <xsl:apply-templates select="./*[not(self::a:num)]">
-      <xsl:with-param name="indent" select="$indent + 1" />
-    </xsl:apply-templates>
-  </xsl:template>
-
-  <xsl:template match="a:listIntroduction">
-    <xsl:param name="indent">0</xsl:param>
-
-    <!--
-      Only indent the listIntroduction text if:
-
-      1. our parent blockList is NOT immediately preceded by a:num, AND
-      2. our parent blockList is the first child AND its parent is immediately preceded by a:num
-
-      In both cases, the list intro is preceded by a num and the text should appear on the same line.
-    -->
-
-    <xsl:variable name="parentpos" select="count(../preceding-sibling::*) + 1"/>
-    <xsl:if test="not(../preceding-sibling::*[1][self::a:num]) and not($parentpos = 1 and ../../preceding-sibling::*[1][self::a:num])">
-      <xsl:call-template name="indent">
-        <xsl:with-param name="level" select="$indent" />
-      </xsl:call-template>
-    </xsl:if>
-
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
 
     <xsl:text>&#10;&#10;</xsl:text>
+
+    <xsl:apply-templates select=".//a:authorialNote" mode="content">
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
   </xsl:template>
 
   <!-- block quotes as embeddedStructure -->
@@ -395,7 +369,7 @@
     </xsl:call-template>
     <xsl:text>QUOTE</xsl:text>
     <xsl:call-template name="block-attrs" />
-    <xsl:text>&#10;&#10;</xsl:text>
+    <xsl:text>&#10;</xsl:text>
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
@@ -419,7 +393,7 @@
     </xsl:call-template>
     <xsl:text>FOOTNOTE </xsl:text>
     <xsl:value-of select="@marker"/>
-    <xsl:text>&#10;&#10;</xsl:text>
+    <xsl:text>&#10;</xsl:text>
 
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent + 1" />
@@ -552,27 +526,6 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-
-    <xsl:apply-templates>
-      <xsl:with-param name="indent" select="$indent" />
-    </xsl:apply-templates>
-
-    <xsl:text>&#10;&#10;</xsl:text>
-
-    <xsl:apply-templates select=".//a:authorialNote" mode="content">
-      <xsl:with-param name="indent" select="$indent" />
-    </xsl:apply-templates>
-  </xsl:template>
-
-  <xsl:template match="a:item/a:p">
-    <xsl:param name="indent">0</xsl:param>
-
-    <!-- don't indent the first p tag -->
-    <xsl:if test="position() &gt; 1">
-      <xsl:call-template name="indent">
-        <xsl:with-param name="level" select="$indent" />
-      </xsl:call-template>
-    </xsl:if>
 
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />

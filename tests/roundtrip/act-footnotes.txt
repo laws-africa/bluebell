@@ -3,7 +3,6 @@ PREAMBLE
   some {{FOOTNOTE 1}} text
 
   FOOTNOTE 1
-
     text
 
 BODY
@@ -15,65 +14,60 @@ CHAP 1 - Heading
     some text at {{FOOTNOTE 1}} the start
 
     FOOTNOTE 1
-
       footnote text
 
     SUBSEC 1
 
-      list intro{{FOOTNOTE 2}} with {{FOOTNOTE 3}} two footnotes
+      ITEMS
+        list intro{{FOOTNOTE 2}} with {{FOOTNOTE 3}} two footnotes
 
-      FOOTNOTE 2
-
-        footnote 2 text
-
-      FOOTNOTE 3
-
-        footnote 3 text
-
-      (a) item (a)
-
-      (b) 
-
-        (i) item (b)(i)
-
-        (ii) item (b)(ii)
-
-      (c) item c with {{FOOTNOTE 3}} and {{FOOTNOTE 4}}
+        FOOTNOTE 2
+          footnote 2 text
 
         FOOTNOTE 3
+          footnote 3 text
 
-          footnote three
+        ITEM (a)
+          item (a)
 
-        FOOTNOTE 4
+        ITEM (b)
+          ITEMS
+            ITEM (i)
+              item (b)(i)
 
-          footnote four
+            ITEM (ii)
+              item (b)(ii)
+
+        ITEM (c)
+          item c with {{FOOTNOTE 3}} and {{FOOTNOTE 4}}
+
+          FOOTNOTE 3
+            footnote three
+
+          FOOTNOTE 4
+            footnote four
 
   CROSSHEADING Heading {{FOOTNOTE 1}}
 
   FOOTNOTE 1
-
     footnote 1 crossheading text
 
   SEC 1 - Heading {{FOOTNOTE 2}}
     SUBHEADING Subheading {{FOOTNOTE 3}}
 
     FOOTNOTE 2
-
       footnote 2 heading text
 
     FOOTNOTE 3
-
       footnote 3 subheading text
 
 ANNEXURE Annex {{FOOTNOTE 1}}
   SUBHEADING Annex subheading {{FOOTNOTE 2}}
 
   FOOTNOTE 1
-
     Annex heading footnote text
 
   FOOTNOTE 2
-
     Annex subheading footnote text
 
   Some content
@@ -84,13 +78,11 @@ ANNEXURE Annex {{FOOTNOTE 1}}
         A table cell{{FOOTNOTE 1}}
 
         FOOTNOTE 1
-
           with a footnote
 
       TH
         A table header{{FOOTNOTE 1}}
 
         FOOTNOTE 1
-
           with a footnote
 

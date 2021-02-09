@@ -4,25 +4,30 @@ BACKGROUND
 
   y
 
-  PART
+  \PART
 
-    (a) something
+  ITEMS
+    ITEM (a)
+      something
 
 ARGUMENTS
 
   an argument
 
-  (b) aoeu
+  PARA (b)
+
+    aoeu
 
   QUOTE{startQuote "}
-
     some quoted text
 
 REMEDIES
 
   fixes!
 
-  (b) fixes
+  PARA (b)
+
+    fixes
 
 DECISION
 
@@ -32,5 +37,7 @@ CONCLUSIONS
 
   aou
 
-  (a) aoeu
+  ITEMS
+    ITEM (a)
+      aoeu
 

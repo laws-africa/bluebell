@@ -118,7 +118,11 @@ CONCLUSIONS
     
     text
     
-    (a) item a
+    BLOCKLIST
+
+      ITEM (a)
+
+        item a
 """, 'conclusions')
         self.assertEqual({
             'name': 'conclusions',

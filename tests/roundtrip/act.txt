@@ -20,15 +20,20 @@ CHAP 1 - Heading
 
     SUBSEC 1
 
-      list __intro__
+      ITEMS
+        list __intro__
 
-      (a) item (a) with a {{>http://example.com link}}
+        ITEM (a)
+          item (a) with a {{>http://example.com link}}
 
-      (b) 
+        ITEM (b)
+          ITEMS
+            ITEM (i) - heading
+              item (b)(i)
 
-        (i) item (b)(i)
-
-        (ii) item (b)(ii)
+            ITEM (ii)
+              SUBHEADING subheading
+              item (b)(ii)
 
       TABLE{class my-table}
         TR
