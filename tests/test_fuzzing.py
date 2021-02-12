@@ -27,6 +27,8 @@ class FuzzingTestCase(ParserSupport, TestCase):
     DECISION
     HEADING
     INTRODUCTION
+    ITEMS
+    ITEM
     MOTIVATION
     PART
     PREAMBLE

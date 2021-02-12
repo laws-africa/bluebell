@@ -287,8 +287,17 @@ class BlockListItem:
         kids = []
 
         # nested blocks
-        if self.content.children.text:
+        if self.content.text and self.content.children.text:
             kids.extend(many_to_dict(self.content.children))
+        else:
+            kids.append({
+                'name': 'p',
+                'type': 'content',
+                'children': [{
+                    'type': 'text',
+                    'value': '',
+                }]
+            })
 
         info = {
             'type': 'block',
@@ -299,7 +308,7 @@ class BlockListItem:
         if self.heading.text:
             self.heading.update_dict(info)
 
-        if self.content.subheading.text:
+        if self.content.text and self.content.subheading.text:
             info['subheading'] = self.content.subheading.to_dict()
 
         return info
