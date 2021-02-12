@@ -285,3 +285,37 @@ PART A
   </content>
 </part>
 """, xml)
+
+    def test_blocklist_broken(self):
+        tree = self.parse("""
+BLOCKLIST
+
+  ITEM (a)
+""", 'block_list')
+        self.assertEqual({
+            'type': 'block',
+            'name': 'blockList',
+            'children': [{
+                'name': 'item',
+                'type': 'block',
+                'num': '(a)',
+                'children': [{
+                    'name': 'p',
+                    'type': 'content',
+                    'children': [{
+                        'type': 'text',
+                        'value': '',
+                    }]
+                }]
+            }]
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<blockList xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="list_1">
+  <item eId="list_1__item_a">
+    <num>(a)</num>
+    <p eId="list_1__item_a__p_1"/>
+  </item>
+</blockList>
+""", xml)
