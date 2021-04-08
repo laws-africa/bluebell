@@ -302,10 +302,7 @@ BLOCKLIST
                 'children': [{
                     'name': 'p',
                     'type': 'content',
-                    'children': [{
-                        'type': 'text',
-                        'value': '',
-                    }]
+                    'children': []
                 }]
             }]
         }, tree.to_dict())

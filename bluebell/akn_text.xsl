@@ -360,6 +360,35 @@
     </xsl:apply-templates>
   </xsl:template>
 
+  <xsl:template match="a:ul">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:text>BULLETS&#10;</xsl:text>
+
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
+
+    <!-- p tags only get one newline, so add a bonus one to create an empty line -->
+    <xsl:text>&#10;</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="a:li">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:text>* </xsl:text>
+
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent + 1" />
+    </xsl:apply-templates>
+  </xsl:template>
+
   <!-- block quotes as embeddedStructure -->
   <xsl:template match="a:embeddedStructure">
     <xsl:param name="indent">0</xsl:param>
@@ -523,15 +552,22 @@
   <xsl:template match="a:p">
     <xsl:param name="indent">0</xsl:param>
 
-    <xsl:call-template name="indent">
-      <xsl:with-param name="level" select="$indent" />
-    </xsl:call-template>
+    <!-- first p tag in li doesn't get indented -->
+    <xsl:if test="not(parent::a:li and position() = 1)">
+      <xsl:call-template name="indent">
+        <xsl:with-param name="level" select="$indent" />
+      </xsl:call-template>
+    </xsl:if>
 
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
 
-    <xsl:text>&#10;&#10;</xsl:text>
+    <xsl:text>&#10;</xsl:text>
+    <!-- p tags in lists only end with one newline -->
+    <xsl:if test="not(parent::a:li)">
+      <xsl:text>&#10;</xsl:text>
+    </xsl:if>
 
     <xsl:apply-templates select=".//a:authorialNote" mode="content">
       <xsl:with-param name="indent" select="$indent" />
