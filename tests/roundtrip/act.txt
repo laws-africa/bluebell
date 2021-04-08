@@ -54,6 +54,15 @@ CHAP 1 - Heading
 
     some text
 
+    BULLETS
+      * item 1
+      * item 2
+        second line
+      * 
+      * empty line before
+      * 
+      * empty item before
+
   wrap up
 
 ANNEXURE Annex 1
