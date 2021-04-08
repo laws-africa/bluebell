@@ -69,6 +69,24 @@ BULLETS
 </ul>
 """, xml)
 
+    def test_bullets_with_attr(self):
+        tree = self.parse("""
+BULLETS{class spiffy}
+  * item 1
+  * item 2
+""", 'bullet_list')
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<ul xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="ul_1" class="spiffy">
+  <li eId="ul_1__li_1">
+    <p eId="ul_1__li_1__p_1">item 1</p>
+  </li>
+  <li eId="ul_1__li_2">
+    <p eId="ul_1__li_2__p_1">item 2</p>
+  </li>
+</ul>
+""", xml)
+
     def test_ul_nested(self):
         tree = self.parse("""
 BULLETS

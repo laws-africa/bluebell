@@ -21,6 +21,8 @@ class FuzzingTestCase(ParserSupport, TestCase):
     ATTACHMENT
     BACKGROUND
     BODY
+    BULLETS
+    *
     CHAPTER
     CONCLUSIONS
     CROSSHEADING
