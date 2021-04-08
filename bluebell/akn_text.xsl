@@ -372,7 +372,7 @@
       <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
 
-    <!-- p tags only get one newline, so add a bonus one to create an empty line -->
+    <!-- the p tags inside the ul's li elements only get one newline, so add a bonus one to create an empty line -->
     <xsl:text>&#10;</xsl:text>
   </xsl:template>
 
