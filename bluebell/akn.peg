@@ -197,7 +197,7 @@ grammar akn
 
   nested_block_element <- indent content:block_element+ dedent <NestedBlockElement>
 
-  block_elements    <- block_list / table / longtitle / footnote / block_quote / line
+  block_elements    <- block_list / bullet_list / table / longtitle / footnote / block_quote / line
 
   longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
 
@@ -244,6 +244,27 @@ grammar akn
                          children:block_element+
                        dedent)?
                        <BlockListItem>
+
+  # ------------------------------------------------------------------------------
+  # UL (unordered list)
+  #
+  # BULLETS
+  #   * item 1
+  #   * multi-line
+  #     item
+  #   item without a star
+  # ------------------------------------------------------------------------------
+
+  bullet_list       <- 'BULLETS' attrs:block_attrs? eol
+                       indent
+                         items:bullet_list_item+
+                       dedent <BulletList>
+
+  bullet_list_item  <- ('*' space?)? initial:(block_elements / eol)
+                       content:(indent
+                         siblings:block_element+
+                       dedent)?
+                       <BulletListItem>
 
   # ------------------------------------------------------------------------------
   # Tables
