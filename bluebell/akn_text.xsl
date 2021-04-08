@@ -11,7 +11,7 @@
                                 a:del a:docCommittee a:docDate a:docIntroducer a:docJurisdiction a:docNumber a:docProponent
                                 a:docPurpose a:docStage a:docStatus a:docTitle a:docType a:docketNumber a:entity a:event
                                 a:extractText a:fillIn a:from a:heading a:i a:inline a:ins a:judge a:lawyer a:legislature
-                                a:li a:listConclusion a:listIntroduction a:location a:mmod a:mod a:mref a:narrative
+                                a:listConclusion a:listIntroduction a:location a:mmod a:mod a:mref a:narrative
                                 a:neutralCitation a:num a:object a:omissis a:opinion a:organization a:outcome a:p
                                 a:party a:person a:placeholder a:process a:quantity a:quotedText a:recordedTime a:ref
                                 a:relatedDocument a:remark a:rmod a:role a:rref a:scene a:session a:shortTitle a:signature
@@ -553,7 +553,7 @@
     <xsl:param name="indent">0</xsl:param>
 
     <!-- first p tag in li doesn't get indented -->
-    <xsl:if test="not(parent::a:li and position() = 1)">
+    <xsl:if test="not(parent::a:li and count(preceding-sibling::a:p) = 0)">
       <xsl:call-template name="indent">
         <xsl:with-param name="level" select="$indent" />
       </xsl:call-template>
