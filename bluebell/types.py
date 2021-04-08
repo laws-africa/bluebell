@@ -14,6 +14,13 @@ def many_to_dict(items):
     return kids
 
 
+def empty_p():
+    return {
+        'name': 'p',
+        'type': 'content',
+        'children': [],
+    }
+
 # ------------------------------------------------------------------------------
 # Hier elements and containers
 # ------------------------------------------------------------------------------
@@ -290,14 +297,7 @@ class BlockListItem:
         if self.content.text and self.content.children.text:
             kids.extend(many_to_dict(self.content.children))
         else:
-            kids.append({
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': '',
-                }]
-            })
+            kids.append(empty_p())
 
         info = {
             'type': 'block',
@@ -312,6 +312,42 @@ class BlockListItem:
             info['subheading'] = self.content.subheading.to_dict()
 
         return info
+
+
+class BulletList:
+    def to_dict(self):
+        kids = [c.to_dict() for c in self.items]
+        info = {
+            'type': 'block',
+            'name': 'ul',
+            'children': kids,
+        }
+
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+
+        return info
+
+
+class BulletListItem:
+    def to_dict(self):
+        kids = []
+
+        if hasattr(self.initial, 'to_dict'):
+            kids.append(self.initial.to_dict())
+
+        # force an empty line if we have content, but no initial
+        if not kids:
+            kids.append(empty_p())
+
+        if self.content.text:
+            kids.extend(k.to_dict() for k in self.content.siblings)
+
+        return {
+            'type': 'element',
+            'name': 'li',
+            'children': kids,
+        }
 
 
 class Table:
@@ -346,11 +382,7 @@ class TableCell:
         if self.content.text:
             kids = many_to_dict(self.content.content)
         else:
-            kids = [{
-                'type': 'content',
-                'name': 'p',
-                'children': [],
-            }]
+            kids = [empty_p()]
 
         info = {
             'type': 'element',

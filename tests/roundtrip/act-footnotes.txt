@@ -72,6 +72,16 @@ ANNEXURE Annex {{FOOTNOTE 1}}
 
   Some content
 
+  BULLETS
+    * a bullet list {{FOOTNOTE 1}}
+      FOOTNOTE 1
+        with a footnote
+
+    * and another {{FOOTNOTE 2}}
+      FOOTNOTE 2
+        to ensure uniqueness
+
+
   TABLE
     TR
       TC
