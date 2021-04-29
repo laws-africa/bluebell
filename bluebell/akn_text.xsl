@@ -559,6 +559,13 @@
       </xsl:call-template>
     </xsl:if>
 
+    <!-- include explicit P marker if the element has attributes other than eId -->
+    <xsl:if test="@*[not(local-name() = 'eId')]">
+      <xsl:text>P</xsl:text>
+      <xsl:call-template name="block-attrs" />
+      <xsl:text> </xsl:text>
+    </xsl:if>
+
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>

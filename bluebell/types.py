@@ -424,6 +424,20 @@ class Heading:
         return InlineText.many_to_dict(k for k in self.content)
 
 
+class P:
+    def to_dict(self):
+        info = {
+            'type': 'content',
+            'name': 'p',
+            'children': InlineText.many_to_dict(self.content.elements),
+        }
+
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+
+        return info
+
+
 # TODO: document content and inline types
 class Line:
     def to_dict(self):

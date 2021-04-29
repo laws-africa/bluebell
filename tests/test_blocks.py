@@ -316,3 +316,23 @@ BLOCKLIST
   </item>
 </blockList>
 """, xml)
+
+    def test_explicit_p_tag(self):
+        tree = self.parse("""
+PART A
+
+  P some text
+  P{class foo bar} text with classes
+  P{style text-align: center} text with style tag
+""", 'hier_element_block')
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_A">
+  <num>A</num>
+  <content>
+    <p eId="part_A__p_1">some text</p>
+    <p eId="part_A__p_2" class="foo bar">text with classes</p>
+    <p eId="part_A__p_3" style="text-align: center">text with style tag</p>
+  </content>
+</part>
+""", xml)

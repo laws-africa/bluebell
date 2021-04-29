@@ -21,6 +21,10 @@ ARGUMENTS
   QUOTE{startQuote "}
     some quoted text
 
+  The next line has RTL arabic text.
+
+  P{class rtl} ويجبر الرجل على نفقة والديه وولده الذكور والإناث إذا كانوا فقراء وكان له ما ينفق عليهم
+
 REMEDIES
 
   fixes!
