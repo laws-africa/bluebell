@@ -310,7 +310,7 @@ class XmlGenerator:
 
     def item_to_xml_content(self, item, prefix):
         eid = self.ids.make(prefix, item)
-        return self.maker(item['name'], eId=eid, *self.kids_to_xml(item, prefix=eid))
+        return self.maker(item['name'], eId=eid, *self.kids_to_xml(item, prefix=eid), **item.get('attribs', {}))
 
     def item_to_xml_inline(self, item, prefix):
         # TODO: should these have ids?
