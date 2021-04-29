@@ -10,7 +10,7 @@ class RTLTestCase(ParserSupport, TestCase):
         tree = self.parse("""
 PREAMBLE
 
-P{class rtl} טקסט כלשהו
+P.rtl טקסט כלשהו
 """, 'preamble')
         self.assertEqual({
             'name': 'preamble',
@@ -27,8 +27,8 @@ P{class rtl} טקסט כלשהו
         }, tree.to_dict())
 
     def test_unparse(self):
-        xml = '<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" class="rtl" foo="bar">טקסט כלשהו</p>'
+        xml = '<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" a="b" class="rtl" foo="bar" baz="boom">טקסט כלשהו</p>'
         actual = self.parser.unparse(xml)
-        self.assertEqual('''P{class rtl|foo bar} טקסט כלשהו
+        self.assertEqual('''P.rtl{a b|foo bar|baz boom} טקסט כלשהו
 
 ''', actual)

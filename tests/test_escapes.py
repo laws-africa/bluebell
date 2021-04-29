@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-from lxml import etree
 from .support import ParserSupport
 
 

@@ -296,9 +296,18 @@ grammar akn
                          content:block_element+
                        dedent)? <TableCell>
 
-  block_attrs       <- '{' first:block_attr? space? rest:('|' space? attr:block_attr?)* '}' <BlockAttrs>
+                     # TD.foo
+                     # TD{attrname attrvalue|attrname attrvalue}
+                     # TD.foo.bar{attrname attrvalue}
+  block_attrs       <- classes:block_attr_class* pairs:block_attr_pairs? <BlockAttrs>
+
+  block_attr_class  <- '.' class_name?
+
+  block_attr_pairs  <- '{' first:block_attr? space? rest:('|' space? attr:block_attr?)* '}'
 
   block_attr        <- attr_name value:(space attr_value)? <BlockAttr>
+
+  class_name        <- [^ \n|{}.]+
 
   attr_name         <- [^ \n|{}]+
 
