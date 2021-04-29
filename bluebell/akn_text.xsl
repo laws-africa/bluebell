@@ -491,20 +491,25 @@
        ............................................................................... -->
 
   <xsl:template name="block-attrs">
-    <xsl:if test="@*[local-name() != 'eId']">
+    <xsl:if test="@class">
+      <xsl:text>.</xsl:text>
+      <xsl:value-of select="translate(@class, ' ', '.')" />
+    </xsl:if>
+
+    <xsl:if test="@*[local-name() != 'eId' and local-name() != 'class']">
       <xsl:text>{</xsl:text>
-
-      <xsl:for-each select="@*[local-name() != 'eId']">
-        <xsl:if test="position() > 1">
-          <xsl:text>|</xsl:text>
-        </xsl:if>
-        <xsl:value-of select="local-name(.)" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="." />
-      </xsl:for-each>
-
+      <xsl:apply-templates select="@*[local-name() != 'eId' and local-name() != 'class']" mode="generic" />
       <xsl:text>}</xsl:text>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="@*" mode="generic">
+    <xsl:if test="position() > 1">
+      <xsl:text>|</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="." />
   </xsl:template>
 
   <!-- ...............................................................................

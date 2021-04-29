@@ -399,12 +399,28 @@ class BlockAttrs:
     def to_dict(self):
         attrs = {}
 
-        if self.first.text:
-            attrs.update(self.first.to_dict())
+        if self.pairs.text:
+            if self.pairs.first.text:
+                attrs.update(self.pairs.first.to_dict())
 
-        for el in self.rest:
-            if el.attr.text:
-                attrs.update(el.attr.to_dict())
+            for el in self.pairs.rest:
+                if el.attr.text:
+                    attrs.update(el.attr.to_dict())
+
+        classes = []
+        if self.classes.text:
+            classes = [
+                cls.text[1:]
+                for cls in self.classes
+                # must have .foo
+                if len(cls.text) > 1
+            ]
+
+        if classes:
+            if 'class' in attrs:
+                attrs['class'] = attrs['class'] + ' ' + ' '.join(classes)
+            else:
+                attrs['class'] = ' '.join(classes)
 
         return attrs
 

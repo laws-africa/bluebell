@@ -336,3 +336,48 @@ PART A
   </content>
 </part>
 """, xml)
+
+    def test_block_attrs(self):
+        tree = self.parse("""
+PART A
+
+  P.baz{class foo bar} text with classes
+  P{style text-align: center} text with style tag
+  P..{style text-align: center} text with style tag and empty classes
+  P..bar. text with empty classes
+  P.foo text with a class
+""", 'hier_element_block')
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_A">
+  <num>A</num>
+  <content>
+    <p eId="part_A__p_1" class="foo bar baz">text with classes</p>
+    <p eId="part_A__p_2" style="text-align: center">text with style tag</p>
+    <p eId="part_A__p_3" style="text-align: center">text with style tag and empty classes</p>
+    <p eId="part_A__p_4" class="bar">text with empty classes</p>
+    <p eId="part_A__p_5" class="foo">text with a class</p>
+  </content>
+</part>
+""", xml)
+
+    def test_block_attrs_unparse(self):
+        xml = '''<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_A">
+  <num>A</num>
+  <content>
+    <p a="b" class="one" foo="bar" baz="boom">text</p>
+    <p class="one two three">text</p>
+    <p a="b">text</p>
+  </content>
+</part>
+'''
+        actual = self.parser.unparse(xml)
+        self.assertEqual('''PART A
+
+  P.one{a b|foo bar|baz boom} text
+
+  P.one.two.three text
+
+  P{a b} text
+
+''', actual)
