@@ -197,13 +197,16 @@ grammar akn
 
   nested_block_element <- indent content:block_element+ dedent <NestedBlockElement>
 
-  block_elements    <- block_list / bullet_list / table / longtitle / footnote / block_quote / line
+  block_elements    <- block_list / bullet_list / table / longtitle / footnote / block_quote / p / line
 
   longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
 
   subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
 
   crossheading      <- 'CROSSHEADING' space content:inline+ eol <Crossheading>
+
+                     # explicit P tag with attribute support
+  p                 <- 'P' attrs:block_attrs? space content:inline+ eol <P>
 
                      # The line block is the only thing that can contain arbitrary text
                      # at the start of a line, where a dedent may occur. By guarding
@@ -293,9 +296,18 @@ grammar akn
                          content:block_element+
                        dedent)? <TableCell>
 
-  block_attrs       <- '{' first:block_attr? space? rest:('|' space? attr:block_attr?)* '}' <BlockAttrs>
+                     # TD.foo
+                     # TD{attrname attrvalue|attrname attrvalue}
+                     # TD.foo.bar{attrname attrvalue}
+  block_attrs       <- classes:block_attr_class* pairs:block_attr_pairs? <BlockAttrs>
+
+  block_attr_class  <- '.' class_name?
+
+  block_attr_pairs  <- '{' first:block_attr? space? rest:('|' space? attr:block_attr?)* '}'
 
   block_attr        <- attr_name value:(space attr_value)? <BlockAttr>
+
+  class_name        <- [^ \n|{}.]+
 
   attr_name         <- [^ \n|{}]+
 

@@ -399,12 +399,28 @@ class BlockAttrs:
     def to_dict(self):
         attrs = {}
 
-        if self.first.text:
-            attrs.update(self.first.to_dict())
+        if self.pairs.text:
+            if self.pairs.first.text:
+                attrs.update(self.pairs.first.to_dict())
 
-        for el in self.rest:
-            if el.attr.text:
-                attrs.update(el.attr.to_dict())
+            for el in self.pairs.rest:
+                if el.attr.text:
+                    attrs.update(el.attr.to_dict())
+
+        classes = []
+        if self.classes.text:
+            classes = [
+                cls.text[1:]
+                for cls in self.classes
+                # must have .foo
+                if len(cls.text) > 1
+            ]
+
+        if classes:
+            if 'class' in attrs:
+                attrs['class'] = attrs['class'] + ' ' + ' '.join(classes)
+            else:
+                attrs['class'] = ' '.join(classes)
 
         return attrs
 
@@ -422,6 +438,20 @@ class BlockAttr:
 class Heading:
     def to_dict(self):
         return InlineText.many_to_dict(k for k in self.content)
+
+
+class P:
+    def to_dict(self):
+        info = {
+            'type': 'content',
+            'name': 'p',
+            'children': InlineText.many_to_dict(self.content.elements),
+        }
+
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+
+        return info
 
 
 # TODO: document content and inline types
