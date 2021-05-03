@@ -35,7 +35,7 @@ CHAP 1 - Heading
               SUBHEADING subheading
               item (b)(ii)
 
-      TABLE{class my-table}
+      TABLE.my-table
         TR
           TC{colspan 2|rowspan 3}
             The Heading
