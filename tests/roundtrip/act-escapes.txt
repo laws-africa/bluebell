@@ -40,3 +40,11 @@ CHAP 1 - Heading
 
   \TABLE in wrapup
 
+  \P foo
+
+  \P.bar foo
+
+  \P{class foo} bar
+
+  Posh doesn't need to be escaped
+
