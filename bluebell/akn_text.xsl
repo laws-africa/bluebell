@@ -73,31 +73,31 @@
                                 </xsl:call-template>
                               </xsl:with-param>
                               <xsl:with-param name="value"><xsl:value-of select="'**'" /></xsl:with-param>
-                              <xsl:with-param name="replacement"><xsl:value-of select="'\**'" /></xsl:with-param>
+                              <xsl:with-param name="replacement"><xsl:value-of select="'\*\*'" /></xsl:with-param>
                             </xsl:call-template>
                           </xsl:with-param>
                           <xsl:with-param name="value"><xsl:value-of select="'//'" /></xsl:with-param>
-                          <xsl:with-param name="replacement"><xsl:value-of select="'\//'" /></xsl:with-param>
+                          <xsl:with-param name="replacement"><xsl:value-of select="'\/\/'" /></xsl:with-param>
                         </xsl:call-template>
                       </xsl:with-param>
                       <xsl:with-param name="value"><xsl:value-of select="'__'" /></xsl:with-param>
-                      <xsl:with-param name="replacement"><xsl:value-of select="'\__'" /></xsl:with-param>
+                      <xsl:with-param name="replacement"><xsl:value-of select="'\_\_'" /></xsl:with-param>
                     </xsl:call-template>
                   </xsl:with-param>
                   <xsl:with-param name="value"><xsl:value-of select="'{{'" /></xsl:with-param>
-                  <xsl:with-param name="replacement"><xsl:value-of select="'\{{'" /></xsl:with-param>
+                  <xsl:with-param name="replacement"><xsl:value-of select="'\{\{'" /></xsl:with-param>
                 </xsl:call-template>
               </xsl:with-param>
               <xsl:with-param name="value"><xsl:value-of select="'}}'" /></xsl:with-param>
-              <xsl:with-param name="replacement"><xsl:value-of select="'\}}'" /></xsl:with-param>
+              <xsl:with-param name="replacement"><xsl:value-of select="'\}\}'" /></xsl:with-param>
             </xsl:call-template>
           </xsl:with-param>
           <xsl:with-param name="value"><xsl:value-of select="'[['" /></xsl:with-param>
-          <xsl:with-param name="replacement"><xsl:value-of select="'\[['" /></xsl:with-param>
+          <xsl:with-param name="replacement"><xsl:value-of select="'\[\['" /></xsl:with-param>
         </xsl:call-template>
       </xsl:with-param>
       <xsl:with-param name="value"><xsl:value-of select="']]'" /></xsl:with-param>
-      <xsl:with-param name="replacement"><xsl:value-of select="'\]]'" /></xsl:with-param>
+      <xsl:with-param name="replacement"><xsl:value-of select="'\]\]'" /></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
@@ -734,6 +734,13 @@
   <xsl:template match="a:*[self::a:p or self::a:listIntroduction or self::a:listWrapUp]
                        /text()[not(preceding-sibling::*)]">
     <xsl:call-template name="escape">
+      <xsl:with-param name="text" select="." />
+    </xsl:call-template>
+  </xsl:template>
+
+  <!-- escape inlines in text nodes -->
+  <xsl:template match="text()">
+    <xsl:call-template name="escape-inlines">
       <xsl:with-param name="text" select="." />
     </xsl:call-template>
   </xsl:template>
