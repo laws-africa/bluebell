@@ -243,3 +243,31 @@ PART
                 }]
             }]
         }, tree.to_dict())
+
+    def test_unescape(self):
+        xml = """<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <num>1</num>
+  <heading>HEADING ** with stars</heading>
+  <content>
+    <p><b>bold with * and **</b> and <b>**</b></p>
+    <p><i>italics // with //</i> and <i>//foo//</i></p>
+    <p><img src="/foo" /></p>
+    <p><ref href="/bar">link</ref></p>
+    <p>foo ** <b>**</b> <ref href="#foo">// **</ref> ** //</p>
+  </content>
+</section>"""
+        actual = self.parser.unparse(xml)
+        self.assertEqual("""SEC 1 - HEADING \\*\\* with stars
+
+  **bold with * and \\*\\*** and **\\*\\***
+
+  //italics \\/\\/ with \\/\\/// and //\\/\\/foo\\/\\///
+
+  {{IMG /foo}}
+
+  {{>/bar link}}
+
+  foo \\*\\* **\\*\\*** {{>#foo \\/\\/ \\*\\*}} \\*\\* \\/\\/
+
+""", actual)
+
