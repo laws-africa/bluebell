@@ -14,13 +14,39 @@ CHAP 1 - Heading
 
     a plain \\ backslash
 
-    some \**text\** at \//the start\// with \**multiple \//types\// of\** markup
+    some \*\*text\*\* at \/\/the start\/\/ with \*\*multiple \/\/types\/\/ of\*\* markup
 
-    some \[[remarks\]] and some \__underline\__
+    some \[\[remarks\]\] and some \_\_underline\_\_
 
-    include \{{^superscripts\}} and \{{_subscripts\}} which are fun
+    include \{\{^superscripts\}\} and \{\{_subscripts\}\} which are fun
 
-    an \{{IMG /foo.png description\}} image
+    an \{\{IMG /foo.png description\}\} image
+
+    some **inlines \/\/ {{>#foo with \/\/ slashes}}**
+
+    inlines that \*\* should \/\/ be \[\[ escaped ![ and \]\]
+
+    refs {{>#foo https:\/\/example.com with \}\} and **nested \*\* stars \*\***}}
+
+    nested ** stars \*\* in bold \*\***
+
+    nested // slashes \/\/ in italics \/\///
+
+    nested ** stars in // italics \*\* // and bold **
+
+    super {{^with \{\{^ curlies } \}\}}}
+
+  SEC 3 - these should not be escaped
+
+    a plain / forward slash
+
+    a plain *
+
+    a plain { open
+
+    a plain } close
+
+    a plain _ underscore
 
   \PART in the middle
 
@@ -28,9 +54,9 @@ CHAP 1 - Heading
 
     \PART A should be escaped
 
-    list \__intro\__
+    list \_\_intro\_\_
 
-    \(a) item (a) with a \{{>http:\//example.com link\}}
+    \(a) item (a) with a \{\{>http:\/\/example.com link\}\}
 
     \CHAPTER.foo
 
