@@ -5890,19 +5890,19 @@ class Grammar(object):
             address0 = self._read_bold()
             if address0 is FAILURE:
                 self._offset = index1
-                address0 = self._read_image()
+                address0 = self._read_footnote_ref()
                 if address0 is FAILURE:
                     self._offset = index1
-                    address0 = self._read_footnote_ref()
+                    address0 = self._read_generic_inline()
                     if address0 is FAILURE:
                         self._offset = index1
-                        address0 = self._read_italics()
+                        address0 = self._read_image()
                         if address0 is FAILURE:
                             self._offset = index1
-                            address0 = self._read_ref()
+                            address0 = self._read_italics()
                             if address0 is FAILURE:
                                 self._offset = index1
-                                address0 = self._read_generic_inline()
+                                address0 = self._read_ref()
                                 if address0 is FAILURE:
                                     self._offset = index1
                                     address0 = self._read_remark()

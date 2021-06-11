@@ -350,7 +350,7 @@ grammar akn
   # inline remarks are the only inline that have a unique closing marker: ]]
   inline_end_remark <- [^*/_{[\n\]\\]+ / escape / (!']]' inline_marker / [^\n]) <InlineText>
 
-  inline_marker     <- abbr / bold / image / footnote_ref / italics / ref / generic_inline / remark / sup / sub / term
+  inline_marker     <- abbr / bold / footnote_ref / generic_inline / image / italics / ref / remark / sup / sub / term
                        / underline
 
   # escape anything with a single backslash (double here because it needs to be escaped itself)
