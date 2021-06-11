@@ -568,24 +568,36 @@ class InlineText:
 
 class Inline:
     name = None
+    default_attribs = {}
 
     def to_dict(self):
-        return {
+        info = {
             'type': 'inline',
             'name': self.name,
             'children': InlineText.many_to_dict(x.inline_nested for x in self.content),
         }
+        attribs = self.get_attribs()
+        if attribs:
+            info['attribs'] = attribs
+        return info
+
+    def get_attribs(self):
+        return self.default_attribs
 
 
-class SymmetricInline:
+class SymmetricInline(Inline):
     name = None
 
     def to_dict(self):
-        return {
+        info = {
             'type': 'inline',
             'name': self.name,
             'children': InlineText.many_to_dict(x.inline for x in self.content),
         }
+        attribs = self.get_attribs()
+        if attribs:
+            info['attribs'] = attribs
+        return info
 
 
 class Bold(SymmetricInline):
@@ -610,10 +622,10 @@ class Sub(Inline):
 
 class Remark(Inline):
     name = 'remark'
+    default_attribs = {'status': 'editorial'}
 
     def to_dict(self):
         d = super().to_dict()
-        d['attribs'] = {'status': 'editorial'}
 
         # add [
         if d['children'] and d['children'][0]['type'] == 'text':
@@ -630,15 +642,12 @@ class Remark(Inline):
         return d
 
 
-class Ref:
-    def to_dict(self):
+class Ref(Inline):
+    name = 'ref'
+
+    def get_attribs(self):
         return {
-            'type': 'inline',
-            'name': 'ref',
-            'attribs': {
-                'href': self.href.text,
-            },
-            'children': InlineText.many_to_dict(x.inline_nested for x in self.content),
+            'href': self.href.text,
         }
 
 
@@ -654,6 +663,30 @@ class Image:
             'attribs': attribs,
         }
 
+
+class InlineWithAttribs(Inline):
+    default_attribs = {}
+
+    def get_attribs(self):
+        attribs = self.attrs.to_dict() if self.attrs.text else {}
+        for attr, val in self.default_attribs.items():
+            attribs.setdefault(attr, val)
+        return attribs
+
+
+class Abbr(InlineWithAttribs):
+    name = 'abbr'
+    default_attribs = {'title': ''}
+
+
+class Term(InlineWithAttribs):
+    name = 'term'
+    default_attribs = {'refersTo': ''}
+
+
+class GenericInline(InlineWithAttribs):
+    name = 'inline'
+    default_attribs = {'name': 'inline'}
 
 # ------------------------------------------------------------------------------
 # Top-level documents

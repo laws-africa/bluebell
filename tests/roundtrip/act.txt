@@ -69,6 +69,12 @@ ANNEXURE Annex 1
 
   Some content
 
+  Text with {{abbr{title Full Text} FT}} abbreviations.
+
+  Text with {{inline.class{name em} generic inlines}}.
+
+  Text with {{term{refersTo #foo} terms}}.
+
 ANNEXURE Annex 2
   SUBHEADING Subheading
 

@@ -350,7 +350,8 @@ grammar akn
   # inline remarks are the only inline that have a unique closing marker: ]]
   inline_end_remark <- [^*/_{[\n\]\\]+ / escape / (!']]' inline_marker / [^\n]) <InlineText>
 
-  inline_marker     <- bold / image / italics / underline / sup / sub / remark / ref / footnote_ref
+  inline_marker     <- abbr / bold / image / footnote_ref / italics / ref / generic_inline / remark / sup / sub / term
+                       / underline
 
   # escape anything with a single backslash (double here because it needs to be escaped itself)
   escape            <- '\\' [^\n]
@@ -369,7 +370,7 @@ grammar akn
                      # [[remark]]
   remark            <- '[[' content:(!']]' inline_nested:inline_end_remark)+ ']]' <Remark>
 
-  # generic-style inlines: {{...}}
+  # special inlines
 
                      # {{IMG src description}}
   image             <- inline_open 'IMG' space? href:(!inline_close [^ \n])+ content:(!inline_close [^\n])* inline_close <Image>
@@ -382,6 +383,17 @@ grammar akn
 
                      # {{>href text}}
   ref               <- inline_open '>' href:(!inline_close [^ \n])* ' '? content:(!inline_close inline_nested)* inline_close <Ref>
+
+  # normal inlines
+
+                     # {{abbr{title Laws.Africa} LA}}
+  abbr              <- inline_open 'abbr' attrs:block_attrs? ' '? content:(!inline_close inline_nested)* inline_close <Abbr>
+
+                     # {{term{refersTo #foo} text}}
+  term              <- inline_open 'term' attrs:block_attrs? ' '? content:(!inline_close inline_nested)* inline_close <Term>
+
+                     # {{inline{name em} text}}
+  generic_inline    <- inline_open 'inline' attrs:block_attrs? ' '? content:(!inline_close inline_nested)* inline_close <GenericInline>
 
                      # {{FOOTNOTE 9}}
   footnote_ref      <- inline_open 'FOOTNOTE' space marker:(!inline_close [^\n])+ inline_close <FootnoteRef>
