@@ -716,6 +716,20 @@
     <xsl:text>}}</xsl:text>
   </xsl:template>
 
+  <!-- general inlines that follow a common pattern -->
+  <xsl:template match="a:abbr | a:term | a:inline">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:text>{{</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:call-template name="block-attrs" />
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
+    <xsl:text>}}</xsl:text>
+  </xsl:template>
+
   <xsl:template match="a:eol">
     <xsl:param name="indent">0</xsl:param>
 

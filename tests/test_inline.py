@@ -245,3 +245,49 @@ class InlineTestCase(ParserSupport, TestCase):
   <sup>super <sub>s}ub</sub> <b>bo*ld</b></sup>
 </p>
 """, xml)
+
+    def test_term(self):
+        tree = self.parse("""
+Text with {{term{refersTo #foo} a term}} and {{term{refersTo #bar}  extra space}} and {{term{refersTo #baz}no space}}.
+""", 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <term refersTo="#foo">a term</term> and <term refersTo="#bar"> extra space</term> and <term refersTo="#baz">no space</term>.</p>
+""", xml)
+
+    def test_abbr(self):
+        tree = self.parse("""
+Text with {{abbr{title Laws.Africa} LA}} and {{abbr No Title}}.
+""", 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <abbr title="Laws.Africa">LA</abbr> and <abbr title="">No Title</abbr>.</p>
+""", xml)
+
+    def test_generic_inline(self):
+        tree = self.parse("""
+Text with {{inline{name em} some text}} and {{inline no name}}.
+""", 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <inline name="em">some text</inline> and <inline name="inline">no name</inline>.</p>
+""", xml)
+
+    def test_inline_attrs(self):
+        tree = self.parse("""
+Text with {{inline.foo.bar{name em} some text}}
+Class {{inline.boom but no attrs}}
+Class but no text {{term.foo}}
+""", 'main_body')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<mainBody xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <p eId="p_1">Text with <inline name="em" class="foo bar">some text</inline></p>
+  <p eId="p_2">Class <inline class="boom" name="inline">but no attrs</inline></p>
+  <p eId="p_3">Class but no text <term class="foo" refersTo=""/></p>
+</mainBody>
+""", xml)
