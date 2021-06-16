@@ -499,9 +499,12 @@
       <xsl:value-of select="translate(@class, ' ', '.')" />
     </xsl:if>
 
-    <xsl:if test="@*[local-name() != 'eId' and local-name() != 'class']">
+    <!-- ignore @eId, @class and @name for <inline name="em"> -->
+    <xsl:if test="@*[local-name() != 'eId' and local-name() != 'class'
+                  and not(parent::a:inline and local-name() = 'name' and . = 'em')]">
       <xsl:text>{</xsl:text>
-      <xsl:apply-templates select="@*[local-name() != 'eId' and local-name() != 'class']" mode="generic" />
+      <xsl:apply-templates select="@*[local-name() != 'eId' and local-name() != 'class'
+                                   and not(parent::a:inline and local-name() = 'name' and . = 'em')]" mode="generic" />
       <xsl:text>}</xsl:text>
     </xsl:if>
   </xsl:template>
@@ -721,7 +724,14 @@
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:text>{{</xsl:text>
-    <xsl:value-of select="local-name(.)" />
+    <xsl:choose>
+      <xsl:when test="self::a:inline and @name='em'">
+        <xsl:text>em</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="local-name(.)" />
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:call-template name="block-attrs" />
     <xsl:text> </xsl:text>
     <xsl:apply-templates>

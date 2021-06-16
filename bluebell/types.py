@@ -664,29 +664,36 @@ class Image:
         }
 
 
-class InlineWithAttribs(Inline):
-    default_attribs = {}
+class StandardInline(Inline):
+    """ Standard inline used for many different types of inlines.
+    """
+    default_attribs = {
+        'abbr': {'title': ''},
+        'term': {'refersTo': ''},
+        'inline': {'name': 'inline'},
+    }
+
+    @property
+    def name(self):
+        return self.tag.text
+
+    def to_dict(self):
+        info = super().to_dict()
+
+        # em is syntactic sugar for <inline name="em">
+        if self.name == 'em':
+            info['name'] = 'inline'
+            info.setdefault('attribs', {})['name'] = 'em'
+
+        return info
 
     def get_attribs(self):
         attribs = self.attrs.to_dict() if self.attrs.text else {}
-        for attr, val in self.default_attribs.items():
+        # set default attributes for this inline
+        for attr, val in self.default_attribs.get(self.name, {}).items():
             attribs.setdefault(attr, val)
         return attribs
 
-
-class Abbr(InlineWithAttribs):
-    name = 'abbr'
-    default_attribs = {'title': ''}
-
-
-class Term(InlineWithAttribs):
-    name = 'term'
-    default_attribs = {'refersTo': ''}
-
-
-class GenericInline(InlineWithAttribs):
-    name = 'inline'
-    default_attribs = {'name': 'inline'}
 
 # ------------------------------------------------------------------------------
 # Top-level documents
