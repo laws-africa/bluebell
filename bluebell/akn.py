@@ -7213,19 +7213,19 @@ class Grammar(object):
                 self._expected.append('\'abbr\'')
         if address0 is FAILURE:
             self._offset = index1
-            chunk1, max1 = None, self._offset + 4
+            chunk1, max1 = None, self._offset + 2
             if max1 <= self._input_size:
                 chunk1 = self._input[self._offset:max1]
-            if chunk1 == 'term':
-                address0 = TreeNode(self._input[self._offset:self._offset + 4], self._offset, [])
-                self._offset = self._offset + 4
+            if chunk1 == 'em':
+                address0 = TreeNode(self._input[self._offset:self._offset + 2], self._offset, [])
+                self._offset = self._offset + 2
             else:
                 address0 = FAILURE
                 if self._offset > self._failure:
                     self._failure = self._offset
                     self._expected = []
                 if self._offset == self._failure:
-                    self._expected.append('\'term\'')
+                    self._expected.append('\'em\'')
             if address0 is FAILURE:
                 self._offset = index1
                 chunk2, max2 = None, self._offset + 6
@@ -7243,19 +7243,19 @@ class Grammar(object):
                         self._expected.append('\'inline\'')
                 if address0 is FAILURE:
                     self._offset = index1
-                    chunk3, max3 = None, self._offset + 2
+                    chunk3, max3 = None, self._offset + 4
                     if max3 <= self._input_size:
                         chunk3 = self._input[self._offset:max3]
-                    if chunk3 == 'em':
-                        address0 = TreeNode(self._input[self._offset:self._offset + 2], self._offset, [])
-                        self._offset = self._offset + 2
+                    if chunk3 == 'term':
+                        address0 = TreeNode(self._input[self._offset:self._offset + 4], self._offset, [])
+                        self._offset = self._offset + 4
                     else:
                         address0 = FAILURE
                         if self._offset > self._failure:
                             self._failure = self._offset
                             self._expected = []
                         if self._offset == self._failure:
-                            self._expected.append('\'em\'')
+                            self._expected.append('\'term\'')
                     if address0 is FAILURE:
                         self._offset = index1
         self._cache['standard_inline_marker'][index0] = (address0, self._offset)
