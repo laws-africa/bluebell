@@ -266,6 +266,18 @@ Text with {{abbr{title Laws.Africa} LA}} and {{abbr No Title}}.
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <abbr title="Laws.Africa">LA</abbr> and <abbr title="">No Title</abbr>.</p>
 """, xml)
 
+    def test_em(self):
+        """ em is syntactic sugar for inline[@name=em]
+        """
+        tree = self.parse("""
+Text with {{em emphasized text}}.
+""", 'line')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <inline name="em">emphasized text</inline>.</p>
+""", xml)
+
     def test_generic_inline(self):
         tree = self.parse("""
 Text with {{inline{name em} some text}} and {{inline no name}}.
