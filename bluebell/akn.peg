@@ -350,8 +350,7 @@ grammar akn
   # inline remarks are the only inline that have a unique closing marker: ]]
   inline_end_remark <- [^*/_{[\n\]\\]+ / escape / (!']]' inline_marker / [^\n]) <InlineText>
 
-  inline_marker     <- abbr / bold / footnote_ref / generic_inline / image / italics / ref / remark / sup / sub / term
-                       / underline
+  inline_marker     <- bold / footnote_ref / image / italics / ref / remark / sup / sub / standard_inline / underline
 
   # escape anything with a single backslash (double here because it needs to be escaped itself)
   escape            <- '\\' [^\n]
@@ -384,23 +383,19 @@ grammar akn
                      # {{>href text}}
   ref               <- inline_open '>' href:(!inline_close [^ \n])* ' '? content:(!inline_close inline_nested)* inline_close <Ref>
 
-  # normal inlines
-
-                     # {{abbr{title Laws.Africa} LA}}
-  abbr              <- inline_open 'abbr' attrs:block_attrs? ' '? content:(!inline_close inline_nested)* inline_close <Abbr>
-
-                     # {{term{refersTo #foo} text}}
-  term              <- inline_open 'term' attrs:block_attrs? ' '? content:(!inline_close inline_nested)* inline_close <Term>
-
-                     # {{inline{name em} text}}
-  generic_inline    <- inline_open 'inline' attrs:block_attrs? ' '? content:(!inline_close inline_nested)* inline_close <GenericInline>
-
                      # {{FOOTNOTE 9}}
   footnote_ref      <- inline_open 'FOOTNOTE' space marker:(!inline_close [^\n])+ inline_close <FootnoteRef>
+
+  # standard inlines
+
+                     # {{abbr{title Laws.Africa} LA}}
+  standard_inline   <- inline_open tag:standard_inline_marker attrs:block_attrs? ' '? content:(!inline_close inline_nested)* inline_close <StandardInline>
 
   inline_open       <- '{{'
 
   inline_close      <- '}}'
+
+  standard_inline_marker <- 'abbr' / 'em' / 'inline' / 'term'
 
   # ------------------------------------------------------------------------------
   # Terminals
