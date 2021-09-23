@@ -982,7 +982,7 @@ CHAP 2 - Bill of Rights
         ITEM (c)
           any derogation from a section mentioned in column 1 of the Table of Non-Derogable Rights, to the extent indicated opposite that section in column 3 of the Table.
 
-Table of Non-Derogable Rights    TABLE
+    TABLE
       TR
         TH.akn--text-center
           1

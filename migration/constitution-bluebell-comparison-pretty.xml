@@ -15,14 +15,14 @@
         <FRBRExpression>
           <FRBRthis value="/akn/za/act/1996/constitution/eng"/>
           <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-          <FRBRdate date="2021-09-15" name="Generation"/>
+          <FRBRdate date="2021-09-23" name="Generation"/>
           <FRBRauthor href=""/>
           <FRBRlanguage language="eng"/>
         </FRBRExpression>
         <FRBRManifestation>
           <FRBRthis value="/akn/za/act/1996/constitution/eng"/>
           <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-          <FRBRdate date="2021-09-15" name="Generation"/>
+          <FRBRdate date="2021-09-23" name="Generation"/>
           <FRBRauthor href=""/>
         </FRBRManifestation>
       </identification>
@@ -1458,194 +1458,229 @@
               </blockList>
             </content>
           </subsection>
+          <hcontainer name="hcontainer">
+            <content>
+              <table>
+                <tr>
+                  <th class="akn--text-center">
+                    <p>1</p>
+                    <p>Section number</p>
+                  </th>
+                  <th class="akn--text-center">
+                    <p>2</p>
+                    <p>Section title</p>
+                  </th>
+                  <th class="akn--text-center">
+                    <p>3</p>
+                    <p>Extent to which the right is non-derogable</p>
+                  </th>
+                </tr>
+                <tr>
+                  <td class="akn--text-center">
+                    <p>9</p>
+                  </td>
+                  <td>
+                    <p>Equality</p>
+                  </td>
+                  <td>
+                    <p>With respect to unfair discrimination solely on the grounds of race, colour, ethnic or social origin, sex, religion or language.</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="akn--text-center">
+                    <p>10</p>
+                  </td>
+                  <td>
+                    <p>Human dignity</p>
+                  </td>
+                  <td>
+                    <p>Entirely</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="akn--text-center">
+                    <p>11</p>
+                  </td>
+                  <td>
+                    <p>Life</p>
+                  </td>
+                  <td>
+                    <p>Entirely</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="akn--text-center">
+                    <p>12</p>
+                  </td>
+                  <td>
+                    <p>Slavery, servitude and forced labour</p>
+                  </td>
+                  <td>
+                    <p>With respect to subsections (1)(d) and (e) and (2)(c).</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="akn--text-center">
+                    <p>13</p>
+                  </td>
+                  <td>
+                    <p>Freedom and security of the person</p>
+                  </td>
+                  <td>
+                    <p>With respect to slavery and servitude</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="akn--text-center">
+                    <p>28</p>
+                  </td>
+                  <td>
+                    <p>Children</p>
+                  </td>
+                  <td>
+                    <p>With respect to:</p>
+                    <p>- subsection (1)(d) and (e);</p>
+                    <p>- the rights in subparagraphs (i) and (ii) of subsection (1)(g); and</p>
+                    <p>- subsection (1)(i) in respect of children of 15 years and younger.</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="akn--text-center">
+                    <p>35</p>
+                  </td>
+                  <td>
+                    <p>Arrested, detained and accused persons</p>
+                  </td>
+                  <td>
+                    <p>With respect to:</p>
+                    <p>- subsections (1)(a), (b) and (c) and (2)(d);</p>
+                    <p>- the rights in paragraphs (a) to (o) of subsection (3), excluding paragraph (d);</p>
+                    <p>- subsection (4); and</p>
+                    <p>- subsection (5) with respect to the exclusion of evidence if the admission of that evidence would render the trial unfair.</p>
+                  </td>
+                </tr>
+              </table>
+            </content>
+          </hcontainer>
+          <subsection>
+            <num>(6)</num>
+            <content>
+              <blockList>
+                <listIntroduction>Whenever anyone is detained without trial in consequence of a derogation of rights resulting from a declaration of a state of emergency, the following conditions must be observed:</listIntroduction>
+                <item>
+                  <num>(a)</num>
+                  <p>An adult family member or friend of the detainee must be contacted as soon as reasonably possible, and informed that the person has been detained.</p>
+                </item>
+                <item>
+                  <num>(b)</num>
+                  <p>A notice must be published in the national <i>Government Gazette</i> within five days of the person being detained, stating the detainee's name and place of detention and referring to the emergency measure in terms of which that person has been detained.</p>
+                </item>
+                <item>
+                  <num>(c)</num>
+                  <p>The detainee must be allowed to choose, and be visited at any reasonable time by, a medical practitioner.</p>
+                </item>
+                <item>
+                  <num>(d)</num>
+                  <p>The detainee must be allowed to choose, and be visited at any reasonable time by, a legal representative.</p>
+                </item>
+                <item>
+                  <num>(e)</num>
+                  <p>A court must review the detention as soon as reasonably possible, but no later than 10 days after the date the person was detained, and the court must release the detainee unless it is necessary to continue the detention to restore peace and order.</p>
+                </item>
+                <item>
+                  <num>(f)</num>
+                  <p>A detainee who is not released in terms of a review under paragraph (e), or who is not released in terms of a review under this paragraph, may apply to a court for a further review of the detention at any time after 10 days have passed since the previous review, and the court must release the detainee unless it is still necessary to continue the detention to restore peace and order.</p>
+                </item>
+                <item>
+                  <num>(g)</num>
+                  <p>The detainee must be allowed to appear in person before any court considering the detention, to be represented by a legal practitioner at those hearings, and to make representations against continued detention.</p>
+                </item>
+                <item>
+                  <num>(h)</num>
+                  <p>The state must present written reasons to the court to justify the continued detention of the detainee, and must give a copy of those reasons to the detainee at least two days before the court reviews the detention.</p>
+                </item>
+              </blockList>
+            </content>
+          </subsection>
+          <subsection>
+            <num>(7)</num>
+            <content>
+              <p>If a court releases a detainee, that person may not be detained again on the same grounds unless the state first shows a court good cause for re-detaining that person.</p>
+            </content>
+          </subsection>
+          <subsection>
+            <num>(8)</num>
+            <content>
+              <p>Subsections (6) and (7) do not apply to persons who are not South African citizens and who are detained in consequence of an international armed conflict. Instead, the state must comply with the standards binding on the Republic under international humanitarian law in respect of the detention of such persons.</p>
+            </content>
+          </subsection>
         </section>
-      </chapter>
-      <hcontainer name="hcontainer">
-        <p>Table of Non-Derogable Rights    TABLE</p>
-        <p>TR</p>
-        <p>TH.akn--text-center</p>
-        <p>1</p>
-        <p>Section number</p>
-        <p>TH.akn--text-center</p>
-        <p>2</p>
-        <p>Section title</p>
-        <p>TH.akn--text-center</p>
-        <p>3</p>
-        <p>Extent to which the right is non-derogable</p>
-        <p>TR</p>
-        <p>TC.akn--text-center</p>
-        <p>9</p>
-        <p>TC</p>
-        <p>Equality</p>
-        <p>TC</p>
-        <p>With respect to unfair discrimination solely on the grounds of race, colour, ethnic or social origin, sex, religion or language.</p>
-        <p>TR</p>
-        <p>TC.akn--text-center</p>
-        <p>10</p>
-        <p>TC</p>
-        <p>Human dignity</p>
-        <p>TC</p>
-        <p>Entirely</p>
-        <p>TR</p>
-        <p>TC.akn--text-center</p>
-        <p>11</p>
-        <p>TC</p>
-        <p>Life</p>
-        <p>TC</p>
-        <p>Entirely</p>
-        <p>TR</p>
-        <p>TC.akn--text-center</p>
-        <p>12</p>
-        <p>TC</p>
-        <p>Slavery, servitude and forced labour</p>
-        <p>TC</p>
-        <p>With respect to subsections (1)(d) and (e) and (2)(c).</p>
-        <p>TR</p>
-        <p>TC.akn--text-center</p>
-        <p>13</p>
-        <p>TC</p>
-        <p>Freedom and security of the person</p>
-        <p>TC</p>
-        <p>With respect to slavery and servitude</p>
-        <p>TR</p>
-        <p>TC.akn--text-center</p>
-        <p>28</p>
-        <p>TC</p>
-        <p>Children</p>
-        <p>TC</p>
-        <p>With respect to:</p>
-        <p>- subsection (1)(d) and (e);</p>
-        <p>- the rights in subparagraphs (i) and (ii) of subsection (1)(g); and</p>
-        <p>- subsection (1)(i) in respect of children of 15 years and younger.</p>
-        <p>TR</p>
-        <p>TC.akn--text-center</p>
-        <p>35</p>
-        <p>TC</p>
-        <p>Arrested, detained and accused persons</p>
-        <p>TC</p>
-        <p>With respect to:</p>
-        <p>- subsections (1)(a), (b) and (c) and (2)(d);</p>
-        <p>- the rights in paragraphs (a) to (o) of subsection (3), excluding paragraph (d);</p>
-        <p>- subsection (4); and</p>
-        <p>- subsection (5) with respect to the exclusion of evidence if the admission of that evidence would render the trial unfair.</p>
-      </hcontainer>
-      <subsection>
-        <num>(6)</num>
-        <content>
-          <blockList>
-            <listIntroduction>Whenever anyone is detained without trial in consequence of a derogation of rights resulting from a declaration of a state of emergency, the following conditions must be observed:</listIntroduction>
-            <item>
-              <num>(a)</num>
-              <p>An adult family member or friend of the detainee must be contacted as soon as reasonably possible, and informed that the person has been detained.</p>
-            </item>
-            <item>
-              <num>(b)</num>
-              <p>A notice must be published in the national <i>Government Gazette</i> within five days of the person being detained, stating the detainee's name and place of detention and referring to the emergency measure in terms of which that person has been detained.</p>
-            </item>
-            <item>
-              <num>(c)</num>
-              <p>The detainee must be allowed to choose, and be visited at any reasonable time by, a medical practitioner.</p>
-            </item>
-            <item>
-              <num>(d)</num>
-              <p>The detainee must be allowed to choose, and be visited at any reasonable time by, a legal representative.</p>
-            </item>
-            <item>
-              <num>(e)</num>
-              <p>A court must review the detention as soon as reasonably possible, but no later than 10 days after the date the person was detained, and the court must release the detainee unless it is necessary to continue the detention to restore peace and order.</p>
-            </item>
-            <item>
-              <num>(f)</num>
-              <p>A detainee who is not released in terms of a review under paragraph (e), or who is not released in terms of a review under this paragraph, may apply to a court for a further review of the detention at any time after 10 days have passed since the previous review, and the court must release the detainee unless it is still necessary to continue the detention to restore peace and order.</p>
-            </item>
-            <item>
-              <num>(g)</num>
-              <p>The detainee must be allowed to appear in person before any court considering the detention, to be represented by a legal practitioner at those hearings, and to make representations against continued detention.</p>
-            </item>
-            <item>
-              <num>(h)</num>
-              <p>The state must present written reasons to the court to justify the continued detention of the detainee, and must give a copy of those reasons to the detainee at least two days before the court reviews the detention.</p>
-            </item>
-          </blockList>
-        </content>
-      </subsection>
-      <subsection>
-        <num>(7)</num>
-        <intro>
-          <p>If a court releases a detainee, that person may not be detained again on the same grounds unless the state first shows a court good cause for re-detaining that person.</p>
-        </intro>
-        <subsection>
-          <num>(8)</num>
-          <content>
-            <p>Subsections (6) and (7) do not apply to persons who are not South African citizens and who are detained in consequence of an international armed conflict. Instead, the state must comply with the standards binding on the Republic under international humanitarian law in respect of the detention of such persons.</p>
-          </content>
-        </subsection>
-      </subsection>
-      <section>
-        <num>38.</num>
-        <heading>Enforcement of rights</heading>
-        <content>
-          <blockList>
-            <listIntroduction>Anyone listed in this section has the right to approach a competent court, alleging that a right in the Bill of Rights has been infringed or threatened, and the court may grant appropriate relief, including a declaration of rights. The persons who may approach a court are -</listIntroduction>
-            <item>
-              <num>(a)</num>
-              <p>anyone acting in their own interest;</p>
-            </item>
-            <item>
-              <num>(b)</num>
-              <p>anyone acting on behalf of another person who cannot act in their own name;</p>
-            </item>
-            <item>
-              <num>(c)</num>
-              <p>anyone acting as a member of, or in the interest of, a group or class of persons;</p>
-            </item>
-            <item>
-              <num>(d)</num>
-              <p>anyone acting in the public interest; and</p>
-            </item>
-            <item>
-              <num>(e)</num>
-              <p>an association acting in the interest of its members.</p>
-            </item>
-          </blockList>
-        </content>
-      </section>
-      <section>
-        <num>39.</num>
-        <heading>Interpretation of Bill of Rights</heading>
-        <subsection>
-          <num>(1)</num>
+        <section>
+          <num>38.</num>
+          <heading>Enforcement of rights</heading>
           <content>
             <blockList>
-              <listIntroduction>When interpreting the Bill of Rights, a court, tribunal or forum -</listIntroduction>
+              <listIntroduction>Anyone listed in this section has the right to approach a competent court, alleging that a right in the Bill of Rights has been infringed or threatened, and the court may grant appropriate relief, including a declaration of rights. The persons who may approach a court are -</listIntroduction>
               <item>
                 <num>(a)</num>
-                <p>must promote the values that underlie an open and democratic society based on human dignity, equality and freedom;</p>
+                <p>anyone acting in their own interest;</p>
               </item>
               <item>
                 <num>(b)</num>
-                <p>must consider international law; and</p>
+                <p>anyone acting on behalf of another person who cannot act in their own name;</p>
               </item>
               <item>
                 <num>(c)</num>
-                <p>may consider foreign law.</p>
+                <p>anyone acting as a member of, or in the interest of, a group or class of persons;</p>
+              </item>
+              <item>
+                <num>(d)</num>
+                <p>anyone acting in the public interest; and</p>
+              </item>
+              <item>
+                <num>(e)</num>
+                <p>an association acting in the interest of its members.</p>
               </item>
             </blockList>
           </content>
-        </subsection>
-        <subsection>
-          <num>(2)</num>
-          <content>
-            <p>When interpreting any legislation, and when developing the common law or customary law, every court, tribunal or forum must promote the spirit, purport and objects of the Bill of Rights.</p>
-          </content>
-        </subsection>
-        <subsection>
-          <num>(3)</num>
-          <content>
-            <p>The Bill of Rights does not deny the existence of any other rights or freedoms that are recognised or conferred by common law, customary law or legislation, to the extent that they are consistent with the Bill.</p>
-          </content>
-        </subsection>
-      </section>
+        </section>
+        <section>
+          <num>39.</num>
+          <heading>Interpretation of Bill of Rights</heading>
+          <subsection>
+            <num>(1)</num>
+            <content>
+              <blockList>
+                <listIntroduction>When interpreting the Bill of Rights, a court, tribunal or forum -</listIntroduction>
+                <item>
+                  <num>(a)</num>
+                  <p>must promote the values that underlie an open and democratic society based on human dignity, equality and freedom;</p>
+                </item>
+                <item>
+                  <num>(b)</num>
+                  <p>must consider international law; and</p>
+                </item>
+                <item>
+                  <num>(c)</num>
+                  <p>may consider foreign law.</p>
+                </item>
+              </blockList>
+            </content>
+          </subsection>
+          <subsection>
+            <num>(2)</num>
+            <content>
+              <p>When interpreting any legislation, and when developing the common law or customary law, every court, tribunal or forum must promote the spirit, purport and objects of the Bill of Rights.</p>
+            </content>
+          </subsection>
+          <subsection>
+            <num>(3)</num>
+            <content>
+              <p>The Bill of Rights does not deny the existence of any other rights or freedoms that are recognised or conferred by common law, customary law or legislation, to the extent that they are consistent with the Bill.</p>
+            </content>
+          </subsection>
+        </section>
+      </chapter>
       <chapter>
         <num>3</num>
         <heading>Co-operative government</heading>
@@ -9129,14 +9164,14 @@
               <FRBRExpression>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_1"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRlanguage language="eng"/>
               </FRBRExpression>
               <FRBRManifestation>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_1"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>
@@ -9205,14 +9240,14 @@
               <FRBRExpression>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_2"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRlanguage language="eng"/>
               </FRBRExpression>
               <FRBRManifestation>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_2"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>
@@ -9333,14 +9368,14 @@
               <FRBRExpression>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_3"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRlanguage language="eng"/>
               </FRBRExpression>
               <FRBRManifestation>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_3"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>
@@ -9555,14 +9590,14 @@
               <FRBRExpression>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_4"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRlanguage language="eng"/>
               </FRBRExpression>
               <FRBRManifestation>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_4"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>
@@ -9651,14 +9686,14 @@
               <FRBRExpression>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_5"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRlanguage language="eng"/>
               </FRBRExpression>
               <FRBRManifestation>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_5"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>
@@ -9734,14 +9769,14 @@
               <FRBRExpression>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_6"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRlanguage language="eng"/>
               </FRBRExpression>
               <FRBRManifestation>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_6"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>
@@ -11567,14 +11602,14 @@
               <FRBRExpression>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_7"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRlanguage language="eng"/>
               </FRBRExpression>
               <FRBRManifestation>
                 <FRBRthis value="/akn/za/act/1996/constitution/eng/!schedule_7"/>
                 <FRBRuri value="/akn/za/act/1996/constitution/eng"/>
-                <FRBRdate date="2021-09-15" name="Generation"/>
+                <FRBRdate date="2021-09-23" name="Generation"/>
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>

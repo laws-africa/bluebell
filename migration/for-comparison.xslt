@@ -4,15 +4,6 @@
 
   <xsl:output method="xml" encoding="utf8" />
 
-  <!-- unwrap hcontainers -->
-  <!-- TODO: do this only when the hcontainer is the only "content" in a hier elem -->
-  <xsl:template match="a:part/a:hcontainer | a:section/a:hcontainer | a:article/a:hcontainer
-                       | a:chapter/a:hocntainer | a:subsection/a:hcontainer">
-    <xsl:apply-templates select="a:content" />
-  </xsl:template>
-
-  <!-- TODO: old-style fake crossheadings -->
-
   <xsl:template match="*">
     <xsl:copy>
       <!-- skip eIds -->
