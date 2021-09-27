@@ -587,7 +587,10 @@
       <xsl:text>&#10;</xsl:text>
     </xsl:if>
 
-    <xsl:apply-templates select=".//a:authorialNote" mode="content">
+    <!-- we only want authorialNotes that don't have an intermediate element between this p
+     and the note. -->
+    <xsl:variable name="cnt" select="count(ancestor-or-self::a:p)" />
+    <xsl:apply-templates select=".//a:authorialNote[count(ancestor::a:p) = $cnt]" mode="content">
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
   </xsl:template>
