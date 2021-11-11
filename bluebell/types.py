@@ -186,6 +186,7 @@ class Attachments:
 class Attachment:
     def to_dict(self):
         if self.indented.text:
+            # TODO: self.indented.content may include attachments
             kids = many_to_dict(self.indented.content)
         else:
             kids = []
