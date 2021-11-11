@@ -185,7 +185,7 @@ class Attachments:
 
 class Attachment:
     def to_dict(self):
-        if self.indented.content:
+        if hasattr(self.indented, 'content'):
             kids = many_to_dict(c.hier_block_element for c in self.indented.content)
         else:
             kids = []
@@ -193,7 +193,7 @@ class Attachment:
         kids.extend(many_to_dict(c.hier_block_indent for c in self.content))
 
         # nested attachments
-        if self.indented.attachments:
+        if hasattr(self.indented, 'attachments'):
             kids.extend(many_to_dict(self.indented.attachments))
         kids.extend(many_to_dict(self.attachments))
 
