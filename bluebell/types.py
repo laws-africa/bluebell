@@ -185,13 +185,17 @@ class Attachments:
 
 class Attachment:
     def to_dict(self):
-        if self.indented.text:
-            # TODO: self.indented.content may include attachments
-            kids = many_to_dict(self.indented.content)
+        if self.indented.content:
+            kids = many_to_dict(c.hier_block_element for c in self.indented.content)
         else:
             kids = []
 
         kids.extend(many_to_dict(c.hier_block_indent for c in self.content))
+
+        # nested attachments
+        if self.indented.attachments:
+            kids.extend(many_to_dict(self.indented.attachments))
+        kids.extend(many_to_dict(self.attachments))
 
         info = {
             'type': 'element',

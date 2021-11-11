@@ -355,6 +355,7 @@ ANNEXURE a heading
   some text
 
   SCHEDULE heading
+    SUBHEADING a nother subheading
 
     schedule text
 """, 'attachment')
@@ -362,12 +363,8 @@ ANNEXURE a heading
             'type': 'element',
             'name': 'attachment',
             'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
-            'heading': [{
-                'type': 'text',
-                'value': 'a heading'}],
-            'subheading': [{
-                'type': 'text',
-                'value': 'subheading'}],
+            'heading': [{'type': 'text', 'value': 'a heading'}],
+            'subheading': [{'type': 'text', 'value': 'subheading'}],
             'children': [{
                 'type': 'content',
                 'name': 'p',
@@ -378,16 +375,14 @@ ANNEXURE a heading
                 'type': 'element',
                 'name': 'attachment',
                 'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
-                'heading': [{
-                    'type': 'text',
-                    'value': 'heading',
-                }],
+                'heading': [{'type': 'text', 'value': 'heading'}],
+                'subheading': [{'type': 'text', 'value': 'a nother subheading'}],
                 'children': [{
                     'name': 'p',
                     'type': 'content',
                     'children': [{
                         'type': 'text',
-                        'value': 'some text',
+                        'value': 'schedule text',
                     }],
                 }],
             }]
