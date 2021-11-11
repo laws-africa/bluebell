@@ -987,7 +987,6 @@ ANNEXURE also back out
   final content
 
 """, 'attachments')
-        # whatis = tree.to_dict()
         self.assertEqual({
             'type': 'element',
             'name': 'attachments',
@@ -1151,3 +1150,175 @@ ANNEXURE also back out
                 'heading': [{'type': 'text', 'value': 'also back out'}]}]}, tree.to_dict())
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
         today = datestring(date.today())
+
+    def test_nested_attachments_overindented(self):
+        """ A correctly marked-up Schedule inside a Division in an attachment will be parsed as text,
+            but once it's unindented it'll be recognised as a Schedule again.
+        """
+        tree = self.parse("""
+ANNEXURE a heading
+  SUBHEADING subheading
+
+  DIVISION A. - The First Division
+
+    contento
+
+    SCHEDULE not a heading
+      SUBHEADING not a subheading
+
+      not Schedule content
+
+  SCHEDULE a heading again
+    SUBHEADING a subheading again
+
+    Schedule content again
+
+""", 'attachments')
+        self.assertEqual({
+            'type': 'element',
+            'name': 'attachments',
+            'children': [
+                {
+                    'type': 'element',
+                    'name': 'attachment',
+                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'children': [{
+                        'type': 'hier',
+                        'name': 'division',
+                        'children': [{
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'contento'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'SCHEDULE not a heading'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'SUBHEADING not a subheading'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'not Schedule content'}]}],
+                        'num': 'A.',
+                        'heading': [{
+                            'type': 'text',
+                            'value': 'The First Division'}]
+                    }, {
+                        'type': 'element',
+                        'name': 'attachment',
+                        'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                        'children': [{
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'Schedule content again'}]
+                        }],
+                        'heading': [{'type': 'text', 'value': 'a heading again'}],
+                        'subheading': [{'type': 'text', 'value': 'a subheading again'}]}],
+                    'heading': [{'type': 'text', 'value': 'a heading'}],
+                    'subheading': [{'type': 'text', 'value': 'subheading'}]
+                }
+            ]}, tree.to_dict())
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        today = datestring(date.today())
+        self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <attachment eId="att_1">
+    <heading>a heading</heading>
+    <subheading>subheading</subheading>
+    <doc contains="originalVersion" name="annexure">
+      <meta>
+        <identification source="#cobalt">
+          <FRBRWork>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10"/>
+            <FRBRalias value="Untitled" name="title"/>
+            <FRBRdate date="2009" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRcountry value="za"/>
+            <FRBRnumber value="10"/>
+          </FRBRWork>
+          <FRBRExpression>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="{today}" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRlanguage language="eng"/>
+          </FRBRExpression>
+          <FRBRManifestation>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="{today}" name="Generation"/>
+            <FRBRauthor href=""/>
+          </FRBRManifestation>
+        </identification>
+        <references source="#cobalt">
+          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        </references>
+      </meta>
+      <mainBody>
+        <division eId="att_1__dvs_A">
+          <num>A.</num>
+          <heading>The First Division</heading>
+          <content>
+            <p eId="att_1__dvs_A__p_1">contento</p>
+            <p eId="att_1__dvs_A__p_2">SCHEDULE not a heading</p>
+            <p eId="att_1__dvs_A__p_3">SUBHEADING not a subheading</p>
+            <p eId="att_1__dvs_A__p_4">not Schedule content</p>
+          </content>
+        </division>
+      </mainBody>
+      <attachments>
+        <attachment eId="att_1__att_1">
+          <heading>a heading again</heading>
+          <subheading>a subheading again</subheading>
+          <doc contains="originalVersion" name="schedule">
+            <meta>
+              <identification source="#cobalt">
+                <FRBRWork>
+                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1__schedule_1"/>
+                  <FRBRuri value="/akn/za/act/2009/10"/>
+                  <FRBRalias value="Untitled" name="title"/>
+                  <FRBRdate date="2009" name="Generation"/>
+                  <FRBRauthor href=""/>
+                  <FRBRcountry value="za"/>
+                  <FRBRnumber value="10"/>
+                </FRBRWork>
+                <FRBRExpression>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1"/>
+                  <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                  <FRBRdate date="{today}" name="Generation"/>
+                  <FRBRauthor href=""/>
+                  <FRBRlanguage language="eng"/>
+                </FRBRExpression>
+                <FRBRManifestation>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1"/>
+                  <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                  <FRBRdate date="{today}" name="Generation"/>
+                  <FRBRauthor href=""/>
+                </FRBRManifestation>
+              </identification>
+              <references source="#cobalt">
+                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+              </references>
+            </meta>
+            <mainBody>
+              <p eId="att_1__att_1__p_1">Schedule content again</p>
+            </mainBody>
+          </doc>
+        </attachment>
+      </attachments>
+    </doc>
+  </attachment>
+</attachments>
+""", xml)
