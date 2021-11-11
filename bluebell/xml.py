@@ -336,6 +336,20 @@ class XmlGenerator:
             if item.get('subheading'):
                 pre.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
 
+            # optional nested attachments
+            main_body_kids = [c for c in item.get('children', []) if c.get('name', None) != 'attachment']
+            attachment_kids = [c for c in item.get('children', []) if c.get('name', None) == 'attachment']
+
+            if attachment_kids:
+                return m('attachment',
+                         *pre,
+                         m('doc',
+                           self.make_meta(self.attachment_frbr_uri(item)),
+                           m('mainBody', *self.kids_to_xml(kids=main_body_kids, prefix=eid)),
+                           m('attachments', *self.kids_to_xml(kids=attachment_kids, prefix=eid)),
+                           **item.get('attribs', {})),
+                         eId=eid)
+
             return m('attachment',
                      *pre,
                      m('doc',
@@ -431,9 +445,11 @@ class XmlGenerator:
         """ Build an FrbrUri instance for the attachment in the given item.
         """
         name = item.get('attribs', {}).get('name', 'attachment')
+        # TODO: check with prefix like we do for eIds
         num = self.ids.incr('__attachments', name)
 
         frbr_uri = self.frbr_uri.clone()
+        # TODO: include parent annex prefix
         frbr_uri.work_component = f'{name}_{num}'
 
         return frbr_uri

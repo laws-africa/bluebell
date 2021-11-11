@@ -427,43 +427,46 @@ ANNEXURE a heading
     <mainBody>
       <p eId="att_1__p_1">some text</p>
     </mainBody>
-    <attachment eId="att_1__att_1">
-      <heading>heading</heading>
-      <doc contains="originalVersion" name="schedule">
-        <meta>
-          <identification source="#cobalt">
-            <FRBRWork>
-              <FRBRthis value="/akn/za/act/2009/10/!annexure_1__schedule_1"/>
-              <FRBRuri value="/akn/za/act/2009/10"/>
-              <FRBRalias value="Untitled" name="title"/>
-              <FRBRdate date="2009" name="Generation"/>
-              <FRBRauthor href=""/>
-              <FRBRcountry value="za"/>
-              <FRBRnumber value="10"/>
-            </FRBRWork>
-            <FRBRExpression>
-              <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1"/>
-              <FRBRuri value="/akn/za/act/2009/10/eng"/>
-              <FRBRdate date="{today}" name="Generation"/>
-              <FRBRauthor href=""/>
-              <FRBRlanguage language="eng"/>
-            </FRBRExpression>
-            <FRBRManifestation>
-              <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1"/>
-              <FRBRuri value="/akn/za/act/2009/10/eng"/>
-              <FRBRdate date="{today}" name="Generation"/>
-              <FRBRauthor href=""/>
-            </FRBRManifestation>
-          </identification>
-          <references source="#cobalt">
-            <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-          </references>
-        </meta>
-        <mainBody>
-          <p eId="att_1__att_1__p_1">schedule text</p>
-        </mainBody>
-      </doc>
-    </attachment>
-    </doc>
+    <attachments>
+      <attachment eId="att_1__att_1">
+        <heading>heading</heading>
+        <subheading>a nother subheading</subheading>
+        <doc contains="originalVersion" name="schedule">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/za/act/2009/10/!annexure_1__schedule_1"/>
+                <FRBRuri value="/akn/za/act/2009/10"/>
+                <FRBRalias value="Untitled" name="title"/>
+                <FRBRdate date="2009" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="za"/>
+                <FRBRnumber value="10"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1"/>
+                <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                <FRBRdate date="{today}" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1"/>
+                <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                <FRBRdate date="{today}" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+            <references source="#cobalt">
+              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+            </references>
+          </meta>
+          <mainBody>
+            <p eId="att_1__att_1__p_1">schedule text</p>
+          </mainBody>
+        </doc>
+      </attachment>
+    </attachments>
+  </doc>
 </attachment>
 """, xml)
