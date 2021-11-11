@@ -658,6 +658,8 @@ ANNEXURE a heading
 
   some text
 
+  some more text
+
   SCHEDULE heading
     SUBHEADING a nother subheading
 
@@ -687,6 +689,12 @@ ANNEXURE back out
                             'children': [{
                                 'type': 'text',
                                 'value': 'some text'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'some more text'}]
                         }, {
                             'type': 'element',
                             'name': 'attachment',
@@ -763,6 +771,7 @@ ANNEXURE back out
       </meta>
       <mainBody>
         <p eId="att_1__p_1">some text</p>
+        <p eId="att_1__p_2">some more text</p>
       </mainBody>
       <attachments>
         <attachment eId="att_1__att_1">
