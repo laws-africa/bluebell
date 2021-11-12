@@ -61,8 +61,8 @@ class Parser(BaseParser):
 class AkomaNtosoParser:
     """ Parses plain text into well-formed Akoma Ntoso XML.
     """
-    indent = '{'
-    dedent = '}'
+    indent = INDENT
+    dedent = DEDENT
     indent_size = 2
 
     line_re = re.compile(r'^([ ]*)([^ \n])', re.M)
