@@ -930,6 +930,289 @@ ANNEXURE back out
 </attachments>
 """, xml)
 
+    def test_nested_attachments_back_out(self):
+        tree = self.parse("""
+ANNEXURE a heading
+  SUBHEADING subheading
+
+  some text
+
+  some more text
+
+even more text, pushed into Annex
+
+  SCHEDULE is a heading
+    SUBHEADING is a subheading
+
+    PARA 1. - is a paragraph
+
+      para 1 content
+
+    ANNEXURE is an Annex
+
+      content of Annex to Schedule to first Annex
+
+ANNEXURE back out
+  SUBHEADING subheading
+
+  text :)
+
+""", 'attachments')
+        self.assertEqual({
+            'type': 'element',
+            'name': 'attachments',
+            'children': [
+                {
+                    'type': 'element',
+                    'name': 'attachment',
+                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'children': [
+                        {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'some text'}]
+                        },
+                        {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'some more text'}]
+                        },
+                        {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'even more text, pushed into Annex'}]
+                        },
+                        {
+                            'type': 'element',
+                            'name': 'attachment',
+                            'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                            'children': [
+                                {
+                                    'type': 'hier',
+                                    'name': 'paragraph',
+                                    'children': [
+                                        {
+                                            'type': 'content',
+                                            'name': 'p',
+                                            'children': [{'type': 'text', 'value': 'para 1 content'}]
+                                        },
+                                    ],
+                                    'num': '1.',
+                                    'heading': [{'type': 'text', 'value': 'is a paragraph'}]
+                                },
+                                {
+                                    'type': 'element',
+                                    'name': 'attachment',
+                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                    'children': [
+                                        {
+                                            'type': 'content',
+                                            'name': 'p',
+                                            'children': [{
+                                                'type': 'text',
+                                                'value': 'content of Annex to Schedule to first Annex'}]
+                                        }
+                                    ],
+                                    'heading': [{'type': 'text', 'value': 'is an Annex'}],
+                                },
+                            ],
+                            'heading': [{'type': 'text', 'value': 'is a heading'}],
+                            'subheading': [{'type': 'text', 'value': 'is a subheading'}],
+                        },
+                    ],
+                    'heading': [{'type': 'text', 'value': 'a heading'}],
+                    'subheading': [{'type': 'text', 'value': 'subheading'}]
+                },
+                {
+                    'type': 'element',
+                    'name': 'attachment',
+                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'children': [
+                        {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{'type': 'text', 'value': 'text :)'}],
+                        }
+                    ],
+                    'heading': [{'type': 'text', 'value': 'back out'}],
+                    'subheading': [{'type': 'text', 'value': 'subheading'}],
+                },
+            ]}, tree.to_dict())
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        today = datestring(date.today())
+        self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <attachment eId="att_1">
+    <heading>a heading</heading>
+    <subheading>subheading</subheading>
+    <doc contains="originalVersion" name="annexure">
+      <meta>
+        <identification source="#cobalt">
+          <FRBRWork>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10"/>
+            <FRBRalias value="Untitled" name="title"/>
+            <FRBRdate date="2009" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRcountry value="za"/>
+            <FRBRnumber value="10"/>
+          </FRBRWork>
+          <FRBRExpression>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="{today}" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRlanguage language="eng"/>
+          </FRBRExpression>
+          <FRBRManifestation>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="{today}" name="Generation"/>
+            <FRBRauthor href=""/>
+          </FRBRManifestation>
+        </identification>
+        <references source="#cobalt">
+          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        </references>
+      </meta>
+      <mainBody>
+        <p eId="att_1__p_1">some text</p>
+        <p eId="att_1__p_2">some more text</p>
+        <p eId="att_1__p_3">even more text, pushed into Annex</p>
+      </mainBody>
+      <attachments>
+        <attachment eId="att_1__att_1">
+          <heading>is a heading</heading>
+          <subheading>is a subheading</subheading>
+          <doc contains="originalVersion" name="schedule">
+            <meta>
+              <identification source="#cobalt">
+                <FRBRWork>
+                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1__schedule_1"/>
+                  <FRBRuri value="/akn/za/act/2009/10"/>
+                  <FRBRalias value="Untitled" name="title"/>
+                  <FRBRdate date="2009" name="Generation"/>
+                  <FRBRauthor href=""/>
+                  <FRBRcountry value="za"/>
+                  <FRBRnumber value="10"/>
+                </FRBRWork>
+                <FRBRExpression>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1"/>
+                  <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                  <FRBRdate date="{today}" name="Generation"/>
+                  <FRBRauthor href=""/>
+                  <FRBRlanguage language="eng"/>
+                </FRBRExpression>
+                <FRBRManifestation>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1"/>
+                  <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                  <FRBRdate date="{today}" name="Generation"/>
+                  <FRBRauthor href=""/>
+                </FRBRManifestation>
+              </identification>
+              <references source="#cobalt">
+                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+              </references>
+            </meta>
+            <mainBody>
+              <paragraph eId="att_1__att_1__para_1">
+                <num>1.</num>
+                <heading>is a paragraph</heading>
+                <content>
+                  <p eId="att_1__att_1__para_1__p_1">para 1 content</p>
+                </content>
+              </paragraph>
+            </mainBody>
+            <attachments>
+              <attachment eId="att_1__att_1__att_1">
+                <heading>is an Annex</heading>
+                <doc contains="originalVersion" name="annexure">
+                  <meta>
+                    <identification source="#cobalt">
+                      <FRBRWork>
+                        <FRBRthis value="/akn/za/act/2009/10/!annexure_1__schedule_1__annexure_1"/>
+                        <FRBRuri value="/akn/za/act/2009/10"/>
+                        <FRBRalias value="Untitled" name="title"/>
+                        <FRBRdate date="2009" name="Generation"/>
+                        <FRBRauthor href=""/>
+                        <FRBRcountry value="za"/>
+                        <FRBRnumber value="10"/>
+                      </FRBRWork>
+                      <FRBRExpression>
+                        <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1__annexure_1"/>
+                        <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                        <FRBRdate date="{today}" name="Generation"/>
+                        <FRBRauthor href=""/>
+                        <FRBRlanguage language="eng"/>
+                      </FRBRExpression>
+                      <FRBRManifestation>
+                        <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1__annexure_1"/>
+                        <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                        <FRBRdate date="{today}" name="Generation"/>
+                        <FRBRauthor href=""/>
+                      </FRBRManifestation>
+                    </identification>
+                    <references source="#cobalt">
+                      <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+                    </references>
+                  </meta>
+                  <mainBody>
+                    <p eId="att_1__att_1__att_1__p_1">content of Annex to Schedule to first Annex</p>
+                  </mainBody>
+                </doc>
+              </attachment>
+            </attachments>
+          </doc>
+        </attachment>
+      </attachments>
+    </doc>
+  </attachment>
+  <attachment eId="att_2">
+    <heading>back out</heading>
+    <subheading>subheading</subheading>
+    <doc contains="originalVersion" name="annexure">
+      <meta>
+        <identification source="#cobalt">
+          <FRBRWork>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_2"/>
+            <FRBRuri value="/akn/za/act/2009/10"/>
+            <FRBRalias value="Untitled" name="title"/>
+            <FRBRdate date="2009" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRcountry value="za"/>
+            <FRBRnumber value="10"/>
+          </FRBRWork>
+          <FRBRExpression>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_2"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="{today}" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRlanguage language="eng"/>
+          </FRBRExpression>
+          <FRBRManifestation>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_2"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="{today}" name="Generation"/>
+            <FRBRauthor href=""/>
+          </FRBRManifestation>
+        </identification>
+        <references source="#cobalt">
+          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        </references>
+      </meta>
+      <mainBody>
+        <p eId="att_2__p_1">text :)</p>
+      </mainBody>
+    </doc>
+  </attachment>
+</attachments>
+""", xml)
+
     def test_nested_attachments_break_structure(self):
         tree = self.parse("""
 ANNEXURE a heading
@@ -1158,50 +1441,53 @@ ANNEXURE a heading
                     'type': 'element',
                     'name': 'attachment',
                     'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
-                    'children': [{
-                        'type': 'hier',
-                        'name': 'division',
-                        'children': [{
-                            'type': 'content',
-                            'name': 'p',
+                    'children': [
+                        {
+                            'type': 'hier',
+                            'name': 'division',
                             'children': [{
+                                'type': 'content',
+                                'name': 'p',
+                                'children': [{
+                                    'type': 'text',
+                                    'value': 'contento'}]
+                            }, {
+                                'type': 'content',
+                                'name': 'p',
+                                'children': [{
+                                    'type': 'text',
+                                    'value': 'SCHEDULE not a heading'}]
+                            }, {
+                                'type': 'content',
+                                'name': 'p',
+                                'children': [{
+                                    'type': 'text',
+                                    'value': 'SUBHEADING not a subheading'}]
+                            }, {
+                                'type': 'content',
+                                'name': 'p',
+                                'children': [{
+                                    'type': 'text',
+                                    'value': 'not Schedule content'}]}],
+                            'num': 'A.',
+                            'heading': [{
                                 'type': 'text',
-                                'value': 'contento'}]
-                        }, {
-                            'type': 'content',
-                            'name': 'p',
+                                'value': 'The First Division'}]
+                        },
+                        {
+                            'type': 'element',
+                            'name': 'attachment',
+                            'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
                             'children': [{
-                                'type': 'text',
-                                'value': 'SCHEDULE not a heading'}]
-                        }, {
-                            'type': 'content',
-                            'name': 'p',
-                            'children': [{
-                                'type': 'text',
-                                'value': 'SUBHEADING not a subheading'}]
-                        }, {
-                            'type': 'content',
-                            'name': 'p',
-                            'children': [{
-                                'type': 'text',
-                                'value': 'not Schedule content'}]}],
-                        'num': 'A.',
-                        'heading': [{
-                            'type': 'text',
-                            'value': 'The First Division'}]
-                    }, {
-                        'type': 'element',
-                        'name': 'attachment',
-                        'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
-                        'children': [{
-                            'type': 'content',
-                            'name': 'p',
-                            'children': [{
-                                'type': 'text',
-                                'value': 'Schedule content again'}]
-                        }],
-                        'heading': [{'type': 'text', 'value': 'a heading again'}],
-                        'subheading': [{'type': 'text', 'value': 'a subheading again'}]}],
+                                'type': 'content',
+                                'name': 'p',
+                                'children': [{
+                                    'type': 'text',
+                                    'value': 'Schedule content again'}]
+                            }],
+                            'heading': [{'type': 'text', 'value': 'a heading again'}],
+                            'subheading': [{'type': 'text', 'value': 'a subheading again'}]},
+                    ],
                     'heading': [{'type': 'text', 'value': 'a heading'}],
                     'subheading': [{'type': 'text', 'value': 'subheading'}]
                 }
