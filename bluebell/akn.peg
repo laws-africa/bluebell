@@ -409,6 +409,7 @@ grammar akn
 
   newline           <- "\n"
 
-  indent            <- '{' eol
+  # These MUST match parser.INDENT and parser.DEDENT
+  indent            <- '\x0E' eol
 
-  dedent            <- '}' eol
+  dedent            <- '\x0F' eol
