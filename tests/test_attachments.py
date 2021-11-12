@@ -930,79 +930,54 @@ ANNEXURE back out
 </attachments>
 """, xml)
 
-    def test_nested_attachments_broken(self):
+    def test_nested_attachments_break_structure(self):
         tree = self.parse("""
-ANNEXURE a heading
-  SUBHEADING subheading
-
-  DIVISION A. - The First Division
-
-    contento
-
-    SCHEDULE not a heading
-      SUBHEADING not a subheading
-
-      not Schedule content
-
-  SCHEDULE a heading again
-    SUBHEADING a subheading again
-
-    Schedule content again
-
 ANNEXURE a heading
   SUBHEADING subheading
 
   some text
 
-  SCHEDULE also a heading
-    SUBHEADING also a subheading
+  SCHEDULE actually a schedule
+    SUBHEADING actually a subheading
 
-    Schedule (inside Annexure) content
+    Schedule (to Annexure) content
 
-  some more text, pushed into Schedule
+  some more text, pushed into Schedule to Annexure
 
-even more text, also pushed into Schedule
+even more text, pushed into Annex (will move up)
 
-  SCHEDULE heading
-    SUBHEADING a nother subheading
+  SCHEDULE not a heading
+    SUBHEADING just text
 
-    PARA 1.
+    PARA 1. - just text
 
-      here's a hierarchical guy.
+      more just text
 
-    ANNEXURE Annex
-      SUBHEADING Yep, an Annex to a Schedule to an Annex
+    ANNEXURE not an Annex
 
-      hi there
-
-ANNEXURE back out
-  SUBHEADING subhead
-
-  more content
-
-ANNEXURE also back out
-
-  ANNEXURE Annex to final annex
-
-  final content
+      even more just text
 
 """, 'attachments')
         self.assertEqual({
             'type': 'element',
             'name': 'attachments',
-            'children': [{
-                'type': 'element',
-                'name': 'attachment',
-                'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
-                'children': [{
-                    'type': 'hier',
-                    'name': 'division',
+            'children': [
+                {
+                    'type': 'element',
+                    'name': 'attachment',
+                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
                     'children': [{
                         'type': 'content',
                         'name': 'p',
                         'children': [{
                             'type': 'text',
-                            'value': 'contento'}]
+                            'value': 'some text'}]
+                    }, {
+                        'type': 'content',
+                        'name': 'p',
+                        'children': [{
+                            'type': 'text',
+                            'value': 'even more text, pushed into Annex (will move up)'}]
                     }, {
                         'type': 'content',
                         'name': 'p',
@@ -1014,142 +989,143 @@ ANNEXURE also back out
                         'name': 'p',
                         'children': [{
                             'type': 'text',
-                            'value': 'SUBHEADING not a subheading'}]
+                            'value': 'SUBHEADING just text'}]
                     }, {
                         'type': 'content',
                         'name': 'p',
                         'children': [{
                             'type': 'text',
-                            'value': 'not Schedule content'}]}],
-                    'num': 'A.',
-                    'heading': [{
-                        'type': 'text',
-                        'value': 'The First Division'}]
-                }, {
-                    'type': 'element',
-                    'name': 'attachment',
-                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
-                    'children': [{
-                        'type': 'content',
-                        'name': 'p',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'Schedule content again'}]
-                    }],
-                    'heading': [{'type': 'text', 'value': 'a heading again'}],
-                    'subheading': [{'type': 'text', 'value': 'a subheading again'}]
-                }
-                ],
-                'heading': [{'type': 'text', 'value': 'a heading'}],
-                'subheading': [{'type': 'text', 'value': 'subheading'}]
-            }, {
-                'type': 'element',
-                'name': 'attachment',
-                'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
-                'children': [{
-                    'type': 'content',
-                    'name': 'p',
-                    'children': [{
-                        'type': 'text',
-                        'value': 'some text'}]
-                }, {
-                    'type': 'content',
-                    'name': 'p',
-                    'children': [{
-                        'type': 'text',
-                        'value': 'even more text, also pushed into Schedule'}]
-                }, {
-                    'type': 'content',
-                    'name': 'p',
-                    'children': [{
-                        'type': 'text',
-                        'value': 'SCHEDULE heading'}]
-                }, {
-                    'type': 'content',
-                    'name': 'p',
-                    'children': [{
-                        'type': 'text',
-                        'value': 'SUBHEADING a nother subheading'}]
-                }, {
-                    'type': 'content',
-                    'name': 'p',
-                    'children': [{
-                        'type': 'text',
-                        'value': 'PARA 1.'}]
-                }, {
-                    'type': 'content',
-                    'name': 'p',
-                    'children': [{
-                        'type': 'text',
-                        'value': "here's a hierarchical guy."}]
-                }, {
-                    'type': 'content',
-                    'name': 'p',
-                    'children': [{
-                        'type': 'text',
-                        'value': 'ANNEXURE Annex'}]
-                }, {
-                    'type': 'content',
-                    'name': 'p',
-                    'children': [{
-                        'type': 'text',
-                        'value': 'SUBHEADING Yep, an Annex to a Schedule to an Annex'}]
-                }, {
-                    'type': 'content',
-                    'name': 'p',
-                    'children': [{
-                        'type': 'text',
-                        'value': 'hi there'}]
-                }, {
-                    'type': 'element',
-                    'name': 'attachment',
-                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
-                    'children': [{
-                        'type': 'content',
-                        'name': 'p',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'Schedule (inside Annexure) content'}]
+                            'value': 'PARA 1. - just text'}]
                     }, {
                         'type': 'content',
                         'name': 'p',
                         'children': [{
                             'type': 'text',
-                            'value': 'some more text, pushed into Schedule'}]}],
-                    'heading': [{'type': 'text', 'value': 'also a heading'}],
-                    'subheading': [{'type': 'text', 'value': 'also a subheading'}]}],
-                'heading': [{'type': 'text', 'value': 'a heading'}],
-                'subheading': [{'type': 'text', 'value': 'subheading'}]
-            }, {
-                'type': 'element',
-                'name': 'attachment',
-                'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
-                'children': [{
-                    'type': 'content',
-                    'name': 'p',
-                    'children': [{
-                        'type': 'text',
-                        'value': 'more content'}]}],
-                'heading': [{'type': 'text', 'value': 'back out'}],
-                'subheading': [{'type': 'text', 'value': 'subhead'}]
-            }, {
-                'type': 'element',
-                'name': 'attachment',
-                'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
-                'children': [{
-                    'type': 'element',
-                    'name': 'attachment',
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
-                    'children': [{
+                            'value': 'more just text'}]
+                    }, {
                         'type': 'content',
                         'name': 'p',
                         'children': [{
                             'type': 'text',
-                            'value': 'final content'}]}],
-                    'heading': [{'type': 'text', 'value': 'Annex to final annex'}]}],
-                'heading': [{'type': 'text', 'value': 'also back out'}]}]}, tree.to_dict())
+                            'value': 'ANNEXURE not an Annex'}]
+                    }, {
+                        'type': 'content',
+                        'name': 'p',
+                        'children': [{
+                            'type': 'text',
+                            'value': 'even more just text'}]
+                    }, {
+                        'type': 'element',
+                        'name': 'attachment',
+                        'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                        'children': [{
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'Schedule (to Annexure) content'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'some more text, pushed into Schedule to Annexure'}]}],
+                        'heading': [{'type': 'text', 'value': 'actually a schedule'}],
+                        'subheading': [{'type': 'text', 'value': 'actually a subheading'}]}],
+                    'heading': [{'type': 'text', 'value': 'a heading'}],
+                    'subheading': [{'type': 'text', 'value': 'subheading'}]
+                }]}, tree.to_dict())
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
         today = datestring(date.today())
+        self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <attachment eId="att_1">
+    <heading>a heading</heading>
+    <subheading>subheading</subheading>
+    <doc contains="originalVersion" name="annexure">
+      <meta>
+        <identification source="#cobalt">
+          <FRBRWork>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10"/>
+            <FRBRalias value="Untitled" name="title"/>
+            <FRBRdate date="2009" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRcountry value="za"/>
+            <FRBRnumber value="10"/>
+          </FRBRWork>
+          <FRBRExpression>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="{today}" name="Generation"/>
+            <FRBRauthor href=""/>
+            <FRBRlanguage language="eng"/>
+          </FRBRExpression>
+          <FRBRManifestation>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+            <FRBRuri value="/akn/za/act/2009/10/eng"/>
+            <FRBRdate date="{today}" name="Generation"/>
+            <FRBRauthor href=""/>
+          </FRBRManifestation>
+        </identification>
+        <references source="#cobalt">
+          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        </references>
+      </meta>
+      <mainBody>
+        <p eId="att_1__p_1">some text</p>
+        <p eId="att_1__p_2">even more text, pushed into Annex (will move up)</p>
+        <p eId="att_1__p_3">SCHEDULE not a heading</p>
+        <p eId="att_1__p_4">SUBHEADING just text</p>
+        <p eId="att_1__p_5">PARA 1. - just text</p>
+        <p eId="att_1__p_6">more just text</p>
+        <p eId="att_1__p_7">ANNEXURE not an Annex</p>
+        <p eId="att_1__p_8">even more just text</p>
+      </mainBody>
+      <attachments>
+        <attachment eId="att_1__att_1">
+          <heading>actually a schedule</heading>
+          <subheading>actually a subheading</subheading>
+          <doc contains="originalVersion" name="schedule">
+            <meta>
+              <identification source="#cobalt">
+                <FRBRWork>
+                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1__schedule_1"/>
+                  <FRBRuri value="/akn/za/act/2009/10"/>
+                  <FRBRalias value="Untitled" name="title"/>
+                  <FRBRdate date="2009" name="Generation"/>
+                  <FRBRauthor href=""/>
+                  <FRBRcountry value="za"/>
+                  <FRBRnumber value="10"/>
+                </FRBRWork>
+                <FRBRExpression>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1"/>
+                  <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                  <FRBRdate date="{today}" name="Generation"/>
+                  <FRBRauthor href=""/>
+                  <FRBRlanguage language="eng"/>
+                </FRBRExpression>
+                <FRBRManifestation>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1__schedule_1"/>
+                  <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                  <FRBRdate date="{today}" name="Generation"/>
+                  <FRBRauthor href=""/>
+                </FRBRManifestation>
+              </identification>
+              <references source="#cobalt">
+                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+              </references>
+            </meta>
+            <mainBody>
+              <p eId="att_1__att_1__p_1">Schedule (to Annexure) content</p>
+              <p eId="att_1__att_1__p_2">some more text, pushed into Schedule to Annexure</p>
+            </mainBody>
+          </doc>
+        </attachment>
+      </attachments>
+    </doc>
+  </attachment>
+</attachments>
+""", xml)
 
     def test_nested_attachments_overindented(self):
         """ A correctly marked-up Schedule inside a Division in an attachment will be parsed as text,
