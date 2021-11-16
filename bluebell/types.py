@@ -195,7 +195,6 @@ class Attachment:
         # nested attachments
         if hasattr(self.indented, 'attachments'):
             kids.extend(many_to_dict(self.indented.attachments))
-        kids.extend(many_to_dict(self.attachments))
 
         info = {
             'type': 'element',
