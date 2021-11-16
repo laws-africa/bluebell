@@ -1375,7 +1375,7 @@ SCHEDULE first schedule
               </attachment>
               <attachment eId="att_1__att_2__att_2">
                 <heading>first, second, first</heading>
-                <doc contains="originalVersion" name="schedule">
+                <doc contains="originalVersion" name="annexure">
                   <meta>
                     <identification source="#cobalt">
                       <FRBRWork>
