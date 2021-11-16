@@ -469,7 +469,7 @@ ANNEXURE a heading
 </attachment>
 """, xml)
 
-    def test_nested_attachments_back_out(self):
+    def test_nested_attachments_multiple(self):
         tree = self.parse("""
 ANNEXURE a heading
   SUBHEADING subheading
@@ -501,7 +501,8 @@ ANNEXURE back out
                             'children': [{
                                 'type': 'text',
                                 'value': 'some text'}]
-                        }, {
+                        },
+                        {
                             'type': 'element',
                             'name': 'attachment',
                             'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
@@ -515,7 +516,8 @@ ANNEXURE back out
                             'subheading': [{'type': 'text', 'value': 'a nother subheading'}]}],
                     'heading': [{'type': 'text', 'value': 'a heading'}],
                     'subheading': [{'type': 'text', 'value': 'subheading'}]
-                }, {
+                },
+                {
                     'type': 'element',
                     'name': 'attachment',
                     'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
@@ -930,7 +932,7 @@ ANNEXURE back out
 </attachments>
 """, xml)
 
-    def test_nested_attachments_back_out(self):
+    def test_nested_attachments_with_hier(self):
         tree = self.parse("""
 ANNEXURE a heading
   SUBHEADING subheading
@@ -938,8 +940,6 @@ ANNEXURE a heading
   some text
 
   some more text
-
-even more text, pushed into Annex
 
   SCHEDULE is a heading
     SUBHEADING is a subheading
@@ -980,13 +980,6 @@ ANNEXURE back out
                             'children': [{
                                 'type': 'text',
                                 'value': 'some more text'}]
-                        },
-                        {
-                            'type': 'content',
-                            'name': 'p',
-                            'children': [{
-                                'type': 'text',
-                                'value': 'even more text, pushed into Annex'}]
                         },
                         {
                             'type': 'element',
@@ -1083,7 +1076,6 @@ ANNEXURE back out
       <mainBody>
         <p eId="att_1__p_1">some text</p>
         <p eId="att_1__p_2">some more text</p>
-        <p eId="att_1__p_3">even more text, pushed into Annex</p>
       </mainBody>
       <attachments>
         <attachment eId="att_1__att_1">
@@ -1213,7 +1205,7 @@ ANNEXURE back out
 </attachments>
 """, xml)
 
-    def test_nested_attachments_break_structure(self):
+    def test_push_nested_attachment_to_end(self):
         tree = self.parse("""
 ANNEXURE a heading
   SUBHEADING subheading
