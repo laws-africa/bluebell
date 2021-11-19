@@ -34,10 +34,9 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="*">
+  <xsl:template match="@*|node()">
     <xsl:copy>
-      <xsl:copy-of select="@*" />
-      <xsl:apply-templates />
+      <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
   </xsl:template>
 
