@@ -153,7 +153,7 @@ grammar akn
                          indent
                            subheading:subheading?
                            content:(!attachment_marker hier_block_element)*
-		                       attachments:attachments?
+                           attachments:attachments?
                          dedent
                        )?
                        content:(!attachment_marker hier_block_indent)*
