@@ -61,6 +61,16 @@ CHAP 1 - Heading
     FOOTNOTE 3
       footnote 3 subheading text
 
+  SEC 2 - Nested footnotes
+
+    Some text with a {{FOOTNOTE 4}} with more footnotes.
+
+    FOOTNOTE 4
+      Some text in the footnote with another {{FOOTNOTE 5}} inside it.
+
+      FOOTNOTE 5
+        the nested footnote
+
 ANNEXURE Annex {{FOOTNOTE 1}}
   SUBHEADING Annex subheading {{FOOTNOTE 2}}
 

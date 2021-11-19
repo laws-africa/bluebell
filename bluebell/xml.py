@@ -231,7 +231,7 @@ class XmlGenerator:
     def xml_from_tree(self, tree):
         """ Transform an entire parse tree to XML.
         """
-        return etree.fromstring(etree.tostring(self.item_to_xml(tree, self.eid_prefix)))
+        return etree.fromstring(etree.tostring(self.item_to_xml(tree, self.eid_prefix), encoding='unicode'))
 
     def item_to_xml(self, item, prefix=''):
         return getattr(self, f'item_to_xml_{item["type"]}')(item, prefix)

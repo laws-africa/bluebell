@@ -16,8 +16,6 @@ class ParserSupport:
         super().setUp()
         self.frbr_uri = self.make_frbr_uri()
         self.parser = AkomaNtosoParser(self.frbr_uri)
-        self.parser.indent = '{'
-        self.parser.dedent = '}'
         self.generator = self.parser.generator
 
     def parse(self, text, root):

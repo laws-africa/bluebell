@@ -54,6 +54,8 @@ class ParserTestCase(ParserSupport, TestCase):
         )
 
     def test_pre_parse_no_leading_whitespace(self):
+        self.parser.indent = '{'
+        self.parser.dedent = '}'
         self.assertEqual(
             "hello\n",
             self.parser.pre_parse("  hello"),
@@ -74,6 +76,8 @@ one
 """))
 
     def test_pre_parse_inconsistent_nesting(self):
+        self.parser.indent = '{'
+        self.parser.dedent = '}'
         self.parser.indent_size = 4
         self.assertEqual("""one
 {
@@ -94,6 +98,8 @@ one
 """))
 
     def test_pre_parse_tables(self):
+        self.parser.indent = '{'
+        self.parser.dedent = '}'
         self.assertEqual("""SECTION 1.
 
 {
