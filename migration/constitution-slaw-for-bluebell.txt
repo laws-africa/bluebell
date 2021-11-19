@@ -1,5 +1,9 @@
 PREFACE
 
+  [[Short Title of Act substituted by section 1 of {{>/akn/za/act/2005/5 Act 5 of 2005}}]]
+
+  [[From the date of commencement of {{>/akn/za/act/2005/5 Act 5 of 2005}}, no Act number is to be associated with the “Constitution of the Republic of South Africa, 1996 (Act No. 108 of 1996)”. Any reference to the “Constitution of the Republic of South Africa, 1996 (Act No. 108 of 1996)”, contained in any law in force immediately prior to the commencement of this Act, must be construed as a reference to the “Constitution of the Republic of South Africa, 1996”]]
+
   [[the expression “South African Human Rights Commission” substituted for the expression “Human Rights Commission”, wherever it occurred, by section 4 of the {{>/akn/za/act/1998/constitution-second-amendment Constitution Second Amendment Act, 1998}}]]
 
   LONGTITLE To introduce a new Constitution for the Republic of South Africa and to provide for matters incidental thereto.
@@ -982,6 +986,8 @@ CHAP 2 - Bill of Rights
         ITEM (c)
           any derogation from a section mentioned in column 1 of the Table of Non-Derogable Rights, to the extent indicated opposite that section in column 3 of the Table.
 
+    CROSSHEADING Table of Non-Derogable Rights
+
     TABLE
       TR
         TH.akn--text-center
@@ -1394,8 +1400,10 @@ CHAP 4 - Parliament
 
       SUBSEC (1)
 
+        The National Assembly consists of no fewer than 350 and no more than 400 women and men elected as members in terms of an electoral system that -
+
         ITEMS
-          The National Assembly consists of no fewer than 350 and no more than 400 women and men elected as members in terms of an electoral system that -
+          [[introductory phrase of subsection (1) substituted by section 1 of the {{>/akn/za/act/2003/constitution-tenth-amendment Constitution Tenth Amendment Act, 2003}} and by section 1 of the {{>/akn/za/act/2008/constitution-fifteenth-amendment Constitution Fifteenth Amendment Act, 2008}}]]
 
           ITEM (a)
             is prescribed by national legislation;
@@ -1452,10 +1460,15 @@ CHAP 4 - Parliament
           A person loses membership of the National Assembly if that person—
 
           ITEM (a)
-            ceases to be eligible; or
+            ceases to be eligible;
 
           ITEM (b)
-            is absent from the Assembly without permission in circumstances for which the rules and orders of the Assembly prescribe loss of membership.
+            is absent from the Assembly without permission in circumstances for which the rules and orders of the Assembly prescribe loss of membership; or
+
+          ITEM (c)
+            ceases to be a member of the party that nominated that person as a member of the Assembly.
+
+        [[subsection (3) substituted by section 2 of the {{>/akn/za/act/2003/constitution-tenth-amendment Constitution Tenth Amendment Act, 2003}} and by section 2 of the {{>/akn/za/act/2008/constitution-fifteenth-amendment Constitution Fifteenth Amendment Act, 2008}}]]
 
       SUBSEC (4)
 
@@ -1473,7 +1486,9 @@ CHAP 4 - Parliament
 
       SUBSEC (2)
 
-        If the National Assembly is dissolved in terms of {{>#sec_50 section 50}}, or when its term expires, the President, by proclamation, must call and set dates for an election, which must be held within 90 days of the date the Assembly was dissolved or its term expired.
+        If the National Assembly is dissolved in terms of {{>#sec_50 section 50}}, or when its term expires, the President, by proclamation, must call and set dates for an election, which must be held within 90 days of the date the Assembly was dissolved or its term expired. A proclamation calling and setting dates for an election may be issued before or after the expiry of the term of the National Assembly
+
+        [[subsection (2) substituted by section 1 of the {{>/akn/za/act/1999/constitution-fifth-amendment Constitution Fifth Amendment Act, 1999}}]]
 
       SUBSEC (3)
 
@@ -1511,7 +1526,9 @@ CHAP 4 - Parliament
 
       SUBSEC (1)
 
-        After an election, the first sitting of the National Assembly must take place at a time and on a date determined by the President of the Constitutional Court, but not more than 14 days after the election result has been declared. The Assembly may determine the time and duration of its other sittings and its recess periods.
+        After an election, the first sitting of the National Assembly must take place at a time and on a date determined by the Chief Justice, but not more than 14 days after the election result has been declared. The Assembly may determine the time and duration of its other sittings and its recess periods.
+
+        [[subsection (1) substituted by section 1 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
       SUBSEC (2)
 
@@ -1529,7 +1546,9 @@ CHAP 4 - Parliament
 
       SUBSEC (2)
 
-        The President of the Constitutional Court must preside over the election of a Speaker, or designate another judge to do so. The Speaker presides over the election of a Deputy Speaker.
+        The Chief Justice must preside over the election of a Speaker, or designate another judge to do so. The Speaker presides over the election of a Deputy Speaker.
+
+        [[subsection (2) substituted by section 2 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
       SUBSEC (3)
 
@@ -1570,9 +1589,11 @@ CHAP 4 - Parliament
           ITEM (b)
             may cast a deliberative vote when a question must be decided with a supporting vote of at least two thirds of the members of the Assembly.
 
-    SEC 54. - Rights of certain Cabinet members in National Assembly
+    SEC 54. - Rights of certain Cabinet members and Deputy Ministers in the National Assembly
 
-      The President and any member of the Cabinet who is not a member of the National Assembly may attend, and may speak in, the Assembly, but may not vote.
+      The President, and any member of the Cabinet or any Deputy Minister who is not a member of the National Assembly, may, subject to the rules and orders of the Assembly, attend and speak in the Assembly, but may not vote.
+
+      [[section 54 substituted by section 3 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SEC 55. - Powers of National Assembly
 
@@ -1656,8 +1677,10 @@ CHAP 4 - Parliament
 
       SUBSEC (1)
 
+        Cabinet members, Deputy Ministers and members of the National Assembly -
+
         ITEMS
-          Cabinet members and members of the National Assembly -
+          [[introductory phrase of subsection (1) substituted by section 4 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
           ITEM (a)
             have freedom of speech in the Assembly and in its committees, subject to its rules and orders; and
@@ -1743,13 +1766,17 @@ CHAP 4 - Parliament
       SUBSEC (2)
 
         ITEMS
-          Within 30 days after the result of an election of a provincial legislature is declared, the legislature must -
-
           ITEM (a)
-            determine, in accordance with national legislation, how many of each party's delegates are to be permanent delegates and how many are to be special delegates; and
+            ITEMS
+              A provincial legislature must, within 30 days after the result of an election of that legislature is declared -
 
-          ITEM (b)
-            appoint the permanent delegates in accordance with the nominations of the parties.
+              ITEM (i)
+                determine, in accordance with national legislation, how many of each party's delegates are to be permanent delegates and how many are to be special delegates; and
+
+              ITEM (ii)
+                appoint the permanent delegates in accordance with the nominations of the parties.
+
+        [[subsection (2) substituted by section 1 of the {{>/akn/za/act/2002/constitution-ninth-amendment Constitution Ninth Amendment Act, 2002}} and by section 1 of the {{>/akn/za/act/2008/constitution-fourteenth-amendment Constitution Fourteenth Amendment Act, 2008}}]]
 
       SUBSEC (3)
 
@@ -1771,7 +1798,13 @@ CHAP 4 - Parliament
 
       SUBSEC (3)
 
-        Permanent delegates are appointed for a term that expires immediately before the first sitting of the provincial legislature after its next election.
+        ITEMS
+          Permanent delegates are appointed for a term that expires -
+
+          ITEM (a)
+            immediately before the first sitting of a provincial legislature after its next election.
+
+        [[subsection (3) substituted by section 2 of the {{>/akn/za/act/2002/constitution-ninth-amendment Constitution Ninth Amendment Act, 2002}} and by section 2 of the {{>/akn/za/act/2008/constitution-fourteenth-amendment Constitution Fourteenth Amendment Act, 2008}}]]
 
       SUBSEC (4)
 
@@ -1831,7 +1864,9 @@ CHAP 4 - Parliament
 
       SUBSEC (4)
 
-        The President of the Constitutional Court must preside over the election of the Chairperson, or designate another judge to do so. The Chairperson presides over the election of the Deputy Chairpersons.
+        The Chief Justice must preside over the election of the Chairperson, or designate another judge to do so. The Chairperson presides over the election of the Deputy Chairpersons.
+
+        [[subsection (4) substituted by section 5 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
       SUBSEC (5)
 
@@ -1985,11 +2020,22 @@ CHAP 4 - Parliament
 
       SUBSEC (2)
 
-        Only a Cabinet member or a Deputy Minister or a member or committee of the National Assembly, may introduce a Bill in the Assembly; but only the Cabinet member responsible for national financial matters may introduce a money Bill in the Assembly.
+        ITEMS
+          Only a Cabinet member or a Deputy Minister or a member or committee of the National Assembly, may introduce a Bill in the Assembly, but only the Cabinet member responsible for national financial matters may introduce the following Bills in the Assembly:
+
+          ITEM (a)
+            a money Bill; or
+
+          ITEM (b)
+            a Bill which provides for legislation envisaged in {{>#sec_214 section 214}}.
+
+        [[subsection (2) substituted by section 1(a) of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}} on 26 April 2002]]
 
       SUBSEC (3)
 
-        A Bill referred to in {{>#sec_76 section 76}}(3), except a money Bill, may be introduced in the National Council of Provinces.
+        A Bill referred to in {{>#sec_76 section 76}}(3), except a Bill referred to in subsection (2)(a) or (b) of this section, may be introduced in the National Council of Provinces.
+
+        [[subsection (3) substituted by section 1(b) of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}} on 26 April 2002]]
 
       SUBSEC (4)
 
@@ -2286,7 +2332,9 @@ CHAP 4 - Parliament
             envisaged in {{>#sec_44 section 44}}(2) or {{>#sec_220 220(}}(3); or
 
           ITEM (b)
-            envisaged in {{>#chp_13 Chapter 13}}, and which affects the financial interests of the provincial sphere of government.
+            envisaged in {{>#chp_13 Chapter 13}}, and which includes any provision affecting the financial interests of the provincial sphere of government.
+
+            [[paragraph (b) substituted by section 1 of the {{>/akn/za/act/2003/constitution-eleventh-amendment Constitution Eleventh Amendment Act, 2003}}]]
 
       SUBSEC (5)
 
@@ -2314,11 +2362,43 @@ CHAP 4 - Parliament
 
       SUBSEC (1)
 
-        A Bill that appropriates money or imposes taxes, levies or duties is a money Bill. A money Bill may not deal with any other matter except a subordinate matter incidental to the appropriation of money or the imposition of taxes, levies or duties.
+        ITEMS
+          A Bill is a money Bill if it—
+
+          ITEM (a)
+            appropriates money;
+
+          ITEM (b)
+            imposes national taxes, levies, duties or surcharges;
+
+          ITEM (c)
+            abolishes or reduces, or grants exemptions from, any national taxes, levies, duties or surcharges; or
+
+          ITEM (d)
+            authorises direct charges against the National Revenue Fund, except a Bill envisaged in {{>#sec_214 section 214}} authorising direct charges.
 
       SUBSEC (2)
 
+        ITEMS
+          A money Bill may not deal with any other matter except—
+
+          ITEM (a)
+            a subordinate matter incidental to the appropriation of money;
+
+          ITEM (b)
+            the imposition, abolition or reduction of national taxes, levies, duties or surcharges;
+
+          ITEM (c)
+            the granting of exemption from national taxes, levies, duties or surcharges; or
+
+          ITEM (d)
+            the authorisation of direct charges against the National Revenue Fund.
+
+      SUBSEC (3)
+
         All money Bills must be considered in accordance with the procedure established by {{>#sec_75 section 75}}. An Act of Parliament must provide for a procedure to amend money Bills before Parliament.
+
+        [[section 77 substituted by section 2 of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}} on 26 April 2002]]
 
     SEC 78. - Mediation Committee
 
@@ -2514,11 +2594,15 @@ CHAP 5 - The President and national executive
 
     SUBSEC (2)
 
-      The President of the Constitutional Court must preside over the election of the President, or designate another judge to do so. The procedure set out in Part A of {{>#att_4 Schedule 3}} applies to the election of the President.
+      The Chief Justice must preside over the election of the President, or designate another judge to do so. The procedure set out in Part A of {{>#att_4 Schedule 3}} applies to the election of the President.
+
+      [[subsection (2) substituted by section 6 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SUBSEC (3)
 
-      An election to fill a vacancy in the office of President must be held at a time and on a date determined by the President of the Constitutional Court, but not more than 30 days after the vacancy occurs.
+      An election to fill a vacancy in the office of President must be held at a time and on a date determined by the Chief Justice, but not more than 30 days after the vacancy occurs.
+
+      [[subsection (3) substituted by section 6 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
   SEC 87. - Assumption of office by President
 
@@ -2642,7 +2726,22 @@ CHAP 5 - The President and national executive
 
   SEC 93. - Deputy Ministers
 
-    The President may appoint Deputy Ministers from among members of the National Assembly to assist the members of the Cabinet, and may dismiss them.
+    SUBSEC (1)
+
+      ITEMS
+        The President may appoint—
+
+        ITEM (a)
+          any number of Deputy Ministers from among the members of the National Assembly; and
+
+        ITEM (b)
+          no more than two Deputy Ministers from outside the Assembly, to assist the members of the Cabinet, and may dismiss them.
+
+    SUBSEC (2)
+
+      Deputy Ministers appointed in terms of subsection (1)(b) are accountable to Parliament for the exercise of their powers and the performance of their functions.
+
+      [[section 93 substituted by section 7 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
   SEC 94. - Continuation of Cabinet after elections
 
@@ -2701,12 +2800,16 @@ CHAP 5 - The President and national executive
       ITEM (c)
         takes effect upon proclamation by the President.
 
-  SEC 100. - National supervision of provincial administration
+  SEC 100. - National intervention in provincial administration
+
+    [[heading substituted by section 2(a) of the {{>/akn/za/act/2003/constitution-eleventh-amendment Constitution Eleventh Amendment Act, 2003}}]]
 
     SUBSEC (1)
 
+      When a province cannot or does not fulfil an executive obligation in terms of the Constitution or legislation, the national executive may intervene by taking any appropriate steps to ensure fulfilment of that obligation, including -
+
       ITEMS
-        When a province cannot or does not fulfil an executive obligation in terms of legislation or the Constitution, the national executive may intervene by taking any appropriate steps to ensure fulfilment of that obligation, including -
+        [[introductory phrase of subsection (1) substituted by section 2(b) of the {{>/akn/za/act/2003/constitution-eleventh-amendment Constitution Eleventh Amendment Act, 2003}}]]
 
         ITEM (a)
           issuing a directive to the provincial executive, describing the extent of the failure to fulfil its obligations and stating any steps required to meet its obligations; and
@@ -2733,13 +2836,15 @@ CHAP 5 - The President and national executive
         If the national executive intervenes in a province in terms of subsection (1)(b)—
 
         ITEM (a)
-          notice of the intervention must be tabled in the National Council of Provinces within 14 days of its first sitting after the intervention began;
+          it must submit a written notice of the intervention to the National Council of Provinces within 14 days after the intervention began;
 
         ITEM (b)
-          the intervention must end unless it is approved by the Council within 30 days of its first sitting after the intervention began; and
+          the intervention must end if the Council disapproves the intervention within 180 days after the intervention began or by the end of that period has not approved the intervention; and
 
         ITEM (c)
-          the Council must review the intervention regularly and make any appropriate recommendations to the national executive.
+          the Council must, while the intervention continues, review the intervention regularly and may make any appropriate recommendations to the national executive.
+
+      [[subsection (2) substituted by section 2(c) of the {{>/akn/za/act/2003/constitution-eleventh-amendment Constitution Eleventh Amendment Act, 2003}}]]
 
     SUBSEC (3)
 
@@ -2809,13 +2914,13 @@ CHAP 6 - Provinces
           KwaZulu-Natal
 
         ITEM (e)
-          Mpumalanga
+          Limpopo
 
         ITEM (f)
-          Northern Cape
+          Mpumalanga
 
         ITEM (g)
-          Northern Province
+          Northern Cape
 
         ITEM (h)
           North West
@@ -2825,7 +2930,18 @@ CHAP 6 - Provinces
 
     SUBSEC (2)
 
-      The boundaries of the provinces are those that existed when the Constitution took effect.
+      The geographical areas of the respective provinces comprise the sum of the indicated geographical areas reflected in the various maps referred to in the Notice listed in {{>#att_2 Schedule 1A}}.
+
+    SUBSEC (3)
+
+      ITEMS
+        ITEM (a)
+          Whenever the geographical area of a province is re-determined by an amendment to the Constitution, an Act of Parliament may provide for measures to regulate, within a reasonable time, the legal, practical and any other consequences of the re-determination.
+
+        ITEM (b)
+          An Act of Parliament envisaged in paragraph (a) may be enacted and implemented before such amendment to the Constitution takes effect, but any provincial functions, assets, rights, obligations, duties or liabilities may only be transferred in terms of that Act after that amendment to the Constitution takes effect.
+
+      [[section 103 amended by section 3 of the {{>/akn/za/act/2003/constitution-eleventh-amendment Constitution Eleventh Amendment Act, 2003}} and substituted by section 1 of the {{>/akn/za/act/2005/constitution-twelfth-amendment Constitution Twelfth Amendment Act, 2005}}]]
 
   SUBPART - Provincial legislatures
 
@@ -2878,8 +2994,10 @@ CHAP 6 - Provinces
 
       SUBSEC (1)
 
+        A provincial legislature consists of women and men elected as members in terms of an electoral system that -
+
         ITEMS
-          A provincial legislature consists of women and men elected as members in terms of an electoral system that -
+          [[introductory phrase of subsection (1) substituted by section 3 of the {{>/akn/za/act/2003/constitution-tenth-amendment Constitution Tenth Amendment Act, 2003}} and by section 3 of the {{>/akn/za/act/2008/constitution-fourteenth-amendment Constitution Fourteenth Amendment Act, 2008}}]]
 
           ITEM (a)
             is prescribed by national legislation;
@@ -2936,10 +3054,15 @@ CHAP 6 - Provinces
           A person loses membership of a provincial legislature if that person—
 
           ITEM (a)
-            ceases to be eligible; or
+            ceases to be eligible;
 
           ITEM (b)
-            is absent from the legislature without permission in circumstances for which the rules and orders of the legislature prescribe loss of membership.
+            is absent from the legislature without permission in circumstances for which the rules and orders of the legislature prescribe loss of membership; or
+
+          ITEM (c)
+            ceases to be a member of the party that nominated that person as a member of the legislature.
+
+        [[subsection (3) substituted by section 4 of the {{>/akn/za/act/2003/constitution-tenth-amendment Constitution Tenth Amendment Act, 2003}} and by section 4 of the {{>/akn/za/act/2008/constitution-fourteenth-amendment Constitution Fourteenth Amendment Act, 2008}}]]
 
       SUBSEC (4)
 
@@ -2957,7 +3080,9 @@ CHAP 6 - Provinces
 
       SUBSEC (2)
 
-        If a provincial legislature is dissolved in terms of {{>#sec_109 section 109}}, or when its term expires, the Premier of the province, by proclamation, must call and set dates for an election, which must be held within 90 days of the date the legislature was dissolved or its term expired.
+        If a provincial legislature is dissolved in terms of {{>#sec_109 section 109}}, or when its term expires, the Premier of the province, by proclamation, must call and set dates for an election, which must be held within 90 days of the date the legislature was dissolved or its term expired. A proclamation calling and setting dates for an election may be issued before or after the expiry of the term of a provincial legislature.
+
+        [[subsection (2) substituted by section 1 of the {{>/akn/za/act/1999/constitution-fourth-amendment Constitution Fourth Amendment Act, 1999}}]]
 
       SUBSEC (3)
 
@@ -2995,7 +3120,9 @@ CHAP 6 - Provinces
 
       SUBSEC (1)
 
-        After an election, the first sitting of a provincial legislature must take place at a time and on a date determined by a judge designated by the President of the Constitutional Court, but not more than 14 days after the election result has been declared. A provincial legislature may determine the time and duration of its other sittings and its recess periods.
+        After an election, the first sitting of a provincial legislature must take place at a time and on a date determined by a judge designated by the Chief Justice, but not more than 14 days after the election result has been declared. A provincial legislature may determine the time and duration of its other sittings and its recess periods.
+
+        [[subsection (1) substituted by section 8 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
       SUBSEC (2)
 
@@ -3013,7 +3140,9 @@ CHAP 6 - Provinces
 
       SUBSEC (2)
 
-        A judge designated by the President of the Constitutional Court must preside over the election of a Speaker. The Speaker presides over the election of a Deputy Speaker.
+        A judge designated by the Chief Justice must preside over the election of a Speaker. The Speaker presides over the election of a Deputy Speaker.
+
+        [[subsection (2) substituted by section 9 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
       SUBSEC (3)
 
@@ -3196,11 +3325,43 @@ CHAP 6 - Provinces
 
       SUBSEC (1)
 
-        A Bill that appropriates money or imposes taxes, levies or duties is a money Bill. A money Bill may not deal with any other matter except a subordinate matter incidental to the appropriation of money or the imposition of taxes, levies or duties.
+        ITEMS
+          A Bill is a money Bill if it—
+
+          ITEM (a)
+            appropriates money;
+
+          ITEM (b)
+            imposes provincial taxes, levies, duties or surcharges;
+
+          ITEM (c)
+            abolishes or reduces, or grants exemptions from, any provincial taxes, levies, duties or surcharges; or
+
+          ITEM (d)
+            authorises direct charges against a Provincial Revenue Fund.
 
       SUBSEC (2)
 
+        ITEMS
+          A money Bill may not deal with any other matter except—
+
+          ITEM (a)
+            a subordinate matter incidental to the appropriation of money;
+
+          ITEM (b)
+            the imposition, abolition or reduction of provincial taxes, levies, duties or surcharges;
+
+          ITEM (c)
+            the granting of exemption from provincial taxes, levies, duties or surcharges; or
+
+          ITEM (d)
+            the authorisation of direct charges against a Provincial Revenue Fund.
+
+      SUBSEC (3)
+
         A provincial Act must provide for a procedure by which the province’s legislature may amend a money Bill.
+
+        [[section 120 substituted by section 3 of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}} on 26 April 2002]]
 
     SEC 121. - Assent to Bills
 
@@ -3280,7 +3441,7 @@ CHAP 6 - Provinces
             implementing provincial legislation in the province;
 
           ITEM (b)
-            implementing all national legislation within the functional areas listed in Schedule {{>#att_5 4}} and {{>#att_6 5}} except where the Constitution or an Act of Parliament provides otherwise;
+            implementing all national legislation within the functional areas listed in Schedule {{>#att_5 4}} or {{>#att_6 5}} except where the Constitution or an Act of Parliament provides otherwise;
 
           ITEM (c)
             administering in the province, national legislation outside the functional areas listed in Schedules {{>#att_5 4}} and {{>#att_6 5}}, the administration of which has been assigned to the provincial executive in terms of an Act of Parliament;
@@ -3371,11 +3532,15 @@ CHAP 6 - Provinces
 
       SUBSEC (2)
 
-        A judge designated by the President of the Constitutional Court must preside over the election of the Premier. The procedure set out in Part A of {{>#att_4 Schedule 3}} applies to the election of the Premier.
+        A judge designated by the Chief Justice must preside over the election of the Premier. The procedure set out in Part A of {{>#att_4 Schedule 3}} applies to the election of the Premier.
+
+        [[subsection (2) substituted by section 10 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
       SUBSEC (3)
 
-        An election to fill a vacancy in the office of Premier must be held at a time and on a date determined by the President of the Constitutional Court, but not later than 30 days after the vacancy occurs.
+        An election to fill a vacancy in the office of Premier must be held at a time and on a date determined by the Chief Justice, but not later than 30 days after the vacancy occurs.
+
+        [[subsection (3) substituted by section 10 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SEC 129. - Assumption of office by Premiers
 
@@ -3507,49 +3672,141 @@ CHAP 6 - Provinces
 
       The Premier of a province may assign to a member of the Executive Council any power or function of another member who is absent from office or is unable to exercise that power or perform that function.
 
-    SEC 139. - Provincial supervision of local government
+    SEC 139. - Provincial intervention in local government
 
       SUBSEC (1)
 
         ITEMS
-          When a municipality cannot or does not fulfil an executive obligation in terms of legislation, the relevant provincial executive may intervene by taking any appropriate steps to ensure fulfilment of that obligation, including—
+          When a municipality cannot or does not fulfil an executive obligation in terms of the Constitution or legislation, the relevant provincial   executive may intervene by taking any appropriate steps to ensure fulfilment of that obligation, including—
 
           ITEM (a)
-            issuing a directive to the Municipal Council, describing the extent of the failure to fulfil its obligations and stating any steps required to meet its obligations; and
+            issuing a directive to the Municipal Council, describing the extent of the failure to fulfil its obligations and stating any steps required to meet its obligations;
 
           ITEM (b)
             ITEMS
-              assuming responsibility for the relevant obligation in that municipality to the extent necessary -
+              assuming responsibility for the relevant obligation in that municipality to the extent necessary to—
 
               ITEM (i)
-                to maintain essential national standards or meet established minimum standards for the rendering of a service;
+                maintain essential national standards or meet established minimum standards for the rendering of a service;
 
               ITEM (ii)
-                to prevent that Municipal Council from taking unreasonable action that is prejudicial to the interests of another municipality or to the province as a whole; or
+                prevent that Municipal Council from taking unreasonable action that is prejudicial to the interests of another municipality     or to the province as a whole; or
 
               ITEM (iii)
-                to maintain economic unity.
+                maintain economic unity; or
+
+          ITEM (c)
+            dissolving the Municipal Council and appointing an administrator until a newly elected Municipal Council has been declared elected, if exceptional circumstances warrant such a step.
 
       SUBSEC (2)
 
         ITEMS
-          If a provincial executive intervenes in a municipality in terms of subsection (1)(b) -
+          If a provincial executive intervenes in a municipality in terms of subsection (l)(b)—
 
           ITEM (a)
-            the intervention must end unless it is approved by the Cabinet member responsible for local government affairs within 14 days of the intervention;
+            ITEMS
+              it must submit a written notice of the intervention to—
+
+              ITEM (i)
+                the Cabinet member responsible for local government affairs; and
+
+              ITEM (ii)
+                the relevant provincial legislature and the National Council of Provinces,
+
+            within 14 days after the intervention began;
 
           ITEM (b)
-            notice of the intervention must be tabled in the provincial legislature and in the National Council of Provinces within 14 days of their respective first sittings after the intervention began;
+            ITEMS
+              the intervention must end if—
+
+              ITEM (i)
+                the Cabinet member responsible for local government affairs disapproves the intervention within 28 days after the intervention began or by the end of that period has not approved the intervention; or
+
+              ITEM (ii)
+                the Council disapproves the intervention within 180 days after the intervention began or by the end of that period has not approved the intervention; and
 
           ITEM (c)
-            the intervention must end unless it is approved by the Council within 30 days of its first sitting after the intervention began; and
-
-          ITEM (d)
-            the Council must review the intervention regularly and make any appropriate recommendations to the provincial executive.
+            the Council must, while the intervention continues, review the intervention regularly and may make any appropriate recommendations to the provincial executive.
 
       SUBSEC (3)
 
-        National legislation may regulate the process established by this section.
+        ITEMS
+          If a Municipal Council is dissolved in terms of subsection (1)(c)-
+
+          ITEM (a)
+            ITEMS
+              the provincial executive must immediately submit a written notice of the dissolution to—
+
+              ITEM (i)
+                the Cabinet member responsible for local government affairs; and
+
+              ITEM (ii)
+                the relevant provincial legislature and the National Council of Provinces; and
+
+          ITEM (b)
+            the dissolution takes effect 14 days from the date of receipt of the notice by the Council unless set aside by that Cabinet member or the council before the expiry of those 14 days.
+
+      SUBSEC (4)
+
+        ITEMS
+          If a municipality cannot or does not fulfil an obligation in terms of the Constitution or legislation to approve a budget or any revenue-raising measures necessary to give effect to the budget, the relevant provincial executive must intervene by taking any appropriate steps to ensure that the budget or those revenue-raising measures are approved, including dissolving the Municipal Council and—
+
+          ITEM (a)
+            appointing an administrator until a newly elected Municipal Council has been declared elected; and
+
+          ITEM (b)
+            approving a temporary budget or revenue-raising measures to provide for the continued functioning of the municipality.
+
+      SUBSEC (5)
+
+        ITEMS
+          If a municipality, as a result of a crisis in its financial affairs, is in serious or persistent material breach of its obligations to provide basic services or to meet its financial commitments, or admits that it is unable to meet its obligations or financial commitments, the relevant provincial executive must—
+
+          ITEM (a)
+            ITEMS
+              impose a recovery plan aimed at securing the municipality’s ability to meet its obligations to provide basic services or its financial    commitments, which—
+
+              ITEM (i)
+                is to be prepared in acccordance with national legislation; and
+
+              ITEM (ii)
+                binds the municipality in the exercise of its legislative and executive authority, but only to the extent necessary to solve the     crisis in its financial affairs; and
+
+          ITEM (b)
+            ITEMS
+              dissolve the Municipal Council, if the municipality cannot or does not approve legislative measures, including a budget or any revenue-raising measures, necessary to give effect to the recovery plan, and—
+
+              ITEM (i)
+                appoint an administrator until a newly elected Municipal Council has been declared elected; and
+
+              ITEM (ii)
+                approve a temporary budget or revenue-raising measures or any other measures giving effect to the recovery plan to provide for the continued functioning of the municipality; or
+
+          ITEM (c)
+            if the Municipal Council is not dissolved in terms of paragraph (b), assume responsibility for the implementation of the recovery plan to the extent that the municipality cannot or does not otherwise implement the recovery plan.
+
+      SUBSEC (6)
+
+        ITEMS
+          If a provincial executive intervenes in a municipality in terms of subsection (4) or (5), it must submit a written notice of the intervention to—
+
+          ITEM (a)
+            the Cabinet member responsible for local government affairs; and
+
+          ITEM (b)
+            the relevant provincial legislature and the National Council of Provinces,
+
+        within seven days after the intervention began.
+
+      SUBSEC (7)
+
+        If a provincial executive cannot or does not or does not adequately exercise the powers or perform the functions referred to in subsection (4) or (5), the national executive must intervene in terms of subsection (4) or (5) in the stead of the relevant provincial executive.
+
+      SUBSEC (8)
+
+        National legislation may regulate the implementation of this section, including the processes established by this section.
+
+        [[section 139 substituted by section 4 of the {{>/akn/za/act/2003/constitution-eleventh-amendment Constitution Eleventh Amendment Act, 2003}}]]
 
     SEC 140. - Executive decisions
 
@@ -3751,7 +4008,7 @@ CHAP 6 - Provinces
           If there is a conflict between national legislation and a provision of a provincial constitution with regard to -
 
           ITEM (a)
-            a matter concerning which this Constitution  specifically requires or envisages the enactment of national legislation, the national legislation prevails over the affected provision of the provincial constitution;
+            a matter concerning which this Constitution specifically requires or envisages the enactment of national legislation, the national legislation prevails over the affected provision of the provincial constitution;
 
           ITEM (b)
             national legislative intervention in terms of {{>#sec_44 section 44}}(2), the national legislation prevails over the provision of the provincial constitution; or
@@ -3897,33 +4154,7 @@ CHAP 7 - Local government
 
     SUBSEC (6A)
 
-      ITEMS
-        If the criteria envisaged in subsection (3)(b) cannot be fulfilled without a municipal boundary extending across a provincial boundary—
-
-        ITEM (a)
-          ITEMS
-            that municipal boundary may be determined across the provincial boundary, but only—
-
-            ITEM (i)
-              with the concurrence of the provinces concerned; and
-
-            ITEM (ii)
-              after the respective provincial executives have been authorised by national legislation to establish a municipality within that municipal area; and
-
-        ITEM (b)
-          ITEMS
-            national legislation may—
-
-            ITEM (i)
-              subject to subsection (5), provide for the establishment in that municipal area of a municipality of a type agreed to between the provinces concerned;
-
-            ITEM (ii)
-              provide a framework for the exercise of provincial executive authority in that municipal area and with regard to that municipality; and
-
-            ITEM (iii)
-              provide for the re-determination of municipal boundaries where one of the provinces concerned withdraws its support of a municipal boundary determined in terms of paragraph (a).
-
-      [[subsection (6A) inserted by section 1 of the {{>/akn/za/act/1998/constitution-third-amendment Constitution Third Amendment Act, 1998}}]]
+      [[subsection (6A) inserted by section 1 of the {{>/akn/za/act/1998/constitution-third-amendment Constitution Third Amendment Act, 1998}} and deleted by section 2 of the {{>/akn/za/act/2005/constitution-twelfth-amendment Constitution Twelfth Amendment Act, 2005}}]]
 
     SUBSEC (7)
 
@@ -3973,7 +4204,7 @@ CHAP 7 - Local government
         A Municipal Council consists of -
 
         ITEM (a)
-          members elected in accordance with subsections (2), (3), (4) and (5); or
+          members elected in accordance with subsections (2) and (3); or
 
         ITEM (b)
           ITEMS
@@ -3984,6 +4215,8 @@ CHAP 7 - Local government
 
             ITEM (ii)
               both members elected in accordance with paragraph (a) and members appointed in accordance with subparagraph (i) of this paragraph.
+
+      [[subsection (1) substituted by section 1(a) of the {{>/akn/za/act/2002/constitution-eighth-amendment Constitution Eighth Amendment Act, 2002}} and introductory words substituted by section 3 of the {{>/akn/za/act/2008/constitution-fifteenth-amendment Constitution Fifteenth Amendment Act, 2008}}]]
 
     SUBSEC (2)
 
@@ -3998,7 +4231,9 @@ CHAP 7 - Local government
 
     SUBSEC (3)
 
-      An electoral system in terms of subsection (2) must ensure that the total number of members elected from each party reflects the total proportion of the votes recorded for those parties.
+      An electoral system in terms of subsection (2) must result, in general, in proportional representation.
+
+      [[subsection (3) substituted by section 1(b) of the {{>/akn/za/act/2002/constitution-eighth-amendment Constitution Eighth Amendment Act, 2002}}]]
 
     SUBSEC (4)
 
@@ -4007,7 +4242,7 @@ CHAP 7 - Local government
           If the electoral system includes ward representation, the delimitation of wards must be done by an independent authority appointed in terms of, and operating according to, procedures and criteria prescribed by national legislation.
 
         ITEM (b)
-          Where a municipal boundary bas been determined in terms of {{>#sec_155 section 155}}(6A), a ward delimited within that municipal boundary may not extend across the provincial boundary concerned.
+          [[paragraph (b) deleted by section 3 of the {{>/akn/za/act/2005/constitution-twelfth-amendment Constitution Twelfth Amendment Act, 2005}}]]
 
       [[subsection (4) substituted by section 2 of the {{>/akn/za/act/1998/constitution-third-amendment Constitution Third Amendment Act, 1998}}]]
 
@@ -4044,6 +4279,12 @@ CHAP 7 - Local government
     SUBSEC (2)
 
       A person who is not eligible to be a member of a Municipal Council in terms of subsection (1)(a), (b), (d) or (e) may be a candidate for the Council, subject to any limits or conditions established by national legislation.
+
+    SUBSEC (3)
+
+      Vacancies in a Municipal Council must be filled in terms of national legislation.
+
+      [[subsection (3) added by section 4 of the {{>/akn/za/act/2008/constitution-fifteenth-amendment Constitution Fifteenth Amendment Act, 2008}}]]
 
   SEC 159. - Terms of Municipal Councils
 
@@ -4203,7 +4444,9 @@ CHAP 7 - Local government
             designate representatives to participate in the National Council of Provinces; and
 
           ITEM (iii)
-            nominate persons to the Financial and Fiscal Commission.
+            participate in the process prescribed in the national legislation envisaged in {{>#sec_221 section 221}}(1)(c).
+
+        [[paragraph (b) substituted by section 4 of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}}]]
 
   SEC 164. - Other matters
 
@@ -4233,6 +4476,12 @@ CHAP 8 - Courts and administration of justice
 
       An order or decision issued by a court binds all persons to whom and organs of state to which it applies.
 
+    SUBSEC (6)
+
+      The Chief Justice is the head of the judiciary and exercises responsibility over the establishment and monitoring of norms and standards for the exercise of the judicial functions of all courts.
+
+      [[subsection (6) added by section 1 of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
+
   SEC 166. - Judicial system
 
     ITEMS
@@ -4245,19 +4494,25 @@ CHAP 8 - Courts and administration of justice
         the Supreme Court of Appeal;
 
       ITEM (c)
-        the High Courts, including any high court of appeal that may be established by an Act of Parliament to hear appeals from High Courts;
+        the High Court of South Africa, and any high court of appeal that may be established by an Act of Parliament to hear appeals from any court of a status similar to the High Court of South Africa;
+
+        [[paragraph (c) substituted by section 2(a) of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
 
       ITEM (d)
         the Magistrates' Courts; and
 
       ITEM (e)
-        any other court established or recognised in terms of an Act of Parliament, including any court of a status similar to either the High Courts or the Magistrates’ Courts.
+        any other court established or recognised in terms of an Act of Parliament, including any court of a status similar to either the High Court of South Africa or the Magistrates’ Courts.
+
+        [[paragraph (e) substituted by section 2(b) of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
 
   SEC 167. - Constitutional Court
 
     SUBSEC (1)
 
-      The Constitutional Court consists of a President, a Deputy President and nine other judges.
+      The Constitutional Court consists of the Chief Justice of South Africa, the Deputy Chief Justice and nine other judges.
+
+      [[subsection (1) substituted by section 11 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SUBSEC (2)
 
@@ -4269,13 +4524,22 @@ CHAP 8 - Courts and administration of justice
         The Constitutional Court-
 
         ITEM (a)
-          is the highest court in all constitutional matters;
+          is the highest court of the Republic; and
 
         ITEM (b)
-          may decide only constitutional matters, and issues connected with decisions on constitutional matters; and
+          ITEMS
+            may decide—
+
+            ITEM (i)
+              constitutional matters; and
+
+            ITEM (ii)
+              any other matter, if the Constitutional Court grants leave to appeal on the grounds that the matter raises an arguable point of law of general public importance which ought to be considered by that Court; and
 
         ITEM (c)
-          makes the final decision whether a matter is a constitutional matter or whether an issue is connected with a decision on a constitutional matter.
+          makes the final decision whether a matter is within its jurisdiction;
+
+      [[subsection (3) substituted by section 3(a) of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
 
     SUBSEC (4)
 
@@ -4302,12 +4566,14 @@ CHAP 8 - Courts and administration of justice
 
     SUBSEC (5)
 
-      The Constitutional Court makes the final decision whether an Act of Parliament, a provincial Act or conduct of the President is constitutional, and must confirm any order of invalidity made by the Supreme Court of Appeal, a High Court, or a court of similar status, before that order has any force.
+      The Constitutional Court makes the final decision whether an Act of Parliament, a provincial Act or conduct of the President is constitutional, and must confirm any order of invalidity made by the Supreme Court of Appeal, the High Court of South Africa, or a court of similar status, before that order has any force.
+
+      [[subsection (5) substituted by section 3(b) of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
 
     SUBSEC (6)
 
       ITEMS
-        National legislation or the rules of the Constitutional Court must allow a person, when it is in the interests of justice and with leave of the Constitutional Court-
+        National legislation or the rules of the Constitutional Court must allow a person, when it is in the interests of justice and with leave of the Constitutional Court -
 
         ITEM (a)
           to bring a matter directly to the Constitutional Court; or
@@ -4323,47 +4589,89 @@ CHAP 8 - Courts and administration of justice
 
     SUBSEC (1)
 
-      The Supreme Court of Appeal consists of a Chief Justice, a Deputy Chief Justice and the number of judges of appeal determined by an Act of Parliament.
+      The Supreme Court of Appeal consists of a President, a Deputy President and the number of judges of appeal determined in terms of an Act of Parliament.
+
+      [[subsection (1) substituted by section 12 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SUBSEC (2)
 
-      A matter before the Supreme Court of Appeal must be decided by the number of judges determined by an Act of Parliament.
+      A matter before the Supreme Court of Appeal must be decided by the number of judges determined in terms of an Act of Parliament.
+
+      [[subsection (2) substituted by section 12 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SUBSEC (3)
 
       ITEMS
-        The Supreme Court of Appeal may decide appeals in any matter. It is the highest court of appeal except in constitutional matters, and may decide only -
-
         ITEM (a)
-          appeals;
+          The Supreme Court of Appeal may decide appeals in any matter arising from the High Court of South Africa or a court of a status similar to the High Court of South Africa, except in respect of labour or competition matters to such extent as may be determined by an Act of Parliament.
 
         ITEM (b)
-          issues connected with appeals; and
+          ITEMS
+            The Supreme Court of Appeal may decide only—
+
+            ITEM (i)
+              appeals;
+
+            ITEM (ii)
+              issues connected with appeals; and
+
+            ITEM (iii)
+              any other matter that may be referred to it in circumstances defined by an Act of Parliament.
+
+      [[subsection (3) substituted by section 4 of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
+
+  SEC 169. - High Court of South Africa
+
+    SUBSEC (1)
+
+      ITEMS
+        The High Court of South Africa may decide—
+
+        ITEM (a)
+          ITEMS
+            any constitutional matter except a matter that—
+
+            ITEM (i)
+              the Constitutional Court has agreed to hear directly in terms of {{>#sec_167 section 167}}(6)(a); or
+
+            ITEM (ii)
+              is assigned by an Act of Parliament to another court of a status similar to the High Court of South Africa; and
+
+        ITEM (b)
+          any other matter not assigned to another court by an Act of Parliament
+
+    SUBSEC (2)
+
+      ITEMS
+        The High Court of South Africa consists of the Divisions determined by an Act of Parliament, which Act must provide for—
+
+        ITEM (a)
+          the establishing of Divisions, with one or more seats in a Division; and
+
+        ITEM (b)
+          the assigning ofjurisdiction to a Division or a seat within a Division.
+
+    SUBSEC (3)
+
+      ITEMS
+        Each Division of the High Court of South Africa—
+
+        ITEM (a)
+          has a Judge President;
+
+        ITEM (b)
+          may have one or more Deputy Judges President; and
 
         ITEM (c)
-          any other matter that may be referred to it in circumstances defined by an Act of Parliament.
+          has the number of other judges determined in terms of national legislation.
 
-  SEC 169. - High Courts
+      [[section 169 substituted by section 5 of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
 
-    ITEMS
-      A High Court may decide -
+  SEC 170. - Other courts
 
-      ITEM (a)
-        ITEMS
-          any constitutional matter except a matter that -
+    All courts other than those referred to in sections {{>#sec_167 167}}, {{>#sec_168 168}} and {{>#sec_169 169}} may decide any matter determined by an Act of Parliament, but a court of a status lower than the High Court of South Africa may not enquire into or rule on the constitutionality of any legislation or any conduct of the President.
 
-          ITEM (i)
-            only the Constitutional Court may decide; or
-
-          ITEM (ii)
-            is assigned by an Act of Parliament to another court of a status similar to a High Court; and
-
-      ITEM (b)
-        any other matter not assigned to another court by an Act of Parliament.
-
-  SEC 170. - Magistrates' Courts and other courts
-
-    Magistrates' Courts and all other courts may decide any matter determined by an Act of Parliament, but a court of a status lower than a High Court may not enquire into or rule on the constitutionality of any legislation or any conduct of the President.
+    [[section 170 substituted by section 6 of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
 
   SEC 171. - Court procedures
 
@@ -4377,7 +4685,7 @@ CHAP 8 - Courts and administration of justice
         When deciding a constitutional matter within its power; a court -
 
         ITEM (a)
-          must declare that any law or conduct that is inconsistent with the Constitution  is invalid to the extent of its inconsistency; and
+          must declare that any law or conduct that is inconsistent with the Constitution is invalid to the extent of its inconsistency; and
 
         ITEM (b)
           ITEMS
@@ -4393,7 +4701,9 @@ CHAP 8 - Courts and administration of justice
 
       ITEMS
         ITEM (a)
-          The Supreme Court of Appeal, a High Court or a court of similar status may make an order concerning the constitutional validity of an Act of Parliament, a provincial Act or any conduct of the President, but an order of constitutional invalidity has no force unless it is confirmed by the Constitutional Court.
+          The Supreme Court of Appeal, the High Court of South Africa or a court of similar status may make an order concerning the constitutional validity of an Act of Parliament, a provincial Act or any conduct of the President, but an order of constitutional invalidity has no force unless it is confirmed by the Constitutional Court.
+
+          [[paragraph (a) substituted by section 7 of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
 
         ITEM (b)
           A court which makes an order of constitutional invalidity may grant a temporary interdict or other temporary relief to a party, or may adjourn the proceedings, pending a decision of the Constitutional Court on the validity of that Act or conduct.
@@ -4406,7 +4716,9 @@ CHAP 8 - Courts and administration of justice
 
   SEC 173. - Inherent power
 
-    The Constitutional Court, Supreme Court of Appeal and High Courts have the inherent power to protect and regulate their own process, and to develop the common low, taking into account the interests of justice.
+    The Constitutional Court, the Supreme Court of Appeal and the High Court of South Africa each has the inherent power to protect and regulate their own process, and to develop the common law, taking into account the interests of justice.
+
+    [[section 173 substituted by section 8 of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
 
   SEC 174. - Appointment of judicial officers
 
@@ -4420,12 +4732,14 @@ CHAP 8 - Courts and administration of justice
 
     SUBSEC (3)
 
-      The President as head of the national executive, after consulting the Judicial Service Commission and the leaders of parties represented in the National Assembly, appoints the President and Deputy President of the Constitutional Court and, after consulting the Judicial Service Commission, appoints the Chief Justice and Deputy Chief Justice.
+      The President as head ofthe national executive, after consulting the Judicial Service Commission and the leaders of parties represented in the National Assembly, appoints the Chief Justice and the Deputy Chief Justice and, after consulting the Judicial Service Commission, appoints the President and Deputy President of the Supreme Court of Appeal.
+
+      [[subsection (3) substituted by section 13 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SUBSEC (4)
 
       ITEMS
-        The other judges of the Constitutional Court are appointed by the President, as head of the national executive, after consulting the President of the Constitutional Court and the leaders of parties represented in the National Assembly, in accordance with the following procedure.
+        The other judges of the Constitutional Court are appointed by the President, as head of the national executive, after consulting the Chief Justice and the leaders of parties represented in the National Assembly, in accordance with the following procedure.
 
         ITEM (a)
           The Judicial Service Commission must prepare a list of nominees with three names more than the number of appointments to be made, and submit the list to the President.
@@ -4435,6 +4749,8 @@ CHAP 8 - Courts and administration of justice
 
         ITEM (c)
           The Judicial Service Commission must supplement the list with further nominees and the President must make the remaining appointments from the supplemented list.
+
+      [[subsection (4) substituted by section 13 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SUBSEC (5)
 
@@ -4452,21 +4768,25 @@ CHAP 8 - Courts and administration of justice
 
       Before judicial officers begin to perform their functions, they must take an oath or affirm, in accordance with {{>#att_3 Schedule 2}}, that they will uphold and protect the Constitution.
 
-  SEC 175. - Acting judges
+  SEC 175. - Appointment of acting judges
 
     SUBSEC (1)
 
-      The President may appoint a woman or a man to be an acting judge of the Constitutional Court if there is a vacancy or if a judge is absent. The appointment must be made on the recommendation of the Cabinet member responsible for the administration of justice acting with the concurrence of the President of the Constitutional Court and the Chief Justice.
+      The President may appoint a woman or man to serve as an acting Deputy Chief Justice or judge of the Constitutional Court if there is a vacancy in any of those offices, or if the person holding such an office is absent. The appointment must be made on the recommendation of the Cabinet member responsible for the administration of justice acting with the concurrence of the Chief Justice, and an appointment as acting Deputy Chief Justice must be made from the ranks of the judges who had been appointed to the Constitutional Court in terms of section 174(4).
 
     SUBSEC (2)
 
       The Cabinet member responsible for the administration of justice must appoint acting judges to other courts after consulting the senior judge of the court on which the acting judge will serve.
 
+      [[section 175 substituted by section 14 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}} and by section 9 of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
+
   SEC 176. - Terms of office and remuneration
 
     SUBSEC (1)
 
-      A Constitutional Court judge is appointed for a non-renewable term of 12 years, but must retire at the age of 70.
+      A Constitutional Court judge holds office for a non-renewable term of 12 years, or until he or she attains the age of 70, whichever occurs first, except where an Act of Parliament extends the term of office of a Constitutional Court judge.
+
+      [[subsection (1) substituted by section 15 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SUBSEC (2)
 
@@ -4508,7 +4828,9 @@ CHAP 8 - Courts and administration of justice
           the Chief Justice, who presides at meetings of the Commission;
 
         ITEM (b)
-          the President of the Constitutional Court;
+          the President of the Supreme Court of Appeal;
+
+          [[paragraph (b) substituted by section 16(a) of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
         ITEM (c)
           one Judge President designated by the Judges President;
@@ -4535,9 +4857,9 @@ CHAP 8 - Courts and administration of justice
           four persons designated by the President as head of the national executive, after consulting the leaders of all the parties in the National Assembly; and
 
         ITEM (k)
-          when considering matters specifically relating to a provincial or local division of the High Court, the Judge President of that division and the Premier of the province concerned, or an alternate designated by each of them.
+          when considering matters relating to a specific Division of the High Court of South Africa, the Judge President of that Division and the Premier of the province concerned, or an alternate designated by each of them.
 
-          [[paragraph (k) substituted by section 2(a) of the {{>/akn/za/act/1998/constitution-second-amendment Constitution Second Amendment Act, 1998}}]]
+          [[paragraph (k) substituted by section 2(a) of the {{>/akn/za/act/1998/constitution-second-amendment Constitution Second Amendment Act, 1998}}, by section 16(b) of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}} and  by section 10 of the {{>/akn/za/act/2012/constitution-seventeenth-amendment Constitution Seventeenth Amendment Act, 2012}}]]
 
     SUBSEC (2)
 
@@ -4561,9 +4883,9 @@ CHAP 8 - Courts and administration of justice
 
     SUBSEC (7)
 
-      If the Chief Justice or the President of the Constitutional Court is temporarily unable to serve on the Commission, the Deputy Chief Justice or the Deputy President of the Constitutional Court, as the case may be, acts as his or her alternate on the Commission.
+      If the Chief Justice or the President of the Supreme Court of Appeal  is temporarily unable to serve on the Commission, the Deputy Chief Justice or the Deputy President of the Supreme Court of Appeal, as the case may be, acts as his or her alternate on the Commission.
 
-      [[subsection (7) added by section 2(b) of the {{>/akn/za/act/1998/constitution-second-amendment Constitution Second Amendment Act, 1998}}]]
+      [[subsection (7) added by section 2(b) of the {{>/akn/za/act/1998/constitution-second-amendment Constitution Second Amendment Act, 1998}} and substituted by section 16(c) of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SUBSEC (8)
 
@@ -4679,8 +5001,6 @@ CHAP 9 - State institutions supporting constitutional democracy
         ITEM (f)
           The Electoral Commission.
 
-      [[subsection 181 amended by section 4 of the {{>/akn/za/act/1998/constitution-second-amendment Constitution Second Amendment Act, 1998}}]]
-
     SUBSEC (2)
 
       These institutions are independent, and subject only to the Constitution and the law, and they must be impartial and must exercise their powers and perform their functions without fear, favour or prejudice.
@@ -4778,8 +5098,6 @@ CHAP 9 - State institutions supporting constitutional democracy
 
         The South African Human Rights Commission has the additional powers and functions prescribed by national legislation.
 
-        [[section 184 amended by section 4 of the {{>/akn/za/act/1998/constitution-second-amendment Constitution Second Amendment Act, 1998}}]]
-
   SUBPART - Commission for the Promotion and Protection of the Rights of Cultural, Religious and Linguistic Communities
 
     SEC 185. - Functions of Commission
@@ -4809,8 +5127,6 @@ CHAP 9 - State institutions supporting constitutional democracy
       SUBSEC (4)
 
         The Commission has the additional powers and functions prescribed by national legislation.
-
-        [[section 185 amended by section 4 of the {{>/akn/za/act/1998/constitution-second-amendment Constitution Second Amendment Act, 1998}}]]
 
     SEC 186. - Composition of Commission
 
@@ -4979,8 +5295,6 @@ CHAP 9 - State institutions supporting constitutional democracy
       SUBSEC (6)
 
         The involvement of civil society in the recommendation process may be provided for as envisaged in {{>#sec_59 section 59}}(1)(a).
-
-        [[section 193 amended by section 4 of the {{>/akn/za/act/1998/constitution-second-amendment Constitution Second Amendment Act, 1998}}]]
 
     SEC 194. - Removal from office
 
@@ -5711,12 +6025,16 @@ CHAP 13 - Finance
 
       SUBSEC (2)
 
-        The national treasury, with the concurrence of the Cabinet member responsible for national financial matters, may stop the transfer of funds to an organ of state only for serious or persistent material breach of the measures established in terms of subsection (1).
+        The national treasury must enforce compliance with the measures established in terms of subsection (1), and may stop the transfer of funds to an organ of state if that organ of state commits a serious or persistent material breach of those measures.
+
+        [[subsection (2) substituted by section 5(a) of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}} on 26 April 2002]]
 
       SUBSEC (3)
 
+        A decision to stop the transfer of funds due to a province in terms of {{>#sec_214 section 214}} (1)(b) may be taken only in the circumstances mentioned in subsection (2) and—
+
         ITEMS
-          A decision to stop the transfer of funds to a province may be taken only in terms of subsection (2), and -
+          [[introductory phrase of subsection (3) substituted by section 5(b) of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}} on 26 April 2002]]
 
           ITEM (a)
             may not stop the transfer of funds for more than 120 days; and
@@ -5758,7 +6076,9 @@ CHAP 13 - Finance
 
       SUBSEC (3)
 
-        National legislation must prescribe a framework within which the policy referred to in subsection (2) may be implemented.
+        National legislation must prescribe a framework within which the policy referred to in subsection (2) must be implemented.
+
+        [[subsection (3) substituted by section 6 of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}} on 26 April 2002]]
 
     SEC 218. - Government guarantees
 
@@ -5827,16 +6147,31 @@ CHAP 13 - Finance
           The Commission consists of the following women and men appointed by the President, as head of the national executive:
 
           ITEM (a)
-            A chairperson and a deputy chairperson, who are full-time members;
+            A chairperson and deputy chairperson;
 
           ITEM (b)
-            nine persons each of whom is nominated by the Executive Council of a province, with each province nominating only one person;
+            three persons selected, after consulting the Premiers, from a list compiled in accordance with a process prescribed by national legislation;
 
           ITEM (c)
-            two persons nominated by organised local government in terms of {{>#sec_163 section 163}}; and
+            two persons selected, after consulting organised local government, from a list compiled in accordance with a process prescribed by national legislation; and
 
           ITEM (d)
-            nine other persons.
+            two other persons.
+
+        [[subsection (1) amended by section 2 of the {{>/akn/za/act/1999/constitution-fifth-amendment Constitution Fifth Amendment Act, 1999}} and substituted by section 7(a) of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}}]]
+
+      SUBSEC (1A)
+
+        ITEMS
+          National legislation referred to in subsection (1) must provide for the participation of—
+
+          ITEM (a)
+            the Premiers in the compilation of a list envisaged in subsection (1)(b); and
+
+          ITEM (b)
+            organised local government in the compilation of a list envisaged in subsection (1)(c).
+
+        [[subsection (1A) inserted by section 7(b) of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}}]]
 
       SUBSEC (2)
 
@@ -5893,6 +6228,19 @@ CHAP 13 - Finance
 
         Revenue allocated through a province to local government in that province in terms of {{>#sec_214 section 214}}(1), is a direct charge against that province’s Revenue Fund.
 
+      SUBSEC (4)
+
+        ITEMS
+          National legislation may determine a framework within which—
+
+          ITEM (a)
+            a provincial Act may in terms of subsection (2)(b) authorise the withdrawal of money as a direct charge against a Provincial Revenue Fund; and
+
+          ITEM (b)
+            revenue allocated through a province to local government in that province in terms of subsection (3) must be paid to municipalities in the  province.
+
+        [[subsection (4) added by section 8 of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}} on 26 April 2002]]
+
     SEC 227. - National sources of provincial and local government funding
 
       SUBSEC (1)
@@ -5929,7 +6277,9 @@ CHAP 13 - Finance
             taxes, levies and duties other than income tax, value-added tax, general sales tax, rates on property or customs duties; and
 
           ITEM (b)
-            flat-rate surcharges on the tax bases of any tax, levy or duty that is imposed by national legislation, other than the tax bases of corporate income tax, value-added tax, rates on property or customs duties.
+            flat-rate surcharges on any tax, levy or duty that is imposed by national legislation, other than on corporate income tax, value-added tax, rates on property or customs duties.
+
+            [[paragraph (b) substituted by section 9 of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}} on 26 April 2002]]
 
       SUBSEC (2)
 
@@ -5994,22 +6344,36 @@ CHAP 13 - Finance
 
         National legislation envisaged in this section may be enacted only after organised local government and the Financial and Fiscal Commission have been consulted, and any recommendations of the Commission have been considered.
 
-    SEC 230. - Provincial and municipal loans
+    SEC 230. - Provincial  loans
 
       SUBSEC (1)
 
-        ITEMS
-          A province or a municipality may raise loans for capital or current expenditure in accordance with reasonable conditions determined by national legislation, but loans for current expenditure -
-
-          ITEM (a)
-            may be raised only when necessary for bridging purposes during a fiscal year; and
-
-          ITEM (b)
-            must be repaid within twelve months.
+        A province may raise loans for capital or current expenditure in accordance with national legislation, but loans for current expenditure may be raised only when necessary for bridging purposes during a fiscal year.
 
       SUBSEC (2)
 
         National legislation referred to in subsection (1) may be enacted only after any recommendations of the Financial and Fiscal Commission have been considered.
+
+        [[section 230 substituted by section 10 of the {{>/akn/za/act/2001/constitution-seventh-amendment Constitution Seventh Amendment Act, 2001}} on 26 April 2002]]
+
+    SEC 230A. - Municipal loans
+
+      SUBSEC (1)
+
+        ITEMS
+          A Municipal Council may, in accordance with national legislation—
+
+          ITEM (a)
+            raise loans for capital or current expenditure for the municipality, but loans for current expenditure may be raised only when necessary for bridging purposes during a fiscal year; and
+
+          ITEM (b)
+            bind itself and a future Council in the exercise of its legislative and executive authority to secure loans or investments for the municipality.
+
+      SUBSEC (2)
+
+        National legislation referred to in subsection (1) may be enacted only after any recommendations of the Financial and Fiscal Commission have been considered.
+
+        [[section 230A inserted by section 17 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
 CHAP 14 - General Provisions
 
@@ -6112,7 +6476,7 @@ CHAP 14 - General Provisions
           subordinate legislation made in terms of a provincial Act; and
 
         ITEM (b)
-          legislation that was in force when the Constitution  took effect and that is administered by a provincial government.
+          legislation that was in force when the Constitution took effect and that is administered by a provincial government.
 
     SEC 240. - Inconsistencies between different texts
 
@@ -6138,15 +6502,15 @@ CHAP 14 - General Provisions
 
       SUBSEC (3)
 
-        Unless the context otherwise indicates, a reference in a provision of the Constitution  to a time when the Constitution  took effect must be construed as a reference to the time when that provision took effect.
+        Unless the context otherwise indicates, a reference in a provision of the Constitution to a time when the Constitution took effect must be construed as a reference to the time when that provision took effect.
 
       SUBSEC (4)
 
-        If a different date is set for any particular provision of the Constitution  in terms of subsection (2), any corresponding provision of the Constitution of the Republic of South Africa, 1993 ({{>/akn/za/act/1993/200 Act 200 of 1993}}), mentioned in the proclamation, is repealed with effect from the same date.
+        If a different date is set for any particular provision of the Constitution in terms of subsection (2), any corresponding provision of the Constitution of the Republic of South Africa, 1993 ({{>/akn/za/act/1993/200 Act 200 of 1993}}), mentioned in the proclamation, is repealed with effect from the same date.
 
       SUBSEC (5)
 
-        Sections {{>#sec_213 213}}, {{>#sec_214 214}}, {{>#sec_215 215}}, {{>#sec_216 216}}, {{>#sec_218 218}}, {{>#sec_226 226}}, {{>#sec_227 227}}, {{>#sec_228 228}}, {{>#sec_229 229}} and {{>#sec_230 230}} come into effect on 1 January 1998, but this does not preclude the enactment in terms of this Constitution  of legislation envisaged in any of these provisions before that date. Until that date any corresponding and incidental provisions of the Constitution of the Republic of South Africa, 1993, remain in force.
+        Sections {{>#sec_213 213}}, {{>#sec_214 214}}, {{>#sec_215 215}}, {{>#sec_216 216}}, {{>#sec_218 218}}, {{>#sec_226 226}}, {{>#sec_227 227}}, {{>#sec_228 228}}, {{>#sec_229 229}} and {{>#sec_230 230}} come into effect on 1 January 1998, but this does not preclude the enactment in terms of this Constitution of legislation envisaged in any of these provisions before that date. Until that date any corresponding and incidental provisions of the Constitution of the Republic of South Africa, 1993, remain in force.
 
 SCHEDULE Schedule 1
   SUBHEADING National flag
@@ -6177,14 +6541,147 @@ SCHEDULE Schedule 1
 
     {{IMG media/f.png}}
 
+SCHEDULE Schedule 1A
+  SUBHEADING Geographical areas of Provinces
+
+  SUBPART - The Province of the Eastern Cape
+
+    Map No. 3 of Schedule 1 to Notice 1998 of 2005
+
+    Map No. 6 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 7 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 8 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 9 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 10 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 11 of Schedule 2 to Notice 1998 of 2005
+
+    [[geographical area of the Province of the Eastern Cape substituted by section 1(a) of the {{>/akn/za/act/2007/constitution-thirteenth-amendment Constitution Thirteenth Amendment Act, 2007}} but no changes were indicated]]
+
+  SUBPART - The Province of the Free State
+
+    Map No. 12 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 13 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 14 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 15 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 16 of Schedule 2 to Notice 1998 of 2005
+
+  SUBPART - The Province of Gauteng
+
+    Map No. 4 of Schedule 1 to Notice 1490 of 2008
+
+    Map No. 17 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 18 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 19 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 20 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 21 of Schedule 2 to Notice 1998 of 2005
+
+    [[geographical area of the Province of Gauteng substituted by section 1(a) of the {{>/akn/za/act/2009/constitution-sixteenth-amendment Constitution Sixteenth Amendment Act, 2009}}]]
+
+  SUBPART - The Province of KwaZulu-Natal
+
+    Map No. 22 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 23 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 24 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 25 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 26 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 27 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 28 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 29 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 30 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 31 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 32 of Schedule 2 to Notice 1998 of 2005
+
+    [[geographical area of the Province of KwaZulu-Natal substituted by section 1(b) of the {{>/akn/za/act/2007/constitution-thirteenth-amendment Constitution Thirteenth Amendment Act, 2007}} but no changes were indicated]]
+
+  SUBPART - The Province of Limpopo
+
+    Map No. 33 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 34 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 35 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 36 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 37 of Schedule 2 to Notice 1998 of 2005
+
+  SUBPART - The Province of Mpumalanga
+
+    Map No. 38 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 39 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 40 of Schedule 2 to Notice 1998 of 2005
+
+  SUBPART - The Province of the Northern Cape
+
+    Map No. 41 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 42 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 43 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 44 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 45 of Schedule 2 to Notice 1998 of 2005
+
+  SUBPART - The Province of North West
+
+    Map No. 5 of Schedule 1 to Notice 1490 of 2008
+
+    Map No. 46 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 47 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 48 of Schedule 2 to Notice 1998 of 2005
+
+    [[geographical area of the Province of North West substituted by section 1(b) of the {{>/akn/za/act/2009/constitution-sixteenth-amendment Constitution Sixteenth Amendment Act, 2009}}]]
+
+  SUBPART - The Province of the Western Cape
+
+    Map No. 49 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 50 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 51 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 52 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 53 of Schedule 2 to Notice 1998 of 2005
+
+    Map No. 54 of Schedule 2 to Notice 1998 of 2005
+
+    [[Schedule 1A inserted by section 4 of the {{>/akn/za/act/2005/constitution-twelfth-amendment Constitution Twelfth Amendment Act, 2005}}]]
+
 SCHEDULE Schedule 2
   SUBHEADING Oaths and solemn affirmations
 
   SEC 1. - Oath or solemn affirmation of President and Acting President
 
-    The President or Acting President, before the President of the Constitutional Court, or another judge designated by the President of the Constitutional Court, must swear/affirm as follows:
-
-    [[introductory words substituted by section 2 of the {{>/akn/za/act/1997/constitution-first-amendment Constitution First Amendment Act, 1997}}]]
+    The President or Acting President, before the Chief Justice, or another judge designated by the Chief Justice, must swear/affirm as follows:
 
     In the presence of everyone assembled here, and in full realisation of the high calling I assume as President/Acting President of the Republic of South Africa, I, A.B., swear/solemnly affirm that I will be faithful to the Republic of South Africa, and will obey, observe, uphold and maintain the Constitution and all other law of the Republic; and I solemnly and sincerely promise that I will always -
 
@@ -6202,7 +6699,7 @@ SCHEDULE Schedule 2
 
   SEC 2. - Oath or solemn affirmation of Deputy President
 
-    The Deputy President, before the President of the Constitutional Court, must swear/affirm as follows:
+    The Deputy President, before the Chief Justice or another judge designated by the Chief Justice, must swear/affirm as follows:
 
     In the presence of everyone assembled here, and in full realisation of the high calling I assume as Deputy President of the Republic of South Africa, I, A.B.,   swear/solemnly affirm that I will be faithful to the Republic of South Africa and will obey, observe, uphold and maintain the Constitution and all other law of the Republic; and I solemnly and sincerely promise that I will always -
 
@@ -6220,7 +6717,7 @@ SCHEDULE Schedule 2
 
   SEC 3. - Oath or solemn affirmation of Ministers and Deputy Ministers
 
-    Each Minister and Deputy Minister, before the President of the Constitutional Court or another judge designated by the President of the Constitutional Court, must swear/affirm as follows:
+    Each Minister and Deputy Minister, before the  Chief Justice or another judge designated by the Chief Justice, must swear/affirm as follows:
 
     I, A.B., swear/solemnly affirm that I will be faithful to the Republic of South Africa and will obey, respect and uphold the Constitution and all other law of the Republic; and I undertake to hold my office as Minister/Deputy Minister with honour and dignity; to be a true and faithful counsellor; not to divulge directly or indirectly any secret matter entrusted to me; and to perform the functions of my office conscientiously and to the best of my ability.
 
@@ -6230,7 +6727,7 @@ SCHEDULE Schedule 2
 
     SUBSEC (1)
 
-      Members of the National Assembly, permanent delegates to the National Council of Provinces and members of provincial legislatures, before the President of the Constitutional Court or a judge designated by the President of the Constitutional Court, must swear or affirm as follows:
+      Members of the National Assembly, permanent delegates to the National Council of Provinces and members of provincial legislatures, before the Chief Justice or a judge designated by the Chief Justice, must swear or affirm as follows:
 
       I, A.B., swear/solemnly affirm that I will be faithful to the Republic of South Africa and will obey, respect and uphold the Constitution and all other law of the Republic; and I solemnly promise to perform my functions as a member of the National Assembly/ permanent delegate to the National Council of Provinces/member of the legislature of the province of C.D. to the best of my ability.
 
@@ -6242,7 +6739,7 @@ SCHEDULE Schedule 2
 
   SEC 5. - Oath or solemn affirmation of Premiers, Acting Premiers and members of provincial Executive Councils
 
-    The Premier or Acting Premier of a province, and each member of the Executive Council of a province, before the President of the Constitutional Court or a judge designated by the President of the Constitutional Court, must swear/affirm as follows:
+    The Premier or Acting Premier of a province, and each member of the Executive Council of a province, before the Chief Justice or a judge designated by the Chief Justice, must swear/affirm as follows:
 
     I, A.B., swear/solemnly affirm that I will be faithful to the Republic of South Africa and will obey, respect and uphold the Constitution and all other law of the Republic; and I undertake to hold my office as Premier/Acting Premier/member of the Executive Council of the province of C.D. with honour and dignity; to be a true and faithful counsellor; not to divulge directly or indirectly any secret matter entrusted to me; and to perform the functions of my office conscientiously and to the best of my ability.
 
@@ -6252,7 +6749,7 @@ SCHEDULE Schedule 2
 
     SUBSEC (1)
 
-      Each judge or acting judge, before the Chief Justice of the Supreme Court of Appeal or another judge designated by the Chief Justice, must swear or affirm as follows:
+      Each judge or acting judge, before the Chief Justice or another judge designated by the Chief Justice, must swear or affirm as follows:
 
       I, A.B., swear/solemnly affirm that, as a Judge of the Constitutional Court/Supreme Court of Appeal/High Court/ E.F. Court, I will be faithful to the Republic of South Africa, will uphold and protect the Constitution and the human rights entrenched in it, and will administer justice to all persons alike without fear, favour or prejudice, in accordance with the Constitution and the law.
 
@@ -6260,11 +6757,13 @@ SCHEDULE Schedule 2
 
     SUBSEC (2)
 
-      A person appointed to the office of Chief Justice of the Supreme Court of Appeal who is not already a judge at the time of that appointment must swear or affirm before the President of the Constitutional Court.
+      A person appointed to the office of Chief Justice who is not already a judge at the time of that appointment must swear or affirm before the Deputy Chief Justice, or failing that judge, the next most senior available judge of the Constitutional Court.
 
     SUBSEC (3)
 
       Judicial officers, and acting judicial officers, other than judges, must swear/affirm in terms of national legislation.
+
+      [[Schedule 2 amended by section 2 of the {{>/akn/za/act/1997/constitution-first-amendment Constitution First Amendment Act, 1997}} and substituted by section 18 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
 SCHEDULE Schedule 3
   SUBHEADING Election Procedures
@@ -6360,7 +6859,7 @@ SCHEDULE Schedule 3
       SUBSEC (1)
 
         ITEMS
-          The President of the Constitutional Court must make rules prescribing -
+          The Chief Justice must make rules prescribing -
 
           ITEM (a)
             the procedure for meetings to which this Schedule applies;
@@ -6376,7 +6875,9 @@ SCHEDULE Schedule 3
 
       SUBSEC (2)
 
-        These rules must be made known in the way that the President of the Constitutional Court determines.
+        These rules must be made known in the way that the Chief Justice determines.
+
+        [[item 9 substituted by section 19 of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
   PART B - Formula to determine party participation in provincial delegations to the National Council of Provinces
 
@@ -6387,6 +6888,18 @@ SCHEDULE Schedule 3
     PARA 2.
 
       If a calculation in terms of item 1 yields a surplus not absorbed by the delegates allocated to a party in terms of that item, the surplus must compete with similar surpluses accruing to any other party or parties, and any undistributed delegates in the delegation must be allocated to the party or parties in the sequence of the highest surplus.
+
+    PARA 3.
+
+      If the competing surpluses envisaged in item 2 are equal, the undistributed delegates in the delegation must be allocated to the party or parties with the same surplus in the sequence from the highest to the lowest number of votes that have been recorded for those parties during the last election for the provincial legislature concerned.
+
+      [[item 3 added by section 2 of the {{>/akn/za/act/1999/constitution-fourth-amendment Constitution Fourth Amendment Act, 1999}} and substituted by section 3 of the {{>/akn/za/act/2002/constitution-ninth-amendment Constitution Ninth Amendment Act, 2002}} and by section 5(a) of the {{>/akn/za/act/2008/constitution-fourteenth-amendment Constitution Fourteenth Amendment Act, 2008}}]]
+
+    PARA 4.
+
+      If more than one party with the same surplus recorded the same number of votes during the last election for the provincial legislature concerned, the legislature concerned must allocate the undistributed delegates in the delegation to the party or parties with the same surplus in a manner which is consistent with democracy.
+
+      [[item 4 added by section 5(b) of the {{>/akn/za/act/2008/constitution-fourteenth-amendment Constitution Fourteenth Amendment Act, 2008}}]]
 
 SCHEDULE Schedule 4
   SUBHEADING Functional areas of concurrent national and provincial legislative competence
@@ -6579,13 +7092,13 @@ SCHEDULE Schedule 6
 
     In this Schedule, unless inconsistent with the context —
 
-    "homeland" means a part of the Republic which, before the previous Constitution took effect, was dealt with in South African legislation as an independent or a self-governing territory;
+    P{refersTo #term-homeland} "homeland" means a part of the Republic which, before the previous Constitution took effect, was dealt with in South African legislation as an independent or a self-governing territory;
 
-    "new Constitution " means the Constitution of the Republic of South Africa, 1996;
+    P{refersTo #term-new_Constitution} "new Constitution" means the Constitution of the Republic of South Africa, 1996;
 
-    "old order legislation" means legislation enacted before the previous Constitution took effect;
+    P{refersTo #term-old_order_legislation} "old order legislation" means legislation enacted before the previous Constitution took effect;
 
-    "previous Constitution" means the Constitution of the Republic of South Africa, 1993 ({{>/akn/za/act/1993/200 Act 200 of 1993}}).
+    P{refersTo #term-previous_Constitution} "previous Constitution" means the Constitution of the Republic of South Africa, 1993 ({{>/akn/za/act/1993/200 Act 200 of 1993}}).
 
   SEC 2. - Continuation of existing law
 
@@ -6905,7 +7418,7 @@ SCHEDULE Schedule 6
 
     SUBSEC (2)
 
-      Until 30 April 1999, sections {{>#sec_84 84}}, {{>#sec_89 89}}, {{>#sec_90 90}}, {{>#sec_91 91}}, {{>#sec_93 93}} and {{>#sec_96 96}} of the new Constitution  must be regarded to read as set out in Annexure B to this Schedule.
+      Until 30 April 1999, sections {{>#sec_84 84}}, {{>#sec_89 89}}, {{>#sec_90 90}}, {{>#sec_91 91}}, {{>#sec_93 93}} and {{>#sec_96 96}} of the new Constitution must be regarded to read as set out in Annexure B to this Schedule.
 
     SUBSEC (3)
 
@@ -6957,7 +7470,7 @@ SCHEDULE Schedule 6
 
     SUBSEC (2)
 
-      Until the Premier elected after the first election of a province’s legislature under the new Constitution assumes office, or the province enacts its constitution, whichever occurs first, sections {{>#sec_132 132}} and {{>#sec_136 136}} of the new Constitution  must be regarded to read as set out in Annexure C to this Schedule.
+      Until the Premier elected after the first election of a province’s legislature under the new Constitution assumes office, or the province enacts its constitution, whichever occurs first, sections {{>#sec_132 132}} and {{>#sec_136 136}} of the new Constitution must be regarded to read as set out in Annexure C to this Schedule.
 
   SEC 13. - Provincial constitutions
 
@@ -7011,7 +7524,7 @@ SCHEDULE Schedule 6
 
     SUBSEC (1)
 
-      An authority within the national executive that administers any legislation falling outside Parliament’s legislative power when the new Constitution  takes effect, remains competent to administer that legislation until it is assigned to an authority within a provincial executive in terms of item 14 of this Schedule.
+      An authority within the national executive that administers any legislation falling outside Parliament’s legislative power when the new Constitution takes effect, remains competent to administer that legislation until it is assigned to an authority within a provincial executive in terms of item 14 of this Schedule.
 
     SUBSEC (2)
 
@@ -7037,7 +7550,7 @@ SCHEDULE Schedule 6
           The Constitutional Court established by the previous Constitution becomes the Constitutional Court under the new Constitution.
 
         ITEM (b)
-          Anyone holding office as the President, the Deputy President or a judge of the Constitutional Court when the new Constitution takes effect, becomes the President, the Deputy President or a judge of the Constitutional Court under the new Constitution, and continues in office for the unexpired portion of their term as fixed by {{>#sec_176 section 176}}(1) of the new Constitution.
+          [[subitem 2(b) deleted by section 20(a) of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SUBSEC (3)
 
@@ -7046,7 +7559,7 @@ SCHEDULE Schedule 6
           The Appellate Division of the Supreme Court of South Africa becomes the Supreme Court of Appeal under the new Constitution.
 
         ITEM (b)
-          Anyone holding office as the Chief Justice, the Deputy Chief Justice or a judge of the Appellate Division when the new Constitution takes effect, becomes the Chief Justice, the Deputy Chief Justice or a judge of the Supreme Court of Appeal under the new Constitution.
+          [[subitem 3(b) deleted by section 20(a) of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
 
     SUBSEC (4)
 
@@ -7080,6 +7593,33 @@ SCHEDULE Schedule 6
         ITEM (b)
           The Cabinet member responsible for the administration of justice, acting after consultation with the Judicial Service Commission, must manage the rationalisation envisaged in paragraph (a).
 
+    SUBSEC (7)
+
+      ITEMS
+        ITEM (a)
+          ITEMS
+            Anyone holding office, when the Constitution of the Republic of South Africa Amendment Act, 2001, takes effect, as—
+
+            ITEM (i)
+              the President of the Constitutional Court, becomes the Chief Justice as contemplated in section 167(1) of the new Constitution;
+
+            ITEM (ii)
+              the Deputy President of the Constitutional Court, becomes the Deputy Chief Justice as contemplated in section 167(1) of the new    Constitution;
+
+            ITEM (iii)
+              the Chief Justice, becomes the President of the Supreme Court of Appeal as contemplated in section 168(1) of the new Constitution; and
+
+            ITEM (iv)
+              the Deputy Chief Justice, becomes the Deputy President of the Supreme Court of Appeal as contemplated in section 168(1) of the new Constitution.
+
+        ITEM (b)
+          All rules, regulations or directions made by the President of the Constitutional Court or the Chief Justice in force immediately before the Constitution of the Republic of South Africa Amendment Act, 2001, takes effect, continue in force until repealed or amended.
+
+        ITEM (c)
+          Unless inconsistent with the context or clearly inappropriate, a reference in any law or process to the Chief Justice or to the President of the Constitutional Court, must be construed as a reference to the Chief Justice as contemplated in section 167(1) of the new Constitution.
+
+      [[subitem (7) added by section 20(b) of the {{>/akn/za/act/2001/constitution-sixth-amendment Constitution Sixth Amendment Act, 2001}}]]
+
   SEC 17. - Cases pending before courts
 
     All proceedings which were pending before a court when the new Constitution took effect, must be disposed of as if the new Constitution had not been enacted, unless the interests of justice require otherwise.
@@ -7088,7 +7628,7 @@ SCHEDULE Schedule 6
 
     SUBSEC (1)
 
-      Section 108 of the previous Constitution continues in force until the Act of Parliament envisaged in {{>#sec_179 section 179}} of the new Constitution  takes effect. This subitem does not affect the appointment of the National Director of Public Prosecutions in terms of {{>#sec_179 section 179}}.
+      Section 108 of the previous Constitution continues in force until the Act of Parliament envisaged in {{>#sec_179 section 179}} of the new Constitution takes effect. This subitem does not affect the appointment of the National Director of Public Prosecutions in terms of {{>#sec_179 section 179}}.
 
     SUBSEC (2)
 
@@ -7128,8 +7668,6 @@ SCHEDULE Schedule 6
 
         ITEM (h)
           the Pan South African Language Board.
-
-      [[item 20 amended by section 4 of the {{>/akn/za/act/1998/constitution-second-amendment Constitution Second Amendment Act, 1998}}]]
 
     SUBSEC (2)
 
@@ -7210,7 +7748,7 @@ SCHEDULE Schedule 6
 
     SUBSEC (1)
 
-      National legislation envisaged in sections {{>#sec_9 9}}(4), {{>#sec_32 32}}(2) and {{>#sec_33 33}}(3) of the new Constitution  must be enacted within three years of the date on which the new Constitution took effect.
+      National legislation envisaged in sections {{>#sec_9 9}}(4), {{>#sec_32 32}}(2) and {{>#sec_33 33}}(3) of the new Constitution must be enacted within three years of the date on which the new Constitution took effect.
 
     SUBSEC (2)
 
@@ -7331,7 +7869,9 @@ SCHEDULE Schedule 6
 
   SUBPART - Annexure A
 
-Amendments to Schedule 2 to the previous Constitution    PARA 1.
+    CROSSHEADING Amendments to Schedule 2 to the previous Constitution
+
+    PARA 1.
 
       The replacement of item 1 with the following item:
 
@@ -7497,7 +8037,9 @@ Amendments to Schedule 2 to the previous Constitution    PARA 1.
 
   SUBPART - Annexure B
 
-Government of national unity: National sphere    PARA 1.
+    CROSSHEADING Government of national unity: National sphere
+
+    PARA 1.
 
       {{>#sec_84 Section 84}} of the new Constitution is deemed to contain the following additional subsection:
 
@@ -7537,7 +8079,7 @@ Government of national unity: National sphere    PARA 1.
 
       "(a) an Executive Deputy President designated by the President;".
 
-    PARA 3.
+    PARA 4.
 
       {{>#sec_91 Section 91}} of the new Constitution is deemed to read as follows:
 
@@ -7723,7 +8265,9 @@ Government of national unity: National sphere    PARA 1.
 
   SUBPART - Annexure C
 
-Government of national unity: Provincial sphere    PARA 1.
+    CROSSHEADING Government of national unity: Provincial sphere
+
+    PARA 1.
 
       {{>#sec_132 Section 132}} of the new Constitution is deemed to read as follows:
 
@@ -7815,7 +8359,9 @@ Government of national unity: Provincial sphere    PARA 1.
 
   SUBPART - Annexure D
 
-Public administration and security services: Amendments to sections of the previous Constitution    PARA 1.
+    CROSSHEADING Public administration and security services: Amendments to sections of the previous Constitution
+
+    PARA 1.
 
       ITEMS
         The amendment of section 218 of the previous Constitution -
@@ -7831,9 +8377,7 @@ Public administration and security services: Amendments to sections of the previ
           "(b) the appointment of provincial commissioners;";
 
         ITEM (c)
-          by replacing paragraph (d) of subsection (1) with the following paragraph:
-
-          "(d) the investigation and prevention of organised crime or crime which requires national investigation and prevention or specialised skills;"; and
+          [[item (c) repealed by {{>#sec_21 section 21}} of  {{>/akn/za/act/2012/10 Act 10 of 2012}}]]
 
         ITEM (d)
           by replacing paragraph (k) of subsection (1) with the following paragraph:
@@ -7866,7 +8410,7 @@ Public administration and security services: Amendments to sections of the previ
         ITEM (a)
           by replacing subsection (1) with the following subsection:
 
-          "(1) A public service, department of state, administration or security service which immediately before the commencement of the Constitution  of the Republic of South Africa, 1996 (hereinafter referred to as "the new Constitution"), performed governmental functions, continues to function in terms of the legislation applicable to it until it is abolished or incorporated or integrated into any appropriate institution or is rationalised or consolidated with any other institution.";
+          "(1) A public service, department of state, administration or security service which immediately before the commencement of the Constitution of the Republic of South Africa, 1996 (hereinafter referred to as "the new Constitution"), performed governmental functions, continues to function in terms of the legislation applicable to it until it is abolished or incorporated or integrated into any appropriate institution or is rationalised or consolidated with any other institution.";
 
         ITEM (b)
           by replacing subsection (6) with the following subsection:
@@ -7885,7 +8429,7 @@ Public administration and security services: Amendments to sections of the previ
         ITEM (a)
           by replacing paragraph (a) of subsection (1) with the following paragraph:
 
-          "(a) The rationalisation of all institutions referred to in section 236(1), excluding military forces referred to in section 224(2), shall after the commencement of the Constitution  of the Republic of South Africa, 1996, continue, with a view to establishing -
+          "(a) The rationalisation of all institutions referred to in section 236(1), excluding military forces referred to in section 224(2), shall after the commencement of the Constitution of the Republic of South Africa, 1996, continue, with a view to establishing -
 
           \(i) an effective administration in the national sphere of government to deal with matters within the jurisdiction of the national sphere; and
 
@@ -7901,6 +8445,14 @@ Public administration and security services: Amendments to sections of the previ
       The amendment of section 239 of the previous Constitution by replacing subsection (4) with the following subsection:
 
       "(4) Subject to and in accordance with any applicable law, the assets, rights, duties and liabilities of all forces referred to in section 224(2) shall devolve upon the National Defence Force in accordance with the directions of the Minister of Defence.".
+
+SCHEDULE Schedule 6A
+
+  [[Schedule 6A inserted by section 6 of the {{>/akn/za/act/2003/constitution-tenth-amendment Constitution Tenth Amendment Act, 2003}}, previous Schedule 6A was renumbered Schedule 6B, and repealed by section 6 of the {{>/akn/za/act/2008/constitution-fourteenth-amendment Constitution Fourteenth Amendment Act, 2008}}]]
+
+SCHEDULE Schedule 6B
+
+  [[Schedule 6B, originally Schedule 6A, inserted by section 2 of the {{>/akn/za/act/2002/constitution-eighth-amendment Constitution Eighth Amendment Act, 2002}}, amended by section 5 and renumbered as Schedule 6B by section 6 of the {{>/akn/za/act/2003/constitution-tenth-amendment Constitution Tenth Amendment Act, 2003}}, and repealed by section 5 of the {{>/akn/za/act/2008/constitution-fifteenth-amendment Constitution Fifteenth Amendment Act, 2008}}]]
 
 SCHEDULE Schedule 7
   SUBHEADING Laws repealed
