@@ -28,13 +28,26 @@ def apply_xslt(xml):
 
 
 def eol_to_p(xml):
-    # change eol's in p's to consecutive p's, going backwards
+    """ Change eol's in p's to consecutive p's, going backwards.
+
+        <p>foo<eol/>bar<eol/>with a <term>term</term></p>
+    becomes
+        <p>foo</p>
+        <p>bar</p>
+        <p>with a <term>term</term></p>
+    """
     for eol in reversed(xml.xpath('//a:p/a:eol', namespaces={'a': ns})):
-        # TODO: handle other elements
         p = maker.p()
+
+        # trailing text
         p.text = eol.tail or ''
-        eol.addnext(p)
-        eol.getparent().remove(eol)
+        # following siblings elements
+        for sibling in eol.itersiblings():
+            p.append(sibling)
+
+        parent = eol.getparent()
+        parent.addnext(p)
+        parent.remove(eol)
 
 
 if __name__ == '__main__':
