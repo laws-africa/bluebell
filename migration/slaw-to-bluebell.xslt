@@ -34,6 +34,30 @@
     </xsl:choose>
   </xsl:template>
 
+  <!-- ensure FRBRalias has name="title" -->
+  <xsl:template match="a:FRBRalias[not(@name)]">
+    <xsl:copy>
+      <xsl:attribute name="name">title</xsl:attribute>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- change source="#slaw" to source="#cobalt" -->
+  <xsl:template match="a:*/@source[. = '#slaw']">
+    <xsl:attribute name="source">#cobalt</xsl:attribute>
+  </xsl:template>
+
+  <!-- ensure <references> has a cobalt entry -->
+  <xsl:template match="a:references[not(./a:TLCOrganization[@eId='cobalt'])]">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+      <a:TLCOrganization href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- remove slaw -->
+  <xsl:template match="a:TLCOrganization[@eId='slaw']" />
+
   <xsl:template match="@*|node()">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>
