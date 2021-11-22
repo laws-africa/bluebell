@@ -58,6 +58,27 @@
   <!-- remove slaw -->
   <xsl:template match="a:TLCOrganization[@eId='slaw']" />
 
+  <!-- clear out FRBRAuthor -->
+  <xsl:template match="a:FRBRauthor/@href[. != '']">
+    <xsl:attribute name="href"></xsl:attribute>
+  </xsl:template>
+
+  <!-- ensure act[@contains="singleVersion"] or act[@contains="originalVersion"] -->
+  <xsl:template match="a:*[self::a:act or self::a:doc][not(@contains)]">
+    <xsl:copy>
+      <xsl:choose>
+        <xsl:when test="a:meta/a:lifecycle/a:eventRef[@name='amendment']">
+          <xsl:attribute name="contains">singleVersion</xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="contains">originalVersion</xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>
+
   <xsl:template match="@*|node()">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>
