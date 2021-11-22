@@ -396,7 +396,7 @@ ANNEXURE a heading
     <meta>
       <identification source="#cobalt">
         <FRBRWork>
-          <FRBRthis value="/akn/za/act/2009/10/!annexure_1/main"/>
+          <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
           <FRBRuri value="/akn/za/act/2009/10"/>
           <FRBRalias value="Untitled" name="title"/>
           <FRBRdate date="2009" name="Generation"/>
@@ -405,14 +405,14 @@ ANNEXURE a heading
           <FRBRnumber value="10"/>
         </FRBRWork>
         <FRBRExpression>
-          <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+          <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
           <FRBRuri value="/akn/za/act/2009/10/eng"/>
           <FRBRdate date="{today}" name="Generation"/>
           <FRBRauthor href=""/>
           <FRBRlanguage language="eng"/>
         </FRBRExpression>
         <FRBRManifestation>
-          <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+          <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
           <FRBRuri value="/akn/za/act/2009/10/eng"/>
           <FRBRdate date="{today}" name="Generation"/>
           <FRBRauthor href=""/>
@@ -541,7 +541,7 @@ ANNEXURE back out
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
-            <FRBRthis value="/akn/za/act/2009/10/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
             <FRBRalias value="Untitled" name="title"/>
             <FRBRdate date="2009" name="Generation"/>
@@ -550,14 +550,14 @@ ANNEXURE back out
             <FRBRnumber value="10"/>
           </FRBRWork>
           <FRBRExpression>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
@@ -745,7 +745,7 @@ ANNEXURE back out
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
-            <FRBRthis value="/akn/za/act/2009/10/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
             <FRBRalias value="Untitled" name="title"/>
             <FRBRdate date="2009" name="Generation"/>
@@ -754,14 +754,14 @@ ANNEXURE back out
             <FRBRnumber value="10"/>
           </FRBRWork>
           <FRBRExpression>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
@@ -783,7 +783,7 @@ ANNEXURE back out
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
-                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
                   <FRBRalias value="Untitled" name="title"/>
                   <FRBRdate date="2009" name="Generation"/>
@@ -792,14 +792,14 @@ ANNEXURE back out
                   <FRBRnumber value="10"/>
                 </FRBRWork>
                 <FRBRExpression>
-                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10/eng"/>
                   <FRBRdate date="{today}" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRlanguage language="eng"/>
                 </FRBRExpression>
                 <FRBRManifestation>
-                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10/eng"/>
                   <FRBRdate date="{today}" name="Generation"/>
                   <FRBRauthor href=""/>
@@ -817,7 +817,7 @@ ANNEXURE back out
                   <meta>
                     <identification source="#cobalt">
                       <FRBRWork>
-                        <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1/schedule_1/main"/>
+                        <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1/schedule_1"/>
                         <FRBRuri value="/akn/za/act/2009/10"/>
                         <FRBRalias value="Untitled" name="title"/>
                         <FRBRdate date="2009" name="Generation"/>
@@ -826,14 +826,14 @@ ANNEXURE back out
                         <FRBRnumber value="10"/>
                       </FRBRWork>
                       <FRBRExpression>
-                        <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1/schedule_1/main"/>
+                        <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1/schedule_1"/>
                         <FRBRuri value="/akn/za/act/2009/10/eng"/>
                         <FRBRdate date="{today}" name="Generation"/>
                         <FRBRauthor href=""/>
                         <FRBRlanguage language="eng"/>
                       </FRBRExpression>
                       <FRBRManifestation>
-                        <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1/schedule_1/main"/>
+                        <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1/schedule_1"/>
                         <FRBRuri value="/akn/za/act/2009/10/eng"/>
                         <FRBRdate date="{today}" name="Generation"/>
                         <FRBRauthor href=""/>
@@ -1126,7 +1126,7 @@ SCHEDULE first schedule
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
-            <FRBRthis value="/akn/za/act/2009/10/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
             <FRBRalias value="Untitled" name="title"/>
             <FRBRdate date="2009" name="Generation"/>
@@ -1135,14 +1135,14 @@ SCHEDULE first schedule
             <FRBRnumber value="10"/>
           </FRBRWork>
           <FRBRExpression>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
@@ -1160,7 +1160,7 @@ SCHEDULE first schedule
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
-                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_1/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
                   <FRBRalias value="Untitled" name="title"/>
                   <FRBRdate date="2009" name="Generation"/>
@@ -1169,14 +1169,14 @@ SCHEDULE first schedule
                   <FRBRnumber value="10"/>
                 </FRBRWork>
                 <FRBRExpression>
-                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/annexure_1/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/annexure_1"/>
                   <FRBRuri value="/akn/za/act/2009/10/eng"/>
                   <FRBRdate date="{today}" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRlanguage language="eng"/>
                 </FRBRExpression>
                 <FRBRManifestation>
-                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/annexure_1/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/annexure_1"/>
                   <FRBRuri value="/akn/za/act/2009/10/eng"/>
                   <FRBRdate date="{today}" name="Generation"/>
                   <FRBRauthor href=""/>
@@ -1308,7 +1308,7 @@ SCHEDULE first schedule
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
-                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_2/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_2"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
                   <FRBRalias value="Untitled" name="title"/>
                   <FRBRdate date="2009" name="Generation"/>
@@ -1317,14 +1317,14 @@ SCHEDULE first schedule
                   <FRBRnumber value="10"/>
                 </FRBRWork>
                 <FRBRExpression>
-                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/annexure_2/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/annexure_2"/>
                   <FRBRuri value="/akn/za/act/2009/10/eng"/>
                   <FRBRdate date="{today}" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRlanguage language="eng"/>
                 </FRBRExpression>
                 <FRBRManifestation>
-                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/annexure_2/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/annexure_2"/>
                   <FRBRuri value="/akn/za/act/2009/10/eng"/>
                   <FRBRdate date="{today}" name="Generation"/>
                   <FRBRauthor href=""/>
@@ -1422,7 +1422,7 @@ SCHEDULE first schedule
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
-            <FRBRthis value="/akn/za/act/2009/10/!annexure_2/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_2"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
             <FRBRalias value="Untitled" name="title"/>
             <FRBRdate date="2009" name="Generation"/>
@@ -1431,14 +1431,14 @@ SCHEDULE first schedule
             <FRBRnumber value="10"/>
           </FRBRWork>
           <FRBRExpression>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_2/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_2"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_2/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_2"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
@@ -1533,7 +1533,7 @@ SCHEDULE first schedule
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
-            <FRBRthis value="/akn/za/act/2009/10/!schedule_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/!schedule_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
             <FRBRalias value="Untitled" name="title"/>
             <FRBRdate date="2009" name="Generation"/>
@@ -1542,14 +1542,14 @@ SCHEDULE first schedule
             <FRBRnumber value="10"/>
           </FRBRWork>
           <FRBRExpression>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!schedule_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
@@ -1756,7 +1756,7 @@ ANNEXURE back out
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
-            <FRBRthis value="/akn/za/act/2009/10/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
             <FRBRalias value="Untitled" name="title"/>
             <FRBRdate date="2009" name="Generation"/>
@@ -1765,14 +1765,14 @@ ANNEXURE back out
             <FRBRnumber value="10"/>
           </FRBRWork>
           <FRBRExpression>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
@@ -1794,7 +1794,7 @@ ANNEXURE back out
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
-                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
                   <FRBRalias value="Untitled" name="title"/>
                   <FRBRdate date="2009" name="Generation"/>
@@ -1803,14 +1803,14 @@ ANNEXURE back out
                   <FRBRnumber value="10"/>
                 </FRBRWork>
                 <FRBRExpression>
-                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10/eng"/>
                   <FRBRdate date="{today}" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRlanguage language="eng"/>
                 </FRBRExpression>
                 <FRBRManifestation>
-                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1/main"/>
+                  <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10/eng"/>
                   <FRBRdate date="{today}" name="Generation"/>
                   <FRBRauthor href=""/>
@@ -2029,7 +2029,7 @@ even more text, pushed into Annex (will move up)
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
-            <FRBRthis value="/akn/za/act/2009/10/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
             <FRBRalias value="Untitled" name="title"/>
             <FRBRdate date="2009" name="Generation"/>
@@ -2038,14 +2038,14 @@ even more text, pushed into Annex (will move up)
             <FRBRnumber value="10"/>
           </FRBRWork>
           <FRBRExpression>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
@@ -2203,7 +2203,7 @@ ANNEXURE a heading
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
-            <FRBRthis value="/akn/za/act/2009/10/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
             <FRBRalias value="Untitled" name="title"/>
             <FRBRdate date="2009" name="Generation"/>
@@ -2212,14 +2212,14 @@ ANNEXURE a heading
             <FRBRnumber value="10"/>
           </FRBRWork>
           <FRBRExpression>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRlanguage language="eng"/>
           </FRBRExpression>
           <FRBRManifestation>
-            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/main"/>
+            <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10/eng"/>
             <FRBRdate date="{today}" name="Generation"/>
             <FRBRauthor href=""/>
