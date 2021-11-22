@@ -43,7 +43,7 @@
   </xsl:template>
 
   <!-- change source="#slaw" to source="#cobalt" -->
-  <xsl:template match="a:*/@source[. = '#slaw']">
+  <xsl:template match="a:*/@source[. = '#slaw' or . = '#this']">
     <xsl:attribute name="source">#cobalt</xsl:attribute>
   </xsl:template>
 
