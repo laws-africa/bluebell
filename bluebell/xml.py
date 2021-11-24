@@ -339,8 +339,8 @@ class XmlGenerator:
                 pre.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
 
             # does it have nested attachments?
-            main_body_kids = [c for c in item.get('children', []) if c.get('name', None) != 'attachment']
-            attachment_kids = [c for c in item.get('children', []) if c.get('name', None) == 'attachment']
+            main_body_kids = [c for c in item.get('children', []) if c.get('name', None) != 'attachments']
+            attachment_kids = [c for c in item.get('children', []) if c.get('name', None) == 'attachments']
             if attachment_kids:
                 self.attachment_names.append(attachment_name)
                 try:
