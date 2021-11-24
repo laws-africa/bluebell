@@ -365,27 +365,30 @@ ANNEXURE a heading
             'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
             'heading': [{'type': 'text', 'value': 'a heading'}],
             'subheading': [{'type': 'text', 'value': 'subheading'}],
-            'children': [{
-                'type': 'content',
-                'name': 'p',
-                'children': [{
-                    'type': 'text',
-                    'value': 'some text'}]
-            }, {
-                'type': 'element',
-                'name': 'attachment',
-                'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
-                'heading': [{'type': 'text', 'value': 'heading'}],
-                'subheading': [{'type': 'text', 'value': 'a nother subheading'}],
-                'children': [{
-                    'name': 'p',
+            'children': [
+                {
                     'type': 'content',
+                    'name': 'p',
                     'children': [{
                         'type': 'text',
-                        'value': 'schedule text',
-                    }],
-                }],
-            }]
+                        'value': 'some text'}]
+                },
+                {
+                    'type': 'element',
+                    'name': 'attachments',
+                    'children': [{
+                        'type': 'element',
+                        'name': 'attachment',
+                        'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                        'heading': [{'type': 'text', 'value': 'heading'}],
+                        'subheading': [{'type': 'text', 'value': 'a nother subheading'}],
+                        'children': [{
+                            'name': 'p',
+                            'type': 'content',
+                            'children': [{'type': 'text', 'value': 'schedule text'}]}],
+                    }]
+                },
+            ]
         }, tree.to_dict())
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
         today = datestring(date.today())
@@ -1661,6 +1664,10 @@ ANNEXURE a heading
 
       content of Annex to Schedule to first Annex
 
+    ANNEXURE para
+
+      content of second Annex to Schedule to first Annex
+
 ANNEXURE back out
   SUBHEADING subheading
 
@@ -1692,40 +1699,67 @@ ANNEXURE back out
                         },
                         {
                             'type': 'element',
-                            'name': 'attachment',
-                            'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                            'name': 'attachments',
                             'children': [
-                                {
-                                    'type': 'hier',
-                                    'name': 'paragraph',
-                                    'children': [
-                                        {
-                                            'type': 'content',
-                                            'name': 'p',
-                                            'children': [{'type': 'text', 'value': 'para 1 content'}]
-                                        },
-                                    ],
-                                    'num': '1.',
-                                    'heading': [{'type': 'text', 'value': 'is a paragraph'}]
-                                },
                                 {
                                     'type': 'element',
                                     'name': 'attachment',
-                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                    'heading': [{'type': 'text', 'value': 'is a heading'}],
+                                    'subheading': [{'type': 'text', 'value': 'is a subheading'}],
+                                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
                                     'children': [
                                         {
-                                            'type': 'content',
-                                            'name': 'p',
-                                            'children': [{
-                                                'type': 'text',
-                                                'value': 'content of Annex to Schedule to first Annex'}]
-                                        }
+                                            'type': 'hier',
+                                            'name': 'paragraph',
+                                            'children': [
+                                                {
+                                                    'type': 'content',
+                                                    'name': 'p',
+                                                    'children': [{'type': 'text', 'value': 'para 1 content'}]
+                                                },
+                                            ],
+                                            'num': '1.',
+                                            'heading': [{'type': 'text', 'value': 'is a paragraph'}]
+                                        },
+                                        {
+                                            'type': 'element',
+                                            'name': 'attachments',
+                                            'children': [
+                                                {
+                                                    'type': 'element',
+                                                    'name': 'attachment',
+                                                    'heading': [{'type': 'text', 'value': 'is an Annex'}],
+                                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                                    'children': [
+                                                        {
+                                                            'type': 'content',
+                                                            'name': 'p',
+                                                            'children': [{
+                                                                'type': 'text',
+                                                                'value': 'content of Annex to Schedule to first Annex'}]
+                                                        }
+                                                    ],
+                                                },
+                                                {
+                                                    'type': 'element',
+                                                    'name': 'attachment',
+                                                    'heading': [{'type': 'text', 'value': 'para'}],
+                                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                                    'children': [
+                                                        {
+                                                            'type': 'content',
+                                                            'name': 'p',
+                                                            'children': [{
+                                                                'type': 'text',
+                                                                'value': 'content of second Annex to Schedule to first Annex'}]
+                                                        }
+                                                    ],
+                                                },
+                                            ],
+                                        },
                                     ],
-                                    'heading': [{'type': 'text', 'value': 'is an Annex'}],
                                 },
                             ],
-                            'heading': [{'type': 'text', 'value': 'is a heading'}],
-                            'subheading': [{'type': 'text', 'value': 'is a subheading'}],
                         },
                     ],
                     'heading': [{'type': 'text', 'value': 'a heading'}],
@@ -1864,6 +1898,43 @@ ANNEXURE back out
                   </meta>
                   <mainBody>
                     <p eId="att_1__att_1__att_1__p_1">content of Annex to Schedule to first Annex</p>
+                  </mainBody>
+                </doc>
+              </attachment>
+              <attachment eId="att_1__att_1__att_2">
+                <heading>para</heading>
+                <doc contains="originalVersion" name="annexure">
+                  <meta>
+                    <identification source="#cobalt">
+                      <FRBRWork>
+                        <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1/annexure_2"/>
+                        <FRBRuri value="/akn/za/act/2009/10"/>
+                        <FRBRalias value="Untitled" name="title"/>
+                        <FRBRdate date="2009" name="Generation"/>
+                        <FRBRauthor href=""/>
+                        <FRBRcountry value="za"/>
+                        <FRBRnumber value="10"/>
+                      </FRBRWork>
+                      <FRBRExpression>
+                        <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1/annexure_2"/>
+                        <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                        <FRBRdate date="{today}" name="Generation"/>
+                        <FRBRauthor href=""/>
+                        <FRBRlanguage language="eng"/>
+                      </FRBRExpression>
+                      <FRBRManifestation>
+                        <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1/annexure_2"/>
+                        <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                        <FRBRdate date="{today}" name="Generation"/>
+                        <FRBRauthor href=""/>
+                      </FRBRManifestation>
+                    </identification>
+                    <references source="#cobalt">
+                      <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+                    </references>
+                  </meta>
+                  <mainBody>
+                    <p eId="att_1__att_1__att_2__p_1">content of second Annex to Schedule to first Annex</p>
                   </mainBody>
                 </doc>
               </attachment>
