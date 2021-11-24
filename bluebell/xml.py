@@ -338,30 +338,17 @@ class XmlGenerator:
             if item.get('subheading'):
                 pre.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
 
-            # does it have nested attachments?
-            main_body_kids = [c for c in item.get('children', []) if c.get('name', None) != 'attachments']
-            attachment_kids = [c for c in item.get('children', []) if c.get('name', None) == 'attachments']
-            if attachment_kids:
-                self.attachment_names.append(attachment_name)
-                try:
-                    return m('attachment',
-                             *pre,
-                             m('doc',
-                               self.make_meta(self.attachment_frbr_uri(attachment_name)),
-                               m('mainBody', *self.kids_to_xml(kids=main_body_kids, prefix=eid)),
-                               *self.kids_to_xml(kids=attachment_kids, prefix=eid),
-                               **item.get('attribs', {})),
-                             eId=eid)
-                finally:
-                    self.attachment_names.pop()
-
-            return m('attachment',
-                     *pre,
-                     m('doc',
-                       self.make_meta(self.attachment_frbr_uri(attachment_name)),
-                       m('mainBody', *self.kids_to_xml(item, prefix=eid)),
-                       **item.get('attribs', {})),
-                     eId=eid)
+            self.attachment_names.append(attachment_name)
+            try:
+                return m('attachment',
+                         *pre,
+                         m('doc',
+                           self.make_meta(self.attachment_frbr_uri(attachment_name)),
+                           *self.kids_to_xml(kids=item['children'], prefix=eid),
+                           **item.get('attribs', {})),
+                         eId=eid)
+            finally:
+                self.attachment_names.pop()
 
         attrs = item.get('attribs', {})
         eid = self.ids.make(prefix, item)
