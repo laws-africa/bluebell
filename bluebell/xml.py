@@ -356,9 +356,10 @@ class XmlGenerator:
             attrs['eId'] = eid
         return m(item['name'], *self.kids_to_xml(item, prefix=(eid or prefix)), **attrs)
 
-    def get_attachment_name(self, item, parent):
+    def get_attachment_name(self, item):
+        parent = self.attachment_names[-1] if self.attachment_names else None
         name = item.get('attribs', {}).get('name', 'attachment')
-        num = self.ids.incr(f'{parent}__{name}', name)
+        num = self.ids.incr(f'__attachments', f'{parent}__{name}' if parent else name)
         return f'{parent}/{name}_{num}' if parent else f'{name}_{num}'
 
     def kids_to_xml(self, parent=None, kids=None, prefix=None):
