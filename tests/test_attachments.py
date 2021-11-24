@@ -1681,21 +1681,29 @@ ANNEXURE back out
                 {
                     'type': 'element',
                     'name': 'attachment',
+                    'heading': [{'type': 'text', 'value': 'a heading'}],
+                    'subheading': [{'type': 'text', 'value': 'subheading'}],
                     'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
                     'children': [
                         {
-                            'type': 'content',
-                            'name': 'p',
-                            'children': [{
-                                'type': 'text',
-                                'value': 'some text'}]
-                        },
-                        {
-                            'type': 'content',
-                            'name': 'p',
-                            'children': [{
-                                'type': 'text',
-                                'value': 'some more text'}]
+                            'type': 'element',
+                            'name': 'mainBody',
+                            'children': [
+                                {
+                                    'type': 'content',
+                                    'name': 'p',
+                                    'children': [{
+                                        'type': 'text',
+                                        'value': 'some text'}]
+                                },
+                                {
+                                    'type': 'content',
+                                    'name': 'p',
+                                    'children': [{
+                                        'type': 'text',
+                                        'value': 'some more text'}]
+                                },
+                            ],
                         },
                         {
                             'type': 'element',
@@ -1709,17 +1717,24 @@ ANNEXURE back out
                                     'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
                                     'children': [
                                         {
-                                            'type': 'hier',
-                                            'name': 'paragraph',
+                                            'type': 'element',
+                                            'name': 'mainBody',
                                             'children': [
                                                 {
-                                                    'type': 'content',
-                                                    'name': 'p',
-                                                    'children': [{'type': 'text', 'value': 'para 1 content'}]
+                                                    'type': 'hier',
+                                                    'name': 'paragraph',
+                                                    'children': [
+                                                        {
+                                                            'type': 'content',
+                                                            'name': 'p',
+                                                            'children': [
+                                                                {'type': 'text', 'value': 'para 1 content'}]
+                                                        },
+                                                    ],
+                                                    'num': '1.',
+                                                    'heading': [{'type': 'text', 'value': 'is a paragraph'}]
                                                 },
                                             ],
-                                            'num': '1.',
-                                            'heading': [{'type': 'text', 'value': 'is a paragraph'}]
                                         },
                                         {
                                             'type': 'element',
@@ -1728,31 +1743,46 @@ ANNEXURE back out
                                                 {
                                                     'type': 'element',
                                                     'name': 'attachment',
-                                                    'heading': [{'type': 'text', 'value': 'is an Annex'}],
-                                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                                    'heading': [
+                                                        {'type': 'text', 'value': 'is an Annex'}],
+                                                    'attribs': {'contains': 'originalVersion',
+                                                                'name': 'annexure'},
                                                     'children': [
                                                         {
-                                                            'type': 'content',
-                                                            'name': 'p',
-                                                            'children': [{
-                                                                'type': 'text',
-                                                                'value': 'content of Annex to Schedule to first Annex'}]
-                                                        }
+                                                            'type': 'element',
+                                                            'name': 'mainBody',
+                                                            'children': [
+                                                                {
+                                                                    'type': 'content',
+                                                                    'name': 'p',
+                                                                    'children': [{
+                                                                        'type': 'text',
+                                                                        'value': 'content of Annex to Schedule to first Annex'}]
+                                                                }
+                                                            ],
+                                                        },
                                                     ],
                                                 },
                                                 {
                                                     'type': 'element',
                                                     'name': 'attachment',
                                                     'heading': [{'type': 'text', 'value': 'para'}],
-                                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                                    'attribs': {'contains': 'originalVersion',
+                                                                'name': 'annexure'},
                                                     'children': [
                                                         {
-                                                            'type': 'content',
-                                                            'name': 'p',
-                                                            'children': [{
-                                                                'type': 'text',
-                                                                'value': 'content of second Annex to Schedule to first Annex'}]
-                                                        }
+                                                            'type': 'element',
+                                                            'name': 'mainBody',
+                                                            'children': [
+                                                                {
+                                                                    'type': 'content',
+                                                                    'name': 'p',
+                                                                    'children': [{
+                                                                        'type': 'text',
+                                                                        'value': 'content of second Annex to Schedule to first Annex'}]
+                                                                }
+                                                            ],
+                                                        },
                                                     ],
                                                 },
                                             ],
@@ -1762,22 +1792,26 @@ ANNEXURE back out
                             ],
                         },
                     ],
-                    'heading': [{'type': 'text', 'value': 'a heading'}],
-                    'subheading': [{'type': 'text', 'value': 'subheading'}]
                 },
                 {
                     'type': 'element',
                     'name': 'attachment',
+                    'heading': [{'type': 'text', 'value': 'back out'}],
+                    'subheading': [{'type': 'text', 'value': 'subheading'}],
                     'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
                     'children': [
                         {
-                            'type': 'content',
-                            'name': 'p',
-                            'children': [{'type': 'text', 'value': 'text :)'}],
-                        }
+                            'type': 'element',
+                            'name': 'mainBody',
+                            'children': [
+                                {
+                                    'type': 'content',
+                                    'name': 'p',
+                                    'children': [{'type': 'text', 'value': 'text :)'}],
+                                },
+                            ],
+                        },
                     ],
-                    'heading': [{'type': 'text', 'value': 'back out'}],
-                    'subheading': [{'type': 'text', 'value': 'subheading'}],
                 },
             ]}, tree.to_dict())
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)

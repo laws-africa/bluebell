@@ -193,8 +193,9 @@ class Attachment:
         kids.extend(many_to_dict(c.hier_block_indent for c in self.content))
 
         # nested attachments
+        attachments = None
         if hasattr(self.indented, 'attachments') and self.indented.attachments.text:
-            kids.append(self.indented.attachments.to_dict())
+            attachments = self.indented.attachments.to_dict()
 
         info = {
             'type': 'element',
@@ -203,8 +204,14 @@ class Attachment:
                 'contains': 'originalVersion',
                 'name': self.attachment_marker.text.lower(),
             },
-            'children': kids,
+            'children': [{
+                'type': 'element',
+                'name': 'mainBody',
+                'children': kids,
+            }],
         }
+        if attachments:
+            info['children'].append(attachments)
 
         if self.heading.text:
             heading = self.heading.heading_to_dict()
