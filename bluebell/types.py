@@ -193,8 +193,8 @@ class Attachment:
         kids.extend(many_to_dict(c.hier_block_indent for c in self.content))
 
         # nested attachments
-        if hasattr(self.indented, 'attachments'):
-            kids.extend(many_to_dict(self.indented.attachments))
+        if hasattr(self.indented, 'attachments') and self.indented.attachments.text:
+            kids.append(self.indented.attachments.to_dict())
 
         info = {
             'type': 'element',
