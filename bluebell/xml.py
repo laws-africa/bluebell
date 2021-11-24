@@ -349,7 +349,7 @@ class XmlGenerator:
                              m('doc',
                                self.make_meta(self.attachment_frbr_uri(attachment_name)),
                                m('mainBody', *self.kids_to_xml(kids=main_body_kids, prefix=eid)),
-                               m('attachments', *self.kids_to_xml(kids=attachment_kids, prefix=eid)),
+                               *self.kids_to_xml(kids=attachment_kids, prefix=eid),
                                **item.get('attribs', {})),
                              eId=eid)
                 finally:
