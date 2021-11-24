@@ -233,10 +233,10 @@ class XmlGenerator:
         """
         return etree.fromstring(etree.tostring(self.item_to_xml(tree, self.eid_prefix), encoding='unicode'))
 
-    def item_to_xml(self, item, prefix='', parent_attachment_name=None):
-        return getattr(self, f'item_to_xml_{item["type"]}')(item, prefix, parent_attachment_name=parent_attachment_name)
+    def item_to_xml(self, item, prefix=''):
+        return getattr(self, f'item_to_xml_{item["type"]}')(item, prefix)
 
-    def item_to_xml_hier(self, item, prefix, parent_attachment_name):
+    def item_to_xml_hier(self, item, prefix):
         m = self.maker
         eid = self.ids.make(prefix, item)
 
@@ -294,7 +294,7 @@ class XmlGenerator:
         kids = pre + kids
         return m(item['name'], *kids, eId=eid, **item.get('attribs', {}))
 
-    def item_to_xml_block(self, item, prefix, parent_attachment_name):
+    def item_to_xml_block(self, item, prefix):
         m = self.maker
         eid = self.ids.make(prefix, item)
         kids = []
@@ -308,22 +308,22 @@ class XmlGenerator:
 
         return m(item['name'], eId=eid, *kids, **item.get('attribs', {}))
 
-    def item_to_xml_content(self, item, prefix, parent_attachment_name):
+    def item_to_xml_content(self, item, prefix):
         eid = self.ids.make(prefix, item)
         return self.maker(item['name'], eId=eid, *self.kids_to_xml(item, prefix=eid), **item.get('attribs', {}))
 
-    def item_to_xml_inline(self, item, prefix, parent_attachment_name):
+    def item_to_xml_inline(self, item, prefix):
         # TODO: should these have ids?
         return self.maker(item['name'], *self.kids_to_xml(item, prefix=prefix), **item.get('attribs', {}))
 
-    def item_to_xml_marker(self, item, prefix, parent_attachment_name):
+    def item_to_xml_marker(self, item, prefix):
         # TODO: should these have ids?
         return self.maker(item['name'], **item.get('attribs', {}))
 
-    def item_to_xml_text(self, item, prefix, parent_attachment_name):
+    def item_to_xml_text(self, item, prefix):
         return item['value']
 
-    def item_to_xml_element(self, item, prefix, parent_attachment_name=None):
+    def item_to_xml_element(self, item, prefix):
         m = self.maker
 
         if item['name'] == 'attachment':
@@ -370,10 +370,10 @@ class XmlGenerator:
         num = self.ids.incr(f'{parent}__{name}', name)
         return f'{parent}/{name}_{num}' if parent else f'{name}_{num}'
 
-    def kids_to_xml(self, parent=None, kids=None, prefix=None, parent_attachment_name=None):
+    def kids_to_xml(self, parent=None, kids=None, prefix=None):
         if kids is None:
             kids = parent.get('children', [])
-        return [self.item_to_xml(k, prefix, parent_attachment_name=parent_attachment_name) for k in kids]
+        return [self.item_to_xml(k, prefix) for k in kids]
 
     def add_num_heading_subheading(self, m, item, eid, kids):
         if item.get('num'):
