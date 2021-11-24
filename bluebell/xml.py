@@ -213,6 +213,7 @@ class XmlGenerator:
         self.frbr_uri = frbr_uri
         self.maker = maker or get_maker(self.akn_version)
         self.eid_prefix = eid_prefix
+        self.attachment_names = []
 
     def to_xml(self, tree):
         """ Transform an entire parse tree to XML, including post-processing.
@@ -328,7 +329,7 @@ class XmlGenerator:
 
         if item['name'] == 'attachment':
             eid = self.ids.make(prefix, item)
-            attachment_name = self.get_attachment_name(item, parent_attachment_name)
+            attachment_name = self.get_attachment_name(item)
 
             pre = []
             if item.get('heading'):
@@ -341,15 +342,18 @@ class XmlGenerator:
             main_body_kids = [c for c in item.get('children', []) if c.get('name', None) != 'attachment']
             attachment_kids = [c for c in item.get('children', []) if c.get('name', None) == 'attachment']
             if attachment_kids:
-                parent_attachment_name = attachment_name.rstrip('/main')
-                return m('attachment',
-                         *pre,
-                         m('doc',
-                           self.make_meta(self.attachment_frbr_uri(attachment_name)),
-                           m('mainBody', *self.kids_to_xml(kids=main_body_kids, prefix=eid)),
-                           m('attachments', *self.kids_to_xml(kids=attachment_kids, prefix=eid, parent_attachment_name=parent_attachment_name)),
-                           **item.get('attribs', {})),
-                         eId=eid)
+                self.attachment_names.append(attachment_name)
+                try:
+                    return m('attachment',
+                             *pre,
+                             m('doc',
+                               self.make_meta(self.attachment_frbr_uri(attachment_name)),
+                               m('mainBody', *self.kids_to_xml(kids=main_body_kids, prefix=eid)),
+                               m('attachments', *self.kids_to_xml(kids=attachment_kids, prefix=eid)),
+                               **item.get('attribs', {})),
+                             eId=eid)
+                finally:
+                    self.attachment_names.pop()
 
             return m('attachment',
                      *pre,
