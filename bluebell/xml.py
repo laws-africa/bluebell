@@ -328,33 +328,38 @@ class XmlGenerator:
         m = self.maker
 
         if item['name'] == 'attachment':
-            eid = self.ids.make(prefix, item)
-            attachment_name = self.get_attachment_name(item)
-
-            pre = []
-            if item.get('heading'):
-                pre.append(m.heading(*(self.item_to_xml(k, eid) for k in item['heading'])))
-
-            if item.get('subheading'):
-                pre.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
-
-            self.attachment_names.append(attachment_name)
-            try:
-                return m('attachment',
-                         *pre,
-                         m('doc',
-                           self.make_meta(self.attachment_frbr_uri(attachment_name)),
-                           *self.kids_to_xml(kids=item['children'], prefix=eid),
-                           **item.get('attribs', {})),
-                         eId=eid)
-            finally:
-                self.attachment_names.pop()
+            return self.item_to_xml_element_attachment(item, prefix)
 
         attrs = item.get('attribs', {})
         eid = self.ids.make(prefix, item)
         if eid and not self.ids.is_unnecessary(prefix, item):
             attrs['eId'] = eid
         return m(item['name'], *self.kids_to_xml(item, prefix=(eid or prefix)), **attrs)
+
+    def item_to_xml_element_attachment(self, item, prefix):
+        m = self.maker
+
+        eid = self.ids.make(prefix, item)
+        attachment_name = self.get_attachment_name(item)
+
+        pre = []
+        if item.get('heading'):
+            pre.append(m.heading(*(self.item_to_xml(k, eid) for k in item['heading'])))
+
+        if item.get('subheading'):
+            pre.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
+
+        self.attachment_names.append(attachment_name)
+        try:
+            return m('attachment',
+                     *pre,
+                     m('doc',
+                       self.make_meta(self.attachment_frbr_uri(attachment_name)),
+                       *self.kids_to_xml(kids=item['children'], prefix=eid),
+                       **item.get('attribs', {})),
+                     eId=eid)
+        finally:
+            self.attachment_names.pop()
 
     def get_attachment_name(self, item):
         parent = self.attachment_names[-1] if self.attachment_names else None
