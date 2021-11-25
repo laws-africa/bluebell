@@ -2248,75 +2248,88 @@ even more text, pushed into Annex (will move up)
                 {
                     'type': 'element',
                     'name': 'attachment',
+                    'heading': [{'type': 'text', 'value': 'a heading'}],
+                    'subheading': [{'type': 'text', 'value': 'subheading'}],
                     'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
                     'children': [{
-                        'type': 'content',
-                        'name': 'p',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'some text'}]
-                    }, {
-                        'type': 'content',
-                        'name': 'p',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'even more text, pushed into Annex (will move up)'}]
-                    }, {
-                        'type': 'content',
-                        'name': 'p',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'SCHEDULE not a heading'}]
-                    }, {
-                        'type': 'content',
-                        'name': 'p',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'SUBHEADING just text'}]
-                    }, {
-                        'type': 'content',
-                        'name': 'p',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'PARA 1. - just text'}]
-                    }, {
-                        'type': 'content',
-                        'name': 'p',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'more just text'}]
-                    }, {
-                        'type': 'content',
-                        'name': 'p',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'ANNEXURE not an Annex'}]
-                    }, {
-                        'type': 'content',
-                        'name': 'p',
-                        'children': [{
-                            'type': 'text',
-                            'value': 'even more just text'}]
-                    }, {
                         'type': 'element',
-                        'name': 'attachment',
-                        'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                        'name': 'mainBody',
                         'children': [{
                             'type': 'content',
                             'name': 'p',
                             'children': [{
                                 'type': 'text',
-                                'value': 'Schedule (to Annexure) content'}]
+                                'value': 'some text'}]
                         }, {
                             'type': 'content',
                             'name': 'p',
                             'children': [{
                                 'type': 'text',
-                                'value': 'some more text, pushed into Schedule to Annexure'}]}],
-                        'heading': [{'type': 'text', 'value': 'actually a schedule'}],
-                        'subheading': [{'type': 'text', 'value': 'actually a subheading'}]}],
-                    'heading': [{'type': 'text', 'value': 'a heading'}],
-                    'subheading': [{'type': 'text', 'value': 'subheading'}]
+                                'value': 'even more text, pushed into Annex (will move up)'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'SCHEDULE not a heading'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'SUBHEADING just text'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'PARA 1. - just text'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'more just text'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'ANNEXURE not an Annex'}]
+                        }, {
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'even more just text'}]
+                        }],
+                    }, {
+                        'type': 'element',
+                        'name': 'attachments',
+                        'children': [{
+                            'type': 'element',
+                            'name': 'attachment',
+                            'heading': [{'type': 'text', 'value': 'actually a schedule'}],
+                            'subheading': [{'type': 'text', 'value': 'actually a subheading'}],
+                            'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                            'children': [{
+                                'type': 'element',
+                                'name': 'mainBody',
+                                'children': [{
+                                    'type': 'content',
+                                    'name': 'p',
+                                    'children': [{
+                                        'type': 'text',
+                                        'value': 'Schedule (to Annexure) content'}]
+                                }, {
+                                    'type': 'content',
+                                    'name': 'p',
+                                    'children': [{
+                                        'type': 'text',
+                                        'value': 'some more text, pushed into Schedule to Annexure'}]}],
+                            }],
+                        }],
+                    }],
                 }]}, tree.to_dict())
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
         today = datestring(date.today())
@@ -2440,56 +2453,69 @@ ANNEXURE a heading
                 {
                     'type': 'element',
                     'name': 'attachment',
+                    'heading': [{'type': 'text', 'value': 'a heading'}],
+                    'subheading': [{'type': 'text', 'value': 'subheading'}],
                     'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
                     'children': [
                         {
-                            'type': 'hier',
-                            'name': 'division',
+                            'type': 'element',
+                            'name': 'mainBody',
                             'children': [{
-                                'type': 'content',
-                                'name': 'p',
+                                'type': 'hier',
+                                'name': 'division',
                                 'children': [{
+                                    'type': 'content',
+                                    'name': 'p',
+                                    'children': [{
+                                        'type': 'text',
+                                        'value': 'contento'}]
+                                }, {
+                                    'type': 'content',
+                                    'name': 'p',
+                                    'children': [{
+                                        'type': 'text',
+                                        'value': 'SCHEDULE not a heading'}]
+                                }, {
+                                    'type': 'content',
+                                    'name': 'p',
+                                    'children': [{
+                                        'type': 'text',
+                                        'value': 'SUBHEADING not a subheading'}]
+                                }, {
+                                    'type': 'content',
+                                    'name': 'p',
+                                    'children': [{
+                                        'type': 'text',
+                                        'value': 'not Schedule content'}]}],
+                                'num': 'A.',
+                                'heading': [{
                                     'type': 'text',
-                                    'value': 'contento'}]
-                            }, {
-                                'type': 'content',
-                                'name': 'p',
-                                'children': [{
-                                    'type': 'text',
-                                    'value': 'SCHEDULE not a heading'}]
-                            }, {
-                                'type': 'content',
-                                'name': 'p',
-                                'children': [{
-                                    'type': 'text',
-                                    'value': 'SUBHEADING not a subheading'}]
-                            }, {
-                                'type': 'content',
-                                'name': 'p',
-                                'children': [{
-                                    'type': 'text',
-                                    'value': 'not Schedule content'}]}],
-                            'num': 'A.',
-                            'heading': [{
-                                'type': 'text',
-                                'value': 'The First Division'}]
+                                    'value': 'The First Division'}]
+                            }],
                         },
                         {
                             'type': 'element',
-                            'name': 'attachment',
-                            'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                            'name': 'attachments',
                             'children': [{
-                                'type': 'content',
-                                'name': 'p',
+                                'type': 'element',
+                                'name': 'attachment',
+                                'heading': [{'type': 'text', 'value': 'a heading again'}],
+                                'subheading': [{'type': 'text', 'value': 'a subheading again'}],
+                                'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
                                 'children': [{
-                                    'type': 'text',
-                                    'value': 'Schedule content again'}]
+                                    'type': 'element',
+                                    'name': 'mainBody',
+                                    'children': [{
+                                        'type': 'content',
+                                        'name': 'p',
+                                        'children': [{
+                                            'type': 'text',
+                                            'value': 'Schedule content again'}]
+                                    }],
+                                }],
                             }],
-                            'heading': [{'type': 'text', 'value': 'a heading again'}],
-                            'subheading': [{'type': 'text', 'value': 'a subheading again'}]},
+                        },
                     ],
-                    'heading': [{'type': 'text', 'value': 'a heading'}],
-                    'subheading': [{'type': 'text', 'value': 'subheading'}]
                 }
             ]}, tree.to_dict())
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
