@@ -773,7 +773,11 @@ ANNEXURE back out
                                         {
                                             'type': 'element',
                                             'name': 'mainBody',
-                                            'children': [],
+                                            'children': [{
+                                                'type': 'content',
+                                                'name': 'p',
+                                                'children': [],
+                                            }],
                                         },
                                         {
                                             'type': 'element',
@@ -788,7 +792,11 @@ ANNEXURE back out
                                                         {
                                                             'type': 'element',
                                                             'name': 'mainBody',
-                                                            'children': [],
+                                                            'children': [{
+                                                                'type': 'content',
+                                                                'name': 'p',
+                                                                'children': [],
+                                                            }],
                                                         },
                                                         {
                                                             'type': 'element',
@@ -913,7 +921,9 @@ ANNEXURE back out
                 <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
               </references>
             </meta>
-            <mainBody/>
+            <mainBody>
+              <p/>
+            </mainBody>
             <attachments>
               <attachment eId="att_1__att_1__att_1">
                 <heading>deeper heading</heading>
@@ -947,7 +957,9 @@ ANNEXURE back out
                       <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
                     </references>
                   </meta>
-                  <mainBody/>
+                  <mainBody>
+                    <p/>
+                  </mainBody>
                   <attachments>
                     <attachment eId="att_1__att_1__att_1__att_1">
                       <heading>even deeper heading</heading>
@@ -1098,7 +1110,11 @@ SCHEDULE first schedule
                         {
                             'type': 'element',
                             'name': 'mainBody',
-                            'children': [],
+                            'children': [{
+                                'type': 'content',
+                                'name': 'p',
+                                'children': [],
+                            }],
                         },
                         {
                             'type': 'element',
@@ -1113,7 +1129,11 @@ SCHEDULE first schedule
                                         {
                                             'type': 'element',
                                             'name': 'mainBody',
-                                            'children': [],
+                                            'children': [{
+                                                'type': 'content',
+                                                'name': 'p',
+                                                'children': [],
+                                            }],
                                         },
                                         {
                                             'type': 'element',
@@ -1175,7 +1195,11 @@ SCHEDULE first schedule
                                         {
                                             'type': 'element',
                                             'name': 'mainBody',
-                                            'children': [],
+                                            'children': [{
+                                                'type': 'content',
+                                                'name': 'p',
+                                                'children': [],
+                                            }],
                                         },
                                         {
                                             'type': 'element',
@@ -1227,7 +1251,11 @@ SCHEDULE first schedule
                         {
                             'type': 'element',
                             'name': 'mainBody',
-                            'children': [],
+                            'children': [{
+                                'type': 'content',
+                                'name': 'p',
+                                'children': [],
+                            }],
                         },
                         {
                             'type': 'element',
@@ -1274,7 +1302,11 @@ SCHEDULE first schedule
                         {
                             'type': 'element',
                             'name': 'mainBody',
-                            'children': [],
+                            'children': [{
+                                'type': 'content',
+                                'name': 'p',
+                                'children': [],
+                            }],
                         },
                         {
                             'type': 'element',
@@ -1349,7 +1381,9 @@ SCHEDULE first schedule
           <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
         </references>
       </meta>
-      <mainBody/>
+      <mainBody>
+        <p/>
+      </mainBody>
       <attachments>
         <attachment eId="att_1__att_1">
           <heading>first, first</heading>
@@ -1383,7 +1417,9 @@ SCHEDULE first schedule
                 <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
               </references>
             </meta>
-            <mainBody/>
+            <mainBody>
+              <p/>
+            </mainBody>
             <attachments>
               <attachment eId="att_1__att_1__att_1">
                 <heading>first, first, first</heading>
@@ -1531,7 +1567,9 @@ SCHEDULE first schedule
                 <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
               </references>
             </meta>
-            <mainBody/>
+            <mainBody>
+              <p/>
+            </mainBody>
             <attachments>
               <attachment eId="att_1__att_2__att_1">
                 <heading>first, second, first schedule</heading>
@@ -1645,7 +1683,9 @@ SCHEDULE first schedule
           <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
         </references>
       </meta>
-      <mainBody/>
+      <mainBody>
+        <p/>
+      </mainBody>
       <attachments>
         <attachment eId="att_2__att_1">
           <heading>second, first</heading>
@@ -1756,7 +1796,9 @@ SCHEDULE first schedule
           <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
         </references>
       </meta>
-      <mainBody/>
+      <mainBody>
+        <p/>
+      </mainBody>
       <attachments>
         <attachment eId="att_3__att_1">
           <heading>first, first</heading>
