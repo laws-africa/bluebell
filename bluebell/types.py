@@ -207,7 +207,7 @@ class Attachment:
             'children': [{
                 'type': 'element',
                 'name': 'mainBody',
-                'children': kids,
+                'children': kids or [empty_p()],
             }],
         }
         if attachments:
