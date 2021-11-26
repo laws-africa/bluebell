@@ -1,0 +1,154 @@
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <statement name="statement">
+    <meta>
+      <identification source="#cobalt">
+        <FRBRWork>
+          <FRBRthis value="/akn/za/act/2009/10"/>
+          <FRBRuri value="/akn/za/act/2009/10"/>
+          <FRBRalias value="Untitled" name="title"/>
+          <FRBRdate date="2009" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRcountry value="za"/>
+          <FRBRnumber value="10"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/akn/za/act/2009/10/eng"/>
+          <FRBRuri value="/akn/za/act/2009/10/eng"/>
+          <FRBRdate date="TODAY" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRlanguage language="eng"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/akn/za/act/2009/10/eng"/>
+          <FRBRuri value="/akn/za/act/2009/10/eng"/>
+          <FRBRdate date="TODAY" name="Generation"/>
+          <FRBRauthor href=""/>
+        </FRBRManifestation>
+      </identification>
+      <references source="#cobalt">
+        <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+      </references>
+    </meta>
+    <mainBody>
+      <p eId="p_1"/>
+    </mainBody>
+    <attachments>
+      <attachment eId="att_1">
+        <heading>Annex</heading>
+        <subheading>Strategy for the practical implementation of the programme of work on technology transfer and scientific and technological cooperation</subheading>
+        <doc contains="originalVersion" name="annexure">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
+                <FRBRuri value="/akn/za/act/2009/10"/>
+                <FRBRalias value="Untitled" name="title"/>
+                <FRBRdate date="2009" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="za"/>
+                <FRBRnumber value="10"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+                <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                <FRBRdate date="TODAY" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+                <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                <FRBRdate date="TODAY" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+            <references source="#cobalt">
+              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+            </references>
+          </meta>
+          <mainBody>
+            <p eId="att_1__p_1"/>
+          </mainBody>
+          <attachments>
+            <attachment eId="att_1__att_1">
+              <heading>Nested Annex</heading>
+              <subheading>Level 2</subheading>
+              <doc contains="originalVersion" name="schedule">
+                <meta>
+                  <identification source="#cobalt">
+                    <FRBRWork>
+                      <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
+                      <FRBRuri value="/akn/za/act/2009/10"/>
+                      <FRBRalias value="Untitled" name="title"/>
+                      <FRBRdate date="2009" name="Generation"/>
+                      <FRBRauthor href=""/>
+                      <FRBRcountry value="za"/>
+                      <FRBRnumber value="10"/>
+                    </FRBRWork>
+                    <FRBRExpression>
+                      <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1"/>
+                      <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                      <FRBRdate date="TODAY" name="Generation"/>
+                      <FRBRauthor href=""/>
+                      <FRBRlanguage language="eng"/>
+                    </FRBRExpression>
+                    <FRBRManifestation>
+                      <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_1"/>
+                      <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                      <FRBRdate date="TODAY" name="Generation"/>
+                      <FRBRauthor href=""/>
+                    </FRBRManifestation>
+                  </identification>
+                  <references source="#cobalt">
+                    <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+                  </references>
+                </meta>
+                <mainBody>
+                  <p eId="att_1__att_1__p_1"/>
+                </mainBody>
+              </doc>
+            </attachment>
+            <attachment eId="att_1__att_2">
+              <heading>Nested Annex Sibling</heading>
+              <subheading>Level 2</subheading>
+              <doc contains="originalVersion" name="schedule">
+                <meta>
+                  <identification source="#cobalt">
+                    <FRBRWork>
+                      <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_2"/>
+                      <FRBRuri value="/akn/za/act/2009/10"/>
+                      <FRBRalias value="Untitled" name="title"/>
+                      <FRBRdate date="2009" name="Generation"/>
+                      <FRBRauthor href=""/>
+                      <FRBRcountry value="za"/>
+                      <FRBRnumber value="10"/>
+                    </FRBRWork>
+                    <FRBRExpression>
+                      <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_2"/>
+                      <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                      <FRBRdate date="TODAY" name="Generation"/>
+                      <FRBRauthor href=""/>
+                      <FRBRlanguage language="eng"/>
+                    </FRBRExpression>
+                    <FRBRManifestation>
+                      <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1/schedule_2"/>
+                      <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                      <FRBRdate date="TODAY" name="Generation"/>
+                      <FRBRauthor href=""/>
+                    </FRBRManifestation>
+                  </identification>
+                  <references source="#cobalt">
+                    <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+                  </references>
+                </meta>
+                <mainBody>
+                  <p eId="att_1__att_2__p_1"/>
+                </mainBody>
+              </doc>
+            </attachment>
+          </attachments>
+        </doc>
+      </attachment>
+    </attachments>
+  </statement>
+</akomaNtoso>

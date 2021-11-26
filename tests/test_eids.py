@@ -283,3 +283,6 @@ PARA
     def test_eids_against_js_edge(self):
         # should not change a document with correct eids (see bluebell-monaco/tests/eids.js)
         self.roundtrip_xml('eids_edge')
+
+    def test_eids_nested_attachments(self):
+        self.roundtrip_xml('nested_attachments')
