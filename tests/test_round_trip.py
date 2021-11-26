@@ -49,3 +49,6 @@ class RoundTripTestCase(ParserSupport, TestCase):
 
     def test_eids(self):
         self.roundtrip('eids', 'statement')
+
+    def test_nested_attachments(self):
+        self.roundtrip('nested_attachments', 'statement')
