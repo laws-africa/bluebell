@@ -763,6 +763,17 @@ class Judgment(DocumentRoot):
 class OpenStructure(DocumentRoot):
     children = ['preface', 'preamble', 'main_body', 'conclusions', 'attachments']
     name = 'openStructure'
+    required_children = {'main_body'}
+
+    def add_empty_required(self, kids, tag):
+        if tag == 'main_body':
+            kids.append({
+                'type': 'element',
+                'name': 'mainBody',
+                'children': [empty_p()],
+            })
+            return kids
+        return super().add_empty_required(kids, tag)
 
 
 class Statement(OpenStructure):
