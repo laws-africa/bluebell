@@ -717,6 +717,13 @@ class DocumentRoot:
     children = []
     required_children = set()
 
+    def add_empty_required(self, kids, tag):
+        kids.append({
+            'type': 'element',
+            'name': tag,
+        })
+        return kids
+
     def to_dict(self):
         kids = []
         for tag in self.children:
@@ -724,10 +731,7 @@ class DocumentRoot:
             if node and node.text:
                 kids.append(node.to_dict())
             elif tag in self.required_children:
-                kids.append({
-                    'type': 'element',
-                    'name': tag,
-                })
+                kids = self.add_empty_required(kids, tag)
 
         return {
             'type': 'element',
