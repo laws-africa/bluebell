@@ -40,7 +40,7 @@ grammar akn
   # Open structure (doc, statement, debateReport, etc.)
   # ------------------------------------------------------------------------------
 
-  debate_report     <- open_structure <DebateReport>
+  debatereport     <- open_structure <DebateReport>
 
   doc               <- open_structure <Doc>
 

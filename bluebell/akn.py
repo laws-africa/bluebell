@@ -974,9 +974,9 @@ class Grammar(object):
         self._cache['hierarchical_structure'][index0] = (address0, self._offset)
         return address0
 
-    def _read_debate_report(self):
+    def _read_debatereport(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['debate_report'].get(index0)
+        cached = self._cache['debatereport'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -984,7 +984,7 @@ class Grammar(object):
         if address0 is not FAILURE:
             cls0 = type(address0)
             address0.__class__ = type(cls0.__name__ + 'DebateReport', (cls0, self._types.DebateReport), {})
-        self._cache['debate_report'][index0] = (address0, self._offset)
+        self._cache['debatereport'][index0] = (address0, self._offset)
         return address0
 
     def _read_doc(self):
