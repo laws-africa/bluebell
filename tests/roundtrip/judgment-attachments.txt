@@ -20,6 +20,18 @@ APPENDIX
 
   appendex 1 text
 
+  APPENDIX nested
+
+    some text
+
+    SCHEDULE without a body
+
+      
+
+    SCHEDULE second nested attachment
+
+      more text
+
 APPENDIX
 
   appendex 2 text
