@@ -1,0 +1,158 @@
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <debateReport name="debateReport">
+    <meta>
+      <identification source="#cobalt">
+        <FRBRWork>
+          <FRBRthis value="/akn/za/act/2009/10"/>
+          <FRBRuri value="/akn/za/act/2009/10"/>
+          <FRBRalias value="Untitled" name="title"/>
+          <FRBRdate date="2009" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRcountry value="za"/>
+          <FRBRnumber value="10"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/akn/za/act/2009/10/eng"/>
+          <FRBRuri value="/akn/za/act/2009/10/eng"/>
+          <FRBRdate date="TODAY" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRlanguage language="eng"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/akn/za/act/2009/10/eng"/>
+          <FRBRuri value="/akn/za/act/2009/10/eng"/>
+          <FRBRdate date="TODAY" name="Generation"/>
+          <FRBRauthor href=""/>
+        </FRBRManifestation>
+      </identification>
+      <references source="#cobalt">
+        <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+      </references>
+    </meta>
+    <mainBody>
+      <p eId="p_1">
+        <i>The Conference of Parties,</i>
+      </p>
+      <division eId="dvs_A">
+        <num>A.</num>
+        <heading>Cooperation with other conventions</heading>
+        <intro>
+          <p eId="dvs_A__intro__p_1"><i>Noting</i> the report of the Executive Secretary on progress,<sup><authorialNote marker="1" placement="bottom" eId="dvs_A__intro__p_1__authorialNote_1"><p eId="dvs_A__intro__p_1__authorialNote_1__p_1">UNEP/CBD/COP/12/24.</p></authorialNote></sup></p>
+          <p eId="dvs_A__intro__p_2"><i>Recalling</i> decision XI/6, including paragraph 3, in which it urged Parties to pursue efforts to enhance synergies among the biodiversity-related conventions to promote policy coherence, improve efficiency and enhance coordination and cooperation at all levels, and with a view to strengthening Parties’ ownership of the process,</p>
+        </intro>
+        <paragraph eId="dvs_A__para_1">
+          <num>"1.</num>
+          <content>
+            <p eId="dvs_A__para_1__p_1"><i>Welcomes</i> the International Plant Protection Convention as a member of the Liaison Group of the Biodiversity-related Conventions and <i>notes</i> with appreciation the role of the International Plant Protection Convention in helping to achieve Aichi Biodiversity Target 9;</p>
+          </content>
+        </paragraph>
+        <paragraph eId="dvs_A__para_4">
+          <num>4.</num>
+          <content>
+            <p eId="dvs_A__para_4__p_1"><i>Reaffirming</i> <ref href="/akn/un/statement/decision/unep-cbd-cop/2010-10-18/10-20">decision X/20</ref>, <i>invites</i> the members of the Liaison Group of the Biodiversity-related Conventions:</p>
+            <blockList eId="dvs_A__para_4__list_1">
+              <item eId="dvs_A__para_4__list_1__item_a">
+                <num>(a)</num>
+                <p eId="dvs_A__para_4__list_1__item_a__p_1">To increase their cooperation, coordination and attention to synergies in the development of their respective reporting systems, including future online reporting systems, as a means to increase synergies in national reporting under the biodiversity-related conventions;</p>
+              </item>
+              <item eId="dvs_A__para_4__list_1__item_b">
+                <num>(b)</num>
+                <p eId="dvs_A__para_4__list_1__item_b__p_1">To consider ways and means to increase cooperation on outreach and communication strategies;</p>
+              </item>
+            </blockList>
+          </content>
+        </paragraph>
+      </division>
+      <division eId="dvs_B">
+        <num>B.</num>
+        <heading>Cooperation with international organizations and initiatives</heading>
+        <intro>
+          <p eId="dvs_B__intro__p_1"><i>Recognizing</i> the need for an all-encompassing effort by all relevant processes to achieve the Aichi Biodiversity Targets, taking into account different views and approaches to achieve the conservation and sustainable use of biodiversity and sustainable development,</p>
+        </intro>
+        <paragraph eId="dvs_B__para_13">
+          <num>13.</num>
+          <content>
+            <p eId="dvs_B__para_13__p_1"><i>Reiterates</i> the importance of a United Nations system‑wide approach to the implementation of the Strategic Plan for Biodiversity 2011-2020 and the achievement of the Aichi Biodiversity Targets in the framework of the United Nations Decade for Biodiversity,<sup><authorialNote marker="3" placement="bottom" eId="dvs_B__para_13__p_1__authorialNote_1"><p eId="dvs_B__para_13__p_1__authorialNote_1__p_1">See General Assembly resolution 65/161.</p></authorialNote></sup> and <i>welcomes</i> the report of the Environment Management Group on relevant activities of the Issue Management Group on Biodiversity;<sup><authorialNote marker="4" placement="bottom" eId="dvs_B__para_13__p_1__authorialNote_2"><p eId="dvs_B__para_13__p_1__authorialNote_2__p_1">UNEP/CBD/COP/12/INF/48. See also: United Nations Environment Programme, Advancing the Biodiversity Agenda: A UN System-wide Contribution. A report by the Environment Management Group (EMG/1320/GEN) (UNEP, 2010). Available from <ref href="http://unemg.org">http://unemg.org</ref>;</p></authorialNote></sup></p>
+          </content>
+        </paragraph>
+        <paragraph eId="dvs_B__para_14">
+          <num>14.</num>
+          <content>
+            <p eId="dvs_B__para_14__p_1"><i>Invites</i> the United Nations and other organizations to continue their efforts in furthering the integration of the Aichi Biodiversity Targets throughout the United Nations system, in particular through the Environment Management Group and other relevant initiatives;</p>
+          </content>
+        </paragraph>
+      </division>
+    </mainBody>
+    <attachments>
+      <attachment eId="att_1">
+        <heading>Annex</heading>
+        <subheading>Strategy for the practical implementation of the programme of work on technology transfer and scientific and technological cooperation</subheading>
+        <doc contains="originalVersion" name="annexure">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
+                <FRBRuri value="/akn/za/act/2009/10"/>
+                <FRBRalias value="Untitled" name="title"/>
+                <FRBRdate date="2009" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="za"/>
+                <FRBRnumber value="10"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+                <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                <FRBRdate date="TODAY" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/za/act/2009/10/eng/!annexure_1"/>
+                <FRBRuri value="/akn/za/act/2009/10/eng"/>
+                <FRBRdate date="TODAY" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+            <references source="#cobalt">
+              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+            </references>
+          </meta>
+          <mainBody>
+            <division eId="att_1__dvs_I">
+              <num>I.</num>
+              <heading>Objectives and background</heading>
+              <paragraph eId="att_1__dvs_I__para_1">
+                <num>1.</num>
+                <content>
+                  <p eId="att_1__dvs_I__para_1__p_1">The strategy for practical implementation of the programme of work has been developed to assist and facilitate efforts to further implement Articles 16 to 19 of the Convention on Biological Diversity. The Strategy explores a number of voluntary ways and means that are aimed at creating a coherent and sustainable approach to technology transfer and scientific and technological cooperation, in accordance with the provisions of the Convention, and relevant international and domestic obligations.</p>
+                </content>
+              </paragraph>
+              <paragraph eId="att_1__dvs_I__para_2">
+                <num>2.</num>
+                <content>
+                  <p eId="att_1__dvs_I__para_2__p_1">The present framework identifies strategic activities for the practical implementation of the programme of work on technology transfer and scientific and technological cooperation. The programme of work was adopted by the Conference of the Parties at its seventh meeting held in Kuala Lumpur in February 2004, in order to develop meaningful and effective action to enhance the implementation of Articles 16 to 19 as well as related provisions of the Convention, by promoting and facilitating the transfer of and access to technologies from developed to developing countries as well as among developing countries and other Parties. According to Article 16 paragraph 1, of the Convention, relevant technologies under the Convention are those that contribute to meeting the three objectives of the Convention, that is, technologies that are relevant to the conservation and sustainable use of biodiversity or make use of genetic resources and do not cause significant damage to the environment.</p>
+                </content>
+              </paragraph>
+              <paragraph eId="att_1__dvs_I__para_3">
+                <num>3.</num>
+                <content>
+                  <p eId="att_1__dvs_I__para_3__p_1">Biodiversity is under massive and increasing pressure as a result of global changes such as population growth, poverty alleviation, reduction of available arable land and water, environmental stress, climate change, and the need for renewable resources, and this requires that the full range of technologies, ranging from traditional to modern technologies, is made widely available in order to address the challenges associated with the implementation of the three objectives of the Convention. Much scientific and technological cooperation, including the transfer of technologies, is already being undertaken, in particular on a smaller scale. The present strategy aims to increase the visibility of such cooperation, and to enhance the efficiency and effectiveness of technology transfer and scientific and technological cooperation under the Convention.</p>
+                </content>
+              </paragraph>
+            </division>
+            <division eId="att_1__dvs_II">
+              <num>II.</num>
+              <heading>Conceptualizing and defining technology transfer and scientific and technological cooperation</heading>
+              <paragraph eId="att_1__dvs_II__para_4">
+                <num>4.</num>
+                <content>
+                  <p eId="att_1__dvs_II__para_4__p_1">It is important to recognize the crucial <b>links between technology transfer and scientific and technological cooperation</b> – the two elements addressed by the programme of work. Technology transfer, in particular in the context of the third objective of the Convention, will not be effective as an on-off and one-way activity, but needs to be <b>embedded in a participatory decision-making process</b> as well as in <b>integrated, long-term scientific and technological cooperation,</b> which may involve the joint development of new technologies and, as based on reciprocity, would also provide a key mechanism for the effective building or enhancement of capacity in developing countries and countries with economies in transition.</p>
+                </content>
+              </paragraph>
+            </division>
+          </mainBody>
+        </doc>
+      </attachment>
+    </attachments>
+  </debateReport>
+</akomaNtoso>

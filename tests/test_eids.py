@@ -286,3 +286,6 @@ PARA
 
     def test_eids_nested_attachments(self):
         self.roundtrip_xml('nested_attachments')
+
+    def test_eids_debatereport(self):
+        self.roundtrip_xml('eids_debatereport', root='debatereport')
