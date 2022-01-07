@@ -727,8 +727,8 @@ class Grammar(object):
     REGEX_4 = re.compile('^[^\\n|}]')
     REGEX_5 = re.compile('^[^ \\n]')
     REGEX_6 = re.compile('^[^\\n]')
-    REGEX_7 = re.compile('^[^*/_{[\\n\\\\]')
-    REGEX_8 = re.compile('^[^*/_{[\\n\\\\}]')
+    REGEX_7 = re.compile('^[^*/_={[\\n\\\\]')
+    REGEX_8 = re.compile('^[^*/_={[\\n\\\\}]')
     REGEX_9 = re.compile('^[^\\n]')
     REGEX_10 = re.compile('^[^*/_{[\\n\\]\\\\]')
     REGEX_11 = re.compile('^[^\\n]')
@@ -5693,7 +5693,7 @@ class Grammar(object):
                     self._failure = self._offset
                     self._expected = []
                 if self._offset == self._failure:
-                    self._expected.append('[^*/_{[\\n\\\\]')
+                    self._expected.append('[^*/_={[\\n\\\\]')
             if address1 is not FAILURE:
                 elements0.append(address1)
                 remaining0 -= 1
@@ -5726,7 +5726,7 @@ class Grammar(object):
                     self._failure = self._offset
                     self._expected = []
                 if self._offset == self._failure:
-                    self._expected.append('[^*/_{[\\n\\\\}]')
+                    self._expected.append('[^*/_={[\\n\\\\}]')
             if address1 is not FAILURE:
                 elements0.append(address1)
                 remaining0 -= 1
@@ -5942,6 +5942,9 @@ class Grammar(object):
                                             address0 = self._read_underline()
                                             if address0 is FAILURE:
                                                 self._offset = index1
+                                                address0 = self._read_strikethrough()
+                                                if address0 is FAILURE:
+                                                    self._offset = index1
         self._cache['inline_marker'][index0] = (address0, self._offset)
         return address0
 

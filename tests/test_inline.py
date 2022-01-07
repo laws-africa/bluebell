@@ -33,6 +33,31 @@ class InlineTestCase(ParserSupport, TestCase):
 </p>
 """, xml)
 
+    def test_strikethrough(self):
+        tree = self.parse("""
+==strikethrough==
+""", 'line')
+
+        self.assertEqual({
+            'type': 'content',
+            'name': 'p',
+            'children': [{
+                'type': 'inline',
+                'name': 's',
+                'children': [{
+                    'type': 'text',
+                    'value': 'strikethrough',
+                }]
+            }],
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <s>strikethrough</s>
+</p>
+""", xml)
+
     def test_remark_with_inlines(self):
         tree = self.parse("""
 [[{{>https://example.com a ==struck through== link}}]]
@@ -58,7 +83,6 @@ class InlineTestCase(ParserSupport, TestCase):
                     }, {
                         'type': 'inline',
                         'name': 's',
-                        'attribs': {},
                         'children': [{
                             'type': 'text',
                             'value': 'struck through',
@@ -78,7 +102,7 @@ class InlineTestCase(ParserSupport, TestCase):
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <remark status="editorial">[<ref href="https://example.com">a link</ref>]</remark>
+  <remark status="editorial">[<ref href="https://example.com">a <s>struck through</s> link</ref>]</remark>
 </p>
 """, xml)
 

@@ -343,15 +343,15 @@ grammar akn
   #         The code generated for this rule is customised by Parser in parser.py
   #         in order to greatly improve its performance. If this regex changes, it MUST
   #         also be updated in Parser.NON_INLINE_START_RE.
-  non_inline_start  <- [^*/_{[\n\\]+
+  non_inline_start  <- [^*/_={[\n\\]+
 
   # inlines that ARE nested, and so we must guard against the closing }}
-  inline_nested     <- [^*/_{[\n\\}]+ / escape / (!'}}' inline_marker / [^\n]) <InlineText>
+  inline_nested     <- [^*/_={[\n\\}]+ / escape / (!'}}' inline_marker / [^\n]) <InlineText>
 
   # inline remarks are the only inline that have a unique closing marker: ]]
   inline_end_remark <- [^*/_{[\n\]\\]+ / escape / (!']]' inline_marker / [^\n]) <InlineText>
 
-  inline_marker     <- bold / footnote_ref / image / italics / ref / remark / sup / sub / standard_inline / underline
+  inline_marker     <- bold / footnote_ref / image / italics / ref / remark / sup / sub / standard_inline / underline / strikethrough
 
   # escape anything with a single backslash (double here because it needs to be escaped itself)
   escape            <- '\\' [^\n]
@@ -368,7 +368,7 @@ grammar akn
   underline         <- '__' content:(!'__' inline)+ '__' <Underline>
 
                      # ==strikethrough==
-  strikethrough      <- '==' content:(!'==' inline)+ '==' <Strikethrough>
+  strikethrough     <- '==' content:(!'==' inline)+ '==' <Strikethrough>
 
                      # [[remark]]
   remark            <- '[[' content:(!']]' inline_nested:inline_end_remark)+ ']]' <Remark>
