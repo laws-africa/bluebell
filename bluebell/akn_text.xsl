@@ -14,7 +14,7 @@
                                 a:listConclusion a:listIntroduction a:location a:mmod a:mod a:mref a:narrative
                                 a:neutralCitation a:num a:object a:omissis a:opinion a:organization a:outcome a:p
                                 a:party a:person a:placeholder a:process a:quantity a:quotedText a:recordedTime a:ref
-                                a:relatedDocument a:remark a:rmod a:role a:rref a:scene a:session a:shortTitle a:signature
+                                a:relatedDocument a:remark a:rmod a:role a:rref a:s a:scene a:session a:shortTitle a:signature
                                 a:span a:sub a:subheading a:summary a:sup a:term a:tocItem a:u a:vote"/>
 
   <!-- ...............................................................................
@@ -700,6 +700,16 @@
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
     <xsl:text>__</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="a:s">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:text>==</xsl:text>
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
+    <xsl:text>==</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:sup">

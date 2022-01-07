@@ -35,7 +35,7 @@ class InlineTestCase(ParserSupport, TestCase):
 
     def test_remark_with_inlines(self):
         tree = self.parse("""
-[[{{>https://example.com a link}}]]
+[[{{>https://example.com a ==struck through== link}}]]
 """, 'line')
 
         self.assertEqual({
@@ -72,7 +72,7 @@ class InlineTestCase(ParserSupport, TestCase):
 
     def test_inlines_with_remark(self):
         tree = self.parse("""
-**bold {{^super [[foo {{>/bar link}} end]]}} [[and another]]**
+**bold {{^super [[foo {{>/bar link}} end]]}} ==struck through== [[and another]]**
 """, 'line')
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)

@@ -623,6 +623,10 @@ class Underline(SymmetricInline):
     name = 'u'
 
 
+class Strikethrough(SymmetricInline):
+    name = 's'
+
+
 class Sup(Inline):
     name = 'sup'
 

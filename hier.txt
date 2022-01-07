@@ -46,6 +46,7 @@ PART a num
 
       (a) this **thing**
       (b) this //other// thing
+      (b) this ==struck through== thing
 
         some text
 

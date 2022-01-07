@@ -367,6 +367,9 @@ grammar akn
                      # __foo__
   underline         <- '__' content:(!'__' inline)+ '__' <Underline>
 
+                     # ==strikethrough==
+  strikethrough      <- '==' content:(!'==' inline)+ '==' <Strikethrough>
+
                      # [[remark]]
   remark            <- '[[' content:(!']]' inline_nested:inline_end_remark)+ ']]' <Remark>
 
