@@ -54,8 +54,20 @@ class InlineTestCase(ParserSupport, TestCase):
                     'attribs': {'href': 'https://example.com'},
                     'children': [{
                         'type': 'text',
-                        'value': 'a link',
-                    }]
+                        'value': 'a ',
+                    }, {
+                        'type': 'inline',
+                        'name': 's',
+                        'attribs': {},
+                        'children': [{
+                            'type': 'text',
+                            'value': 'struck through',
+                        }]
+                    }, {
+                        'type': 'text',
+                        'value': ' link',
+                    }
+                    ]
                 }, {
                     'type': 'text',
                     'value': ']',
@@ -78,7 +90,7 @@ class InlineTestCase(ParserSupport, TestCase):
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <b>bold <sup>super <remark status="editorial">[foo <ref href="/bar">link</ref> end]</remark></sup> <remark status="editorial">[and another]</remark></b>
+  <b>bold <sup>super <remark status="editorial">[foo <ref href="/bar">link</ref> end]</remark></sup> <s>struck through</s> <remark status="editorial">[and another]</remark></b>
 </p>
 """, xml)
 
