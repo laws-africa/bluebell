@@ -46,6 +46,8 @@ PART a num
 
       (a) this **thing**
       (b) this //other// thing
+      (c) this {{-deleted}} thing
+      (d) this {{+inserted}} thing
 
         some text
 
