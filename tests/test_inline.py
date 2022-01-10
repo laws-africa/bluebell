@@ -248,7 +248,7 @@ class InlineTestCase(ParserSupport, TestCase):
 
     def test_ins(self):
         tree = self.parse("""
-        {{+in}s}}
+        {{+ in}s}} and {{+  one with a space at the start and end }}
         """, 'line')
 
         self.assertEqual({
@@ -262,19 +262,25 @@ class InlineTestCase(ParserSupport, TestCase):
                     {'type': 'text', 'value': '}'},
                     {'type': 'text', 'value': 's'},
                 ]
+            }, {
+                'type': 'text', 'value': ' and '
+            }, {
+                'type': 'inline',
+                'name': 'ins',
+                'children': [
+                    {'type': 'text', 'value': ' one with a space at the start and end '},
+                ]
             }]
         }, tree.to_dict())
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <ins>in}s</ins>
-</p>
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1"><ins>in}s</ins> and <ins> one with a space at the start and end </ins></p>
 """, xml)
 
     def test_del(self):
         tree = self.parse("""
-        {{-de}l}}
+        {{- de}l}} and {{-  one with a space at the start and end }}
         """, 'line')
 
         self.assertEqual({
@@ -288,19 +294,25 @@ class InlineTestCase(ParserSupport, TestCase):
                     {'type': 'text', 'value': '}'},
                     {'type': 'text', 'value': 'l'},
                 ]
+            }, {
+                'type': 'text', 'value': ' and '
+            }, {
+                'type': 'inline',
+                'name': 'del',
+                'children': [
+                    {'type': 'text', 'value': ' one with a space at the start and end '},
+                ]
             }]
         }, tree.to_dict())
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
-        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <del>de}l</del>
-</p>
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1"><del>de}l</del> and <del> one with a space at the start and end </del></p>
 """, xml)
 
     def test_ins_del_nested(self):
         tree = self.parse("""
-{{+ins {{-de}l}} **bo*ld**}}
+{{+ ins {{- de}l}} **bo*ld**}}
 """, 'line')
 
         self.assertEqual({

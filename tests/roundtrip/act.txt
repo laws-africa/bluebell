@@ -16,9 +16,9 @@ CHAP 1 - Heading
 
     an {{IMG /foo.png description}} image
 
-    some {{-deleted}} text
+    some {{- deleted}} text
 
-    some {{+inserted}} text
+    some {{+ inserted}} text
 
     Part A should not be escaped
 
