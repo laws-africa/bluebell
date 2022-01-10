@@ -7302,6 +7302,36 @@ class Grammar(object):
                             self._expected.append('\'term\'')
                     if address0 is FAILURE:
                         self._offset = index1
+                        chunk4, max4 = None, self._offset + 1
+                        if max4 <= self._input_size:
+                            chunk4 = self._input[self._offset:max4]
+                        if chunk4 == '-':
+                            address0 = TreeNode(self._input[self._offset:self._offset + 1], self._offset, [])
+                            self._offset = self._offset + 1
+                        else:
+                            address0 = FAILURE
+                            if self._offset > self._failure:
+                                self._failure = self._offset
+                                self._expected = []
+                            if self._offset == self._failure:
+                                self._expected.append('\'-\'')
+                        if address0 is FAILURE:
+                            self._offset = index1
+                            chunk5, max5 = None, self._offset + 1
+                            if max5 <= self._input_size:
+                                chunk5 = self._input[self._offset:max5]
+                            if chunk5 == '+':
+                                address0 = TreeNode(self._input[self._offset:self._offset + 1], self._offset, [])
+                                self._offset = self._offset + 1
+                            else:
+                                address0 = FAILURE
+                                if self._offset > self._failure:
+                                    self._failure = self._offset
+                                    self._expected = []
+                                if self._offset == self._failure:
+                                    self._expected.append('\'+\'')
+                            if address0 is FAILURE:
+                                self._offset = index1
         self._cache['standard_inline_marker'][index0] = (address0, self._offset)
         return address0
 

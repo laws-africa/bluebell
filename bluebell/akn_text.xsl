@@ -723,13 +723,19 @@
   </xsl:template>
 
   <!-- general inlines that follow a common pattern -->
-  <xsl:template match="a:abbr | a:term | a:inline">
+  <xsl:template match="a:abbr | a:term | a:inline | a:ins | a:del">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:text>{{</xsl:text>
     <xsl:choose>
       <xsl:when test="self::a:inline and @name='em'">
         <xsl:text>em</xsl:text>
+      </xsl:when>
+      <xsl:when test="self::a:ins">
+        <xsl:text>+</xsl:text>
+      </xsl:when>
+      <xsl:when test="self::a:del">
+        <xsl:text>-</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="local-name(.)" />
