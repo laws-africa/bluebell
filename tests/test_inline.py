@@ -246,6 +246,113 @@ class InlineTestCase(ParserSupport, TestCase):
 </p>
 """, xml)
 
+    def test_ins(self):
+        tree = self.parse("""
+        {{+ in}s}} and {{+  one with a space at the start and end }}
+        """, 'line')
+
+        self.assertEqual({
+            'name': 'p',
+            'type': 'content',
+            'children': [{
+                'type': 'inline',
+                'name': 'ins',
+                'children': [
+                    {'type': 'text', 'value': 'in'},
+                    {'type': 'text', 'value': '}'},
+                    {'type': 'text', 'value': 's'},
+                ]
+            }, {
+                'type': 'text', 'value': ' and '
+            }, {
+                'type': 'inline',
+                'name': 'ins',
+                'children': [
+                    {'type': 'text', 'value': ' one with a space at the start and end '},
+                ]
+            }]
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1"><ins>in}s</ins> and <ins> one with a space at the start and end </ins></p>
+""", xml)
+
+    def test_del(self):
+        tree = self.parse("""
+        {{- de}l}} and {{-  one with a space at the start and end }}
+        """, 'line')
+
+        self.assertEqual({
+            'name': 'p',
+            'type': 'content',
+            'children': [{
+                'type': 'inline',
+                'name': 'del',
+                'children': [
+                    {'type': 'text', 'value': 'de'},
+                    {'type': 'text', 'value': '}'},
+                    {'type': 'text', 'value': 'l'},
+                ]
+            }, {
+                'type': 'text', 'value': ' and '
+            }, {
+                'type': 'inline',
+                'name': 'del',
+                'children': [
+                    {'type': 'text', 'value': ' one with a space at the start and end '},
+                ]
+            }]
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1"><del>de}l</del> and <del> one with a space at the start and end </del></p>
+""", xml)
+
+    def test_ins_del_nested(self):
+        tree = self.parse("""
+{{+ ins {{- de}l}} **bo*ld**}}
+""", 'line')
+
+        self.assertEqual({
+            'name': 'p',
+            'type': 'content',
+            'children': [{
+                'type': 'inline',
+                'name': 'ins',
+                'children': [
+                    {'type': 'text', 'value': 'ins '},
+                    {
+                        'type': 'inline',
+                        'name': 'del',
+                        'children': [
+                            {'type': 'text', 'value': 'de'},
+                            {'type': 'text', 'value': '}'},
+                            {'type': 'text', 'value': 'l'},
+                        ]
+                    },
+                    {'type': 'text', 'value': ' '},
+                    {
+                        'type': 'inline',
+                        'name': 'b',
+                        'children': [
+                            {'type': 'text', 'value': 'bo'},
+                            {'type': 'text', 'value': '*'},
+                            {'type': 'text', 'value': 'ld'},
+                        ]
+                    }
+                ]
+            }]
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <ins>ins <del>de}l</del> <b>bo*ld</b></ins>
+</p>
+""", xml)
+
     def test_term(self):
         tree = self.parse("""
 Text with {{term{refersTo #foo} a term}} and {{term{refersTo #bar}  extra space}} and {{term{refersTo #baz}no space}}.

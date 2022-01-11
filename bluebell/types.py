@@ -696,6 +696,14 @@ class StandardInline(Inline):
             info['name'] = 'inline'
             info.setdefault('attribs', {})['name'] = 'em'
 
+        # + is syntactic sugar for <ins>
+        elif self.name == '+':
+            info['name'] = 'ins'
+
+        # - is syntactic sugar for <del>
+        elif self.name == '-':
+            info['name'] = 'del'
+
         return info
 
     def get_attribs(self):
