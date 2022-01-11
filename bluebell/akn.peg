@@ -396,7 +396,7 @@ grammar akn
 
   inline_close      <- '}}'
 
-  standard_inline_marker <- 'abbr' / 'em' / 'inline' / 'term'
+  standard_inline_marker <- 'abbr' / 'em' / 'inline' / 'term' / '-' / '+'
 
   # ------------------------------------------------------------------------------
   # Terminals
