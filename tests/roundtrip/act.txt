@@ -18,6 +18,8 @@ CHAP 1 - Heading
 
     Part A should not be escaped
 
+    A {{*[remark]}} and one {{*without brackets}}
+
     SUBSEC 1
 
       ITEMS

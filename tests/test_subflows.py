@@ -274,10 +274,7 @@ PART 1
                 'name': 'p',
                 'children': [{
                     'type': 'text',
-                    'value': 'this section ',
-                }, {
-                    'type': 'text',
-                    'value': '[',
+                    'value': 'this section [',
                 }, {
                     'type': 'element',
                     'name': 'authorialNote',
