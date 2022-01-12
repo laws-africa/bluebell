@@ -20,6 +20,12 @@ CHAP 1 - Heading
 
     A {{*[remark]}} and one {{*without brackets}}
 
+    A {{*multi
+
+    line
+
+    remark}}
+
     SUBSEC 1
 
       ITEMS
