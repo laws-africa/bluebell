@@ -650,6 +650,14 @@
     <xsl:text>}}</xsl:text>
   </xsl:template>
 
+  <xsl:template match="a:remark/a:br">
+    <xsl:param name="indent">0</xsl:param>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="a:ref">
     <xsl:param name="indent">0</xsl:param>
 
