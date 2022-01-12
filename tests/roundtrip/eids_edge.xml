@@ -60,7 +60,7 @@
       <p eId="preamble__p_3">Preamble 2</p>
       <p eId="preamble__p_4">Preamble 3</p>
       <p eId="preamble__p_5">Preamble <remark status="editorial">[remark]</remark></p>
-      <p eId="preamble__p_6">A <remark status="editorial">[multi<br/>line<br/><br/>remark]</remark></p>
+      <p eId="preamble__p_6">A <remark status="editorial">[multi<br/>**line**<br/><br/>CROSSHEADING remark]</remark></p>
     </preamble>
     <mainBody>
       <table eId="table_1">
