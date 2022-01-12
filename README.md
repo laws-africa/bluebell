@@ -14,6 +14,327 @@ while being simple to use and not requiring that authors have an in-depth knowle
 Bluebell will always produce structurally valid Akoma Ntoso, no matter what input is given. It will never refuse to parse
 malformed input. If it does, it's a bug.
 
+## Elements
+
+### Preface, preamble and conclusions
+
+These are semi-structured content blocks that are indicated with a keyword. Use the `BODY` keyword
+to indicate where the preface and/or preamble end, and the body starts.
+
+```
+PREFACE
+  ...
+  
+PREAMBLE
+  ...
+  
+BODY
+  ...
+  
+CONCLUSIONS
+  ...
+```
+
+### Judgments
+
+Judgments are broken into various sections which are indicated with a keyword.
+
+```
+INTRODUCTION
+  ...
+  
+BACKGROUND
+  ...
+  
+ARGUMENTS
+  ...
+  
+REMEDIES
+  ...
+  
+MOTIVATION
+  ...
+  
+DECISION
+  ...
+```
+
+### Hierarchical elements
+
+All AKN hierarchical elements are supported.
+
+**Format**
+
+```
+<hier><attribs>
+  ...
+  
+<hier><attribs>
+  SUBHEADING <subheading>
+  ...
+  
+<hier><attribs> <num>
+  ...
+  
+<hier><attribs> <num> - <heading>
+  ...
+  
+<hier><attribs> - <heading>
+  ...
+```
+
+* `<hier>` is a hierarchical element keyword or synonym, such as `CHAPTER`, `PART`, `SECTION`, `PARA` etc.
+* `<attribs>` are attributes (optional)
+* `<num>` is an optional number, eg `2` or `2a` or `2(bis)`
+* `<heading>` is an optional heading
+* `<subheading>` is an optional subheading
+
+#### Synonyms
+
+The following synonyms are supported for hierarchical elements:
+
+* `ART` (`ARTICLE`)
+* `CHAP` (`CHAPTER`)
+* `PARA` (`PARAGRAPH`)
+* `SEC` (`SECTION`)
+* `SUBCHAP` (`SUBCHAPTER`)
+* `SUBPARA` (`SUBPARAGRAPH`)
+* `SUBSEC` (`SUBSECTION`)
+
+##### Crossheading
+
+A crossheading is a special heading element that can be used between hierarchical elements, without
+creating a new element in the hierarchy.
+
+```
+CROSSHEADING <heading>
+```
+
+### Attachments
+
+All document types support attachments, which can also be nested. Attachments must come at the end
+of a document.
+
+The keywords `APPENDIX`, `SCHEDULE` and `ANNEXURE` can also be used instead of `ATTACHMENT`.
+
+```
+ATTACHMENT <heading>
+  ...
+  
+ATTACHMENT <heading>
+  SUBHEADING <subheading>
+  ...
+
+```
+
+* `<heading>` (optional) a heading for the attachment
+* `<subheading>` a subheading heading for the attachment
+
+### Block elements
+
+#### Numbered list
+
+General number lists that are not part of the hierarchy.
+
+```
+ITEMS
+  <introductory text>
+  
+  ITEM
+    SUBHEADING <subheading>
+    ...
+  
+  ITEM <num>
+    ...
+    
+  ITEM <num> - <heading>
+    ...
+    
+  ITEM - <heading>
+    ...
+    
+  <wrap-up text>
+
+```
+
+* `<introductory text>` is optional plain text before the first item
+* `<num>` is an optional item number, such as `(a)` or `2bis`
+* `<heading>` is an optional item heading
+* `<subheading>` is an optional item subheading
+* `<wrap-up text>` is optional plain text after the last item
+
+#### Bulleted list
+
+An un-numbered bulleted list that is not part of the hierarchy.
+
+```
+BULLETS
+  * item 1
+  * item 2 with text
+    on multiple lines
+```
+
+#### Block quote
+
+A block quotation. Use the `startQuote` to indicate the quote starting prefix, such as `"`
+
+```
+QUOTE<attribs>
+  ...
+  
+QUOTE{startQuote "}
+  ...
+```
+
+* `<attribs>` are attributes (optional)
+
+#### Table
+
+A table is made up of rows and cells.
+
+```
+TABLE<attribs>
+  TR
+    TH<attribs>
+      A table heading cell
+      
+    TC
+      A regular table cell
+      
+  TR
+    TC{colspan 2}
+      Cell in the second row that spans columns
+```
+
+* `<attribs>` are attributes (optional)
+
+#### Longtitle
+
+A special block element for the long title of a legislation document.
+
+```
+LONGTITLE <long title>
+```
+
+### Inline elements
+
+General formatting elements:
+
+```
+**bold**
+//italics//
+__underline__
+{{^superscript}}
+{{_subscript}}
+```
+
+#### Abbreviations
+
+Abbreviations include the full expansion of the abbreviation using the `title` attribute.
+
+```
+{{abbr{title Akoma Ntoso} AKN}}
+```
+
+#### Editorial remarks
+
+Editorial remarks are for content not originally included by the document author. Editorial remarks can
+contain other inline elements, such as links and formatting.
+
+```
+{{*remark content}}
+```
+
+#### Emphasis
+
+Emphasis is not always the same as italics and may be formatted differently.
+
+```
+{{em<attribs> text}}
+```
+
+* `<attribs>` are attributes (optional)
+
+#### Footnotes
+
+Footnotes are made up of two components: the footnote marker and the footnote content. The marker
+is often in superscript `{{^...}}` but this not required.
+
+The marker is indicated with `{{FOOTNOTE <symbol>}}`.
+
+* `<symbol>` is the footnote symbol, such as `*` or `1`.
+
+The footnote content comes after the line with the marker, at the same indent level. The symbols must match.
+
+```
+This sentence includes the {{^{{FOOTNOTE *}}}} marker.
+
+FOOTNOTE *
+  This is the footnote content.
+```
+
+#### Generic inline
+
+A generic inline element must be identified with the `name` attribute.
+
+```
+{{inline{name <name>} text}}
+```
+
+* `<name>` the inline name (required)
+
+#### Images
+
+Embed an image as follows:
+
+```
+{{IMG <src> <description>}}
+```
+
+* `<src>` is the relative or absolute URL to the image file
+* `<description>` is the alternate text that describes the image
+
+#### References (links)
+
+References are for internal and external links.
+
+```
+{{>https://example.com link text}}
+```
+
+#### Term
+
+A defined term.
+
+```
+{{em<attribs> text}}
+```
+
+* `<attribs>` are attributes (optional)
+
+## Attributes
+
+When `<attribs>` is supported, it is a list of attributes to be applied to the XML element.
+Attributes are `<name> <value>` pairs. Multiple attributes are separate with `|`.
+
+```
+{attr value}
+
+{attr1 value1|attr2 value2}
+```
+
+The `class` attribute can be added using dot-notation before the attributes:
+
+```
+.class1.class2{attr value}
+```
+
+This is equivalent to:
+
+```
+{class class1 class2|attr value}
+```
+
 ## Usage
 
 ### From Python
@@ -103,18 +424,6 @@ Key points:
 * Content inside a block element at the top level is usually nested, but Bluebell is forgiving and
   makes a best effort if you don't nest it.
 * If Bluebell finds something it doesn't understand, it includes it as text and continues.
-
-### Synonyms
-
-The following synonyms are supported for hierarchical elements:
-
-* ART (ARTICLE)
-* CHAP (CHAPTER)
-* PARA (PARAGRAPH)
-* SEC (SECTION)
-* SUBCHAP (SUBCHAPTER)
-* SUBPARA (SUBPARAGRAPH)
-* SUBSEC (SUBSECTION)
 
 ## Intermediate output structure
 
