@@ -643,11 +643,11 @@
   <xsl:template match="a:remark">
     <xsl:param name="indent">0</xsl:param>
 
-    <xsl:text>[</xsl:text>
+    <xsl:text>{{*</xsl:text>
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
-    <xsl:text>]</xsl:text>
+    <xsl:text>}}</xsl:text>
   </xsl:template>
 
   <xsl:template match="a:ref">

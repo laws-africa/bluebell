@@ -140,8 +140,7 @@ PART
   foo **bar\\**
   some \\{{^non-sup}}
   some {{^sup\\}}}
-  a \\[[remark]]
-  a [[remark\\]]
+  a \\{{*remark}}
 """, 'hier_element_block')
 
         self.assertEqual({
@@ -217,29 +216,16 @@ PART
                 'type': 'content',
                 'children': [{
                     'type': 'text',
-                    'value': 'a ['
+                    'value': 'a {'
                 }, {
                     'type': 'text',
-                    'value': '['
+                    'value': '{'
                 }, {
                     'type': 'text',
-                    'value': 'remark]]'
-                }]
-            }, {
-                'name': 'p',
-                'type': 'content',
-                'children': [{
-                    'type': 'text',
-                    'value': 'a '
+                    'value': '*'
                 }, {
                     'type': 'text',
-                    'value': '['
-                }, {
-                    'type': 'text',
-                    'value': '['
-                }, {
-                    'type': 'text',
-                    'value': 'remark]]'
+                    'value': 'remark}}'
                 }]
             }]
         }, tree.to_dict())
