@@ -239,10 +239,15 @@ Abbreviations include the full expansion of the abbreviation using the `title` a
 #### Editorial remarks
 
 Editorial remarks are for content not originally included by the document author. Editorial remarks can
-contain other inline elements, such as links and formatting.
+contain other inline elements, such as links and formatting. Remarks may span multiple lines.
 
 ```
 {{*remark content}}
+
+A {{*remark may
+span
+
+multiple lines.}}
 ```
 
 #### Emphasis
