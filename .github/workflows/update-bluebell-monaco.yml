@@ -19,6 +19,6 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: 'laws-africa',
               repo: 'bluebell-monaco',
-              workflow_id: 'workflows/update-xslt.yaml',
+              workflow_id: 'update-xslt.yaml',
               ref: 'master'
             });
