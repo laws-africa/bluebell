@@ -343,13 +343,10 @@ grammar akn
   #         The code generated for this rule is customised by Parser in parser.py
   #         in order to greatly improve its performance. If this regex changes, it MUST
   #         also be updated in Parser.NON_INLINE_START_RE.
-  non_inline_start  <- [^*/_{[\n\\]+
+  non_inline_start  <- [^*/_{\n\\]+
 
   # inlines that ARE nested, and so we must guard against the closing }}
-  inline_nested     <- [^*/_{[\n\\}]+ / escape / (!'}}' inline_marker / [^\n]) <InlineText>
-
-  # inline remarks are the only inline that have a unique closing marker: ]]
-  inline_end_remark <- [^*/_{[\n\]\\]+ / escape / (!']]' inline_marker / [^\n]) <InlineText>
+  inline_nested     <- [^*/_{\n\\}]+ / escape / (!'}}' inline_marker / [^\n]) <InlineText>
 
   inline_marker     <- bold / footnote_ref / image / italics / ref / remark / sup / sub / standard_inline / underline
 
@@ -367,8 +364,17 @@ grammar akn
                      # __foo__
   underline         <- '__' content:(!'__' inline)+ '__' <Underline>
 
-                     # [[remark]]
-  remark            <- '[[' content:(!']]' inline_nested:inline_end_remark)+ ']]' <Remark>
+                     # {{*remark}}
+                     # {{*[remark]}}
+                     #
+                     # OR
+                     #
+                     # {{*a remark
+                     # that covers
+                     # multiple lines}}
+                     #
+                     # Note that indents and dedents are explicitly disallowed
+  remark            <- inline_open '*' content:(!inline_close !indent !dedent content:([\n] / inline_nested))+ inline_close <Remark>
 
   # special inlines
 

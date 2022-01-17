@@ -16,7 +16,11 @@ CHAP 1 - Heading
 
     some \*\*text\*\* at \/\/the start\/\/ with \*\*multiple \/\/types\/\/ of\*\* markup
 
-    some \[\[remarks\]\] and some \_\_underline\_\_
+    some old [[remarks]] that don't [need] escaping any more
+
+    some \{\{*new remarks\}\}
+
+    some \_\_underline\_\_
 
     include \{\{^superscripts\}\} and \{\{_subscripts\}\} which are fun
 
@@ -24,7 +28,7 @@ CHAP 1 - Heading
 
     some **inlines \/\/ {{>#foo with \/\/ slashes}}**
 
-    inlines that \*\* should \/\/ be \[\[ escaped ![ and \]\]
+    inlines that \*\* should \/\/ be [[ escaped ![ and ]]
 
     refs {{>#foo https:\/\/example.com with \}\} and **nested \*\* stars \*\***}}
 
@@ -35,6 +39,12 @@ CHAP 1 - Heading
     nested ** stars in // italics \*\* // and bold **
 
     super {{^with \{\{^ curlies } \}\}}}
+
+    A {{*multi
+    line
+    CROSSHEADING doesn't need to be escaped
+    \*\*escaped
+    remark}}
 
   SEC 3 - these should not be escaped
 

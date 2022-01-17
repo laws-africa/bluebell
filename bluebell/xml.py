@@ -19,8 +19,8 @@ class IdGenerator:
 
     id_exempt = set("act amendment amendmentList bill debate debateReport doc documentCollection judgment"
                     " officialGazette portion statement body mainBody judgmentBody attachments"
-                    " tr td th".split())
-    """ Top-level document types that never have ids. """
+                    " br tr td th".split())
+    """ Elements that never have ids, such as top-level documents and self-closing inlines."""
 
     id_unnecessary = set("arguments background conclusions decision header introduction motivation preamble preface"
                          " remedies".split())
