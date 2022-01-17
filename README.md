@@ -312,7 +312,7 @@ References are for internal and external links.
 A defined term.
 
 ```
-{{em<attribs> text}}
+{{term<attribs> text}}
 ```
 
 * `<attribs>` are attributes (optional)
