@@ -309,10 +309,12 @@ References are for internal and external links.
 
 #### Term
 
-A defined term.
+A defined term. This usually has the `refersTo` attribute.
 
 ```
-{{term<attribs> text}}
+{{term<attribs> term}}
+
+{{term{refersTo #special-term} special term}}
 ```
 
 * `<attribs>` are attributes (optional)
