@@ -1,0 +1,24 @@
+name: Update bluebell-monaco
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'bluebell/akn_text.xsl'
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger workflow in bluebell-monaco
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.LA_ACTIONS_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              'laws-africa',
+              'bluebell-monaco',
+              'workflows/update-xslt.yaml',
+              'master',
+            });
