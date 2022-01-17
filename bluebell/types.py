@@ -636,21 +636,42 @@ class Remark(Inline):
     default_attribs = {'status': 'editorial'}
 
     def to_dict(self):
-        d = super().to_dict()
+        kids = []
+        batch = []
 
-        # add [
-        if d['children'] and d['children'][0]['type'] == 'text':
-            d['children'][0]['value'] = '[' + d['children'][0]['value']
-        else:
-            d['children'].insert(0, {'type': 'text', 'value': '['})
+        def end_batch():
+            kids.extend(InlineText.many_to_dict(batch))
 
-        # add ]
-        if d['children'][-1]['type'] == 'text':
-            d['children'][-1]['value'] = d['children'][-1]['value'] + ']'
-        else:
-            d['children'].append({'type': 'text', 'value': ']'})
+        # The content may have newlines, which we transform into <br>, by effectively grouping
+        # the content between each newline.
+        content = list(self.content)
+        # list.pop() removes from the end, so reverse the list
+        content.reverse()
+        while content:
+            kid = content.pop()
+            if kid.text == '\n':
+                # end this batch and add a <br>
+                end_batch()
+                batch = []
+                kids.append({
+                    'type': 'element',
+                    'name': 'br'
+                })
+            else:
+                batch.append(kid.content)
 
-        return d
+        if batch:
+            end_batch()
+
+        info = {
+            'type': 'inline',
+            'name': self.name,
+            'children': kids
+        }
+        attribs = self.get_attribs()
+        if attribs:
+            info['attribs'] = attribs
+        return info
 
 
 class Ref(Inline):

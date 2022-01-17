@@ -9,7 +9,7 @@ class InlineTestCase(ParserSupport, TestCase):
 
     def test_remark(self):
         tree = self.parse("""
-[[a remark]]
+{{*[a remark]}}
 """, 'line')
 
         self.assertEqual({
@@ -33,9 +33,100 @@ class InlineTestCase(ParserSupport, TestCase):
 </p>
 """, xml)
 
+    def test_multiline_remark(self):
+        tree = self.parse("""
+{{*[a remark
+
+that covers
+multiple lines]}}
+""", 'line')
+
+        self.assertEqual({
+            'type': 'content',
+            'name': 'p',
+            'children': [{
+                'type': 'inline',
+                'name': 'remark',
+                'attribs': {'status': 'editorial'},
+                'children': [{
+                    'type': 'text',
+                    'value': '[a remark',
+                }, {
+                    'type': 'element',
+                    'name': 'br'
+                }, {
+                    'type': 'element',
+                    'name': 'br'
+                }, {
+                    'type': 'text',
+                    'value': 'that covers',
+                }, {
+                    'type': 'element',
+                    'name': 'br'
+                }, {
+                    'type': 'text',
+                    'value': 'multiple lines]',
+                }]
+            }],
+        }, tree.to_dict())
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <remark status="editorial">[a remark<br/><br/>that covers<br/>multiple lines]</remark>
+</p>
+""", xml)
+
+    def test_multiline_remark_with_indents(self):
+        # this is not allowed and is effectively ignored
+        tree = self.parse("""
+PARA
+    {{*[a remark
+
+        that covers
+    multiple lines]}}
+""", 'hier_element')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<paragraph xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="para_nn_1">
+  <content>
+    <p eId="para_nn_1__p_1">{{*[a remark</p>
+    <p eId="para_nn_1__p_2">that covers</p>
+    <p eId="para_nn_1__p_3">multiple lines]}}</p>
+  </content>
+</paragraph>
+""", xml)
+
+    def test_multiline_remark_with_dedents(self):
+        # this is not allowed and is effectively ignored
+        tree = self.parse("""
+SEC
+  PARA
+    {{*[a remark
+
+  that covers
+    multiple lines]}}
+""", 'hier_element')
+
+        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+
+        self.assertEqual("""<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="sec_nn_1">
+  <paragraph eId="sec_nn_1__para_nn_1">
+    <content>
+      <p eId="sec_nn_1__para_nn_1__p_1">{{*[a remark</p>
+    </content>
+  </paragraph>
+  <wrapUp>
+    <p eId="sec_nn_1__wrapup__p_1">that covers</p>
+    <p eId="sec_nn_1__wrapup__p_2">multiple lines]}}</p>
+  </wrapUp>
+</section>
+""", xml)
+
     def test_remark_with_inlines(self):
         tree = self.parse("""
-[[{{>https://example.com a link}}]]
+{{*[{{>https://example.com a link}}]}}
 """, 'line')
 
         self.assertEqual({
@@ -72,7 +163,7 @@ class InlineTestCase(ParserSupport, TestCase):
 
     def test_inlines_with_remark(self):
         tree = self.parse("""
-**bold {{^super [[foo {{>/bar link}} end]]}} [[and another]]**
+**bold {{^super {{*[foo {{>/bar link}} end]}}}} {{*[and another]}}**
 """, 'line')
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)

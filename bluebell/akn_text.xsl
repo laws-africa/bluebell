@@ -63,41 +63,29 @@
                     <xsl:call-template name="string-replace-all">
                       <xsl:with-param name="text">
                         <xsl:call-template name="string-replace-all">
-                          <xsl:with-param name="text">
-                            <xsl:call-template name="string-replace-all">
-                              <xsl:with-param name="text">
-                                <xsl:call-template name="string-replace-all">
-                                  <xsl:with-param name="text" select="$text" />
-                                  <xsl:with-param name="value"><xsl:value-of select="'\'" /></xsl:with-param>
-                                  <xsl:with-param name="replacement"><xsl:value-of select="'\\'" /></xsl:with-param>
-                                </xsl:call-template>
-                              </xsl:with-param>
-                              <xsl:with-param name="value"><xsl:value-of select="'**'" /></xsl:with-param>
-                              <xsl:with-param name="replacement"><xsl:value-of select="'\*\*'" /></xsl:with-param>
-                            </xsl:call-template>
-                          </xsl:with-param>
-                          <xsl:with-param name="value"><xsl:value-of select="'//'" /></xsl:with-param>
-                          <xsl:with-param name="replacement"><xsl:value-of select="'\/\/'" /></xsl:with-param>
+                          <xsl:with-param name="text" select="$text" />
+                          <xsl:with-param name="value"><xsl:value-of select="'\'" /></xsl:with-param>
+                          <xsl:with-param name="replacement"><xsl:value-of select="'\\'" /></xsl:with-param>
                         </xsl:call-template>
                       </xsl:with-param>
-                      <xsl:with-param name="value"><xsl:value-of select="'__'" /></xsl:with-param>
-                      <xsl:with-param name="replacement"><xsl:value-of select="'\_\_'" /></xsl:with-param>
+                      <xsl:with-param name="value"><xsl:value-of select="'**'" /></xsl:with-param>
+                      <xsl:with-param name="replacement"><xsl:value-of select="'\*\*'" /></xsl:with-param>
                     </xsl:call-template>
                   </xsl:with-param>
-                  <xsl:with-param name="value"><xsl:value-of select="'{{'" /></xsl:with-param>
-                  <xsl:with-param name="replacement"><xsl:value-of select="'\{\{'" /></xsl:with-param>
+                  <xsl:with-param name="value"><xsl:value-of select="'//'" /></xsl:with-param>
+                  <xsl:with-param name="replacement"><xsl:value-of select="'\/\/'" /></xsl:with-param>
                 </xsl:call-template>
               </xsl:with-param>
-              <xsl:with-param name="value"><xsl:value-of select="'}}'" /></xsl:with-param>
-              <xsl:with-param name="replacement"><xsl:value-of select="'\}\}'" /></xsl:with-param>
+              <xsl:with-param name="value"><xsl:value-of select="'__'" /></xsl:with-param>
+              <xsl:with-param name="replacement"><xsl:value-of select="'\_\_'" /></xsl:with-param>
             </xsl:call-template>
           </xsl:with-param>
-          <xsl:with-param name="value"><xsl:value-of select="'[['" /></xsl:with-param>
-          <xsl:with-param name="replacement"><xsl:value-of select="'\[\['" /></xsl:with-param>
+          <xsl:with-param name="value"><xsl:value-of select="'{{'" /></xsl:with-param>
+          <xsl:with-param name="replacement"><xsl:value-of select="'\{\{'" /></xsl:with-param>
         </xsl:call-template>
       </xsl:with-param>
-      <xsl:with-param name="value"><xsl:value-of select="']]'" /></xsl:with-param>
-      <xsl:with-param name="replacement"><xsl:value-of select="'\]\]'" /></xsl:with-param>
+      <xsl:with-param name="value"><xsl:value-of select="'}}'" /></xsl:with-param>
+      <xsl:with-param name="replacement"><xsl:value-of select="'\}\}'" /></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
@@ -643,11 +631,19 @@
   <xsl:template match="a:remark">
     <xsl:param name="indent">0</xsl:param>
 
-    <xsl:text>[</xsl:text>
+    <xsl:text>{{*</xsl:text>
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
-    <xsl:text>]</xsl:text>
+    <xsl:text>}}</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="a:remark/a:br">
+    <xsl:param name="indent">0</xsl:param>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="a:ref">
