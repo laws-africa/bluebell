@@ -251,6 +251,7 @@ PART
   <content>
     <p><b>bold with * and **</b> and <b>**</b></p>
     <p><i>italics // with //</i> and <i>//foo//</i></p>
+    <p><sup>sup with }}</sup>}}</p>
     <p><img src="/foo" /></p>
     <p><ref href="/bar">link</ref></p>
     <p>foo ** <b>**</b> <ref href="#foo">// **</ref> ** //</p>
@@ -262,6 +263,8 @@ PART
   **bold with * and \\*\\*** and **\\*\\***
 
   //italics \\/\\/ with \\/\\/// and //\\/\\/foo\\/\\///
+
+  {{^sup with \}\}}}\}\}
 
   {{IMG /foo}}
 
