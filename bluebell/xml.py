@@ -15,16 +15,19 @@ class IdGenerator:
     # whitespace
     whitespace_re = re.compile(r'\s')
     # general punctuation
-    punct_re = re.compile(r'[\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~]+');
+    punct_re = re.compile(r'[\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~]+')
 
     id_exempt = set("act amendment amendmentList bill debate debateReport doc documentCollection judgment"
                     " officialGazette portion statement body mainBody judgmentBody attachments"
-                    " br tr td th".split())
+                    " br tr td th num heading content".split())
     """ Elements that never have ids, such as top-level documents and self-closing inlines."""
 
     id_unnecessary = set("arguments background conclusions decision header introduction motivation preamble preface"
                          " remedies".split())
     """ Elements for which an id is optional. """
+
+    id_unnecessary_but_pass_to_children = ['intro', 'wrapUp']
+    """ Elements for which an id is optional but any descendants get the parent's prefix."""
 
     num_expected = set("alinea article book chapter clause division indent item level list"
                        " paragraph part point proviso rule section subchapter subclause"
@@ -72,16 +75,12 @@ class IdGenerator:
     def __init__(self):
         self.counters = {}
         self.eid_counter = {}
+        self.mappings = {}
 
     def incr(self, prefix, name):
         sub = self.counters.setdefault(prefix, {})
         sub[name] = sub.get(name, 0) + 1
         return sub[name]
-
-    def is_exempt(self, prefix, item):
-        """ Is this element completely exempt from having an eId?
-        """
-        return item['name'] in self.id_exempt
 
     def is_unnecessary(self, prefix, item):
         """ Certain top-level elements only need ids if they're embedded and therefore have a prefix.
@@ -89,15 +88,10 @@ class IdGenerator:
         return item['name'] in self.id_unnecessary and not prefix
 
     def make(self, prefix, item):
-        if self.is_exempt(prefix, item):
+        if item['name'] in self.id_exempt:
             return None
 
-        item = item or {}
-        if prefix:
-            eid = prefix + '__'
-        else:
-            eid = ''
-
+        eid = f'{prefix}__' if prefix else ''
         name = item['name']
         eid = eid + self.aliases.get(name, name)
 
@@ -180,7 +174,7 @@ class IdGenerator:
 
         The old_prefix and the new_prefix are both without the '__' suffix, to permit exact and substring matches.
         """
-        offset = len(old_prefix) + 2
+        offset = len(old_prefix) + 2 if old_prefix else 0
 
         # rewrite element and children
         for elem in chain([root], root.xpath('.//a:*[@eId]', namespaces={'a': root.nsmap[None]})):
@@ -191,6 +185,65 @@ class IdGenerator:
 
             elif old_id.startswith(old_prefix + '__'):
                 elem.set('eId', new_prefix + '__' + old_id[offset:])
+
+    def rewrite_all_eids(self, doc_tree):
+        """ Rewrites all eId attributes for this tree.
+        :param doc_tree: XML tree
+        :returns: mappings of old --> new eids
+        """
+        self.mappings = {}
+
+        for child in doc_tree.iterchildren():
+            self.rewrite_eid(child)
+
+        return self.mappings
+
+    def rewrite_eid(self, element, prefix=''):
+        """ Rewrites all eIds recursively in `element`, ensuring correctness and uniqueness.
+            :param element: XML element
+            :param prefix: string of parent eId or other prefix to be used (e.g. "preface"); defaults to empty string
+        """
+        tag = element.tag.split('}', 1)[-1]
+        # skip meta blocks entirely
+        if tag == 'meta':
+            return
+
+        # don't generate new eId for `act`, `num`, etc
+        if tag not in self.id_exempt:
+            old_eid = element.get('eId')
+
+            # use preface / preamble as prefix
+            parent = element.getparent().tag.split('}', 1)[-1]
+            if parent in ['preface', 'preamble']:
+                prefix = parent
+
+            # nums = [n.text for n in element.iterchildren(f'{{{element.nsmap[None]}}}num')]
+            num = next((n.text for n in element.iterchildren(f'{{{element.nsmap[None]}}}num')), '')
+            item = {
+                'name': tag,
+                # 'num': nums[0] if nums else '',
+                'num': num,
+            }
+            new_eid = self.make(prefix, item) or ''
+
+            # update prefix on all descendants if changed
+            if old_eid != new_eid:
+                self.rewrite_id_prefix(element, old_eid, new_eid)
+
+                # update mappings if changed (ignores duplicates and elements with no eIds in original)
+                if old_eid:
+                    self.mappings.setdefault(old_eid, new_eid)
+
+            # use the new eId as the prefix if there is one, or keep using the same one
+            prefix = new_eid or prefix
+
+        # include the current tag in the prefix if needed
+        if tag in self.id_unnecessary_but_pass_to_children:
+            prefix = f'{prefix}__{tag.lower()}' if prefix else tag.lower()
+
+        # keep drilling down
+        for kid in element.iterchildren():
+            self.rewrite_eid(kid, prefix)
 
 
 class XmlGenerator:
