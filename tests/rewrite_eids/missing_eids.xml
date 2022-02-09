@@ -1,0 +1,450 @@
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <act contains="singleVersion" name="act">
+    <meta>
+      <identification source="#cobalt">
+        <FRBRWork>
+          <FRBRthis value="/akn/za/act/2021/6/!main"/>
+          <FRBRuri value="/akn/za/act/2021/6"/>
+          <FRBRalias value="Work with uncommenced provisions, only one commencement so far" name="title"/>
+          <FRBRdate date="2021" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRcountry value="za"/>
+          <FRBRnumber value="6"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/akn/za/act/2021/6/sot@2022-08-12/!main"/>
+          <FRBRuri value="/akn/za/act/2021/6/sot@2022-08-12"/>
+          <FRBRdate date="2022-08-12" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRlanguage language="sot"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/akn/za/act/2021/6/sot@2022-08-12/!main"/>
+          <FRBRuri value="/akn/za/act/2021/6/sot@2022-08-12"/>
+          <FRBRdate date="2022-02-03" name="Generation"/>
+          <FRBRauthor href=""/>
+        </FRBRManifestation>
+      </identification>
+      <publication number="" name="" showAs="" date="2021-10-11"/>
+      <lifecycle source="#Laws-Africa">
+        <eventRef eId="amendment-2021-10-20" date="2021-10-20" type="amendment" source="#amendment-0-source"/>
+      </lifecycle>
+      <references source="#cobalt">
+        <TLCOrganization eId="Laws-Africa" href="http://localhost:8000" showAs="Laws.Africa"/>
+        <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        <passiveRef eId="amendment-0-source" href="/akn/za/act/2021/6" showAs="Work with uncommenced provisions, only one commencement so far"/>
+      </references>
+    </meta>
+    <preface>
+      <p>ACT</p>
+      <longTitle>
+        <p>To do cool stuff.</p>
+      </longTitle>
+    </preface>
+    <preamble>
+      <p>Whereas certain things need to happen,</p>
+      <blockList>
+        <item>
+          <num>a</num>
+          <p>Testy</p>
+        </item>
+        <item>
+          <num>b</num>
+          <p eId="">Testy</p>
+        </item>
+        <listWrapUp>And this?</listWrapUp>
+      </blockList>
+      <ul eId="">
+        <li><p>First</p></li>
+        <li eId=""><p>Second</p></li>
+      </ul>
+      <p>We therefore say the following:—</p>
+    </preamble>
+    <body>
+      <chapter>
+        <num>1</num>
+        <heading>Heading</heading>
+        <section>
+          <num>1.</num>
+          <heading>First section</heading>
+          <content>
+            <crossHeading>Random heading</crossHeading>
+            <block name="quote"><embeddedStructure startQuote="“"><p><u>Quote</u> text.|</p></embeddedStructure></block>
+            <p><i>(Emphasis added)</i></p>
+            <p>Content<sup><authorialNote marker="x" placement="bottom"><p>Content:</p><block name="quote"><embeddedStructure startQuote="|"><p><u>Quote</u> text.|</p></embeddedStructure></block><p><i>(Emphasis added)</i></p><paragraph><num>a.</num><content><p>Yep, still in footnote.</p></content></paragraph><p>Annd, yes, still in.</p></authorialNote></sup> and <sup><authorialNote marker="x" placement="bottom"><p>Content:</p><block name="quote"><embeddedStructure startQuote="{"><p><u>Quote</u> text.|</p></embeddedStructure></block><p><i>(Emphasis added)</i></p><paragraph><num>a.</num><content><p>Yep, still in footnote.</p></content></paragraph><p>Annd, yes, still in.</p></authorialNote></sup></p>
+          </content>
+        </section>
+        <section>
+          <num>2.</num>
+          <heading>Second section</heading>
+          <intro>
+            <p>Intro</p>
+          </intro>
+          <paragraph>
+            <num>(a)</num>
+            <content>
+              <p>first para</p>
+            </content>
+          </paragraph>
+          <paragraph>
+            <num>(b)</num>
+            <content>
+              <p>second para</p>
+            </content>
+          </paragraph>
+          <crossHeading>Random heading</crossHeading>
+          <paragraph>
+            <num>(c)</num>
+            <content>
+              <p>third para</p>
+            </content>
+          </paragraph>
+          <wrapUp>
+            <p>Wrap-up</p>
+          </wrapUp>
+        </section>
+        <section>
+          <num>2.</num>
+          <heading>Second section again!</heading>
+          <intro>
+            <p>Intro</p>
+          </intro>
+          <paragraph>
+            <num>(a)</num>
+            <content>
+              <p>first para</p>
+            </content>
+          </paragraph>
+          <paragraph>
+            <num>(b)</num>
+            <content>
+              <p>second para</p>
+            </content>
+          </paragraph>
+          <crossHeading>Random heading</crossHeading>
+          <paragraph>
+            <num>(c)</num>
+            <content>
+              <p>third para</p>
+            </content>
+          </paragraph>
+          <wrapUp>
+            <p>Wrap-up</p>
+          </wrapUp>
+        </section>
+        <section>
+          <num>3.</num>
+          <heading>Third section</heading>
+          <subsection>
+            <num>(1)</num>
+            <intro>
+              <p>First subsection:</p>
+            </intro>
+            <paragraph>
+              <num>(a)</num>
+              <content>
+                <p>first para</p>
+              </content>
+            </paragraph>
+            <paragraph>
+              <num>(b)</num>
+              <content>
+                <p>second para</p>
+              </content>
+            </paragraph>
+            <paragraph>
+              <num>(c)</num>
+              <content>
+                <p>third para</p>
+              </content>
+            </paragraph>
+          </subsection>
+          <subsection>
+            <num>(2)</num>
+            <intro>
+              <p>Second subsection.</p>
+              <p>Intro text:</p>
+            </intro>
+            <paragraph>
+              <num>(a)</num>
+              <content>
+                <p>first para</p>
+              </content>
+            </paragraph>
+            <paragraph>
+              <num>(b)</num>
+              <intro>
+                <p>second para</p>
+              </intro>
+              <subparagraph>
+                <num>(i)</num>
+                <content>
+                  <p>first subpara</p>
+                </content>
+              </subparagraph>
+              <subparagraph>
+                <num>(ii)</num>
+                <content>
+                  <p>second subpara</p>
+                </content>
+              </subparagraph>
+              <subparagraph>
+                <num>(iii)</num>
+                <content>
+                  <p>third subpara</p>
+                </content>
+              </subparagraph>
+              <wrapUp>
+                <p>wrap-up</p>
+              </wrapUp>
+            </paragraph>
+            <paragraph>
+              <num>(c)</num>
+              <content>
+                <p>third para</p>
+              </content>
+            </paragraph>
+          </subsection>
+        </section>
+      </chapter>
+      <chapter>
+        <num>2</num>
+        <subpart>
+          <heading>First unnumbered subpart</heading>
+          <section>
+            <num>4.</num>
+            <heading>Fourth section</heading>
+            <content>
+              <p>Content</p>
+            </content>
+          </section>
+        </subpart>
+        <subpart>
+          <heading>Second unnumbered subpart</heading>
+          <section>
+            <num>5.</num>
+            <heading>Fifth section</heading>
+            <content>
+              <p>Content</p>
+            </content>
+          </section>
+          <section>
+            <num>6.</num>
+            <heading>Sixth section</heading>
+            <content>
+              <p>Content</p>
+            </content>
+          </section>
+        </subpart>
+      </chapter>
+    </body>
+    <attachments>
+      <attachment>
+        <heading>First Schedule</heading>
+        <subheading>Laws repealed</subheading>
+        <doc contains="originalVersion" name="schedule">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_1"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1"/>
+                <FRBRalias value="Untitled" name="title"/>
+                <FRBRdate date="2021" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="xx-playground"/>
+                <FRBRnumber value="1"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_1"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_1"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+            <references source="#cobalt">
+              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+            </references>
+          </meta>
+          <mainBody>
+            <table>
+              <tr>
+                <th>
+                  <p>Name and number</p>
+                </th>
+                <th>
+                  <p>Extent</p>
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <p>5 of 2012</p>
+                </td>
+                <td>
+                  <p>All</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p>13 of 1998</p>
+                </td>
+                <td>
+                  <p>All except Part 1</p>
+                </td>
+              </tr>
+            </table>
+          </mainBody>
+        </doc>
+      </attachment>
+      <attachment>
+        <heading>Second Schedule</heading>
+        <subheading>This one has sections</subheading>
+        <doc contains="originalVersion" name="schedule">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_2"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1"/>
+                <FRBRalias value="Untitled" name="title"/>
+                <FRBRdate date="2021" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="xx-playground"/>
+                <FRBRnumber value="1"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_2"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_2"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+            <references source="#cobalt">
+              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+            </references>
+          </meta>
+          <mainBody>
+            <part>
+              <num>I</num>
+              <heading>Heading</heading>
+              <section>
+                <num>1.</num>
+                <heading>First</heading>
+                <content>
+                  <p>Content</p>
+                </content>
+              </section>
+              <section>
+                <num>2.</num>
+                <heading>Second</heading>
+                <content>
+                  <p>Content</p>
+                </content>
+              </section>
+            </part>
+            <part>
+              <num>II</num>
+              <heading>Heading</heading>
+              <section>
+                <num>1.</num>
+                <heading>First</heading>
+                <content>
+                  <p>Content</p>
+                </content>
+              </section>
+              <section>
+                <num>2.</num>
+                <heading>Second</heading>
+                <content>
+                  <p>Content</p>
+                </content>
+              </section>
+            </part>
+          </mainBody>
+        </doc>
+      </attachment>
+      <attachment>
+        <heading>Third Schedule</heading>
+        <subheading>This one has paragraphs</subheading>
+        <doc contains="originalVersion" name="schedule">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_3"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1"/>
+                <FRBRalias value="Untitled" name="title"/>
+                <FRBRdate date="2021" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="xx-playground"/>
+                <FRBRnumber value="1"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_3"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_3"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+            <references source="#cobalt">
+              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+            </references>
+          </meta>
+          <mainBody>
+            <p>Intro</p>
+            <p>Intro</p>
+            <p>Intro:</p>
+            <paragraph>
+              <num>1.</num>
+              <content>
+                <p>An item</p>
+              </content>
+            </paragraph>
+            <paragraph>
+              <num>2.</num>
+              <content>
+                <p>An item</p>
+              </content>
+            </paragraph>
+            <paragraph>
+              <num>3.</num>
+              <content>
+                <p>An item</p>
+              </content>
+            </paragraph>
+            <paragraph>
+              <num>4.</num>
+              <content>
+                <p>An item</p>
+              </content>
+            </paragraph>
+            <paragraph>
+              <num>5.</num>
+              <content>
+                <p>An item</p>
+              </content>
+            </paragraph>
+          </mainBody>
+        </doc>
+      </attachment>
+    </attachments>
+  </act>
+</akomaNtoso>
