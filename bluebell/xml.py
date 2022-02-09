@@ -18,15 +18,18 @@ class IdGenerator:
     punct_re = re.compile(r'[\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~]+')
 
     id_exempt = set("act amendment amendmentList bill debate debateReport doc documentCollection judgment"
-                    " officialGazette portion statement body mainBody judgmentBody attachments"
-                    " br tr td th num heading content".split())
+                    " officialGazette portion statement"
+                    " amendmentBody attachments body collectionBody components coverPage debateBody"
+                    " judgmentBody mainBody meta portionBody"
+                    " br tr td th num heading subheading content b i u sub sup img ref".split())
+    # TODO: container, block, inline, marker, div, span, abbr, a, caption, etc?
     """ Elements that never have ids, such as top-level documents and self-closing inlines."""
 
     id_unnecessary = set("arguments background conclusions decision header introduction motivation preamble preface"
                          " remedies".split())
     """ Elements for which an id is optional. """
 
-    id_unnecessary_but_pass_to_children = ['intro', 'wrapUp']
+    id_unnecessary_but_pass_to_children = set("intro wrapUp preface preamble".split())
     """ Elements for which an id is optional but any descendants get the parent's prefix."""
 
     num_expected = set("alinea article book chapter clause division indent item level list"
@@ -174,11 +177,13 @@ class IdGenerator:
 
         The old_prefix and the new_prefix are both without the '__' suffix, to permit exact and substring matches.
         """
-        offset = len(old_prefix) + 2 if old_prefix else 0
+        # TODO: test this explicitly?
+        old_prefix = old_prefix or ''
+        offset = len(old_prefix) + 2
 
         # rewrite element and children
         for elem in chain([root], root.xpath('.//a:*[@eId]', namespaces={'a': root.nsmap[None]})):
-            old_id = elem.get('eId')
+            old_id = elem.get('eId', '')
 
             if old_id == old_prefix:
                 elem.set('eId', new_prefix)
@@ -209,19 +214,17 @@ class IdGenerator:
             return
 
         # don't generate new eId for `act`, `num`, etc
-        if tag not in self.id_exempt:
-            old_eid = element.get('eId')
+        if tag not in self.id_exempt and tag not in self.id_unnecessary_but_pass_to_children:
+            old_eid = element.get('eId', '')
 
             # use preface / preamble as prefix
             parent = element.getparent().tag.split('}', 1)[-1]
             if parent in ['preface', 'preamble']:
                 prefix = parent
 
-            # nums = [n.text for n in element.iterchildren(f'{{{element.nsmap[None]}}}num')]
             num = next((n.text for n in element.iterchildren(f'{{{element.nsmap[None]}}}num')), '')
             item = {
                 'name': tag,
-                # 'num': nums[0] if nums else '',
                 'num': num,
             }
             new_eid = self.make(prefix, item) or ''
