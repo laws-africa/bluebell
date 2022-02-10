@@ -7,6 +7,7 @@ from lxml import etree
 from cobalt import StructuredDocument
 from cobalt.schemas import assert_validates
 from tests.support import ParserSupport
+from bluebell.xml import IdGenerator
 
 
 class IdGeneratorTestCase(ParserSupport, TestCase):
@@ -289,3 +290,116 @@ PARA
 
     def test_eids_debatereport(self):
         self.roundtrip_xml('eids_debatereport', root='debatereport')
+
+    def rewrite_compare_eids(self, text, root='doc'):
+        """ Ensures eIds are rewritten exactly the same as they're written initially.
+        """
+        generator = IdGenerator()
+        tree = self.parse(text, root)
+        xml = self.to_xml(tree.to_dict())
+        old_xml = etree.tostring(xml, encoding='unicode', pretty_print=True)
+        generator.rewrite_all_eids(xml)
+        new_xml = etree.tostring(xml, encoding='unicode', pretty_print=True)
+        self.assertEqual(old_xml, new_xml)
+
+    def test_rewrite_eids_no_num(self):
+        self.rewrite_compare_eids("""
+PARA
+  Intro
+
+PARA 1.
+  First para
+
+PARA 1A.
+  Added in later
+
+PARA
+  Unnumbered
+
+PARA 2.
+  Second (actually third/fourth/fifth, depending on who's counting) para.
+""")
+
+    def test_rewrite_eids_duplicate_num(self):
+        self.rewrite_compare_eids("""
+PARA 2.
+  Second para.
+
+PARA 2.
+  Another para with the num 2.
+
+PARA 2.3..74.5.
+  Interesting number.
+
+PARA 2.3..74.5.
+  Duplicate interesting number.
+
+PARA 2.3..74.5_2
+  Highly unlikely duplicate of eId of previous.
+""")
+
+    def test_rewrite_eids_duplicate_no_num(self):
+        self.rewrite_compare_eids("""
+PARA
+  Unnumbered para.
+
+PARA
+  Second unnumbered para.
+
+PARA (nn)
+  Perfectly possible paragraph numbering.
+
+PARA nn_2
+  Para nn_2, which is the second para's eId.
+
+PARA nn_2
+  Para nn_2, which is a dup of the second para's eId.
+
+PARA nn-2
+  Para nn-2, which we don't currently support because we don't like hyphens in numbers
+""")
+
+    def test_rewrite_eids_duplicate_nn(self):
+        self.rewrite_compare_eids("""
+PARA (mm)
+  Perfectly possible paragraph mm.
+
+PARA (nn)
+  Perfectly possible paragraph nn.
+
+PARA (oo)
+  Perfectly possible paragraph oo.
+
+PARA
+  Unnumbered para.
+""")
+
+    def rewrite_fix_eids(self, xml_in, xml_out):
+        """ Ensures incorrect or older-style eIds are rewritten correctly.
+        """
+        dir = os.path.join(os.path.dirname(__file__), 'rewrite_eids')
+        fname_in = os.path.join(dir, f'{xml_in}.xml')
+        with open(fname_in, 'rt') as f:
+            old_xml = f.read()
+        fname_out = os.path.join(dir, f'{xml_out}.xml')
+        with open(fname_out, 'rt') as f:
+            expected = f.read()
+
+        generator = IdGenerator()
+        xml = etree.fromstring(old_xml)
+        generator.rewrite_all_eids(xml)
+        actual = etree.tostring(xml, encoding='unicode', pretty_print=True)
+
+        self.assertEqual(expected, actual)
+
+    def test_rewrite_fix_eids_unchanged(self):
+        """ Checks that rewrite_all_eids() doesn't change a document with correct eids"""
+        self.rewrite_fix_eids('out', 'out')
+        self.rewrite_fix_eids('unchanged_1', 'unchanged_1')
+        self.rewrite_fix_eids('unchanged_2', 'unchanged_2')
+
+    def test_rewrite_fix_eids_fixed(self):
+        """ Checks that rewrite_all_eids() does fix a document with incorrect or missing eids"""
+        self.rewrite_fix_eids('bad_eids', 'out')
+        self.rewrite_fix_eids('missing_eids', 'out')
+        self.rewrite_fix_eids('empty_doc_in', 'empty_doc_out')
