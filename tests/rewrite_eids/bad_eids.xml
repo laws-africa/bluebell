@@ -1,0 +1,450 @@
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <act contains="singleVersion" name="act">
+    <meta>
+      <identification source="#cobalt">
+        <FRBRWork>
+          <FRBRthis value="/akn/za/act/2021/6/!main"/>
+          <FRBRuri value="/akn/za/act/2021/6"/>
+          <FRBRalias value="Work with uncommenced provisions, only one commencement so far" name="title"/>
+          <FRBRdate date="2021" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRcountry value="za"/>
+          <FRBRnumber value="6"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/akn/za/act/2021/6/sot@2022-08-12/!main"/>
+          <FRBRuri value="/akn/za/act/2021/6/sot@2022-08-12"/>
+          <FRBRdate date="2022-08-12" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRlanguage language="sot"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/akn/za/act/2021/6/sot@2022-08-12/!main"/>
+          <FRBRuri value="/akn/za/act/2021/6/sot@2022-08-12"/>
+          <FRBRdate date="2022-02-03" name="Generation"/>
+          <FRBRauthor href=""/>
+        </FRBRManifestation>
+      </identification>
+      <publication number="" name="" showAs="" date="2021-10-11"/>
+      <lifecycle source="#Laws-Africa">
+        <eventRef eId="amendment-2021-10-20" date="2021-10-20" type="amendment" source="#amendment-0-source"/>
+      </lifecycle>
+      <references source="#cobalt">
+        <TLCOrganization eId="Laws-Africa" href="http://localhost:8000" showAs="Laws.Africa"/>
+        <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        <passiveRef eId="amendment-0-source" href="/akn/za/act/2021/6" showAs="Work with uncommenced provisions, only one commencement so far"/>
+      </references>
+    </meta>
+    <preface>
+      <p eId="p_1">ACT</p>
+      <longTitle eId="longTitle">
+        <p eId="preface__longTitle_1__p_1__1">To do cool stuff.</p>
+      </longTitle>
+    </preface>
+    <preamble>
+      <p eId="__p_1">Whereas certain things need to happen,</p>
+      <blockList eId="list_1">
+        <item eId="item_a">
+          <num>a</num>
+          <p eId="p_1">Testy</p>
+        </item>
+        <item eId="preamble__list_1__item_b">
+          <num>b</num>
+          <p eId="">Testy</p>
+        </item>
+        <listWrapUp eId="nope">And this?</listWrapUp>
+      </blockList>
+      <ul eId="">
+        <li eId="li_1"><p eId="p_1">First</p></li>
+        <li eId=""><p eId="preamble__ul">Second</p></li>
+      </ul>
+      <p eId="xxx">We therefore say the following:—</p>
+    </preamble>
+    <body>
+      <chapter eId="chp_1">
+        <num>1</num>
+        <heading>Heading</heading>
+        <section eId="sec_1">
+          <num>1.</num>
+          <heading>First section</heading>
+          <content>
+            <crossHeading eId="hcontainer">Random heading</crossHeading>
+            <block name="quote" eId="section_1.p_1"><embeddedStructure startQuote="“" eId="chp_1__sec_1__block_1__embeddedStructure_1"><p eId="chp_1__sec_1__block_1__embeddedStructure_1__p_1"><u>Quote</u> text.|</p></embeddedStructure></block>
+            <p eId="chp_1__sec_1__p_1"><i>(Emphasis added)</i></p>
+            <p eId="chp_1__sec_1__p_2">Content<sup><authorialNote marker="x" placement="bottom" eId="chp_1__sec_1__p_2__authorialNote_1"><p eId="chp_1__sec_1__p_2__authorialNote_1__p_1">Content:</p><block name="quote" eId="chp_1__sec_1__p_2__authorialNote_1__block_1"><embeddedStructure startQuote="|" eId="chp_1__sec_1__p_2__authorialNote_1__block_1__embeddedStructure_1"><p eId="chp_1__sec_1__p_2__authorialNote_1__block_1__embeddedStructure_1__p_1"><u>Quote</u> text.|</p></embeddedStructure></block><p eId="chp_1__sec_1__p_2__authorialNote_1__p_2"><i>(Emphasis added)</i></p><paragraph eId="chp_1__sec_1__p_2__authorialNote_1__para_a"><num>a.</num><content><p eId="chp_1__sec_1__p_2__authorialNote_1__para_a__p_1">Yep, still in footnote.</p></content></paragraph><p eId="chp_1__sec_1__p_2__authorialNote_1__p_3">Annd, yes, still in.</p></authorialNote></sup> and <sup><authorialNote marker="x" placement="bottom" eId="chp_1__sec_1__p_2__authorialNote_2"><p eId="chp_1__sec_1__p_2__authorialNote_2__p_1">Content:</p><block name="quote" eId="chp_1__sec_1__p_2__authorialNote_2__block_1"><embeddedStructure startQuote="{" eId="chp_1__sec_1__p_2__authorialNote_2__block_1__embeddedStructure_1"><p eId="chp_1__sec_1__p_2__authorialNote_2__block_1__embeddedStructure_1__p_1"><u>Quote</u> text.|</p></embeddedStructure></block><p eId="chp_1__sec_1__p_2__authorialNote_2__p_2"><i>(Emphasis added)</i></p><paragraph eId="chp_1__sec_1__p_2__authorialNote_2__para_a"><num>a.</num><content><p eId="chp_1__sec_1__p_2__authorialNote_2__para_a__p_1">Yep, still in footnote.</p></content></paragraph><p eId="chp_1__sec_1__p_2__authorialNote_2__p_3">Annd, yes, still in.</p></authorialNote></sup></p>
+          </content>
+        </section>
+        <section eId="sec_2">
+          <num>2.</num>
+          <heading>Second section</heading>
+          <intro>
+            <p eId="sec_2">Intro</p>
+          </intro>
+          <paragraph eId="sec_2__para_a">
+            <num>(a)</num>
+            <content>
+              <p eId="sec_2__para_a__p_1">first para</p>
+            </content>
+          </paragraph>
+          <paragraph eId="sec_2__para_b">
+            <num>(b)</num>
+            <content>
+              <p eId="sec_2__para_b__p_1">second para</p>
+            </content>
+          </paragraph>
+          <crossHeading eId="sec_2__crossHeading_1">Random heading</crossHeading>
+          <paragraph eId="sec_2__para_c">
+            <num>(c)</num>
+            <content>
+              <p eId="sec_2__para_c__p_1">third para</p>
+            </content>
+          </paragraph>
+          <wrapUp>
+            <p eId="sec_2__wrapup__p_1">Wrap-up</p>
+          </wrapUp>
+        </section>
+        <section eId="sec_2">
+          <num>2.</num>
+          <heading>Second section again!</heading>
+          <intro>
+            <p eId="chp_1__sec_2_2__intro__p_1">Intro</p>
+          </intro>
+          <paragraph eId="sec_2__para_a">
+            <num>(a)</num>
+            <content>
+              <p eId="sec_2__para_a__p_1">first para</p>
+            </content>
+          </paragraph>
+          <paragraph eId="sec_2__para_b">
+            <num>(b)</num>
+            <content>
+              <p eId="sec_2__para_b__p_1">second para</p>
+            </content>
+          </paragraph>
+          <crossHeading eId="sec_2__crossHeading_1">Random heading</crossHeading>
+          <paragraph eId="sec_2__para_c">
+            <num>(c)</num>
+            <content>
+              <p eId="sec_2__para_c__p_1">third para</p>
+            </content>
+          </paragraph>
+          <wrapUp>
+            <p eId="sec_2__wrapup__p_1">Wrap-up</p>
+          </wrapUp>
+        </section>
+        <section eId="totally_wrong">
+          <num>3.</num>
+          <heading>Third section</heading>
+          <subsection eId="even more wrong">
+            <num>(1)</num>
+            <intro>
+              <p eId="chp_1__sec_3__subsec_1__intro__p_1">First subsection:</p>
+            </intro>
+            <paragraph eId="much, much more wrong than we could imagine">
+              <num>(a)</num>
+              <content>
+                <p eId=":)">first para</p>
+              </content>
+            </paragraph>
+            <paragraph eId="">
+              <num>(b)</num>
+              <content>
+                <p eId="0">second para</p>
+              </content>
+            </paragraph>
+            <paragraph eId="None">
+              <num>(c)</num>
+              <content>
+                <p eId="______">third para</p>
+              </content>
+            </paragraph>
+          </subsection>
+          <subsection eId="xyzabc">
+            <num>(2)</num>
+            <intro>
+              <p eId="chp_1__sec_3__subsec_2__intro__p_1">Second subsection.</p>
+              <p eId="chp_1__sec_3__subsec_2__intro__p_2">Intro text:</p>
+            </intro>
+            <paragraph eId="chp_1__sec_3__subsec_2__para_a">
+              <num>(a)</num>
+              <content>
+                <p eId="chp_1__sec_3__subsec_2__para_a__p_1">first para</p>
+              </content>
+            </paragraph>
+            <paragraph eId="chp_1__sec_3__subsec_2__para_b">
+              <num>(b)</num>
+              <intro>
+                <p eId="chp_1__sec_3__subsec_2__para_b__intro__p_1">second para</p>
+              </intro>
+              <subparagraph eId="chp_1__sec_3__subsec_2__para_b__subpara_i">
+                <num>(i)</num>
+                <content>
+                  <p eId="chp_1__sec_3__subsec_2__para_b__subpara_i__p_1">first subpara</p>
+                </content>
+              </subparagraph>
+              <subparagraph eId="chp_1__sec_3__subsec_2__para_b__subpara_ii">
+                <num>(ii)</num>
+                <content>
+                  <p eId="chp_1__sec_3__subsec_2__para_b__subpara_ii__p_1">second subpara</p>
+                </content>
+              </subparagraph>
+              <subparagraph eId="chp_1__sec_3__subsec_2__para_b__subpara_iii">
+                <num>(iii)</num>
+                <content>
+                  <p eId="chp_1__sec_3__subsec_2__para_b__subpara_iii__p_1">third subpara</p>
+                </content>
+              </subparagraph>
+              <wrapUp>
+                <p eId="chp_1__sec_3__subsec_2__para_b__wrapup__p_1">wrap-up</p>
+              </wrapUp>
+            </paragraph>
+            <paragraph eId="chp_1__sec_3__subsec_2__para_c">
+              <num>(c)</num>
+              <content>
+                <p eId="chp_1__sec_3__subsec_2__para_c__p_1">third para</p>
+              </content>
+            </paragraph>
+          </subsection>
+        </section>
+      </chapter>
+      <chapter eId="chp_2">
+        <num>2</num>
+        <subpart eId="subpart">
+          <heading>First unnumbered subpart</heading>
+          <section eId="sec_4">
+            <num>4.</num>
+            <heading>Fourth section</heading>
+            <content>
+              <p eId="sec_4">Content</p>
+            </content>
+          </section>
+        </subpart>
+        <subpart eId="subpart">
+          <heading>Second unnumbered subpart</heading>
+          <section eId="sec_5">
+            <num>5.</num>
+            <heading>Fifth section</heading>
+            <content>
+              <p eId="sec_5">Content</p>
+            </content>
+          </section>
+          <section eId="sec_6">
+            <num>6.</num>
+            <heading>Sixth section</heading>
+            <content>
+              <p eId="sec_6">Content</p>
+            </content>
+          </section>
+        </subpart>
+      </chapter>
+    </body>
+    <attachments>
+      <attachment eId="first_schedule">
+        <heading>First Schedule</heading>
+        <subheading>Laws repealed</subheading>
+        <doc contains="originalVersion" name="schedule">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_1"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1"/>
+                <FRBRalias value="Untitled" name="title"/>
+                <FRBRdate date="2021" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="xx-playground"/>
+                <FRBRnumber value="1"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_1"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_1"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+            <references source="#cobalt">
+              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+            </references>
+          </meta>
+          <mainBody>
+            <table eId="first_schedule">
+              <tr>
+                <th>
+                  <p eId="p_1">Name and number</p>
+                </th>
+                <th>
+                  <p eId="p_2">Extent</p>
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <p eId="p_3">5 of 2012</p>
+                </td>
+                <td>
+                  <p eId="p_4">All</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p eId="p_5">13 of 1998</p>
+                </td>
+                <td>
+                  <p eId="p_6">All except Part 1</p>
+                </td>
+              </tr>
+            </table>
+          </mainBody>
+        </doc>
+      </attachment>
+      <attachment eId="">
+        <heading>Second Schedule</heading>
+        <subheading>This one has sections</subheading>
+        <doc contains="originalVersion" name="schedule">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_2"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1"/>
+                <FRBRalias value="Untitled" name="title"/>
+                <FRBRdate date="2021" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="xx-playground"/>
+                <FRBRnumber value="1"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_2"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_2"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+            <references source="#cobalt">
+              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+            </references>
+          </meta>
+          <mainBody>
+            <part eId="part_I">
+              <num>I</num>
+              <heading>Heading</heading>
+              <section eId="sec_1">
+                <num>1.</num>
+                <heading>First</heading>
+                <content>
+                  <p eId="p_1">Content</p>
+                </content>
+              </section>
+              <section eId="sec_2">
+                <num>2.</num>
+                <heading>Second</heading>
+                <content>
+                  <p eId="p_1">Content</p>
+                </content>
+              </section>
+            </part>
+            <part eId="part deux">
+              <num>II</num>
+              <heading>Heading</heading>
+              <section eId="">
+                <num>1.</num>
+                <heading>First</heading>
+                <content>
+                  <p eId="p_1">Content</p>
+                </content>
+              </section>
+              <section eId="sec_2">
+                <num>2.</num>
+                <heading>Second</heading>
+                <content>
+                  <p eId="sec_2__p_1">Content</p>
+                </content>
+              </section>
+            </part>
+          </mainBody>
+        </doc>
+      </attachment>
+      <attachment eId="att_">
+        <heading>Third Schedule</heading>
+        <subheading>This one has paragraphs</subheading>
+        <doc contains="originalVersion" name="schedule">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_3"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1"/>
+                <FRBRalias value="Untitled" name="title"/>
+                <FRBRdate date="2021" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="xx-playground"/>
+                <FRBRnumber value="1"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_3"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!schedule_3"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+            <references source="#cobalt">
+              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+            </references>
+          </meta>
+          <mainBody>
+            <p eId="p_1">Intro</p>
+            <p eId="p_2">Intro</p>
+            <p eId="p_3">Intro:</p>
+            <paragraph eId="para_1">
+              <num>1.</num>
+              <content>
+                <p eId="p_1">An item</p>
+              </content>
+            </paragraph>
+            <paragraph eId="att_3__">
+              <num>2.</num>
+              <content>
+                <p eId="att_3__para_2__p_2">An item</p>
+              </content>
+            </paragraph>
+            <paragraph eId="att_3__para_3__some_nonsense">
+              <num>3.</num>
+              <content>
+                <p eId="att_3__para_3__p_1">An item</p>
+              </content>
+            </paragraph>
+            <paragraph eId="att_3__para_4">
+              <num>4.</num>
+              <content>
+                <p eId="att_3__para_4__p_1">An item</p>
+              </content>
+            </paragraph>
+            <paragraph eId="att_3__para_5">
+              <num>5.</num>
+              <content>
+                <p eId="att_3__para_5__p_1">An item</p>
+              </content>
+            </paragraph>
+          </mainBody>
+        </doc>
+      </attachment>
+    </attachments>
+  </act>
+</akomaNtoso>
