@@ -7,12 +7,12 @@ grammar akn
   # Judgment
   # ------------------------------------------------------------------------------ 
 
-  judgment          <- judgment_body
+  judgment          <- judgmentBody
                        conclusions:conclusions?
                        attachments:attachments?
                        <Judgment>
 
-  judgment_body     <- introduction:introduction?
+  judgmentBody      <- introduction:introduction?
                        background:background?
                        arguments:arguments?
                        remedies:remedies?
@@ -40,7 +40,7 @@ grammar akn
   # Open structure (doc, statement, debateReport, etc.)
   # ------------------------------------------------------------------------------
 
-  debatereport     <- open_structure <DebateReport>
+  debateReport      <- open_structure <DebateReport>
 
   doc               <- open_structure <Doc>
 
@@ -49,7 +49,7 @@ grammar akn
   # TODO: components
   open_structure    <- preface:preface?
                        preamble:preamble?
-                       main_body
+                       mainBody
                        conclusions:conclusions?
                        attachments:attachments?
                        <OpenStructure>
@@ -110,7 +110,7 @@ grammar akn
                        <Body>
 
                      # body with mixed block and hier elements
-  main_body         <- body_marker?
+  mainBody          <- body_marker?
                        content:(!conclusions_marker !attachment_marker hier_block_indent)*
                        <MainBody>
 
