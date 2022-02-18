@@ -491,7 +491,7 @@ Text with {{inline{name em} some text}} and {{inline no name}}.
 Text with {{inline.foo.bar{name em} some text}}
 Class {{inline.boom but no attrs}}
 Class but no text {{term.foo}}
-""", 'main_body')
+""", 'mainBody')
 
         xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
 
