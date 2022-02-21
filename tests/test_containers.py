@@ -166,7 +166,7 @@ a
   b
     c
       d
-""", 'main_body')
+""", 'mainBody')
         self.assertEqual({
             'name': 'mainBody',
             'type': 'element',
