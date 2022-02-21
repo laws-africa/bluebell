@@ -746,11 +746,15 @@ class DocumentRoot:
     children = []
     required_children = set()
 
-    def add_empty_required(self, kids, tag):
-        kids.append({
+    def make_empty(self, tag):
+        return {
             'type': 'element',
             'name': tag,
-        })
+        }
+
+    def add_empty_required(self, kids, tag):
+        maker = getattr(self, f'make_empty_{tag}', self.make_empty)
+        kids.append(maker(tag))
         return kids
 
     def to_dict(self):
@@ -772,7 +776,24 @@ class DocumentRoot:
 
 class HierarchicalStructure(DocumentRoot):
     children = ['preface', 'preamble', 'body', 'conclusions', 'attachments']
+    required_children = {'body'}
     name = 'hierarchicalStructure'
+
+    def make_empty_body(self, tag):
+        return {
+            'type': 'element',
+            'name': tag,
+            'children': [{
+                'type': 'element',
+                'name': 'hcontainer',
+                'attribs': {'name': 'hcontainer'},
+                'children': [{
+                    'type': 'element',
+                    'name': 'content',
+                    'children': [empty_p()],
+                }]
+            }]
+        }
 
 
 class Act(HierarchicalStructure):
@@ -784,25 +805,33 @@ class Bill(HierarchicalStructure):
 
 
 class Judgment(DocumentRoot):
-    children = ['header', 'judgment_body', 'conclusions', 'attachments']
-    required_children = ['header']
+    children = ['header', 'judgmentBody', 'conclusions', 'attachments']
+    required_children = {'header', 'judgmentBody'}
     name = 'judgment'
+
+    def make_empty_judgmentBody(self, tag):
+        return {
+            'type': 'element',
+            'name': tag,
+            'children': [{
+                'type': 'element',
+                'name': 'introduction',
+                'children': [empty_p()],
+            }]
+        }
 
 
 class OpenStructure(DocumentRoot):
-    children = ['preface', 'preamble', 'main_body', 'conclusions', 'attachments']
+    children = ['preface', 'preamble', 'mainBody', 'conclusions', 'attachments']
     name = 'openStructure'
-    required_children = {'main_body'}
+    required_children = {'mainBody'}
 
-    def add_empty_required(self, kids, tag):
-        if tag == 'main_body':
-            kids.append({
-                'type': 'element',
-                'name': 'mainBody',
-                'children': [empty_p()],
-            })
-            return kids
-        return super().add_empty_required(kids, tag)
+    def make_empty_mainBody(self, tag):
+        return {
+            'type': 'element',
+            'name': tag,
+            'children': [empty_p()],
+        }
 
 
 class Statement(OpenStructure):

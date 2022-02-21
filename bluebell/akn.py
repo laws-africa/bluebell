@@ -19,7 +19,7 @@ class TreeNode(object):
 class TreeNode1(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode1, self).__init__(text, offset, elements)
-        self.judgment_body = elements[0]
+        self.judgmentBody = elements[0]
         self.conclusions = elements[1]
         self.attachments = elements[2]
 
@@ -50,7 +50,7 @@ class TreeNode4(TreeNode):
         super(TreeNode4, self).__init__(text, offset, elements)
         self.preface = elements[0]
         self.preamble = elements[1]
-        self.main_body = elements[2]
+        self.mainBody = elements[2]
         self.conclusions = elements[3]
         self.attachments = elements[4]
 
@@ -750,7 +750,7 @@ class Grammar(object):
             return cached[0]
         index1, elements0 = self._offset, []
         address1 = FAILURE
-        address1 = self._read_judgment_body()
+        address1 = self._read_judgmentBody()
         if address1 is not FAILURE:
             elements0.append(address1)
             address2 = FAILURE
@@ -789,9 +789,9 @@ class Grammar(object):
         self._cache['judgment'][index0] = (address0, self._offset)
         return address0
 
-    def _read_judgment_body(self):
+    def _read_judgmentBody(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['judgment_body'].get(index0)
+        cached = self._cache['judgmentBody'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -870,7 +870,7 @@ class Grammar(object):
         if address0 is not FAILURE:
             cls0 = type(address0)
             address0.__class__ = type(cls0.__name__ + 'JudgmentBody', (cls0, self._types.JudgmentBody), {})
-        self._cache['judgment_body'][index0] = (address0, self._offset)
+        self._cache['judgmentBody'][index0] = (address0, self._offset)
         return address0
 
     def _read_act(self):
@@ -968,9 +968,9 @@ class Grammar(object):
         self._cache['hierarchical_structure'][index0] = (address0, self._offset)
         return address0
 
-    def _read_debatereport(self):
+    def _read_debateReport(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['debatereport'].get(index0)
+        cached = self._cache['debateReport'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -978,7 +978,7 @@ class Grammar(object):
         if address0 is not FAILURE:
             cls0 = type(address0)
             address0.__class__ = type(cls0.__name__ + 'DebateReport', (cls0, self._types.DebateReport), {})
-        self._cache['debatereport'][index0] = (address0, self._offset)
+        self._cache['debateReport'][index0] = (address0, self._offset)
         return address0
 
     def _read_doc(self):
@@ -1031,7 +1031,7 @@ class Grammar(object):
             if address2 is not FAILURE:
                 elements0.append(address2)
                 address3 = FAILURE
-                address3 = self._read_main_body()
+                address3 = self._read_mainBody()
                 if address3 is not FAILURE:
                     elements0.append(address3)
                     address4 = FAILURE
@@ -2166,9 +2166,9 @@ class Grammar(object):
         self._cache['body'][index0] = (address0, self._offset)
         return address0
 
-    def _read_main_body(self):
+    def _read_mainBody(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['main_body'].get(index0)
+        cached = self._cache['mainBody'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -2249,7 +2249,7 @@ class Grammar(object):
         if address0 is not FAILURE:
             cls0 = type(address0)
             address0.__class__ = type(cls0.__name__ + 'MainBody', (cls0, self._types.MainBody), {})
-        self._cache['main_body'][index0] = (address0, self._offset)
+        self._cache['mainBody'][index0] = (address0, self._offset)
         return address0
 
     def _read_conclusions(self):

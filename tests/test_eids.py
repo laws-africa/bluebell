@@ -289,7 +289,7 @@ PARA
         self.roundtrip_xml('nested_attachments')
 
     def test_eids_debatereport(self):
-        self.roundtrip_xml('eids_debatereport', root='debatereport')
+        self.roundtrip_xml('eids_debatereport', root='debateReport')
 
     def rewrite_compare_eids(self, text, root='doc'):
         """ Ensures eIds are rewritten exactly the same as they're written initially.
