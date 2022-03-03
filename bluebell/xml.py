@@ -439,7 +439,9 @@ class XmlGenerator:
             kids.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
 
     def post_process(self, xml):
-        return self.resolve_displaced_content(xml)
+        xml = self.resolve_displaced_content(xml)
+        xml = self.set_attachment_titles(xml)
+        return xml
 
     def resolve_displaced_content(self, xml):
         """ Resolve displaced content (ie. footnotes).
@@ -497,6 +499,20 @@ class XmlGenerator:
 
             # remove the empty element
             displaced.getparent().remove(displaced)
+
+        return xml
+
+    def set_attachment_titles(self, xml):
+        """ Derive attachment aliases from their headings, if available.
+        """
+        ns = xml.nsmap[None]
+        for attachment in xml.xpath('//a:attachment', namespaces={'a': ns}):
+            heading = attachment.xpath('./a:heading', namespaces={'a': ns})
+            if heading:
+                title = ''.join(heading[0].itertext())
+                alias = attachment.xpath('./a:doc/a:meta/a:identification/a:FRBRWork/a:FRBRalias[@name="title"]', namespaces={'a': ns})
+                if alias:
+                    alias[0].attrib['value'] = title
 
         return xml
 
