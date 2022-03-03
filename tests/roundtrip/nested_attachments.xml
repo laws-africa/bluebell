@@ -62,9 +62,6 @@
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>
-            <references source="#cobalt">
-              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-            </references>
           </meta>
           <mainBody>
             <p eId="att_1__p_1"/>
@@ -99,9 +96,6 @@
                       <FRBRauthor href=""/>
                     </FRBRManifestation>
                   </identification>
-                  <references source="#cobalt">
-                    <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                  </references>
                 </meta>
                 <mainBody>
                   <p eId="att_1__att_1__p_1"/>
@@ -137,9 +131,6 @@
                       <FRBRauthor href=""/>
                     </FRBRManifestation>
                   </identification>
-                  <references source="#cobalt">
-                    <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                  </references>
                 </meta>
                 <mainBody>
                   <p eId="att_1__att_2__p_1"/>
