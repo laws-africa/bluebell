@@ -42,7 +42,7 @@
               <FRBRWork>
                 <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
                 <FRBRuri value="/akn/za/act/2009/10"/>
-                <FRBRalias value="Untitled" name="title"/>
+                <FRBRalias value="Annex" name="title"/>
                 <FRBRdate date="2009" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="za"/>
@@ -76,7 +76,7 @@
                     <FRBRWork>
                       <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
                       <FRBRuri value="/akn/za/act/2009/10"/>
-                      <FRBRalias value="Untitled" name="title"/>
+                      <FRBRalias value="Nested Annex" name="title"/>
                       <FRBRdate date="2009" name="Generation"/>
                       <FRBRauthor href=""/>
                       <FRBRcountry value="za"/>
@@ -111,7 +111,7 @@
                     <FRBRWork>
                       <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_2"/>
                       <FRBRuri value="/akn/za/act/2009/10"/>
-                      <FRBRalias value="Untitled" name="title"/>
+                      <FRBRalias value="Nested Annex Sibling" name="title"/>
                       <FRBRdate date="2009" name="Generation"/>
                       <FRBRauthor href=""/>
                       <FRBRcountry value="za"/>

@@ -28,7 +28,7 @@ class ParserSupport:
             raise
 
     def to_xml(self, dict_tree):
-        return self.generator.xml_from_tree(dict_tree)
+        return self.generator.post_process(self.generator.xml_from_tree(dict_tree))
 
     def make_frbr_uri(self):
         return FrbrUri.parse('/akn/za/act/2009/10')
