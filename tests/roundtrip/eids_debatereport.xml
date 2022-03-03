@@ -113,9 +113,6 @@
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>
-            <references source="#cobalt">
-              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-            </references>
           </meta>
           <mainBody>
             <division eId="att_1__dvs_I">

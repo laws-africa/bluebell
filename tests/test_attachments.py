@@ -175,9 +175,6 @@ SCHEDULE heading
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_1__p_1">some text</p>
@@ -212,9 +209,6 @@ SCHEDULE heading
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_2__p_1">schedule text</p>
@@ -321,9 +315,6 @@ schedule text
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_1__p_1">some text</p>
@@ -358,9 +349,6 @@ schedule text
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_2__p_1">schedule text</p>
@@ -455,9 +443,6 @@ ANNEXURE a heading
           <FRBRauthor href=""/>
         </FRBRManifestation>
       </identification>
-      <references source="#cobalt">
-        <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-      </references>
     </meta>
     <mainBody>
       <p eId="att_1__p_1">some text</p>
@@ -492,9 +477,6 @@ ANNEXURE a heading
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>
-            <references source="#cobalt">
-              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-            </references>
           </meta>
           <mainBody>
             <p eId="att_1__att_1__p_1">schedule text</p>
@@ -622,9 +604,6 @@ ANNEXURE back out
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_1__p_1">some text</p>
@@ -659,9 +638,6 @@ ANNEXURE back out
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <p eId="att_1__att_1__p_1">schedule text</p>
@@ -700,9 +676,6 @@ ANNEXURE back out
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_2__p_1">more content</p>
@@ -879,9 +852,6 @@ ANNEXURE back out
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_1__p_1">some text</p>
@@ -917,9 +887,6 @@ ANNEXURE back out
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <p eId="att_1__att_1__p_1"/>
@@ -953,9 +920,6 @@ ANNEXURE back out
                         <FRBRauthor href=""/>
                       </FRBRManifestation>
                     </identification>
-                    <references source="#cobalt">
-                      <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                    </references>
                   </meta>
                   <mainBody>
                     <p eId="att_1__att_1__att_1__p_1"/>
@@ -989,9 +953,6 @@ ANNEXURE back out
                               <FRBRauthor href=""/>
                             </FRBRManifestation>
                           </identification>
-                          <references source="#cobalt">
-                            <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                          </references>
                         </meta>
                         <mainBody>
                           <p eId="att_1__att_1__att_1__att_1__p_1">content in final nest</p>
@@ -1036,9 +997,6 @@ ANNEXURE back out
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_2__p_1">more content</p>
@@ -1377,9 +1335,6 @@ SCHEDULE first schedule
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_1__p_1"/>
@@ -1413,9 +1368,6 @@ SCHEDULE first schedule
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <p eId="att_1__att_1__p_1"/>
@@ -1449,9 +1401,6 @@ SCHEDULE first schedule
                         <FRBRauthor href=""/>
                       </FRBRManifestation>
                     </identification>
-                    <references source="#cobalt">
-                      <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                    </references>
                   </meta>
                   <mainBody>
                     <p eId="att_1__att_1__att_1__p_1">content</p>
@@ -1486,9 +1435,6 @@ SCHEDULE first schedule
                         <FRBRauthor href=""/>
                       </FRBRManifestation>
                     </identification>
-                    <references source="#cobalt">
-                      <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                    </references>
                   </meta>
                   <mainBody>
                     <p eId="att_1__att_1__att_2__p_1">content</p>
@@ -1523,9 +1469,6 @@ SCHEDULE first schedule
                         <FRBRauthor href=""/>
                       </FRBRManifestation>
                     </identification>
-                    <references source="#cobalt">
-                      <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                    </references>
                   </meta>
                   <mainBody>
                     <p eId="att_1__att_1__att_3__p_1">content</p>
@@ -1563,9 +1506,6 @@ SCHEDULE first schedule
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <p eId="att_1__att_2__p_1"/>
@@ -1599,9 +1539,6 @@ SCHEDULE first schedule
                         <FRBRauthor href=""/>
                       </FRBRManifestation>
                     </identification>
-                    <references source="#cobalt">
-                      <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                    </references>
                   </meta>
                   <mainBody>
                     <p eId="att_1__att_2__att_1__p_1">content</p>
@@ -1636,9 +1573,6 @@ SCHEDULE first schedule
                         <FRBRauthor href=""/>
                       </FRBRManifestation>
                     </identification>
-                    <references source="#cobalt">
-                      <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                    </references>
                   </meta>
                   <mainBody>
                     <p eId="att_1__att_2__att_2__p_1">content</p>
@@ -1679,9 +1613,6 @@ SCHEDULE first schedule
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_2__p_1"/>
@@ -1715,9 +1646,6 @@ SCHEDULE first schedule
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <p eId="att_2__att_1__p_1">content</p>
@@ -1752,9 +1680,6 @@ SCHEDULE first schedule
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <p eId="att_2__att_2__p_1">content</p>
@@ -1792,9 +1717,6 @@ SCHEDULE first schedule
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_3__p_1"/>
@@ -1828,9 +1750,6 @@ SCHEDULE first schedule
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <p eId="att_3__att_1__p_1">content</p>
@@ -1865,9 +1784,6 @@ SCHEDULE first schedule
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <p eId="att_3__att_2__p_1">content</p>
@@ -2082,9 +1998,6 @@ ANNEXURE back out
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_1__p_1">some text</p>
@@ -2120,9 +2033,6 @@ ANNEXURE back out
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <paragraph eId="att_1__att_1__para_1">
@@ -2162,9 +2072,6 @@ ANNEXURE back out
                         <FRBRauthor href=""/>
                       </FRBRManifestation>
                     </identification>
-                    <references source="#cobalt">
-                      <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                    </references>
                   </meta>
                   <mainBody>
                     <p eId="att_1__att_1__att_1__p_1">content of Annex to Schedule to first Annex</p>
@@ -2199,9 +2106,6 @@ ANNEXURE back out
                         <FRBRauthor href=""/>
                       </FRBRManifestation>
                     </identification>
-                    <references source="#cobalt">
-                      <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                    </references>
                   </meta>
                   <mainBody>
                     <p eId="att_1__att_1__att_2__p_1">content of second Annex to Schedule to first Annex</p>
@@ -2243,9 +2147,6 @@ ANNEXURE back out
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_2__p_1">text :)</p>
@@ -2405,9 +2306,6 @@ even more text, pushed into Annex (will move up)
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <p eId="att_1__p_1">some text</p>
@@ -2449,9 +2347,6 @@ even more text, pushed into Annex (will move up)
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <p eId="att_1__att_1__p_1">Schedule (to Annexure) content</p>
@@ -2592,9 +2487,6 @@ ANNEXURE a heading
             <FRBRauthor href=""/>
           </FRBRManifestation>
         </identification>
-        <references source="#cobalt">
-          <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-        </references>
       </meta>
       <mainBody>
         <division eId="att_1__dvs_A">
@@ -2638,9 +2530,6 @@ ANNEXURE a heading
                   <FRBRauthor href=""/>
                 </FRBRManifestation>
               </identification>
-              <references source="#cobalt">
-                <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-              </references>
             </meta>
             <mainBody>
               <p eId="att_1__att_1__p_1">Schedule content again</p>
