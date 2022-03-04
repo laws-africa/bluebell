@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-from lxml import etree
 from tests.support import ParserSupport
 
 
@@ -82,7 +81,7 @@ TABLE
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>
@@ -180,14 +179,14 @@ TABLE{class my-table}
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" class="my-table" eId="table_1">
   <tr>
     <td colspan="2">
       <p eId="table_1__p_1">r1c1</p>
     </td>
-    <td rowspan="1" colspan="3&quot;">
+    <td colspan="3&quot;" rowspan="1">
       <p eId="table_1__p_2">r1c2</p>
     </td>
   </tr>
@@ -335,7 +334,7 @@ SECTION 1.
             item b
 """, 'hier_element')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="sec_1">
   <num>1.</num>
@@ -423,7 +422,7 @@ TABLE
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
   <tr>

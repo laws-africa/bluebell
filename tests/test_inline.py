@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-from lxml import etree
 from tests.support import ParserSupport
 
 
@@ -26,7 +25,7 @@ class InlineTestCase(ParserSupport, TestCase):
             }],
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <remark status="editorial">[a remark]</remark>
@@ -70,7 +69,7 @@ multiple lines]}}
             }],
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <remark status="editorial">[a remark<br/><br/>that covers<br/>multiple lines]</remark>
@@ -87,7 +86,7 @@ PARA
     multiple lines]}}
 """, 'hier_element')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<paragraph xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="para_nn_1">
   <content>
@@ -109,7 +108,7 @@ SEC
     multiple lines]}}
 """, 'hier_element')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="sec_nn_1">
   <paragraph eId="sec_nn_1__para_nn_1">
@@ -154,7 +153,7 @@ SEC
             }],
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <remark status="editorial">[<ref href="https://example.com">a link</ref>]</remark>
@@ -166,7 +165,7 @@ SEC
 **bold {{^super {{*[foo {{>/bar link}} end]}}}} {{*[and another]}}**
 """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <b>bold <sup>super <remark status="editorial">[foo <ref href="/bar">link</ref> end]</remark></sup> <remark status="editorial">[and another]</remark></b>
@@ -178,7 +177,7 @@ SEC
 {{>https://example.com a link}}
         """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <ref href="https://example.com">a link</ref>
@@ -190,7 +189,7 @@ SEC
 {{>https://example.com  a link{{^2}} **with stuff**}}
 """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <ref href="https://example.com"> a link<sup>2</sup> <b>with stuff</b></ref>
@@ -202,7 +201,7 @@ SEC
 {{>https://example.com}}
         """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <ref href="https://example.com"/>
@@ -214,7 +213,7 @@ SEC
 {{> link text}}
         """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <ref href="">link text</ref>
@@ -226,7 +225,7 @@ SEC
 {{IMG /foo.png}} {{IMG/foo.png}} {{IMGfoo.png}}
         """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1"><img src="/foo.png"/> <img src="/foo.png"/> <img src="foo.png"/></p>
 """, xml)
@@ -236,10 +235,10 @@ SEC
 {{IMG /foo.png  description text }}
         """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <img src="/foo.png" alt="description text"/>
+  <img alt="description text" src="/foo.png"/>
 </p>
 """, xml)
 
@@ -248,7 +247,7 @@ SEC
 {{IMG }} {{IMG}}
         """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">{{IMG }} {{IMG}}</p>
 """, xml)
@@ -258,7 +257,7 @@ SEC
  }}
 """, 'statement')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<statement xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="statement">
   <mainBody>
@@ -287,7 +286,7 @@ SEC
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <sup>su}per</sup>
@@ -330,7 +329,7 @@ SEC
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <sup>super <sub>s}ub</sub> <b>bo*ld</b></sup>
@@ -364,7 +363,7 @@ SEC
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1"><ins>in}s</ins> and <ins> one with a space at the start and end </ins></p>
 """, xml)
@@ -396,7 +395,7 @@ SEC
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1"><del>de}l</del> and <del> one with a space at the start and end </del></p>
 """, xml)
@@ -437,7 +436,7 @@ SEC
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
   <ins>ins <del>de}l</del> <b>bo*ld</b></ins>
@@ -449,7 +448,7 @@ SEC
 Text with {{term{refersTo #foo} a term}} and {{term{refersTo #bar}  extra space}} and {{term{refersTo #baz}no space}}.
 """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <term refersTo="#foo">a term</term> and <term refersTo="#bar"> extra space</term> and <term refersTo="#baz">no space</term>.</p>
 """, xml)
@@ -459,7 +458,7 @@ Text with {{term{refersTo #foo} a term}} and {{term{refersTo #bar}  extra space}
 Text with {{abbr{title Laws.Africa} LA}} and {{abbr No Title}}.
 """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <abbr title="Laws.Africa">LA</abbr> and <abbr title="">No Title</abbr>.</p>
 """, xml)
@@ -471,7 +470,7 @@ Text with {{abbr{title Laws.Africa} LA}} and {{abbr No Title}}.
 Text with {{em emphasized text}}.
 """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <inline name="em">emphasized text</inline>.</p>
 """, xml)
@@ -481,7 +480,7 @@ Text with {{em emphasized text}}.
 Text with {{inline{name em} some text}} and {{inline no name}}.
 """, 'line')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <inline name="em">some text</inline> and <inline name="inline">no name</inline>.</p>
 """, xml)
@@ -493,10 +492,10 @@ Class {{inline.boom but no attrs}}
 Class but no text {{term.foo}}
 """, 'mainBody')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<mainBody xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
-  <p eId="p_1">Text with <inline name="em" class="foo bar">some text</inline></p>
+  <p eId="p_1">Text with <inline class="foo bar" name="em">some text</inline></p>
   <p eId="p_2">Class <inline class="boom" name="inline">but no attrs</inline></p>
   <p eId="p_3">Class but no text <term class="foo" refersTo=""/></p>
 </mainBody>

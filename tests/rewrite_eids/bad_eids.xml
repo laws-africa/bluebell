@@ -5,7 +5,7 @@
         <FRBRWork>
           <FRBRthis value="/akn/za/act/2021/6/!main"/>
           <FRBRuri value="/akn/za/act/2021/6"/>
-          <FRBRalias value="Work with uncommenced provisions, only one commencement so far" name="title"/>
+          <FRBRalias name="title" value="Work with uncommenced provisions, only one commencement so far"/>
           <FRBRdate date="2021" name="Generation"/>
           <FRBRauthor href=""/>
           <FRBRcountry value="za"/>
@@ -25,9 +25,9 @@
           <FRBRauthor href=""/>
         </FRBRManifestation>
       </identification>
-      <publication number="" name="" showAs="" date="2021-10-11"/>
+      <publication date="2021-10-11" name="" number="" showAs=""/>
       <lifecycle source="#Laws-Africa">
-        <eventRef eId="amendment-2021-10-20" date="2021-10-20" type="amendment" source="#amendment-0-source"/>
+        <eventRef date="2021-10-20" eId="amendment-2021-10-20" source="#amendment-0-source" type="amendment"/>
       </lifecycle>
       <references source="#cobalt">
         <TLCOrganization eId="Laws-Africa" href="http://localhost:8000" showAs="Laws.Africa"/>
@@ -248,7 +248,7 @@
               <FRBRWork>
                 <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_1"/>
                 <FRBRuri value="/akn/xx-playground/act/2021/1"/>
-                <FRBRalias value="Untitled" name="title"/>
+                <FRBRalias name="title" value="Untitled"/>
                 <FRBRdate date="2021" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="xx-playground"/>
@@ -308,7 +308,7 @@
               <FRBRWork>
                 <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_2"/>
                 <FRBRuri value="/akn/xx-playground/act/2021/1"/>
-                <FRBRalias value="Untitled" name="title"/>
+                <FRBRalias name="title" value="Untitled"/>
                 <FRBRdate date="2021" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="xx-playground"/>
@@ -378,7 +378,7 @@
               <FRBRWork>
                 <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_3"/>
                 <FRBRuri value="/akn/xx-playground/act/2021/1"/>
-                <FRBRalias value="Untitled" name="title"/>
+                <FRBRalias name="title" value="Untitled"/>
                 <FRBRdate date="2021" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="xx-playground"/>
