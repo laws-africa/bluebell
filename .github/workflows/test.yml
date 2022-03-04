@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -e git+ssh://git@github.com/laws-africa/cobalt.git@master#egg=cobalt
+        pip install -e 'git+https://git@github.com/laws-africa/cobalt.git@master#egg=cobalt'
         pip install -e '.[test]'
     - name: Test with nosetests
       run: nosetests
