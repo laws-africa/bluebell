@@ -66,6 +66,9 @@ grammar akn
                           content:hier_block_element*
                         dedent <HierElement>
 
+                        # the num and heading MUST be separated by ' - ', including spaces
+                        # otherwise, the dash is considered a part of the num, or of the heading
+                        #
                         # num - heading
                         # - heading
                         # num
@@ -73,7 +76,11 @@ grammar akn
                         #   eg: heading
                         #       num -
                         #       num - heading
-  hier_element_heading <- space num:[^\n-]* heading:('-' space content:inline*)? <HierElementHeading>
+  hier_element_heading <- num:hier_element_heading_num? heading:hier_element_heading_heading? <HierElementHeading>
+
+  hier_element_heading_num     <- !hier_element_heading_heading space content:(!hier_element_heading_heading [^\n])+
+
+  hier_element_heading_heading <- space '-' space content:inline*
 
   hier_block_element <- hier_element / block_element
 

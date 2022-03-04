@@ -168,7 +168,7 @@ PARA nn_2
     Para nn_2, which is a dup of the second para's eId.
 
 PARA nn-2
-    Para nn-2, which we don't currently support because we don't like hyphens in numbers
+    Para nn-2, which we do support because we support hyphens in numbers
 """, 'doc')
 
         xml = self.tostring(self.to_xml(tree.to_dict()))
@@ -203,8 +203,12 @@ PARA nn-2
         <p eId="para_nn-2_2__p_1">Para nn_2, which is a dup of the second para's eId.</p>
       </content>
     </paragraph>
-    <p eId="p_1">PARA nn-2</p>
-    <p eId="p_2">Para nn-2, which we don't currently support because we don't like hyphens in numbers</p>
+    <paragraph eId="para_nn-2_3">
+      <num>nn-2</num>
+      <content>
+        <p eId="para_nn-2_3__p_1">Para nn-2, which we do support because we support hyphens in numbers</p>
+      </content>
+    </paragraph>
   </mainBody>
 </doc>
 """, xml)
