@@ -410,7 +410,7 @@ class XmlGenerator:
             return m('attachment',
                      *pre,
                      m('doc',
-                       self.make_meta(self.attachment_frbr_uri(attachment_name)),
+                       self.make_meta(self.attachment_frbr_uri(attachment_name), False),
                        *self.kids_to_xml(kids=item['children'], prefix=eid),
                        **item.get('attribs', {})),
                      eId=eid)
@@ -439,7 +439,9 @@ class XmlGenerator:
             kids.append(m.subheading(*(self.item_to_xml(k, eid) for k in item['subheading'])))
 
     def post_process(self, xml):
-        return self.resolve_displaced_content(xml)
+        xml = self.resolve_displaced_content(xml)
+        xml = self.set_attachment_titles(xml)
+        return xml
 
     def resolve_displaced_content(self, xml):
         """ Resolve displaced content (ie. footnotes).
@@ -500,6 +502,20 @@ class XmlGenerator:
 
         return xml
 
+    def set_attachment_titles(self, xml):
+        """ Derive attachment aliases from their headings, if available.
+        """
+        ns = xml.nsmap[None]
+        for attachment in xml.xpath('//a:attachment', namespaces={'a': ns}):
+            heading = attachment.xpath('./a:heading', namespaces={'a': ns})
+            if heading:
+                title = ''.join(heading[0].itertext())
+                alias = attachment.xpath('./a:doc/a:meta/a:identification/a:FRBRWork/a:FRBRalias[@name="title"]', namespaces={'a': ns})
+                if alias:
+                    alias[0].attrib['value'] = title
+
+        return xml
+
     def attachment_frbr_uri(self, attachment_name):
         """ Build an FrbrUri instance for the attachment in the given item.
         """
@@ -522,12 +538,12 @@ class XmlGenerator:
         if not self.frbr_uri:
             raise ValueError("An frbr_uri must be provided when generating top-level documents.")
 
-        meta = etree.fromstring(etree.tostring(self.make_meta(self.frbr_uri)))
+        meta = etree.fromstring(etree.tostring(self.make_meta(self.frbr_uri, True)))
         list(xml)[0].insert(0, meta)
         return xml
 
-    def make_meta(self, frbr_uri):
+    def make_meta(self, frbr_uri, for_root):
         """ Create a meta element appropriate for this generator's FRBR URI.
         """
         cls = StructuredDocument.for_document_type(frbr_uri.doctype)
-        return cls.empty_meta(frbr_uri, maker=self.maker)
+        return cls.empty_meta(frbr_uri, maker=self.maker, for_root=for_root)
