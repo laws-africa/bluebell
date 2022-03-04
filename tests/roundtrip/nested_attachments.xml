@@ -42,7 +42,7 @@
               <FRBRWork>
                 <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
                 <FRBRuri value="/akn/za/act/2009/10"/>
-                <FRBRalias value="Untitled" name="title"/>
+                <FRBRalias value="Annex" name="title"/>
                 <FRBRdate date="2009" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="za"/>
@@ -62,9 +62,6 @@
                 <FRBRauthor href=""/>
               </FRBRManifestation>
             </identification>
-            <references source="#cobalt">
-              <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-            </references>
           </meta>
           <mainBody>
             <p eId="att_1__p_1"/>
@@ -79,7 +76,7 @@
                     <FRBRWork>
                       <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
                       <FRBRuri value="/akn/za/act/2009/10"/>
-                      <FRBRalias value="Untitled" name="title"/>
+                      <FRBRalias value="Nested Annex" name="title"/>
                       <FRBRdate date="2009" name="Generation"/>
                       <FRBRauthor href=""/>
                       <FRBRcountry value="za"/>
@@ -99,9 +96,6 @@
                       <FRBRauthor href=""/>
                     </FRBRManifestation>
                   </identification>
-                  <references source="#cobalt">
-                    <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                  </references>
                 </meta>
                 <mainBody>
                   <p eId="att_1__att_1__p_1"/>
@@ -117,7 +111,7 @@
                     <FRBRWork>
                       <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_2"/>
                       <FRBRuri value="/akn/za/act/2009/10"/>
-                      <FRBRalias value="Untitled" name="title"/>
+                      <FRBRalias value="Nested Annex Sibling" name="title"/>
                       <FRBRdate date="2009" name="Generation"/>
                       <FRBRauthor href=""/>
                       <FRBRcountry value="za"/>
@@ -137,9 +131,6 @@
                       <FRBRauthor href=""/>
                     </FRBRManifestation>
                   </identification>
-                  <references source="#cobalt">
-                    <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
-                  </references>
                 </meta>
                 <mainBody>
                   <p eId="att_1__att_2__p_1"/>
