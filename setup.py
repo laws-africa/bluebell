@@ -65,7 +65,7 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
         'lxml >= 3.4.1',
-        'cobalt >= 4.1.0',
+        'cobalt >= 5.0.0',
     ],
 
     # List additional groups of dependencies here (e.g. development
