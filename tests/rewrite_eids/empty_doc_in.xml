@@ -5,7 +5,7 @@
         <FRBRWork>
           <FRBRthis value="/akn/za/act/2021/6/!main"/>
           <FRBRuri value="/akn/za/act/2021/6"/>
-          <FRBRalias value="Work with uncommenced provisions, only one commencement so far" name="title"/>
+          <FRBRalias name="title" value="Work with uncommenced provisions, only one commencement so far"/>
           <FRBRdate date="2021" name="Generation"/>
           <FRBRauthor href=""/>
           <FRBRcountry value="za"/>

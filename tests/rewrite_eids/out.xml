@@ -5,7 +5,7 @@
         <FRBRWork>
           <FRBRthis value="/akn/za/act/2021/6/!main"/>
           <FRBRuri value="/akn/za/act/2021/6"/>
-          <FRBRalias value="Work with uncommenced provisions, only one commencement so far" name="title"/>
+          <FRBRalias name="title" value="Work with uncommenced provisions, only one commencement so far"/>
           <FRBRdate date="2021" name="Generation"/>
           <FRBRauthor href=""/>
           <FRBRcountry value="za"/>
@@ -25,9 +25,9 @@
           <FRBRauthor href=""/>
         </FRBRManifestation>
       </identification>
-      <publication number="" name="" showAs="" date="2021-10-11"/>
+      <publication date="2021-10-11" name="" number="" showAs=""/>
       <lifecycle source="#Laws-Africa">
-        <eventRef eId="amendment-2021-10-20" date="2021-10-20" type="amendment" source="#amendment-0-source"/>
+        <eventRef date="2021-10-20" eId="amendment-2021-10-20" source="#amendment-0-source" type="amendment"/>
       </lifecycle>
       <references source="#cobalt">
         <TLCOrganization eId="Laws-Africa" href="http://localhost:8000" showAs="Laws.Africa"/>
@@ -69,9 +69,9 @@
           <heading>First section</heading>
           <content>
             <crossHeading eId="chp_1__sec_1__crossHeading_1">Random heading</crossHeading>
-            <block name="quote" eId="chp_1__sec_1__block_1"><embeddedStructure startQuote="“" eId="chp_1__sec_1__block_1__embeddedStructure_1"><p eId="chp_1__sec_1__block_1__embeddedStructure_1__p_1"><u>Quote</u> text.|</p></embeddedStructure></block>
+            <block eId="chp_1__sec_1__block_1" name="quote"><embeddedStructure eId="chp_1__sec_1__block_1__embeddedStructure_1" startQuote="“"><p eId="chp_1__sec_1__block_1__embeddedStructure_1__p_1"><u>Quote</u> text.|</p></embeddedStructure></block>
             <p eId="chp_1__sec_1__p_1"><i>(Emphasis added)</i></p>
-            <p eId="chp_1__sec_1__p_2">Content<sup><authorialNote marker="x" placement="bottom" eId="chp_1__sec_1__p_2__authorialNote_1"><p eId="chp_1__sec_1__p_2__authorialNote_1__p_1">Content:</p><block name="quote" eId="chp_1__sec_1__p_2__authorialNote_1__block_1"><embeddedStructure startQuote="|" eId="chp_1__sec_1__p_2__authorialNote_1__block_1__embeddedStructure_1"><p eId="chp_1__sec_1__p_2__authorialNote_1__block_1__embeddedStructure_1__p_1"><u>Quote</u> text.|</p></embeddedStructure></block><p eId="chp_1__sec_1__p_2__authorialNote_1__p_2"><i>(Emphasis added)</i></p><paragraph eId="chp_1__sec_1__p_2__authorialNote_1__para_a"><num>a.</num><content><p eId="chp_1__sec_1__p_2__authorialNote_1__para_a__p_1">Yep, still in footnote.</p></content></paragraph><p eId="chp_1__sec_1__p_2__authorialNote_1__p_3">Annd, yes, still in.</p></authorialNote></sup> and <sup><authorialNote marker="x" placement="bottom" eId="chp_1__sec_1__p_2__authorialNote_2"><p eId="chp_1__sec_1__p_2__authorialNote_2__p_1">Content:</p><block name="quote" eId="chp_1__sec_1__p_2__authorialNote_2__block_1"><embeddedStructure startQuote="{" eId="chp_1__sec_1__p_2__authorialNote_2__block_1__embeddedStructure_1"><p eId="chp_1__sec_1__p_2__authorialNote_2__block_1__embeddedStructure_1__p_1"><u>Quote</u> text.|</p></embeddedStructure></block><p eId="chp_1__sec_1__p_2__authorialNote_2__p_2"><i>(Emphasis added)</i></p><paragraph eId="chp_1__sec_1__p_2__authorialNote_2__para_a"><num>a.</num><content><p eId="chp_1__sec_1__p_2__authorialNote_2__para_a__p_1">Yep, still in footnote.</p></content></paragraph><p eId="chp_1__sec_1__p_2__authorialNote_2__p_3">Annd, yes, still in.</p></authorialNote></sup></p>
+            <p eId="chp_1__sec_1__p_2">Content<sup><authorialNote eId="chp_1__sec_1__p_2__authorialNote_1" marker="x" placement="bottom"><p eId="chp_1__sec_1__p_2__authorialNote_1__p_1">Content:</p><block eId="chp_1__sec_1__p_2__authorialNote_1__block_1" name="quote"><embeddedStructure eId="chp_1__sec_1__p_2__authorialNote_1__block_1__embeddedStructure_1" startQuote="|"><p eId="chp_1__sec_1__p_2__authorialNote_1__block_1__embeddedStructure_1__p_1"><u>Quote</u> text.|</p></embeddedStructure></block><p eId="chp_1__sec_1__p_2__authorialNote_1__p_2"><i>(Emphasis added)</i></p><paragraph eId="chp_1__sec_1__p_2__authorialNote_1__para_a"><num>a.</num><content><p eId="chp_1__sec_1__p_2__authorialNote_1__para_a__p_1">Yep, still in footnote.</p></content></paragraph><p eId="chp_1__sec_1__p_2__authorialNote_1__p_3">Annd, yes, still in.</p></authorialNote></sup> and <sup><authorialNote eId="chp_1__sec_1__p_2__authorialNote_2" marker="x" placement="bottom"><p eId="chp_1__sec_1__p_2__authorialNote_2__p_1">Content:</p><block eId="chp_1__sec_1__p_2__authorialNote_2__block_1" name="quote"><embeddedStructure eId="chp_1__sec_1__p_2__authorialNote_2__block_1__embeddedStructure_1" startQuote="{"><p eId="chp_1__sec_1__p_2__authorialNote_2__block_1__embeddedStructure_1__p_1"><u>Quote</u> text.|</p></embeddedStructure></block><p eId="chp_1__sec_1__p_2__authorialNote_2__p_2"><i>(Emphasis added)</i></p><paragraph eId="chp_1__sec_1__p_2__authorialNote_2__para_a"><num>a.</num><content><p eId="chp_1__sec_1__p_2__authorialNote_2__para_a__p_1">Yep, still in footnote.</p></content></paragraph><p eId="chp_1__sec_1__p_2__authorialNote_2__p_3">Annd, yes, still in.</p></authorialNote></sup></p>
           </content>
         </section>
         <section eId="chp_1__sec_2">
@@ -248,7 +248,7 @@
               <FRBRWork>
                 <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_1"/>
                 <FRBRuri value="/akn/xx-playground/act/2021/1"/>
-                <FRBRalias value="Untitled" name="title"/>
+                <FRBRalias name="title" value="Untitled"/>
                 <FRBRdate date="2021" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="xx-playground"/>
@@ -308,7 +308,7 @@
               <FRBRWork>
                 <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_2"/>
                 <FRBRuri value="/akn/xx-playground/act/2021/1"/>
-                <FRBRalias value="Untitled" name="title"/>
+                <FRBRalias name="title" value="Untitled"/>
                 <FRBRdate date="2021" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="xx-playground"/>
@@ -378,7 +378,7 @@
               <FRBRWork>
                 <FRBRthis value="/akn/xx-playground/act/2021/1/!schedule_3"/>
                 <FRBRuri value="/akn/xx-playground/act/2021/1"/>
-                <FRBRalias value="Untitled" name="title"/>
+                <FRBRalias name="title" value="Untitled"/>
                 <FRBRdate date="2021" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="xx-playground"/>

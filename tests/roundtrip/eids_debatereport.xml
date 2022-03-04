@@ -5,7 +5,7 @@
         <FRBRWork>
           <FRBRthis value="/akn/za/act/2009/10"/>
           <FRBRuri value="/akn/za/act/2009/10"/>
-          <FRBRalias value="Untitled" name="title"/>
+          <FRBRalias name="title" value="Untitled"/>
           <FRBRdate date="2009" name="Generation"/>
           <FRBRauthor href=""/>
           <FRBRcountry value="za"/>
@@ -37,7 +37,7 @@
         <num>A.</num>
         <heading>Cooperation with other conventions</heading>
         <intro>
-          <p eId="dvs_A__intro__p_1"><i>Noting</i> the report of the Executive Secretary on progress,<sup><authorialNote marker="1" placement="bottom" eId="dvs_A__intro__p_1__authorialNote_1"><p eId="dvs_A__intro__p_1__authorialNote_1__p_1">UNEP/CBD/COP/12/24.</p></authorialNote></sup></p>
+          <p eId="dvs_A__intro__p_1"><i>Noting</i> the report of the Executive Secretary on progress,<sup><authorialNote eId="dvs_A__intro__p_1__authorialNote_1" marker="1" placement="bottom"><p eId="dvs_A__intro__p_1__authorialNote_1__p_1">UNEP/CBD/COP/12/24.</p></authorialNote></sup></p>
           <p eId="dvs_A__intro__p_2"><i>Recalling</i> decision XI/6, including paragraph 3, in which it urged Parties to pursue efforts to enhance synergies among the biodiversity-related conventions to promote policy coherence, improve efficiency and enhance coordination and cooperation at all levels, and with a view to strengthening Parties’ ownership of the process,</p>
         </intro>
         <paragraph eId="dvs_A__para_1">
@@ -72,7 +72,7 @@
         <paragraph eId="dvs_B__para_13">
           <num>13.</num>
           <content>
-            <p eId="dvs_B__para_13__p_1"><i>Reiterates</i> the importance of a United Nations system‑wide approach to the implementation of the Strategic Plan for Biodiversity 2011-2020 and the achievement of the Aichi Biodiversity Targets in the framework of the United Nations Decade for Biodiversity,<sup><authorialNote marker="3" placement="bottom" eId="dvs_B__para_13__p_1__authorialNote_1"><p eId="dvs_B__para_13__p_1__authorialNote_1__p_1">See General Assembly resolution 65/161.</p></authorialNote></sup> and <i>welcomes</i> the report of the Environment Management Group on relevant activities of the Issue Management Group on Biodiversity;<sup><authorialNote marker="4" placement="bottom" eId="dvs_B__para_13__p_1__authorialNote_2"><p eId="dvs_B__para_13__p_1__authorialNote_2__p_1">UNEP/CBD/COP/12/INF/48. See also: United Nations Environment Programme, Advancing the Biodiversity Agenda: A UN System-wide Contribution. A report by the Environment Management Group (EMG/1320/GEN) (UNEP, 2010). Available from <ref href="http://unemg.org">http://unemg.org</ref>;</p></authorialNote></sup></p>
+            <p eId="dvs_B__para_13__p_1"><i>Reiterates</i> the importance of a United Nations system‑wide approach to the implementation of the Strategic Plan for Biodiversity 2011-2020 and the achievement of the Aichi Biodiversity Targets in the framework of the United Nations Decade for Biodiversity,<sup><authorialNote eId="dvs_B__para_13__p_1__authorialNote_1" marker="3" placement="bottom"><p eId="dvs_B__para_13__p_1__authorialNote_1__p_1">See General Assembly resolution 65/161.</p></authorialNote></sup> and <i>welcomes</i> the report of the Environment Management Group on relevant activities of the Issue Management Group on Biodiversity;<sup><authorialNote eId="dvs_B__para_13__p_1__authorialNote_2" marker="4" placement="bottom"><p eId="dvs_B__para_13__p_1__authorialNote_2__p_1">UNEP/CBD/COP/12/INF/48. See also: United Nations Environment Programme, Advancing the Biodiversity Agenda: A UN System-wide Contribution. A report by the Environment Management Group (EMG/1320/GEN) (UNEP, 2010). Available from <ref href="http://unemg.org">http://unemg.org</ref>;</p></authorialNote></sup></p>
           </content>
         </paragraph>
         <paragraph eId="dvs_B__para_14">
@@ -93,7 +93,7 @@
               <FRBRWork>
                 <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
                 <FRBRuri value="/akn/za/act/2009/10"/>
-                <FRBRalias value="Annex" name="title"/>
+                <FRBRalias name="title" value="Annex"/>
                 <FRBRdate date="2009" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="za"/>
