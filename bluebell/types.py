@@ -161,9 +161,10 @@ class HierElement:
 class HierElementHeading:
     def update_dict(self, info):
         if self.text:
-            num = self.num.text.strip()
-            if num:
-                info['num'] = num
+            if hasattr(self.num, 'content'):
+                num = self.num.content.text.rstrip(' -')
+                if num:
+                    info['num'] = num
 
             heading = self.heading_to_dict()
             if heading:
