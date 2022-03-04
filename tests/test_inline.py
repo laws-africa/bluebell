@@ -156,7 +156,7 @@ SEC
         xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <remark status="editorial">[<ref href="https://example.com">a link</ref>]</remark>
+  <remark status="editorial">[<ref eId="p_1__ref_1" href="https://example.com">a link</ref>]</remark>
 </p>
 """, xml)
 
@@ -168,7 +168,7 @@ SEC
         xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <b>bold <sup>super <remark status="editorial">[foo <ref href="/bar">link</ref> end]</remark></sup> <remark status="editorial">[and another]</remark></b>
+  <b>bold <sup>super <remark status="editorial">[foo <ref eId="p_1__ref_1" href="/bar">link</ref> end]</remark></sup> <remark status="editorial">[and another]</remark></b>
 </p>
 """, xml)
 
@@ -180,7 +180,7 @@ SEC
         xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <ref href="https://example.com">a link</ref>
+  <ref eId="p_1__ref_1" href="https://example.com">a link</ref>
 </p>
 """, xml)
 
@@ -192,7 +192,7 @@ SEC
         xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <ref href="https://example.com"> a link<sup>2</sup> <b>with stuff</b></ref>
+  <ref eId="p_1__ref_1" href="https://example.com"> a link<sup>2</sup> <b>with stuff</b></ref>
 </p>
 """, xml)
 
@@ -204,7 +204,7 @@ SEC
         xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <ref href="https://example.com"/>
+  <ref eId="p_1__ref_1" href="https://example.com"/>
 </p>
 """, xml)
 
@@ -216,7 +216,7 @@ SEC
         xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
-  <ref href="">link text</ref>
+  <ref eId="p_1__ref_1" href="">link text</ref>
 </p>
 """, xml)
 
@@ -450,7 +450,7 @@ Text with {{term{refersTo #foo} a term}} and {{term{refersTo #bar}  extra space}
 
         xml = self.tostring(self.to_xml(tree.to_dict()))
 
-        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <term refersTo="#foo">a term</term> and <term refersTo="#bar"> extra space</term> and <term refersTo="#baz">no space</term>.</p>
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">Text with <term eId="p_1__term_1" refersTo="#foo">a term</term> and <term eId="p_1__term_2" refersTo="#bar"> extra space</term> and <term eId="p_1__term_3" refersTo="#baz">no space</term>.</p>
 """, xml)
 
     def test_abbr(self):
@@ -497,6 +497,6 @@ Class but no text {{term.foo}}
         self.assertEqual("""<mainBody xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <p eId="p_1">Text with <inline class="foo bar" name="em">some text</inline></p>
   <p eId="p_2">Class <inline class="boom" name="inline">but no attrs</inline></p>
-  <p eId="p_3">Class but no text <term class="foo" refersTo=""/></p>
+  <p eId="p_3">Class but no text <term class="foo" eId="p_3__term_1" refersTo=""/></p>
 </mainBody>
 """, xml)

@@ -22,9 +22,11 @@ class IdGenerator:
                     " amendmentBody attachments body collectionBody components coverPage debateBody"
                     " judgmentBody mainBody meta portionBody"
                     " br tr td th num heading subheading content"
-                    " abbr b i u sub sup ins del inline img ref remark span term".split())
-    # TODO: container, block, marker, div, caption, etc?
-    """ Elements that never have ids, such as top-level documents and self-closing inlines."""
+                    " abbr b i u sub sup ins del inline img remark span".split())
+    """ Elements that never have ids, such as top-level documents and self-closing inlines.
+        Note that we don't include block in this list, even though eId is optional on block, because we consider it a
+        peer of p, blockList and friends, which should have eIds.
+    """
 
     id_unnecessary = set("arguments background conclusions decision header introduction motivation preamble preface"
                          " remedies".split())
