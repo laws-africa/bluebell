@@ -719,7 +719,7 @@
   </xsl:template>
 
   <!-- general inlines that follow a common pattern -->
-  <xsl:template match="a:abbr | a:term | a:inline | a:ins | a:del">
+  <xsl:template match="a:abbr | a:def | a:term | a:inline | a:ins | a:del">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:text>{{</xsl:text>
