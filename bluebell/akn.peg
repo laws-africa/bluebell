@@ -61,10 +61,10 @@ grammar akn
   hier_element      <- crossheading / hier_element_block
 
   hier_element_block <- hier_element_name heading:hier_element_heading? eol
-                        indent
+                        body:(indent
                           subheading:subheading?
                           content:hier_block_element*
-                        dedent <HierElement>
+                        dedent)? <HierElement>
 
                         # the num and heading MUST be separated by ' - ', including spaces
                         # otherwise, the dash is considered a part of the num, or of the heading

@@ -153,18 +153,22 @@ class HierElement:
     def to_dict(self):
         name = self.hier_element_name.text.lower()
         name = self.synonyms.get(name, name)
+        if self.body.text:
+            kids = many_to_dict(self.body.content)
+        else:
+            kids = []
 
         info = {
             'type': 'hier',
             'name': name,
-            'children': many_to_dict(self.content),
+            'children': kids,
         }
 
         if self.heading.text:
             self.heading.update_dict(info)
 
-        if self.subheading.text:
-            info['subheading'] = self.subheading.to_dict()
+        if self.body.text and self.body.subheading.text:
+            info['subheading'] = self.body.subheading.to_dict()
 
         return info
 
