@@ -78,25 +78,36 @@ class Conclusions(BlockIndentElement):
 
 
 class Longtitle:
-    # TODO: this is actually a block element
     def to_dict(self):
+        if self.body.text:
+            kids = [{
+                'type': 'content',
+                'name': 'p',
+                'children': InlineText.many_to_dict(k for k in self.body.content),
+            }]
+        else:
+            # longtitles may be empty
+            kids = []
+
         return {
             'type': 'element',
             'name': 'longTitle',
-            'children': [{
-                'type': 'content',
-                'name': 'p',
-                'children': InlineText.many_to_dict(k for k in self.content),
-            }]
+            'children': kids,
         }
 
 
 class Crossheading:
     def to_dict(self):
+        # crossheadings may be empty
+        if self.body.text:
+            kids = InlineText.many_to_dict(k for k in self.body.content)
+        else:
+            kids = []
+
         return {
             'type': 'element',
             'name': 'crossHeading',
-            'children': InlineText.many_to_dict(k for k in self.content),
+            'children': kids
         }
 
 
@@ -447,9 +458,12 @@ class BlockAttr:
 # ------------------------------------------------------------------------------
 
 
-class Heading:
+class Subheading:
     def to_dict(self):
-        return InlineText.many_to_dict(k for k in self.content)
+        if self.body.text:
+            return InlineText.many_to_dict(k for k in self.body.content)
+        else:
+            return []
 
 
 class P:

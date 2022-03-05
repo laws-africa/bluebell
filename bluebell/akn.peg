@@ -207,11 +207,11 @@ grammar akn
 
   block_elements    <- block_list / bullet_list / table / longtitle / footnote / block_quote / p / line
 
-  longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
+  longtitle         <- 'LONGTITLE' body:(space content:inline+)? eol <Longtitle>
 
-  subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
+  subheading        <- 'SUBHEADING' body:(space content:inline+)? eol <Subheading>
 
-  crossheading      <- 'CROSSHEADING' space content:inline+ eol <Crossheading>
+  crossheading      <- 'CROSSHEADING' body:(space content:inline+)? eol <Crossheading>
 
                      # explicit P tag with attribute support
   p                 <- 'P' attrs:block_attrs? space content:inline+ eol <P>
