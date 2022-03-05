@@ -214,7 +214,7 @@ class IdGenerator:
 
             # use preface / preamble as prefix
             parent = element.getparent()
-            if parent:
+            if parent is not None:
                 parent = parent.tag.split('}', 1)[-1]
                 if parent in ['preface', 'preamble']:
                     prefix = parent
@@ -500,8 +500,9 @@ class XmlGenerator:
         rather than when translating the intermediate structure into XML.
 
         1. remove empty crossHeading and longTitle elements which can be produced by the grammar.
+        2. remove empty content elements which can be produced for empty hierarchical elements.
         """
-        for elem in xml.xpath('//*[self::a:crossHeading or self::a:longTitle][not(node())]', namespaces={'a': xml.nsmap[None]}):
+        for elem in xml.xpath('//*[self::a:crossHeading or self::a:longTitle or self::a:content][not(node())]', namespaces={'a': xml.nsmap[None]}):
             elem.getparent().remove(elem)
         return xml
 
