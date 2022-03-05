@@ -362,3 +362,22 @@ SEC 1.
   </part>
 </section>
 """, xml)
+
+    def test_empty_subheading(self):
+        tree = self.parse("""
+PART 1 - Heading
+  SUBHEADING
+
+  text
+""", 'hier_element_block')
+
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
+  <num>1</num>
+  <heading>Heading</heading>
+  <content>
+    <p eId="part_1__p_1">text</p>
+  </content>
+</part>
+""", xml)
