@@ -58,7 +58,7 @@ PARA 2.
     Second (actually third/fourth/fifth, depending on who's counting) para.
 """, 'doc')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="doc">
   <mainBody>
@@ -112,7 +112,7 @@ PARA 2.3..74.5_2
     Highly unlikely duplicate of eId of previous.
 """, 'doc')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="doc">
   <mainBody>
@@ -171,7 +171,7 @@ PARA nn-2
     Para nn-2, which we don't currently support because we don't like hyphens in numbers
 """, 'doc')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="doc">
   <mainBody>
@@ -224,7 +224,7 @@ PARA
     Unnumbered para.
 """, 'doc')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<doc xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="doc">
   <mainBody>
@@ -269,7 +269,7 @@ PARA
         unparsed = self.parser.unparse(xml_in)
         text = self.parser.pre_parse(unparsed)
         xml_out = self.parser.parse_to_xml(text, root)
-        xml_out_pretty = etree.tostring(xml_out, encoding='unicode', pretty_print=True)
+        xml_out_pretty = self.tostring(xml_out)
 
         # ensure xml_out validates
         doc = StructuredDocument.for_document_type(root)(xml_out_pretty)
@@ -297,9 +297,9 @@ PARA
         generator = IdGenerator()
         tree = self.parse(text, root)
         xml = self.to_xml(tree.to_dict())
-        old_xml = etree.tostring(xml, encoding='unicode', pretty_print=True)
+        old_xml = self.tostring(xml)
         generator.rewrite_all_eids(xml)
-        new_xml = etree.tostring(xml, encoding='unicode', pretty_print=True)
+        new_xml = self.tostring(xml)
         self.assertEqual(old_xml, new_xml)
 
     def test_rewrite_eids_no_num(self):
@@ -388,7 +388,7 @@ PARA
         generator = IdGenerator()
         xml = etree.fromstring(old_xml)
         generator.rewrite_all_eids(xml)
-        actual = etree.tostring(xml, encoding='unicode', pretty_print=True)
+        actual = self.tostring(xml)
 
         self.assertEqual(expected, actual)
 
