@@ -54,7 +54,7 @@ BULLETS
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<ul xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="ul_1">
   <li eId="ul_1__li_1">
@@ -75,9 +75,9 @@ BULLETS{class spiffy}
   * item 1
   * item 2
 """, 'bullet_list')
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
-        self.assertEqual("""<ul xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="ul_1" class="spiffy">
+        self.assertEqual("""<ul xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" class="spiffy" eId="ul_1">
   <li eId="ul_1__li_1">
     <p eId="ul_1__li_1__p_1">item 1</p>
   </li>
@@ -162,7 +162,7 @@ BULLETS
             }, ]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<ul xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="ul_1">
   <li eId="ul_1__li_1">
@@ -273,7 +273,7 @@ BULLETS
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<ul xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="ul_1">
   <li eId="ul_1__li_1">
@@ -385,7 +385,7 @@ BULLETS
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<ul xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="ul_1">
   <li eId="ul_1__li_1">

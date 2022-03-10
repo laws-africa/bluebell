@@ -5,7 +5,7 @@
         <FRBRWork>
           <FRBRthis value="/akn/za/act/2009/10"/>
           <FRBRuri value="/akn/za/act/2009/10"/>
-          <FRBRalias value="Untitled" name="title"/>
+          <FRBRalias name="title" value="Untitled"/>
           <FRBRdate date="2009" name="Generation"/>
           <FRBRauthor href=""/>
           <FRBRcountry value="za"/>
@@ -31,8 +31,8 @@
     </meta>
     <preface>
       <p eId="preface__p_1">Here is a document:</p>
-      <block name="quote" eId="preface__block_1">
-        <embeddedStructure startQuote="“" eId="preface__block_1__embeddedStructure_1">
+      <block eId="preface__block_1" name="quote">
+        <embeddedStructure eId="preface__block_1__embeddedStructure_1" startQuote="“">
           <paragraph eId="preface__block_1__embeddedStructure_1__para_A">
             <num>A</num>
             <heading>Heading</heading>
@@ -45,7 +45,7 @@
             <subparagraph eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii">
               <num>ii</num>
               <content>
-                <p eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1">Content<authorialNote marker="x" placement="bottom" eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1"><p eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__p_1">Here's a footnote, and it Also includes a quote:</p><block name="quote" eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1"><embeddedStructure startQuote="“" eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1"><paragraph eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1__para_A"><num>A</num><heading>Heading</heading><subparagraph eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1__para_A__subpara_i"><num>i</num><content><p eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1__para_A__subpara_i__p_1">Content</p></content></subparagraph><subparagraph eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1__para_A__subpara_ii"><num>ii</num><content><p eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1__para_A__subpara_ii__p_1">Content”.</p></content></subparagraph></paragraph></embeddedStructure></block></authorialNote>”.</p>
+                <p eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1">Content<authorialNote eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1" marker="x" placement="bottom"><p eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__p_1">Here's a footnote, and it Also includes a quote:</p><block eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1" name="quote"><embeddedStructure eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1" startQuote="“"><paragraph eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1__para_A"><num>A</num><heading>Heading</heading><subparagraph eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1__para_A__subpara_i"><num>i</num><content><p eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1__para_A__subpara_i__p_1">Content</p></content></subparagraph><subparagraph eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1__para_A__subpara_ii"><num>ii</num><content><p eId="preface__block_1__embeddedStructure_1__para_A__subpara_ii__p_1__authorialNote_1__block_1__embeddedStructure_1__para_A__subpara_ii__p_1">Content”.</p></content></subparagraph></paragraph></embeddedStructure></block></authorialNote>”.</p>
               </content>
             </subparagraph>
           </paragraph>
@@ -75,14 +75,14 @@
         <tr>
           <td>
             <p eId="table_1__p_3">Intro text:</p>
-            <block name="quote" eId="table_1__block_1">
+            <block eId="table_1__block_1" name="quote">
               <embeddedStructure eId="table_1__block_1__embeddedStructure_1">
                 <p eId="table_1__block_1__embeddedStructure_1__p_1">Text of quote.</p>
               </embeddedStructure>
             </block>
           </td>
           <td>
-            <block name="quote" eId="table_1__block_2">
+            <block eId="table_1__block_2" name="quote">
               <embeddedStructure eId="table_1__block_2__embeddedStructure_1">
                 <p eId="table_1__block_2__embeddedStructure_1__p_1">Text of quote.</p>
               </embeddedStructure>
@@ -90,7 +90,7 @@
           </td>
         </tr>
       </table>
-      <block name="quote" eId="block_1">
+      <block eId="block_1" name="quote">
         <embeddedStructure eId="block_1__embeddedStructure_1">
           <p eId="block_1__embeddedStructure_1__p_1">Text of quote, introducing this table:</p>
           <table eId="block_1__embeddedStructure_1__table_1">
@@ -223,7 +223,7 @@
             <p eId="dvs_nn_1__para_5__p_1"><i>Takes note</i> of the exploration contained in the note by the Executive Secretary of possibilities of developing a Biodiversity Technology Initiative (BTI), taking into account the Climate Technology Initiative (CTI) (UNEP/CBD/COP/9/18/Add.1), bearing in mind that the Biodiversity Technology Initiative would facilitate enhanced interaction with Parties with identified capacity/technology building needs and international organizations, Parties, or other relevant organizations, which could assist in capacity‑building and technology transfer;</p>
           </content>
         </paragraph>
-        <hcontainer name="hcontainer" eId="dvs_nn_1__hcontainer_1">
+        <hcontainer eId="dvs_nn_1__hcontainer_1" name="hcontainer">
           <content>
             <p eId="dvs_nn_1__hcontainer_1__p_1">Rando text between paragraphs</p>
           </content>
@@ -245,7 +245,7 @@
             <p eId="dvs_nn_1__para_6__p_2">and to submit the options and the list of criteria to the Ad Hoc Open-ended Working Group on Review of Implementation of the Convention at its third meeting for its consideration;</p>
           </content>
         </paragraph>
-        <hcontainer name="hcontainer" eId="dvs_nn_1__hcontainer_2">
+        <hcontainer eId="dvs_nn_1__hcontainer_2" name="hcontainer">
           <content>
             <p eId="dvs_nn_1__hcontainer_2__p_1">Rando text between paragraphs</p>
           </content>
@@ -409,7 +409,7 @@
               <FRBRWork>
                 <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
                 <FRBRuri value="/akn/za/act/2009/10"/>
-                <FRBRalias value="Annex" name="title"/>
+                <FRBRalias name="title" value="Annex"/>
                 <FRBRdate date="2009" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="za"/>
@@ -699,7 +699,7 @@
               <paragraph eId="att_1__dvs_VI__para_30">
                 <num>30.</num>
                 <content>
-                  <p eId="att_1__dvs_VI__para_30__p_1">Committed Parties and organizations that act as <b>champions of technology transfer</b> can play an important role in promoting and supporting the effective implementation of Articles 16 to 19 and the programme of work on technology transfer and scientific and technological cooperation, in particular if competitive mechanisms are put in place. For example, the Climate Technology Initiative (CTI), which was launched in 1995 by 23 OECD/International Energy Agency member countries and the European Commission to support the technology-related objectives of the United Nations Framework Convention on Climate Change, indicates the useful role of such an international network of champions for the effective implementation of provisions on technology transfer. The establishment of a similar <b>‘Biodiversity Technology Initiative’</b> would be useful and welcome if effectively contributing to the implementation of the present strategy. Several open questions remain, including on the funding needs, the potential portfolio of activities, and other questions as identified in the report prepared by the Executive Secretary for consideration by the ninth meeting of the Conference of the Parties. <sup><authorialNote marker="1" placement="bottom" eId="att_1__dvs_VI__para_30__p_1__authorialNote_1"><p eId="att_1__dvs_VI__para_30__p_1__authorialNote_1__p_1">UNEP/CBD/COP/9/18/Add. 1.</p></authorialNote></sup></p>
+                  <p eId="att_1__dvs_VI__para_30__p_1">Committed Parties and organizations that act as <b>champions of technology transfer</b> can play an important role in promoting and supporting the effective implementation of Articles 16 to 19 and the programme of work on technology transfer and scientific and technological cooperation, in particular if competitive mechanisms are put in place. For example, the Climate Technology Initiative (CTI), which was launched in 1995 by 23 OECD/International Energy Agency member countries and the European Commission to support the technology-related objectives of the United Nations Framework Convention on Climate Change, indicates the useful role of such an international network of champions for the effective implementation of provisions on technology transfer. The establishment of a similar <b>‘Biodiversity Technology Initiative’</b> would be useful and welcome if effectively contributing to the implementation of the present strategy. Several open questions remain, including on the funding needs, the potential portfolio of activities, and other questions as identified in the report prepared by the Executive Secretary for consideration by the ninth meeting of the Conference of the Parties. <sup><authorialNote eId="att_1__dvs_VI__para_30__p_1__authorialNote_1" marker="1" placement="bottom"><p eId="att_1__dvs_VI__para_30__p_1__authorialNote_1__p_1">UNEP/CBD/COP/9/18/Add. 1.</p></authorialNote></sup></p>
                 </content>
               </paragraph>
               <paragraph eId="att_1__dvs_VI__para_31">

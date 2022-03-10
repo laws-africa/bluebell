@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-from lxml import etree
 from tests.support import ParserSupport
 
 
@@ -46,7 +45,7 @@ there
             }],
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<judgment xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="judgment">
   <header/>

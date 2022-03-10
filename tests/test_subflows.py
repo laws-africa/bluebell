@@ -1,7 +1,5 @@
 from unittest import TestCase
 
-from lxml import etree
-
 from bluebell.akn import ParseError
 from tests.support import ParserSupport
 
@@ -227,9 +225,9 @@ hello {{FOOTNOTE }} }} there
 hello {{FOOTNOTE 1}} there
 """, 'line')
 
-        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.generator.to_xml(tree))
 
-        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">hello <authorialNote marker="1" placement="bottom" eId="p_1__authorialNote_1"><p eId="p_1__authorialNote_1__p_1">(content missing)</p></authorialNote> there</p>
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">hello <authorialNote eId="p_1__authorialNote_1" marker="1" placement="bottom"><p eId="p_1__authorialNote_1__p_1">(content missing)</p></authorialNote> there</p>
 """, xml)
 
     def test_footnote_owner_missing(self):
@@ -242,7 +240,7 @@ FOOTNOTE 99
   a footnote without a parent
 """, 'remedies')
 
-        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.generator.to_xml(tree))
 
         self.assertEqual("""<remedies xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <p eId="remedies__p_1">some content</p>
@@ -314,12 +312,12 @@ PART 1
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.generator.to_xml(tree))
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
   <num>1</num>
   <content>
-    <p eId="part_1__p_1">this section [<authorialNote marker="1" placement="bottom" eId="part_1__p_1__authorialNote_1"><p eId="part_1__p_1__authorialNote_1__p_1">which isn't very interesting</p></authorialNote>] uses a footnote.</p>
+    <p eId="part_1__p_1">this section [<authorialNote eId="part_1__p_1__authorialNote_1" marker="1" placement="bottom"><p eId="part_1__p_1__authorialNote_1__p_1">which isn't very interesting</p></authorialNote>] uses a footnote.</p>
     <p eId="part_1__p_2">FOOTNOTE 2</p>
     <p eId="part_1__p_3">which is not used</p>
   </content>
@@ -344,11 +342,11 @@ FOOTNOTE 1
 
 """, 'preamble')
 
-        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.generator.to_xml(tree))
 
         self.assertEqual("""<preamble xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
-  <p eId="preamble__p_1">First reference to the Sustainable Development Goals,<sup><authorialNote marker="1" placement="bottom" eId="preamble__p_1__authorialNote_1"><p eId="preamble__p_1__authorialNote_1__p_1">General Assembly resolution 70/1, annex.</p></authorialNote></sup></p>
-  <p eId="preamble__p_2">Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,<sup><authorialNote marker="1" placement="bottom" eId="preamble__p_2__authorialNote_1"><p eId="preamble__p_2__authorialNote_1__p_1">General Assembly resolution 70/1, annex.</p></authorialNote></sup></p>
+  <p eId="preamble__p_1">First reference to the Sustainable Development Goals,<sup><authorialNote eId="preamble__p_1__authorialNote_1" marker="1" placement="bottom"><p eId="preamble__p_1__authorialNote_1__p_1">General Assembly resolution 70/1, annex.</p></authorialNote></sup></p>
+  <p eId="preamble__p_2">Second reference to the Sustainable Development Goals, with repeated reference and identical footnote text,<sup><authorialNote eId="preamble__p_2__authorialNote_1" marker="1" placement="bottom"><p eId="preamble__p_2__authorialNote_1__p_1">General Assembly resolution 70/1, annex.</p></authorialNote></sup></p>
 </preamble>
 """, xml)
 
@@ -436,10 +434,10 @@ QUOTE{startQuote "}
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.generator.to_xml(tree), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.generator.to_xml(tree))
 
-        self.assertEqual("""<block xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="quote" eId="block_1">
-  <embeddedStructure startQuote="&quot;" eId="block_1__embeddedStructure_1">
+        self.assertEqual("""<block xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="block_1" name="quote">
+  <embeddedStructure eId="block_1__embeddedStructure_1" startQuote="&quot;">
     <p eId="block_1__embeddedStructure_1__p_1">line one</p>
   </embeddedStructure>
 </block>
@@ -464,7 +462,7 @@ QUOTE{startQuote "}
 
     def test_quote_unparsed(self):
         # quotes should be correctly indented when unparsed
-        xml = '''<block xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="quote" eId="block_1"><embeddedStructure startQuote="&quot;" eId="block_1__embeddedStructure_1"><p eId="block_1__embeddedStructure_1__p_1">line one</p></embeddedStructure></block>
+        xml = '''<block xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="block_1" name="quote"><embeddedStructure eId="block_1__embeddedStructure_1" startQuote="&quot;"><p eId="block_1__embeddedStructure_1__p_1">line one</p></embeddedStructure></block>
 '''
         unparsed = self.parser.unparse(xml)
         self.assertEqual('''QUOTE{startQuote "}

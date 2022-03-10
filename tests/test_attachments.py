@@ -1,8 +1,6 @@
 from datetime import date
 from unittest import TestCase
 
-from lxml import etree
-
 from cobalt import datestring
 from tests.support import ParserSupport
 
@@ -142,7 +140,7 @@ SCHEDULE heading
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
         today = datestring(date.today())
 
         self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
@@ -155,7 +153,7 @@ SCHEDULE heading
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="a heading" name="title"/>
+            <FRBRalias name="title" value="a heading"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -189,7 +187,7 @@ SCHEDULE heading
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!schedule_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="heading" name="title"/>
+            <FRBRalias name="title" value="heading"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -282,7 +280,7 @@ schedule text
             }]
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
         today = datestring(date.today())
 
         self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
@@ -295,7 +293,7 @@ schedule text
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="a heading" name="title"/>
+            <FRBRalias name="title" value="a heading"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -329,7 +327,7 @@ schedule text
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!schedule_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="heading" name="title"/>
+            <FRBRalias name="title" value="heading"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -412,7 +410,7 @@ ANNEXURE a heading
 
             ]
         }, tree.to_dict())
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
         today = datestring(date.today())
         self.assertEqual(f"""<attachment xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="att_1">
   <heading>a heading</heading>
@@ -423,7 +421,7 @@ ANNEXURE a heading
         <FRBRWork>
           <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
           <FRBRuri value="/akn/za/act/2009/10"/>
-          <FRBRalias value="a heading" name="title"/>
+          <FRBRalias name="title" value="a heading"/>
           <FRBRdate date="2009" name="Generation"/>
           <FRBRauthor href=""/>
           <FRBRcountry value="za"/>
@@ -457,7 +455,7 @@ ANNEXURE a heading
               <FRBRWork>
                 <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
                 <FRBRuri value="/akn/za/act/2009/10"/>
-                <FRBRalias value="heading" name="title"/>
+                <FRBRalias name="title" value="heading"/>
                 <FRBRdate date="2009" name="Generation"/>
                 <FRBRauthor href=""/>
                 <FRBRcountry value="za"/>
@@ -572,7 +570,7 @@ ANNEXURE back out
                 }
             ]
         }, tree.to_dict())
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
         today = datestring(date.today())
         self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
@@ -584,7 +582,7 @@ ANNEXURE back out
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="a heading" name="title"/>
+            <FRBRalias name="title" value="a heading"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -618,7 +616,7 @@ ANNEXURE back out
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="heading" name="title"/>
+                  <FRBRalias name="title" value="heading"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>
@@ -656,7 +654,7 @@ ANNEXURE back out
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_2"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="back out" name="title"/>
+            <FRBRalias name="title" value="back out"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -820,7 +818,7 @@ ANNEXURE back out
                 }
             ]
         }, tree.to_dict())
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
         today = datestring(date.today())
         self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
@@ -832,7 +830,7 @@ ANNEXURE back out
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="a heading" name="title"/>
+            <FRBRalias name="title" value="a heading"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -867,7 +865,7 @@ ANNEXURE back out
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="heading" name="title"/>
+                  <FRBRalias name="title" value="heading"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>
@@ -900,7 +898,7 @@ ANNEXURE back out
                       <FRBRWork>
                         <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1/schedule_1"/>
                         <FRBRuri value="/akn/za/act/2009/10"/>
-                        <FRBRalias value="deeper heading" name="title"/>
+                        <FRBRalias name="title" value="deeper heading"/>
                         <FRBRdate date="2009" name="Generation"/>
                         <FRBRauthor href=""/>
                         <FRBRcountry value="za"/>
@@ -933,7 +931,7 @@ ANNEXURE back out
                             <FRBRWork>
                               <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1/schedule_1/schedule_1"/>
                               <FRBRuri value="/akn/za/act/2009/10"/>
-                              <FRBRalias value="even deeper heading" name="title"/>
+                              <FRBRalias name="title" value="even deeper heading"/>
                               <FRBRdate date="2009" name="Generation"/>
                               <FRBRauthor href=""/>
                               <FRBRcountry value="za"/>
@@ -977,7 +975,7 @@ ANNEXURE back out
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_2"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="back out" name="title"/>
+            <FRBRalias name="title" value="back out"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -1304,7 +1302,7 @@ SCHEDULE first schedule
                 },
             ]
         }, tree.to_dict())
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
         today = datestring(date.today())
         self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
@@ -1315,7 +1313,7 @@ SCHEDULE first schedule
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="first" name="title"/>
+            <FRBRalias name="title" value="first"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -1348,7 +1346,7 @@ SCHEDULE first schedule
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="first, first" name="title"/>
+                  <FRBRalias name="title" value="first, first"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>
@@ -1381,7 +1379,7 @@ SCHEDULE first schedule
                       <FRBRWork>
                         <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_1/annexure_1"/>
                         <FRBRuri value="/akn/za/act/2009/10"/>
-                        <FRBRalias value="first, first, first" name="title"/>
+                        <FRBRalias name="title" value="first, first, first"/>
                         <FRBRdate date="2009" name="Generation"/>
                         <FRBRauthor href=""/>
                         <FRBRcountry value="za"/>
@@ -1415,7 +1413,7 @@ SCHEDULE first schedule
                       <FRBRWork>
                         <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_1/annexure_2"/>
                         <FRBRuri value="/akn/za/act/2009/10"/>
-                        <FRBRalias value="first, first, second" name="title"/>
+                        <FRBRalias name="title" value="first, first, second"/>
                         <FRBRdate date="2009" name="Generation"/>
                         <FRBRauthor href=""/>
                         <FRBRcountry value="za"/>
@@ -1449,7 +1447,7 @@ SCHEDULE first schedule
                       <FRBRWork>
                         <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_1/schedule_1"/>
                         <FRBRuri value="/akn/za/act/2009/10"/>
-                        <FRBRalias value="first, first, first schedule" name="title"/>
+                        <FRBRalias name="title" value="first, first, first schedule"/>
                         <FRBRdate date="2009" name="Generation"/>
                         <FRBRauthor href=""/>
                         <FRBRcountry value="za"/>
@@ -1486,7 +1484,7 @@ SCHEDULE first schedule
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_2"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="first, second" name="title"/>
+                  <FRBRalias name="title" value="first, second"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>
@@ -1519,7 +1517,7 @@ SCHEDULE first schedule
                       <FRBRWork>
                         <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_2/schedule_1"/>
                         <FRBRuri value="/akn/za/act/2009/10"/>
-                        <FRBRalias value="first, second, first schedule" name="title"/>
+                        <FRBRalias name="title" value="first, second, first schedule"/>
                         <FRBRdate date="2009" name="Generation"/>
                         <FRBRauthor href=""/>
                         <FRBRcountry value="za"/>
@@ -1553,7 +1551,7 @@ SCHEDULE first schedule
                       <FRBRWork>
                         <FRBRthis value="/akn/za/act/2009/10/!annexure_1/annexure_2/annexure_1"/>
                         <FRBRuri value="/akn/za/act/2009/10"/>
-                        <FRBRalias value="first, second, first" name="title"/>
+                        <FRBRalias name="title" value="first, second, first"/>
                         <FRBRdate date="2009" name="Generation"/>
                         <FRBRauthor href=""/>
                         <FRBRcountry value="za"/>
@@ -1593,7 +1591,7 @@ SCHEDULE first schedule
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_2"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="second" name="title"/>
+            <FRBRalias name="title" value="second"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -1626,7 +1624,7 @@ SCHEDULE first schedule
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!annexure_2/annexure_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="second, first" name="title"/>
+                  <FRBRalias name="title" value="second, first"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>
@@ -1660,7 +1658,7 @@ SCHEDULE first schedule
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!annexure_2/annexure_2"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="second, second" name="title"/>
+                  <FRBRalias name="title" value="second, second"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>
@@ -1697,7 +1695,7 @@ SCHEDULE first schedule
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!schedule_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="first schedule" name="title"/>
+            <FRBRalias name="title" value="first schedule"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -1730,7 +1728,7 @@ SCHEDULE first schedule
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!schedule_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="first, first" name="title"/>
+                  <FRBRalias name="title" value="first, first"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>
@@ -1764,7 +1762,7 @@ SCHEDULE first schedule
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!schedule_1/annexure_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="first, first annex" name="title"/>
+                  <FRBRalias name="title" value="first, first annex"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>
@@ -1966,7 +1964,7 @@ ANNEXURE back out
                     ],
                 },
             ]}, tree.to_dict())
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
         today = datestring(date.today())
         self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
@@ -1978,7 +1976,7 @@ ANNEXURE back out
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="a heading" name="title"/>
+            <FRBRalias name="title" value="a heading"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -2013,7 +2011,7 @@ ANNEXURE back out
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="is a heading" name="title"/>
+                  <FRBRalias name="title" value="is a heading"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>
@@ -2052,7 +2050,7 @@ ANNEXURE back out
                       <FRBRWork>
                         <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1/annexure_1"/>
                         <FRBRuri value="/akn/za/act/2009/10"/>
-                        <FRBRalias value="is an Annex" name="title"/>
+                        <FRBRalias name="title" value="is an Annex"/>
                         <FRBRdate date="2009" name="Generation"/>
                         <FRBRauthor href=""/>
                         <FRBRcountry value="za"/>
@@ -2086,7 +2084,7 @@ ANNEXURE back out
                       <FRBRWork>
                         <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1/annexure_2"/>
                         <FRBRuri value="/akn/za/act/2009/10"/>
-                        <FRBRalias value="para" name="title"/>
+                        <FRBRalias name="title" value="para"/>
                         <FRBRdate date="2009" name="Generation"/>
                         <FRBRauthor href=""/>
                         <FRBRcountry value="za"/>
@@ -2127,7 +2125,7 @@ ANNEXURE back out
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_2"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="back out" name="title"/>
+            <FRBRalias name="title" value="back out"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -2274,7 +2272,7 @@ even more text, pushed into Annex (will move up)
                         }],
                     }],
                 }]}, tree.to_dict())
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
         today = datestring(date.today())
         self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
@@ -2286,7 +2284,7 @@ even more text, pushed into Annex (will move up)
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="a heading" name="title"/>
+            <FRBRalias name="title" value="a heading"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -2327,7 +2325,7 @@ even more text, pushed into Annex (will move up)
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="actually a schedule" name="title"/>
+                  <FRBRalias name="title" value="actually a schedule"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>
@@ -2455,7 +2453,7 @@ ANNEXURE a heading
                     ],
                 }
             ]}, tree.to_dict())
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
         today = datestring(date.today())
         self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
@@ -2467,7 +2465,7 @@ ANNEXURE a heading
           <FRBRWork>
             <FRBRthis value="/akn/za/act/2009/10/!annexure_1"/>
             <FRBRuri value="/akn/za/act/2009/10"/>
-            <FRBRalias value="a heading" name="title"/>
+            <FRBRalias name="title" value="a heading"/>
             <FRBRdate date="2009" name="Generation"/>
             <FRBRauthor href=""/>
             <FRBRcountry value="za"/>
@@ -2510,7 +2508,7 @@ ANNEXURE a heading
                 <FRBRWork>
                   <FRBRthis value="/akn/za/act/2009/10/!annexure_1/schedule_1"/>
                   <FRBRuri value="/akn/za/act/2009/10"/>
-                  <FRBRalias value="a heading again" name="title"/>
+                  <FRBRalias name="title" value="a heading again"/>
                   <FRBRdate date="2009" name="Generation"/>
                   <FRBRauthor href=""/>
                   <FRBRcountry value="za"/>

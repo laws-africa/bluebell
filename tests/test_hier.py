@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-from lxml import etree
 from .support import ParserSupport
 
 
@@ -44,11 +43,11 @@ there
             }],
         }, tree.to_dict())
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
-        self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="hierarchicalStructure" eId="hierarchicalStructure_1">
+        self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="hierarchicalStructure_1" name="hierarchicalStructure">
   <body>
-    <hcontainer name="hcontainer" eId="hierarchicalStructure_1__hcontainer_1">
+    <hcontainer eId="hierarchicalStructure_1__hcontainer_1" name="hcontainer">
       <p eId="hierarchicalStructure_1__hcontainer_1__p_1">hello</p>
       <p eId="hierarchicalStructure_1__hcontainer_1__p_2">there</p>
     </hcontainer>
@@ -162,7 +161,7 @@ PART
   conclusion
 """, 'hier_element_block')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_nn_1">
   <intro>
@@ -174,7 +173,7 @@ PART
       <p eId="part_nn_1__sec_1__p_1">section 1 text</p>
     </content>
   </section>
-  <hcontainer name="hcontainer" eId="part_nn_1__hcontainer_1">
+  <hcontainer eId="part_nn_1__hcontainer_1" name="hcontainer">
     <content>
       <p eId="part_nn_1__hcontainer_1__p_1">some interstitial text</p>
     </content>
@@ -208,7 +207,7 @@ PART
   conclusion
 """, 'hier_element_block')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_nn_1">
   <intro>
@@ -245,7 +244,7 @@ PART
     section 2 text
 """, 'hier_element_block')
 
-        xml = etree.tostring(self.to_xml(tree.to_dict()), encoding='unicode', pretty_print=True)
+        xml = self.tostring(self.to_xml(tree.to_dict()))
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_nn_1">
   <section eId="part_nn_1__sec_1">
