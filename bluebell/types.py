@@ -155,6 +155,9 @@ class HierElement:
         if self.subheading.text:
             info['subheading'] = self.subheading.to_dict()
 
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+
         return info
 
 

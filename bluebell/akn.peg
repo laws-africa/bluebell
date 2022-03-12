@@ -1,6 +1,4 @@
 grammar akn
-  # TODO: either one big grammar, or we need to fake inheritance
-
   root              <- 'noop'
 
   # ------------------------------------------------------------------------------
@@ -60,19 +58,16 @@ grammar akn
 
   hier_element      <- crossheading / hier_element_block
 
-  hier_element_block <- hier_element_name heading:hier_element_heading? eol
+  hier_element_block <- hier_element_name attrs:block_attrs? heading:hier_element_heading? eol
                         indent
                           subheading:subheading?
                           content:hier_block_element*
                         dedent <HierElement>
 
-                        # num - heading
-                        # - heading
-                        # num
-                        # TODO: maybe better to make the heading the default?
-                        #   eg: heading
-                        #       num -
-                        #       num - heading
+                        # eg: num - heading
+                        #     - heading
+                        #     num
+                        #     num -
   hier_element_heading <- space num:[^\n-]* heading:('-' space content:inline*)? <HierElementHeading>
 
   hier_block_element <- hier_element / block_element
