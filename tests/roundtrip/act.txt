@@ -31,7 +31,7 @@ CHAP 1 - Heading
 
     SUBSEC 1
 
-      ITEMS
+      ITEMS.classname
         list __intro__
 
         ITEM (a)
@@ -65,7 +65,7 @@ CHAP 1 - Heading
 
     some text
 
-    BULLETS
+    BULLETS.classname
       * item 1
       * item 2
         second line

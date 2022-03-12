@@ -329,7 +329,9 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>ITEMS&#10;</xsl:text>
+    <xsl:text>ITEMS</xsl:text>
+    <xsl:call-template name="block-attrs" />
+    <xsl:text>&#10;</xsl:text>
 
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent + 1" />
@@ -359,7 +361,9 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>BULLETS&#10;</xsl:text>
+    <xsl:text>BULLETS</xsl:text>
+    <xsl:call-template name="block-attrs" />
+    <xsl:text>&#10;</xsl:text>
 
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent + 1" />
