@@ -118,7 +118,7 @@ grammar akn
                        content:(!attachment_marker block_element)*
                        <Conclusions>
 
-  # Judment-specific containers
+  # Judgment-specific containers
 
   introduction      <- introduction_marker
                        content:(!background_marker !arguments_marker !remedies_marker !motivation_marker !decision_marker !conclusions_marker !attachment_marker hier_block_indent)*
