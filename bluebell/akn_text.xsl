@@ -286,6 +286,8 @@
       </xsl:otherwise>
     </xsl:choose>
 
+    <xsl:call-template name="block-attrs" />
+
     <xsl:if test="a:num">
       <xsl:text> </xsl:text>
       <xsl:value-of select="a:num" />

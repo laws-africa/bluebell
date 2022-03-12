@@ -59,12 +59,13 @@ class TreeNode5(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode5, self).__init__(text, offset, elements)
         self.hier_element_name = elements[0]
-        self.heading = elements[1]
-        self.eol = elements[2]
-        self.indent = elements[3]
-        self.subheading = elements[4]
-        self.content = elements[5]
-        self.dedent = elements[6]
+        self.attrs = elements[1]
+        self.heading = elements[2]
+        self.eol = elements[3]
+        self.indent = elements[4]
+        self.subheading = elements[5]
+        self.content = elements[6]
+        self.dedent = elements[7]
 
 
 class TreeNode6(TreeNode):
@@ -1105,46 +1106,57 @@ class Grammar(object):
             elements0.append(address1)
             address2 = FAILURE
             index2 = self._offset
-            address2 = self._read_hier_element_heading()
+            address2 = self._read_block_attrs()
             if address2 is FAILURE:
                 address2 = TreeNode(self._input[index2:index2], index2, [])
                 self._offset = index2
             if address2 is not FAILURE:
                 elements0.append(address2)
                 address3 = FAILURE
-                address3 = self._read_eol()
+                index3 = self._offset
+                address3 = self._read_hier_element_heading()
+                if address3 is FAILURE:
+                    address3 = TreeNode(self._input[index3:index3], index3, [])
+                    self._offset = index3
                 if address3 is not FAILURE:
                     elements0.append(address3)
                     address4 = FAILURE
-                    address4 = self._read_indent()
+                    address4 = self._read_eol()
                     if address4 is not FAILURE:
                         elements0.append(address4)
                         address5 = FAILURE
-                        index3 = self._offset
-                        address5 = self._read_subheading()
-                        if address5 is FAILURE:
-                            address5 = TreeNode(self._input[index3:index3], index3, [])
-                            self._offset = index3
+                        address5 = self._read_indent()
                         if address5 is not FAILURE:
                             elements0.append(address5)
                             address6 = FAILURE
-                            remaining0, index4, elements1, address7 = 0, self._offset, [], True
-                            while address7 is not FAILURE:
-                                address7 = self._read_hier_block_element()
-                                if address7 is not FAILURE:
-                                    elements1.append(address7)
-                                    remaining0 -= 1
-                            if remaining0 <= 0:
-                                address6 = TreeNode(self._input[index4:self._offset], index4, elements1)
-                                self._offset = self._offset
-                            else:
-                                address6 = FAILURE
+                            index4 = self._offset
+                            address6 = self._read_subheading()
+                            if address6 is FAILURE:
+                                address6 = TreeNode(self._input[index4:index4], index4, [])
+                                self._offset = index4
                             if address6 is not FAILURE:
                                 elements0.append(address6)
-                                address8 = FAILURE
-                                address8 = self._read_dedent()
-                                if address8 is not FAILURE:
-                                    elements0.append(address8)
+                                address7 = FAILURE
+                                remaining0, index5, elements1, address8 = 0, self._offset, [], True
+                                while address8 is not FAILURE:
+                                    address8 = self._read_hier_block_element()
+                                    if address8 is not FAILURE:
+                                        elements1.append(address8)
+                                        remaining0 -= 1
+                                if remaining0 <= 0:
+                                    address7 = TreeNode(self._input[index5:self._offset], index5, elements1)
+                                    self._offset = self._offset
+                                else:
+                                    address7 = FAILURE
+                                if address7 is not FAILURE:
+                                    elements0.append(address7)
+                                    address9 = FAILURE
+                                    address9 = self._read_dedent()
+                                    if address9 is not FAILURE:
+                                        elements0.append(address9)
+                                    else:
+                                        elements0 = None
+                                        self._offset = index1
                                 else:
                                     elements0 = None
                                     self._offset = index1
