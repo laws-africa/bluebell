@@ -28,12 +28,9 @@ class IdGenerator:
         peer of p, blockList and friends, which should have eIds.
     """
 
-    id_unnecessary = set("arguments background conclusions decision header introduction motivation preamble preface"
-                         " remedies".split())
-    """ Elements for which an id is optional. """
-
-    id_unnecessary_but_pass_to_children = set("intro wrapUp preface preamble".split()) | id_unnecessary
-    """ Elements for which an id is optional but any descendants get the parent's prefix."""
+    id_exempt_but_pass_to_children = set("arguments background conclusions decision header intro introduction"
+                                         " motivation preamble preface remedies wrapUp".split())
+    """ Elements for which an id is not required but any descendants get the parent's prefix."""
 
     num_expected = set("alinea article book chapter clause division indent item level list"
                        " paragraph part point proviso rule section subchapter subclause"
@@ -88,30 +85,29 @@ class IdGenerator:
         sub[name] = sub.get(name, 0) + 1
         return sub[name]
 
-    def make(self, prefix, item):
-        if item['name'] in self.id_exempt:
+    def get_eid(self, prefix, name, num):
+        if name in self.id_exempt:
             return None
 
         eid = f'{prefix}__' if prefix else ''
-        name = item['name']
         eid = eid + self.aliases.get(name, name)
 
-        if self.needs_num(name):
-            num, nn = self.get_num(item, prefix, name)
+        # some elements are effectively unique and so don't need a differentiating number
+        if name not in self.id_exempt_but_pass_to_children:
+            num, nn = self.get_num(prefix, name, num)
             eid = self.ensure_unique(f'{eid}_{num}', nn)
 
         return eid
 
-    def get_num(self, item, prefix, name):
-        num = None
+    def get_num(self, prefix, name, num):
         nn = False
 
         # e.g. PARA (a)
-        if item.get('num'):
-            num = self.clean_num(item.get('num'))
+        if num:
+            num = self.clean_num(num)
 
         # e.g. PARA, or num was cleaned to ''
-        if not num and self.needs_nn(name):
+        if not num and name in self.num_expected:
             num = 'nn'
             nn = True
 
@@ -136,12 +132,6 @@ class IdGenerator:
     def reset(self):
         self.counters.clear()
         self.eid_counter.clear()
-
-    def needs_num(self, name):
-        return name not in self.id_unnecessary
-
-    def needs_nn(self, name):
-        return name in self.num_expected
 
     def clean_num(self, num):
         """ Clean a <num> value for use in an eId
@@ -200,31 +190,20 @@ class IdGenerator:
 
     def rewrite_eid(self, element, prefix=''):
         """ Rewrites all eIds recursively in `element`, ensuring correctness and uniqueness.
-            :param element: XML element
-            :param prefix: string of parent eId or other prefix to be used (e.g. "preface"); defaults to empty string
+        :param element: XML element
+        :param prefix: string of parent eId or other prefix to be used (e.g. "preface"); defaults to empty string
         """
         tag = element.tag.split('}', 1)[-1]
         # skip meta blocks entirely
         if tag == 'meta':
             return
 
-        # don't generate new eId for `act`, `num`, etc
-        if tag not in self.id_exempt and tag not in self.id_unnecessary_but_pass_to_children:
+        # don't generate an eId for `act`, `num`, etc
+        if tag not in self.id_exempt and tag not in self.id_exempt_but_pass_to_children:
             old_eid = element.get('eId', '')
 
-            # use preface / preamble as prefix
-            parent = element.getparent()
-            if parent is not None:
-                parent = parent.tag.split('}', 1)[-1]
-                if parent in ['preface', 'preamble']:
-                    prefix = parent
-
             num = next((n.text for n in element.iterchildren(f'{{{element.nsmap[None]}}}num')), '')
-            item = {
-                'name': tag,
-                'num': num,
-            }
-            new_eid = self.make(prefix, item) or ''
+            new_eid = self.get_eid(prefix, tag, num) or ''
 
             # update prefix on all descendants if changed
             if old_eid != new_eid:
@@ -238,7 +217,7 @@ class IdGenerator:
             prefix = new_eid or prefix
 
         # include the current tag in the prefix if needed
-        if tag in self.id_unnecessary_but_pass_to_children:
+        if tag in self.id_exempt_but_pass_to_children:
             prefix = f'{prefix}__{tag.lower()}' if prefix else tag.lower()
 
         # keep drilling down

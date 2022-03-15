@@ -1,0 +1,24 @@
+PREFACE
+
+  preface
+
+PREAMBLE
+
+  preamble
+
+BODY
+
+main body text
+
+PART 1
+
+  First part
+
+CONCLUSIONS
+
+  conclusions
+
+ANNEXURE Annex 1
+
+  Some content 1
+
