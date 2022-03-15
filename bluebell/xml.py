@@ -409,6 +409,7 @@ class XmlGenerator:
         """ Post-processing of generated XML to make final changes.
         """
         xml = self.resolve_displaced_content(xml)
+        xml = self.normalise(xml)
         xml = self.generate_eids(xml)
         xml = self.set_attachment_titles(xml)
         return xml
@@ -471,6 +472,17 @@ class XmlGenerator:
                 if alias:
                     alias[0].attrib['value'] = title
 
+        return xml
+
+    def normalise(self, xml):
+        """ Make some basic normalisations. It's easier (and a better separation of concerns) to do these afterwards,
+        rather than when translating the intermediate structure into XML.
+
+        1. remove empty crossHeading and longTitle elements which can be produced by the grammar.
+        2. remove empty content elements which can be produced for empty hierarchical elements.
+        """
+        for elem in xml.xpath('//*[self::a:crossHeading or self::a:longTitle or self::a:content][not(node())]', namespaces={'a': xml.nsmap[None]}):
+            elem.getparent().remove(elem)
         return xml
 
     def generate_eids(self, xml):
