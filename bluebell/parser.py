@@ -9,6 +9,9 @@ from lxml import etree
 
 INDENT = '\x0E'  # ascii SHIFT-IN character
 DEDENT = '\x0F'  # ascii SHIFT_OUT character
+ROOT_ALIASES = {
+    'debatereport': 'debateReport'
+}
 
 
 class Parser(BaseParser):
@@ -158,6 +161,7 @@ class AkomaNtosoParser:
     def parse_with_failure(self, text, root):
         """ Helper function to do the actual parsing with an arbitrary root. Raises ParseError if parsing fails.
         """
+        root = ROOT_ALIASES.get(root, root)
         parser = Parser(text, actions=None, types=types)
         tree = getattr(parser, f'_read_{root}')()
         if tree is not FAILURE and parser._offset == parser._input_size:
