@@ -61,11 +61,14 @@ grammar akn
   hier_element      <- crossheading / hier_element_block
 
   hier_element_block <- hier_element_name heading:hier_element_heading? eol
-                        indent
+                        body:(indent
                           subheading:subheading?
                           content:hier_block_element*
-                        dedent <HierElement>
+                        dedent)? <HierElement>
 
+                        # the num and heading MUST be separated by ' - ', including spaces
+                        # otherwise, the dash is considered a part of the num, or of the heading
+                        #
                         # num - heading
                         # - heading
                         # num
@@ -73,7 +76,11 @@ grammar akn
                         #   eg: heading
                         #       num -
                         #       num - heading
-  hier_element_heading <- space num:[^\n-]* heading:('-' space content:inline*)? <HierElementHeading>
+  hier_element_heading <- num:hier_element_heading_num? heading:hier_element_heading_heading? <HierElementHeading>
+
+  hier_element_heading_num     <- !hier_element_heading_heading space content:(!hier_element_heading_heading [^\n])+
+
+  hier_element_heading_heading <- space '-' space content:inline*
 
   hier_block_element <- hier_element / block_element
 
@@ -200,11 +207,11 @@ grammar akn
 
   block_elements    <- block_list / bullet_list / table / longtitle / footnote / block_quote / p / line
 
-  longtitle         <- 'LONGTITLE' space content:inline+ eol <Longtitle>
+  longtitle         <- 'LONGTITLE' body:(space content:inline+)? eol <Longtitle>
 
-  subheading        <- 'SUBHEADING' space content:inline+ eol <Heading>
+  subheading        <- 'SUBHEADING' body:(space content:inline+)? eol <Subheading>
 
-  crossheading      <- 'CROSSHEADING' space content:inline+ eol <Crossheading>
+  crossheading      <- 'CROSSHEADING' body:(space content:inline+)? eol <Crossheading>
 
                      # explicit P tag with attribute support
   p                 <- 'P' attrs:block_attrs? space content:inline+ eol <P>
