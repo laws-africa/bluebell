@@ -52,3 +52,6 @@ class RoundTripTestCase(ParserSupport, TestCase):
 
     def test_nested_attachments(self):
         self.roundtrip('nested_attachments', 'statement')
+
+    def test_hansard(self):
+        self.roundtrip('hansard', 'debateReport')
