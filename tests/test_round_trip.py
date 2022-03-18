@@ -55,3 +55,6 @@ class RoundTripTestCase(ParserSupport, TestCase):
 
     def test_hansard(self):
         self.roundtrip('hansard', 'debateReport')
+
+    def test_empty_parts(self):
+        self.roundtrip('act-empty', 'act')
