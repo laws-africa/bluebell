@@ -126,19 +126,40 @@ class Crossheading:
 
 class Body:
     def to_dict(self):
-        # the body element MUST only contain hier elements at the top level
-        # so group non-hier children into hcontainers
+        # the body element MUST only contain hier elements at the top level so group non-hier children into hcontainers
         kids = many_to_dict(c.hier_block_indent for c in self.content)
         children = []
-        for is_hier, group in groupby(kids, lambda k: k['type'] == 'hier'):
-            if is_hier:
+        def grouper(item):
+            if item['type'] == 'hier':
+                return 'hier'
+            if item['name'] == 'crossHeading':
+                return 'crossHeading'
+            return 'general'
+
+        for key, group in groupby(kids, grouper):
+            if key == 'hier':
                 children.extend(group)
-            else:
+
+            elif key == 'crossHeading':
+                # crossHeading can't be a direct child of body (even though it can be a peer of hier elements later)
+                # so we wrap it in an hcontainer here
                 children.append({
                     'type': 'element',
                     'name': 'hcontainer',
                     'attribs': {'name': 'hcontainer'},
                     'children': list(group),
+                })
+
+            else:
+                children.append({
+                    'type': 'element',
+                    'name': 'hcontainer',
+                    'attribs': {'name': 'hcontainer'},
+                    'children': [{
+                        'type': 'element',
+                        'name': 'content',
+                        'children': list(group),
+                    }]
                 })
 
         return {
