@@ -74,6 +74,21 @@ CHAP 1 - Heading
       * 
       * empty item before
 
+    some empty hierarchical elements follow below
+
+    PART
+
+    SEC
+
+      CHAP
+
+      SUBPART
+        SUBHEADING a subheading
+
+    SEC - a heading
+
+    PART 99a
+
   wrap up
 
 ANNEXURE Annex 1

@@ -379,3 +379,41 @@ PART A
   P{a b} text
 
 ''', actual)
+
+    def test_longtitles(self):
+        tree = self.parse("""
+PART A
+
+  LONGTITLE test
+
+  LONGTITLE
+""", 'hier_element_block')
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_A">
+  <num>A</num>
+  <content>
+    <longTitle eId="part_A__longTitle_1">
+      <p eId="part_A__longTitle_1__p_1">test</p>
+    </longTitle>
+  </content>
+</part>
+""", xml)
+
+    def test_crossheading(self):
+        tree = self.parse("""
+PART A
+
+  CROSSHEADING test
+
+  CROSSHEADING
+""", 'hier_element_block')
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_A">
+  <num>A</num>
+  <content>
+    <crossHeading eId="part_A__crossHeading_1">test</crossHeading>
+  </content>
+</part>
+""", xml)
