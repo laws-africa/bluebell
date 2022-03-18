@@ -21,6 +21,19 @@ def empty_p():
         'children': [],
     }
 
+
+def empty_hcontainer():
+    return {
+        'type': 'element',
+        'name': 'hcontainer',
+        'attribs': {'name': 'hcontainer'},
+        'children': [{
+            'type': 'element',
+            'name': 'content',
+            'children': [empty_p()],
+        }]
+    }
+
 # ------------------------------------------------------------------------------
 # Hier elements and containers
 # ------------------------------------------------------------------------------
@@ -131,7 +144,7 @@ class Body:
         return {
             'type': 'element',
             'name': 'body',
-            'children': children,
+            'children': children or [empty_hcontainer()],
         }
 
 
@@ -805,16 +818,7 @@ class HierarchicalStructure(DocumentRoot):
         return {
             'type': 'element',
             'name': tag,
-            'children': [{
-                'type': 'element',
-                'name': 'hcontainer',
-                'attribs': {'name': 'hcontainer'},
-                'children': [{
-                    'type': 'element',
-                    'name': 'content',
-                    'children': [empty_p()],
-                }]
-            }]
+            'children': [empty_hcontainer()],
         }
 
 

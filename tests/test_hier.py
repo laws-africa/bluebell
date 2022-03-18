@@ -412,3 +412,26 @@ PART
   </chapter>
 </part>
 """, xml)
+
+    def test_empty_body(self):
+        tree = self.parse("""
+PREFACE
+  the preface
+BODY
+""", 'act')
+
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<act xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="act">
+  <preface>
+    <p eId="preface__p_1">the preface</p>
+  </preface>
+  <body>
+    <hcontainer eId="hcontainer_1" name="hcontainer">
+      <content>
+        <p eId="hcontainer_1__p_1"/>
+      </content>
+    </hcontainer>
+  </body>
+</act>
+""", xml)
