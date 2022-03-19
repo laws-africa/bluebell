@@ -144,17 +144,17 @@ SECTION 1.
         unparsed = self.parser.unparse(xml)
         self.assertEqual('''SEC
 
-  test ** text**
+  test **  text **
 
-  CROSSHEADING  crossheading    
+  CROSSHEADING   crossheading     
 
   ITEMS
-    \ITEMS escaped
+    \ITEMS escaped 
 
     ITEM
-      item
+      item 
 
-    some wrap  up
+    some wrap   up
 
   QUOTE
     quoted text
