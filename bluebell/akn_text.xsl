@@ -83,8 +83,8 @@
                     <xsl:call-template name="string-replace-all">
                       <xsl:with-param name="text">
                         <xsl:call-template name="string-replace-all">
-                          <!-- disallow newlines completely -->
-                          <xsl:with-param name="text" select="translate($text, '&#13;&#10;', '')" />
+                          <!-- replace newlines with spaces -->
+                          <xsl:with-param name="text" select="translate($text, '&#13;&#10;', '  ')" />
                           <xsl:with-param name="value"><xsl:value-of select="'\'" /></xsl:with-param>
                           <xsl:with-param name="replacement"><xsl:value-of select="'\\'" /></xsl:with-param>
                         </xsl:call-template>
