@@ -126,14 +126,20 @@ SECTION 1.
     |}
 """))
 
-    def test_unparse_strip_newlines(self):
-        # strip newlines when unparsing
-        # whitespace is NOT stripped
-        xml = '''<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><content><p>test <b>
+    def test_unparse_strip_newlines_and_whitespace(self):
+        # strip newlines anywhere
+        # strip whitespace at the start of P, listIntroduction and listWrapup
+        xml = '''<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><content><p>
+        test <b>
  text
 </b></p><crossHeading>
  crossheading
-    </crossHeading><block name="quote"><embeddedStructure><p>quoted text</p></embeddedStructure></block></content></section>
+    </crossHeading><blockList><listIntroduction>  ITEMS escaped
+</listIntroduction><item><p>
+  item
+</p></item><listWrapUp>
+  some wrap
+  up</listWrapUp></blockList><block name="quote"><embeddedStructure><p>   quoted text</p></embeddedStructure></block></content></section>
 '''
         unparsed = self.parser.unparse(xml)
         self.assertEqual('''SEC
@@ -141,6 +147,14 @@ SECTION 1.
   test ** text**
 
   CROSSHEADING  crossheading    
+
+  ITEMS
+    \ITEMS escaped
+
+    ITEM
+      item
+
+    some wrap  up
 
   QUOTE
     quoted text
