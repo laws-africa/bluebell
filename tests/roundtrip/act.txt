@@ -94,6 +94,7 @@ CHAP 1 - Heading
         SUBHEADING a subheading
 
     PART
+
       CROSSHEADING a lonely crossheading
 
     SEC - a heading
