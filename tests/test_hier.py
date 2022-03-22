@@ -163,6 +163,64 @@ text
 </hierarchicalStructure>
 """, xml)
 
+    def test_hier_crossHeading_with_blocks_1(self):
+        # crossheading after block elements requires block elements to be in an intro block
+        tree = self.parse("""
+SEC
+  ITEMS
+    ITEM
+      item 1
+        
+  CROSSHEADING crossheading one
+""", 'hierarchical_structure')
+
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="hierarchicalStructure_1" name="hierarchicalStructure">
+  <body>
+    <section eId="hierarchicalStructure_1__sec_nn_1">
+      <intro>
+        <blockList eId="hierarchicalStructure_1__sec_nn_1__intro__list_1">
+          <item eId="hierarchicalStructure_1__sec_nn_1__intro__list_1__item_nn_1">
+            <p eId="hierarchicalStructure_1__sec_nn_1__intro__list_1__item_nn_1__p_1">item 1</p>
+          </item>
+        </blockList>
+      </intro>
+      <crossHeading eId="hierarchicalStructure_1__sec_nn_1__crossHeading_1">crossheading one</crossHeading>
+    </section>
+  </body>
+</hierarchicalStructure>
+""", xml)
+
+    def test_hier_crossHeading_with_blocks_2(self):
+        # crossheading before block elements requires block elements to be in a wrapUp block
+        tree = self.parse("""
+SEC
+  CROSSHEADING crossheading one
+  
+  ITEMS
+    ITEM
+      item 1
+""", 'hierarchical_structure')
+
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<hierarchicalStructure xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="hierarchicalStructure_1" name="hierarchicalStructure">
+  <body>
+    <section eId="hierarchicalStructure_1__sec_nn_1">
+      <crossHeading eId="hierarchicalStructure_1__sec_nn_1__crossHeading_1">crossheading one</crossHeading>
+      <wrapUp>
+        <blockList eId="hierarchicalStructure_1__sec_nn_1__wrapup__list_1">
+          <item eId="hierarchicalStructure_1__sec_nn_1__wrapup__list_1__item_nn_1">
+            <p eId="hierarchicalStructure_1__sec_nn_1__wrapup__list_1__item_nn_1__p_1">item 1</p>
+          </item>
+        </blockList>
+      </wrapUp>
+    </section>
+  </body>
+</hierarchicalStructure>
+""", xml)
+
     def test_hier_with_block_lists(self):
         tree = self.parse("""
 PART
