@@ -126,3 +126,54 @@ SECTION 1.
     |}
 """))
 
+    def test_unparse_strip_newlines_and_whitespace(self):
+        # strip newlines anywhere
+        # strip whitespace at the start of P, listIntroduction and listWrapup
+        xml = '''<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><content><p>
+        test <b>
+ text
+</b></p><crossHeading>
+ crossheading
+    </crossHeading><blockList><listIntroduction>  ITEMS escaped
+</listIntroduction><item><p>
+  item
+</p></item><listWrapUp>
+  some wrap
+  up</listWrapUp></blockList><block name="quote"><embeddedStructure><p>   quoted text</p></embeddedStructure></block></content></section>
+'''
+        unparsed = self.parser.unparse(xml)
+        self.assertEqual('''SEC
+
+  test **  text **
+
+  CROSSHEADING   crossheading     
+
+  ITEMS
+    \ITEMS escaped 
+
+    ITEM
+      item 
+
+    some wrap   up
+
+  QUOTE
+    quoted text
+'''.strip(), unparsed.strip())
+
+    def test_unparse_images(self):
+        # replace spaces in image names
+        xml = '<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><content><p><img src="media/foo bar.png" alt="alt text"/></p></content></section>'
+        unparsed = self.parser.unparse(xml)
+        self.assertEqual('''SEC
+
+  {{IMG media/foo%20bar.png alt text}}
+'''.strip(), unparsed.strip())
+
+    def test_unparse_links(self):
+        # replace spaces in hrefs
+        xml = '<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><content><p><ref href="foo bar">link text</ref></p></content></section>'
+        unparsed = self.parser.unparse(xml)
+        self.assertEqual('''SEC
+
+  {{>foo%20bar link text}}
+'''.strip(), unparsed.strip())
