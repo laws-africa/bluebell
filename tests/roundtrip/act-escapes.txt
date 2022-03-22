@@ -66,15 +66,25 @@ CHAP 1 - Heading
 
     list \_\_intro\_\_
 
-    \(a) item (a) with a \{\{>http:\/\/example.com link\}\}
+    (a) item (a) with a \{\{>http:\/\/example.com link\}\}
 
     \CHAPTER.foo
 
     \QUOTE{}
 
+    \ITEMS
+
+    \BLOCKLIST
+
+    \BULLETS
+
   \FOOTNOTE 1
 
   \TABLE in wrapup
+
+  \TC
+
+  \TH
 
   \P foo
 

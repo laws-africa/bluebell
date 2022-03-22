@@ -280,7 +280,7 @@ grammar akn
   #     TH{colspan 2}
   #       text
   #
-  #     TD{rowspan 3|colspan 1}
+  #     TC{rowspan 3|colspan 1}
   #       text
   # ------------------------------------------------------------------------------
 
@@ -299,9 +299,9 @@ grammar akn
                          content:block_element+
                        dedent)? <TableCell>
 
-                     # TD.foo
-                     # TD{attrname attrvalue|attrname attrvalue}
-                     # TD.foo.bar{attrname attrvalue}
+                     # TC.foo
+                     # TC{attrname attrvalue|attrname attrvalue}
+                     # TC.foo.bar{attrname attrvalue}
   block_attrs       <- classes:block_attr_class* pairs:block_attr_pairs? <BlockAttrs>
 
   block_attr_class  <- '.' class_name?

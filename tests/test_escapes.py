@@ -245,6 +245,8 @@ PART
     <p><img src="/foo" /></p>
     <p><ref href="/bar">link</ref></p>
     <p>foo ** <b>**</b> <ref href="#foo">// **</ref> ** //</p>
+    <p>   PART 1</p>
+    <p>   ITEMS</p>
   </content>
 </section>"""
         actual = self.parser.unparse(xml)
@@ -261,6 +263,10 @@ PART
   {{>/bar link}}
 
   foo \\*\\* **\\*\\*** {{>#foo \\/\\/ \\*\\*}} \\*\\* \\/\\/
+
+  \PART 1
+
+  \ITEMS
 
 """, actual)
 
