@@ -120,11 +120,15 @@ PART
                     'name': 'hcontainer',
                     'attribs': {'name': 'hcontainer'},
                     'children': [{
-                        'type': 'content',
-                        'name': 'p',
+                        'type': 'element',
+                        'name': 'content',
                         'children': [{
-                            'type': 'text',
-                            'value': 'hello'
+                            'type': 'content',
+                            'name': 'p',
+                            'children': [{
+                                'type': 'text',
+                                'value': 'hello'
+                            }]
                         }]
                     }]
                 }]

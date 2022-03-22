@@ -1,6 +1,4 @@
 grammar akn
-  # TODO: either one big grammar, or we need to fake inheritance
-
   root              <- 'noop'
 
   # ------------------------------------------------------------------------------
@@ -60,7 +58,7 @@ grammar akn
 
   hier_element      <- crossheading / hier_element_block
 
-  hier_element_block <- hier_element_name heading:hier_element_heading? eol
+  hier_element_block <- hier_element_name attrs:block_attrs? heading:hier_element_heading? eol
                         body:(indent
                           subheading:subheading?
                           content:hier_block_element*
@@ -69,13 +67,10 @@ grammar akn
                         # the num and heading MUST be separated by ' - ', including spaces
                         # otherwise, the dash is considered a part of the num, or of the heading
                         #
-                        # num - heading
-                        # - heading
-                        # num
-                        # TODO: maybe better to make the heading the default?
-                        #   eg: heading
-                        #       num -
-                        #       num - heading
+                        # eg: num - heading
+                        #     - heading
+                        #     num
+                        #     num -
   hier_element_heading <- num:hier_element_heading_num? heading:hier_element_heading_heading? <HierElementHeading>
 
   hier_element_heading_num     <- !hier_element_heading_heading space content:(!hier_element_heading_heading [^\n])+

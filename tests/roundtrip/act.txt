@@ -8,7 +8,7 @@ CHAP 1 - Heading
 
   intro
 
-  SEC 1 - Section
+  SEC.custom-class{status edited} 1 - Section
 
     some **text** at //the start// with **multiple //types// of** markup
 
@@ -31,7 +31,7 @@ CHAP 1 - Heading
 
     SUBSEC 1
 
-      ITEMS
+      ITEMS.classname
         list __intro__
 
         ITEM (a)
@@ -65,7 +65,7 @@ CHAP 1 - Heading
 
     some text
 
-    BULLETS
+    BULLETS.classname
       * item 1
       * item 2
         second line
@@ -76,6 +76,14 @@ CHAP 1 - Heading
 
     some empty hierarchical elements follow below
 
+    SEC 3
+
+      ITEMS
+        ITEM 1
+          first item
+
+      CROSSHEADING crossheading
+
     PART
 
     SEC
@@ -84,6 +92,10 @@ CHAP 1 - Heading
 
       SUBPART
         SUBHEADING a subheading
+
+    PART
+
+      CROSSHEADING a lonely crossheading
 
     SEC - a heading
 
