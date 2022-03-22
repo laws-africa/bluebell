@@ -272,7 +272,10 @@ class XmlGenerator:
     def item_to_xml_hier(self, item):
         m = self.maker
 
-        if all(k['type'] != 'hier' for k in item['children']):
+        def check_hier(x):
+            return x['type'] == 'hier' or x['name'] == 'crossHeading'
+
+        if all(not check_hier(k) for k in item['children']):
             # no hierarchy children (ie. all block/content), wrap children in <content>
             kids = self.kids_to_xml(item)
             kids = [m.content(*kids)]
@@ -291,11 +294,7 @@ class XmlGenerator:
             # wrapUp
             #   ...
             #
-            groups = [
-                (is_hier, list(group))
-                for is_hier, group in
-                groupby(item['children'], lambda x: x['type'] == 'hier' or x['name'] == 'crossHeading')
-            ]
+            groups = [(is_hier, list(group)) for is_hier, group in groupby(item['children'], check_hier)]
 
             kids = []
             seen_hier = False
