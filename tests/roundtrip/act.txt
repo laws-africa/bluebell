@@ -76,6 +76,14 @@ CHAP 1 - Heading
 
     some empty hierarchical elements follow below
 
+    SEC 3
+
+      ITEMS
+        ITEM 1
+          first item
+
+      CROSSHEADING crossheading
+
     PART
 
     SEC
@@ -84,6 +92,9 @@ CHAP 1 - Heading
 
       SUBPART
         SUBHEADING a subheading
+
+    PART
+      SUBHEADING a lonely crossheading
 
     SEC - a heading
 
