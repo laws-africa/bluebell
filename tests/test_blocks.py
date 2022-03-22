@@ -412,8 +412,6 @@ PART A
 
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_A">
   <num>A</num>
-  <content>
-    <crossHeading eId="part_A__crossHeading_1">test</crossHeading>
-  </content>
+  <crossHeading eId="part_A__crossHeading_1">test</crossHeading>
 </part>
 """, xml)
