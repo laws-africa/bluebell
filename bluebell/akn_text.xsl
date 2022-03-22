@@ -678,7 +678,11 @@
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:text>{{&gt;</xsl:text>
-    <xsl:value-of select="@href" />
+    <xsl:call-template name="string-replace-all">
+      <xsl:with-param name="text" select="@href"></xsl:with-param>
+      <xsl:with-param name="value" select="' '"></xsl:with-param>
+      <xsl:with-param name="replacement" select="'%20'"></xsl:with-param>
+    </xsl:call-template>
     <xsl:text> </xsl:text>
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
@@ -688,7 +692,11 @@
 
   <xsl:template match="a:img">
     <xsl:text>{{IMG </xsl:text>
-    <xsl:value-of select="@src" />
+    <xsl:call-template name="string-replace-all">
+      <xsl:with-param name="text" select="@src"></xsl:with-param>
+      <xsl:with-param name="value" select="' '"></xsl:with-param>
+      <xsl:with-param name="replacement" select="'%20'"></xsl:with-param>
+    </xsl:call-template>
     <xsl:if test="@alt">
       <xsl:text> </xsl:text>
       <xsl:value-of select="@alt" />
