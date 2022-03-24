@@ -1,6 +1,14 @@
+BACKGROUND
+
+  
+
 ARGUMENTS
 
+  the above background is empty
+
   an argument
+
+  CROSSHEADING crossheading
 
 CONCLUSIONS
 
@@ -35,4 +43,18 @@ APPENDIX
 APPENDIX
 
   appendex 2 text
+
+APPENDIX
+
+  CROSSHEADING a lone crossheading
+
+APPENDIX
+
+  some text
+
+  CROSSHEADING crossheading
+
+  PART 2
+
+    a part
 
