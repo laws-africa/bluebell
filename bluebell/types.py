@@ -50,17 +50,6 @@ class JudgmentBody:
         }
 
 
-class HierBlockIndentElement:
-    name = None
-
-    def to_dict(self):
-        return {
-            'type': 'element',
-            'name': self.name,
-            'children': many_to_dict(c.hier_block_indent for c in self.content),
-        }
-
-
 class BlockIndentElement:
     name = None
 
@@ -124,24 +113,28 @@ class Crossheading:
         }
 
 
-class Body:
-    def to_dict(self):
-        # the body element MUST only contain hier elements at the top level so group non-hier children into hcontainers
-        kids = many_to_dict(c.hier_block_indent for c in self.content)
+class MainContentElement:
+    """ Top-level main content container. Named to match the maincontenttype in the AKN schema.
+
+    Used here for <body>, <mainBody>, and <mainBody>'s equivalents such as <background>.
+    """
+    name = None
+
+    def empty(self):
+        return empty_p()
+
+    def classify(self, item):
+        # only crossheadings are special for mainBody and friends
+        if item['name'] == 'crossHeading':
+            return 'crossHeading'
+
+    def wrap_children(self, kids):
+        """ Adjust kids, taking into account that crossHeading must be wrapped at the top level.
+        """
         children = []
-        def grouper(item):
-            if item['type'] == 'hier':
-                return 'hier'
-            if item['name'] == 'crossHeading':
-                return 'crossHeading'
-            return 'general'
-
-        for key, group in groupby(kids, grouper):
-            if key == 'hier':
-                children.extend(group)
-
-            elif key == 'crossHeading':
-                # crossHeading can't be a direct child of body (even though it can be a peer of hier elements later)
+        for class_, group in groupby(kids, self.classify):
+            if class_ == 'crossHeading':
+                # crossHeading can't be a direct child of mainBody (even though it can be a peer of hier elements later)
                 # so we wrap it in an hcontainer here
                 children.append({
                     'type': 'element',
@@ -150,7 +143,8 @@ class Body:
                     'children': list(group),
                 })
 
-            else:
+            elif class_ == 'content':
+                # wrap top-level content in hcontainer
                 children.append({
                     'type': 'element',
                     'name': 'hcontainer',
@@ -162,15 +156,35 @@ class Body:
                     }]
                 })
 
+            else:
+                # don't change it
+                children.extend(list(group))
+
+        return children
+
+    def to_dict(self):
+        kids = many_to_dict(c.hier_block_indent for c in self.content)
+        kids = self.wrap_children(kids)
         return {
             'type': 'element',
-            'name': 'body',
-            'children': children or [empty_hcontainer()],
+            'name': self.name,
+            'children': kids or [self.empty()]
         }
 
 
-class MainBody(HierBlockIndentElement):
-    name = 'mainBody'
+class Body(MainContentElement):
+    name = 'body'
+
+    def empty(self):
+        return empty_hcontainer()
+
+    def classify(self, item):
+        # for body, crossHeading and content must both be wrapped
+        if item['type'] == 'hier':
+            return 'hier'
+        if item['name'] == 'crossHeading':
+            return 'crossHeading'
+        return 'content'
 
 
 class HierElement:
@@ -236,7 +250,7 @@ class Attachments:
         }
 
 
-class Attachment:
+class Attachment(MainContentElement):
     def to_dict(self):
         if hasattr(self.indented, 'content'):
             kids = many_to_dict(c.hier_block_element for c in self.indented.content)
@@ -244,6 +258,7 @@ class Attachment:
             kids = []
 
         kids.extend(many_to_dict(c.hier_block_indent for c in self.content))
+        kids = self.wrap_children(kids)
 
         # nested attachments
         attachments = None
@@ -260,7 +275,7 @@ class Attachment:
             'children': [{
                 'type': 'element',
                 'name': 'mainBody',
-                'children': kids or [empty_p()],
+                'children': kids or [self.empty()]
             }],
         }
         if attachments:
@@ -283,27 +298,31 @@ class AttachmentHeading:
             return InlineText.many_to_dict(x for x in self.content)
 
 
-class Introduction(HierBlockIndentElement):
+class MainBody(MainContentElement):
+    name = 'mainBody'
+
+
+class Introduction(MainContentElement):
     name = 'introduction'
 
 
-class Background(HierBlockIndentElement):
+class Background(MainContentElement):
     name = 'background'
 
 
-class Arguments(HierBlockIndentElement):
+class Arguments(MainContentElement):
     name = 'arguments'
 
 
-class Remedies(HierBlockIndentElement):
+class Remedies(MainContentElement):
     name = 'remedies'
 
 
-class Motivation(HierBlockIndentElement):
+class Motivation(MainContentElement):
     name = 'motivation'
 
 
-class Decision(HierBlockIndentElement):
+class Decision(MainContentElement):
     name = 'decision'
 
 
