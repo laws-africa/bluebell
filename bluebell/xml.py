@@ -479,8 +479,11 @@ class XmlGenerator:
 
         1. remove empty crossHeading and longTitle elements which can be produced by the grammar.
         2. remove empty content elements which can be produced for empty hierarchical elements.
+        3. remove empty containers that are not valid
         """
-        for elem in xml.xpath('//*[self::a:crossHeading or self::a:longTitle or self::a:content][not(node())]', namespaces={'a': xml.nsmap[None]}):
+        for elem in xml.xpath('//*[self::a:crossHeading or self::a:longTitle or self::a:content or self::a:preface'
+                              ' or self::a:preamble or self::a:conclusions][not(node())]',
+                              namespaces={'a': xml.nsmap[None]}):
             elem.getparent().remove(elem)
         return xml
 
