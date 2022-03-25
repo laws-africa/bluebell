@@ -83,6 +83,9 @@ ANNEXURE a heading
 
   some text
   
+  CROSSHEADING crossheading
+CROSSHEADING crossheading2
+
 SCHEDULE heading
 
   schedule text
@@ -115,7 +118,26 @@ SCHEDULE heading
                             'type': 'text',
                             'value': 'some text',
                         }]
-                    }],
+                    }, {
+                        'name': 'hcontainer',
+                        'type': 'element',
+                        'attribs': {'name': 'hcontainer'},
+                         'children': [{
+                             'name': 'crossHeading',
+                             'type': 'element',
+                             'children': [{
+                                 'type': 'text',
+                                 'value': 'crossheading'
+                             }],
+                         }, {
+                             'name': 'crossHeading',
+                             'type': 'element',
+                             'children': [{
+                                 'type': 'text',
+                                 'value': 'crossheading2'
+                             }]
+                         }]
+                    }]
                 }]
             }, {
                 'type': 'element',
@@ -176,6 +198,10 @@ SCHEDULE heading
       </meta>
       <mainBody>
         <p eId="att_1__p_1">some text</p>
+        <hcontainer eId="att_1__hcontainer_1" name="hcontainer">
+          <crossHeading eId="att_1__hcontainer_1__crossHeading_1">crossheading</crossHeading>
+          <crossHeading eId="att_1__hcontainer_1__crossHeading_2">crossheading2</crossHeading>
+        </hcontainer>
       </mainBody>
     </doc>
   </attachment>
