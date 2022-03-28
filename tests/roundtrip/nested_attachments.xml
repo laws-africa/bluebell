@@ -36,7 +36,7 @@
       <attachment eId="att_1">
         <heading>Annex</heading>
         <subheading>Strategy for the practical implementation of the programme of work on technology transfer and scientific and technological cooperation</subheading>
-        <doc contains="originalVersion" name="annexure">
+        <doc name="annexure">
           <meta>
             <identification source="#cobalt">
               <FRBRWork>
@@ -70,7 +70,7 @@
             <attachment eId="att_1__att_1">
               <heading>Nested Annex</heading>
               <subheading>Level 2</subheading>
-              <doc contains="originalVersion" name="schedule">
+              <doc name="schedule">
                 <meta>
                   <identification source="#cobalt">
                     <FRBRWork>
@@ -105,7 +105,7 @@
             <attachment eId="att_1__att_2">
               <heading>Nested Annex Sibling</heading>
               <subheading>Level 2</subheading>
-              <doc contains="originalVersion" name="schedule">
+              <doc name="schedule">
                 <meta>
                   <identification source="#cobalt">
                     <FRBRWork>
