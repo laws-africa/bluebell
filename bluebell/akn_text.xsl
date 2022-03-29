@@ -674,6 +674,17 @@
     </xsl:call-template>
   </xsl:template>
 
+  <!-- left trim the first text node just after a br in a remark to prevent interfering with indents -->
+  <xsl:template match="a:remark/text()[preceding-sibling::a:*[1][self::a:br]]">
+    <xsl:call-template name="escape-inlines">
+      <xsl:with-param name="text">
+        <xsl:call-template name="string-ltrim">
+          <xsl:with-param name="text" select="." />
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="a:ref">
     <xsl:param name="indent">0</xsl:param>
 

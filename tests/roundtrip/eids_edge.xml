@@ -403,7 +403,7 @@
       <attachment eId="att_1">
         <heading>Annex</heading>
         <subheading>Strategy for the practical implementation of the programme of work on technology transfer and scientific and technological cooperation</subheading>
-        <doc contains="originalVersion" name="annexure">
+        <doc name="annexure">
           <meta>
             <identification source="#cobalt">
               <FRBRWork>

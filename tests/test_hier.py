@@ -601,3 +601,24 @@ BODY
   </body>
 </act>
 """, xml)
+
+    def test_empty_preface_and_preamble(self):
+        tree = self.parse("""
+PREFACE
+PREAMBLE
+BODY
+  test
+""", 'act')
+
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<act xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="act">
+  <body>
+    <hcontainer eId="hcontainer_1" name="hcontainer">
+      <content>
+        <p eId="hcontainer_1__p_1">test</p>
+      </content>
+    </hcontainer>
+  </body>
+</act>
+""", xml)

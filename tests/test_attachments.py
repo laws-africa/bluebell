@@ -18,7 +18,7 @@ ANNEXURE a heading
         self.assertEqual({
             'type': 'element',
             'name': 'attachment',
-            'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+            'attribs': {'name': 'annexure'},
             'heading': [{
                 'type': 'text',
                 'value': 'a heading',
@@ -50,7 +50,7 @@ SUBHEADING not matched as a subheading
         self.assertEqual({
             'type': 'element',
             'name': 'attachment',
-            'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+            'attribs': {'name': 'annexure'},
             'heading': [{
                 'type': 'text',
                 'value': 'a heading',
@@ -98,7 +98,6 @@ SCHEDULE heading
                 'name': 'attachment',
                 'attribs': {
                     'name': 'annexure',
-                    'contains': 'originalVersion',
                 },
                 'heading': [{
                     'type': 'text',
@@ -142,7 +141,7 @@ SCHEDULE heading
             }, {
                 'type': 'element',
                 'name': 'attachment',
-                'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                'attribs': {'name': 'schedule'},
                 'heading': [{
                     'type': 'text',
                     'value': 'heading',
@@ -169,7 +168,7 @@ SCHEDULE heading
   <attachment eId="att_1">
     <heading>a heading</heading>
     <subheading>subheading</subheading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -207,7 +206,7 @@ SCHEDULE heading
   </attachment>
   <attachment eId="att_2">
     <heading>heading</heading>
-    <doc contains="originalVersion" name="schedule">
+    <doc name="schedule">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -261,7 +260,6 @@ schedule text
                 'name': 'attachment',
                 'attribs': {
                     'name': 'annexure',
-                    'contains': 'originalVersion',
                 },
                 'heading': [{
                     'type': 'text',
@@ -286,7 +284,7 @@ schedule text
             }, {
                 'type': 'element',
                 'name': 'attachment',
-                'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                'attribs': {'name': 'schedule'},
                 'heading': [{
                     'type': 'text',
                     'value': 'heading',
@@ -313,7 +311,7 @@ schedule text
   <attachment eId="att_1">
     <heading>a heading</heading>
     <subheading>subheading</subheading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -347,7 +345,7 @@ schedule text
   </attachment>
   <attachment eId="att_2">
     <heading>heading</heading>
-    <doc contains="originalVersion" name="schedule">
+    <doc name="schedule">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -397,7 +395,7 @@ ANNEXURE a heading
         self.assertEqual({
             'type': 'element',
             'name': 'attachment',
-            'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+            'attribs': {'name': 'annexure'},
             'heading': [{'type': 'text', 'value': 'a heading'}],
             'subheading': [{'type': 'text', 'value': 'subheading'}],
             'children': [
@@ -420,7 +418,7 @@ ANNEXURE a heading
                     'children': [{
                         'type': 'element',
                         'name': 'attachment',
-                        'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                        'attribs': {'name': 'schedule'},
                         'heading': [{'type': 'text', 'value': 'heading'}],
                         'subheading': [{'type': 'text', 'value': 'a nother subheading'}],
                         'children': [{
@@ -441,7 +439,7 @@ ANNEXURE a heading
         self.assertEqual(f"""<attachment xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="att_1">
   <heading>a heading</heading>
   <subheading>subheading</subheading>
-  <doc contains="originalVersion" name="annexure">
+  <doc name="annexure">
     <meta>
       <identification source="#cobalt">
         <FRBRWork>
@@ -475,7 +473,7 @@ ANNEXURE a heading
       <attachment eId="att_1__att_1">
         <heading>heading</heading>
         <subheading>a nother subheading</subheading>
-        <doc contains="originalVersion" name="schedule">
+        <doc name="schedule">
           <meta>
             <identification source="#cobalt">
               <FRBRWork>
@@ -536,7 +534,7 @@ ANNEXURE back out
                 {
                     'type': 'element',
                     'name': 'attachment',
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'attribs': {'name': 'annexure'},
                     'children': [
                         {
                             'type': 'element',
@@ -558,7 +556,7 @@ ANNEXURE back out
                                 {
                                     'type': 'element',
                                     'name': 'attachment',
-                                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                                    'attribs': {'name': 'schedule'},
                                     'children': [{
                                         'type': 'element',
                                         'name': 'mainBody',
@@ -582,7 +580,7 @@ ANNEXURE back out
                     'name': 'attachment',
                     'heading': [{'type': 'text', 'value': 'back out'}],
                     'subheading': [{'type': 'text', 'value': 'subhead'}],
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'attribs': {'name': 'annexure'},
                     'children': [{
                         'type': 'element',
                         'name': 'mainBody',
@@ -602,7 +600,7 @@ ANNEXURE back out
   <attachment eId="att_1">
     <heading>a heading</heading>
     <subheading>subheading</subheading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -636,7 +634,7 @@ ANNEXURE back out
         <attachment eId="att_1__att_1">
           <heading>heading</heading>
           <subheading>a nother subheading</subheading>
-          <doc contains="originalVersion" name="schedule">
+          <doc name="schedule">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
@@ -674,7 +672,7 @@ ANNEXURE back out
   <attachment eId="att_2">
     <heading>back out</heading>
     <subheading>subhead</subheading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -741,7 +739,7 @@ ANNEXURE back out
                     'name': 'attachment',
                     'heading': [{'type': 'text', 'value': 'a heading'}],
                     'subheading': [{'type': 'text', 'value': 'subheading'}],
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'attribs': {'name': 'annexure'},
                     'children': [
                         {
                             'type': 'element',
@@ -765,7 +763,7 @@ ANNEXURE back out
                                     'name': 'attachment',
                                     'heading': [{'type': 'text', 'value': 'heading'}],
                                     'subheading': [{'type': 'text', 'value': 'a nother subheading'}],
-                                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                                    'attribs': {'name': 'schedule'},
                                     'children': [
                                         {
                                             'type': 'element',
@@ -784,7 +782,7 @@ ANNEXURE back out
                                                     'type': 'element',
                                                     'name': 'attachment',
                                                     'heading': [{'type': 'text', 'value': 'deeper heading'}],
-                                                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                                                    'attribs': {'name': 'schedule'},
                                                     'children': [
                                                         {
                                                             'type': 'element',
@@ -803,8 +801,7 @@ ANNEXURE back out
                                                                     'type': 'element',
                                                                     'name': 'attachment',
                                                                     'heading': [{'type': 'text', 'value': 'even deeper heading'}],
-                                                                    'attribs': {'contains': 'originalVersion',
-                                                                                'name': 'schedule'},
+                                                                    'attribs': {'name': 'schedule'},
                                                                     'children': [{
                                                                         'type': 'element',
                                                                         'name': 'mainBody',
@@ -831,7 +828,7 @@ ANNEXURE back out
                     'name': 'attachment',
                     'heading': [{'type': 'text', 'value': 'back out'}],
                     'subheading': [{'type': 'text', 'value': 'subhead'}],
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'attribs': {'name': 'annexure'},
                     'children': [{
                         'type': 'element',
                         'name': 'mainBody',
@@ -850,7 +847,7 @@ ANNEXURE back out
   <attachment eId="att_1">
     <heading>a heading</heading>
     <subheading>subheading</subheading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -885,7 +882,7 @@ ANNEXURE back out
         <attachment eId="att_1__att_1">
           <heading>heading</heading>
           <subheading>a nother subheading</subheading>
-          <doc contains="originalVersion" name="schedule">
+          <doc name="schedule">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
@@ -918,7 +915,7 @@ ANNEXURE back out
             <attachments>
               <attachment eId="att_1__att_1__att_1">
                 <heading>deeper heading</heading>
-                <doc contains="originalVersion" name="schedule">
+                <doc name="schedule">
                   <meta>
                     <identification source="#cobalt">
                       <FRBRWork>
@@ -951,7 +948,7 @@ ANNEXURE back out
                   <attachments>
                     <attachment eId="att_1__att_1__att_1__att_1">
                       <heading>even deeper heading</heading>
-                      <doc contains="originalVersion" name="schedule">
+                      <doc name="schedule">
                         <meta>
                           <identification source="#cobalt">
                             <FRBRWork>
@@ -995,7 +992,7 @@ ANNEXURE back out
   <attachment eId="att_2">
     <heading>back out</heading>
     <subheading>subhead</subheading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -1087,7 +1084,7 @@ SCHEDULE first schedule
                     'type': 'element',
                     'name': 'attachment',
                     'heading': [{'type': 'text', 'value': 'first'}],
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'attribs': {'name': 'annexure'},
                     'children': [
                         {
                             'type': 'element',
@@ -1106,7 +1103,7 @@ SCHEDULE first schedule
                                     'type': 'element',
                                     'name': 'attachment',
                                     'heading': [{'type': 'text', 'value': 'first, first'}],
-                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                    'attribs': {'name': 'annexure'},
                                     'children': [
                                         {
                                             'type': 'element',
@@ -1125,7 +1122,7 @@ SCHEDULE first schedule
                                                     'type': 'element',
                                                     'name': 'attachment',
                                                     'heading': [{'type': 'text', 'value': 'first, first, first'}],
-                                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                                    'attribs': {'name': 'annexure'},
                                                     'children': [{
                                                         'type': 'element',
                                                         'name': 'mainBody',
@@ -1139,7 +1136,7 @@ SCHEDULE first schedule
                                                     'type': 'element',
                                                     'name': 'attachment',
                                                     'heading': [{'type': 'text', 'value': 'first, first, second'}],
-                                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                                    'attribs': {'name': 'annexure'},
                                                     'children': [{
                                                         'type': 'element',
                                                         'name': 'mainBody',
@@ -1154,7 +1151,7 @@ SCHEDULE first schedule
                                                     'name': 'attachment',
                                                     'heading': [
                                                         {'type': 'text', 'value': 'first, first, first schedule'}],
-                                                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                                                    'attribs': {'name': 'schedule'},
                                                     'children': [{
                                                         'type': 'element',
                                                         'name': 'mainBody',
@@ -1172,7 +1169,7 @@ SCHEDULE first schedule
                                     'type': 'element',
                                     'name': 'attachment',
                                     'heading': [{'type': 'text', 'value': 'first, second'}],
-                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                    'attribs': {'name': 'annexure'},
                                     'children': [
                                         {
                                             'type': 'element',
@@ -1192,7 +1189,7 @@ SCHEDULE first schedule
                                                     'name': 'attachment',
                                                     'heading': [
                                                         {'type': 'text', 'value': 'first, second, first schedule'}],
-                                                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                                                    'attribs': {'name': 'schedule'},
                                                     'children': [{
                                                         'type': 'element',
                                                         'name': 'mainBody',
@@ -1206,7 +1203,7 @@ SCHEDULE first schedule
                                                     'type': 'element',
                                                     'name': 'attachment',
                                                     'heading': [{'type': 'text', 'value': 'first, second, first'}],
-                                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                                    'attribs': {'name': 'annexure'},
                                                     'children': [{
                                                         'type': 'element',
                                                         'name': 'mainBody',
@@ -1228,7 +1225,7 @@ SCHEDULE first schedule
                     'type': 'element',
                     'name': 'attachment',
                     'heading': [{'type': 'text', 'value': 'second'}],
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'attribs': {'name': 'annexure'},
                     'children': [
                         {
                             'type': 'element',
@@ -1247,7 +1244,7 @@ SCHEDULE first schedule
                                     'type': 'element',
                                     'name': 'attachment',
                                     'heading': [{'type': 'text', 'value': 'second, first'}],
-                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                    'attribs': {'name': 'annexure'},
                                     'children': [{
                                         'type': 'element',
                                         'name': 'mainBody',
@@ -1261,7 +1258,7 @@ SCHEDULE first schedule
                                     'type': 'element',
                                     'name': 'attachment',
                                     'heading': [{'type': 'text', 'value': 'second, second'}],
-                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                    'attribs': {'name': 'annexure'},
                                     'children': [{
                                         'type': 'element',
                                         'name': 'mainBody',
@@ -1279,7 +1276,7 @@ SCHEDULE first schedule
                     'type': 'element',
                     'name': 'attachment',
                     'heading': [{'type': 'text', 'value': 'first schedule'}],
-                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                    'attribs': {'name': 'schedule'},
                     'children': [
                         {
                             'type': 'element',
@@ -1298,7 +1295,7 @@ SCHEDULE first schedule
                                     'type': 'element',
                                     'name': 'attachment',
                                     'heading': [{'type': 'text', 'value': 'first, first'}],
-                                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                                    'attribs': {'name': 'schedule'},
                                     'children': [{
                                         'type': 'element',
                                         'name': 'mainBody',
@@ -1312,7 +1309,7 @@ SCHEDULE first schedule
                                     'type': 'element',
                                     'name': 'attachment',
                                     'heading': [{'type': 'text', 'value': 'first, first annex'}],
-                                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                                    'attribs': {'name': 'annexure'},
                                     'children': [{
                                         'type': 'element',
                                         'name': 'mainBody',
@@ -1333,7 +1330,7 @@ SCHEDULE first schedule
         self.assertEqual(f"""<attachments xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
   <attachment eId="att_1">
     <heading>first</heading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -1366,7 +1363,7 @@ SCHEDULE first schedule
       <attachments>
         <attachment eId="att_1__att_1">
           <heading>first, first</heading>
-          <doc contains="originalVersion" name="annexure">
+          <doc name="annexure">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
@@ -1399,7 +1396,7 @@ SCHEDULE first schedule
             <attachments>
               <attachment eId="att_1__att_1__att_1">
                 <heading>first, first, first</heading>
-                <doc contains="originalVersion" name="annexure">
+                <doc name="annexure">
                   <meta>
                     <identification source="#cobalt">
                       <FRBRWork>
@@ -1433,7 +1430,7 @@ SCHEDULE first schedule
               </attachment>
               <attachment eId="att_1__att_1__att_2">
                 <heading>first, first, second</heading>
-                <doc contains="originalVersion" name="annexure">
+                <doc name="annexure">
                   <meta>
                     <identification source="#cobalt">
                       <FRBRWork>
@@ -1467,7 +1464,7 @@ SCHEDULE first schedule
               </attachment>
               <attachment eId="att_1__att_1__att_3">
                 <heading>first, first, first schedule</heading>
-                <doc contains="originalVersion" name="schedule">
+                <doc name="schedule">
                   <meta>
                     <identification source="#cobalt">
                       <FRBRWork>
@@ -1504,7 +1501,7 @@ SCHEDULE first schedule
         </attachment>
         <attachment eId="att_1__att_2">
           <heading>first, second</heading>
-          <doc contains="originalVersion" name="annexure">
+          <doc name="annexure">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
@@ -1537,7 +1534,7 @@ SCHEDULE first schedule
             <attachments>
               <attachment eId="att_1__att_2__att_1">
                 <heading>first, second, first schedule</heading>
-                <doc contains="originalVersion" name="schedule">
+                <doc name="schedule">
                   <meta>
                     <identification source="#cobalt">
                       <FRBRWork>
@@ -1571,7 +1568,7 @@ SCHEDULE first schedule
               </attachment>
               <attachment eId="att_1__att_2__att_2">
                 <heading>first, second, first</heading>
-                <doc contains="originalVersion" name="annexure">
+                <doc name="annexure">
                   <meta>
                     <identification source="#cobalt">
                       <FRBRWork>
@@ -1611,7 +1608,7 @@ SCHEDULE first schedule
   </attachment>
   <attachment eId="att_2">
     <heading>second</heading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -1644,7 +1641,7 @@ SCHEDULE first schedule
       <attachments>
         <attachment eId="att_2__att_1">
           <heading>second, first</heading>
-          <doc contains="originalVersion" name="annexure">
+          <doc name="annexure">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
@@ -1678,7 +1675,7 @@ SCHEDULE first schedule
         </attachment>
         <attachment eId="att_2__att_2">
           <heading>second, second</heading>
-          <doc contains="originalVersion" name="annexure">
+          <doc name="annexure">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
@@ -1715,7 +1712,7 @@ SCHEDULE first schedule
   </attachment>
   <attachment eId="att_3">
     <heading>first schedule</heading>
-    <doc contains="originalVersion" name="schedule">
+    <doc name="schedule">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -1748,7 +1745,7 @@ SCHEDULE first schedule
       <attachments>
         <attachment eId="att_3__att_1">
           <heading>first, first</heading>
-          <doc contains="originalVersion" name="schedule">
+          <doc name="schedule">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
@@ -1782,7 +1779,7 @@ SCHEDULE first schedule
         </attachment>
         <attachment eId="att_3__att_2">
           <heading>first, first annex</heading>
-          <doc contains="originalVersion" name="annexure">
+          <doc name="annexure">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
@@ -1859,7 +1856,7 @@ ANNEXURE back out
                     'name': 'attachment',
                     'heading': [{'type': 'text', 'value': 'a heading'}],
                     'subheading': [{'type': 'text', 'value': 'subheading'}],
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'attribs': {'name': 'annexure'},
                     'children': [
                         {
                             'type': 'element',
@@ -1890,7 +1887,7 @@ ANNEXURE back out
                                     'name': 'attachment',
                                     'heading': [{'type': 'text', 'value': 'is a heading'}],
                                     'subheading': [{'type': 'text', 'value': 'is a subheading'}],
-                                    'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                                    'attribs': {'name': 'schedule'},
                                     'children': [
                                         {
                                             'type': 'element',
@@ -1921,8 +1918,7 @@ ANNEXURE back out
                                                     'name': 'attachment',
                                                     'heading': [
                                                         {'type': 'text', 'value': 'is an Annex'}],
-                                                    'attribs': {'contains': 'originalVersion',
-                                                                'name': 'annexure'},
+                                                    'attribs': {'name': 'annexure'},
                                                     'children': [
                                                         {
                                                             'type': 'element',
@@ -1943,8 +1939,7 @@ ANNEXURE back out
                                                     'type': 'element',
                                                     'name': 'attachment',
                                                     'heading': [{'type': 'text', 'value': 'para'}],
-                                                    'attribs': {'contains': 'originalVersion',
-                                                                'name': 'annexure'},
+                                                    'attribs': {'name': 'annexure'},
                                                     'children': [
                                                         {
                                                             'type': 'element',
@@ -1974,7 +1969,7 @@ ANNEXURE back out
                     'name': 'attachment',
                     'heading': [{'type': 'text', 'value': 'back out'}],
                     'subheading': [{'type': 'text', 'value': 'subheading'}],
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'attribs': {'name': 'annexure'},
                     'children': [
                         {
                             'type': 'element',
@@ -1996,7 +1991,7 @@ ANNEXURE back out
   <attachment eId="att_1">
     <heading>a heading</heading>
     <subheading>subheading</subheading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -2031,7 +2026,7 @@ ANNEXURE back out
         <attachment eId="att_1__att_1">
           <heading>is a heading</heading>
           <subheading>is a subheading</subheading>
-          <doc contains="originalVersion" name="schedule">
+          <doc name="schedule">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
@@ -2070,7 +2065,7 @@ ANNEXURE back out
             <attachments>
               <attachment eId="att_1__att_1__att_1">
                 <heading>is an Annex</heading>
-                <doc contains="originalVersion" name="annexure">
+                <doc name="annexure">
                   <meta>
                     <identification source="#cobalt">
                       <FRBRWork>
@@ -2104,7 +2099,7 @@ ANNEXURE back out
               </attachment>
               <attachment eId="att_1__att_1__att_2">
                 <heading>para</heading>
-                <doc contains="originalVersion" name="annexure">
+                <doc name="annexure">
                   <meta>
                     <identification source="#cobalt">
                       <FRBRWork>
@@ -2145,7 +2140,7 @@ ANNEXURE back out
   <attachment eId="att_2">
     <heading>back out</heading>
     <subheading>subheading</subheading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -2217,7 +2212,7 @@ even more text, pushed into Annex (will move up)
                     'name': 'attachment',
                     'heading': [{'type': 'text', 'value': 'a heading'}],
                     'subheading': [{'type': 'text', 'value': 'subheading'}],
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'attribs': {'name': 'annexure'},
                     'children': [{
                         'type': 'element',
                         'name': 'mainBody',
@@ -2278,7 +2273,7 @@ even more text, pushed into Annex (will move up)
                             'name': 'attachment',
                             'heading': [{'type': 'text', 'value': 'actually a schedule'}],
                             'subheading': [{'type': 'text', 'value': 'actually a subheading'}],
-                            'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                            'attribs': {'name': 'schedule'},
                             'children': [{
                                 'type': 'element',
                                 'name': 'mainBody',
@@ -2304,7 +2299,7 @@ even more text, pushed into Annex (will move up)
   <attachment eId="att_1">
     <heading>a heading</heading>
     <subheading>subheading</subheading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -2345,7 +2340,7 @@ even more text, pushed into Annex (will move up)
         <attachment eId="att_1__att_1">
           <heading>actually a schedule</heading>
           <subheading>actually a subheading</subheading>
-          <doc contains="originalVersion" name="schedule">
+          <doc name="schedule">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>
@@ -2416,7 +2411,7 @@ ANNEXURE a heading
                     'name': 'attachment',
                     'heading': [{'type': 'text', 'value': 'a heading'}],
                     'subheading': [{'type': 'text', 'value': 'subheading'}],
-                    'attribs': {'contains': 'originalVersion', 'name': 'annexure'},
+                    'attribs': {'name': 'annexure'},
                     'children': [
                         {
                             'type': 'element',
@@ -2462,7 +2457,7 @@ ANNEXURE a heading
                                 'name': 'attachment',
                                 'heading': [{'type': 'text', 'value': 'a heading again'}],
                                 'subheading': [{'type': 'text', 'value': 'a subheading again'}],
-                                'attribs': {'contains': 'originalVersion', 'name': 'schedule'},
+                                'attribs': {'name': 'schedule'},
                                 'children': [{
                                     'type': 'element',
                                     'name': 'mainBody',
@@ -2485,7 +2480,7 @@ ANNEXURE a heading
   <attachment eId="att_1">
     <heading>a heading</heading>
     <subheading>subheading</subheading>
-    <doc contains="originalVersion" name="annexure">
+    <doc name="annexure">
       <meta>
         <identification source="#cobalt">
           <FRBRWork>
@@ -2528,7 +2523,7 @@ ANNEXURE a heading
         <attachment eId="att_1__att_1">
           <heading>a heading again</heading>
           <subheading>a subheading again</subheading>
-          <doc contains="originalVersion" name="schedule">
+          <doc name="schedule">
             <meta>
               <identification source="#cobalt">
                 <FRBRWork>

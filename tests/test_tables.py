@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, expectedFailure
 
 from tests.support import ParserSupport
 
@@ -432,6 +432,32 @@ TABLE
     </td>
     <td>
       <p eId="table_1__p_3">three</p>
+    </td>
+  </tr>
+</table>
+""", xml)
+
+    @expectedFailure
+    def test_empty_attribs(self):
+        # TODO: empty rowSpan and colSpan should not be allowed
+        tree = self.parse("""
+TABLE
+  TR
+    TC{rowSpan}
+      one
+    TC{colSpan}
+      two
+""", 'table')
+
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<table xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="table_1">
+  <tr>
+    <td>
+      <p eId="table_1__p_1">one</p>
+    </td>
+    <td>
+      <p eId="table_1__p_2">two</p>
     </td>
   </tr>
 </table>
