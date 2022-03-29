@@ -177,3 +177,13 @@ SECTION 1.
 
   {{>foo%20bar link text}}
 '''.strip(), unparsed.strip())
+
+    def test_unparse_multiline_remarks_with_whitespace(self):
+        xml = '<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><content><p><remark status="editorial">remark<br/>  with white <b> space</b> and bold<br/>and other</remark></p></content></section>'
+        unparsed = self.parser.unparse(xml)
+        self.assertEqual('''SEC
+
+  {{*remark
+  with white ** space** and bold
+  and other}}
+'''.strip(), unparsed.strip())

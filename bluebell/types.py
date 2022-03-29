@@ -269,7 +269,6 @@ class Attachment(MainContentElement):
             'type': 'element',
             'name': 'attachment',
             'attribs': {
-                'contains': 'originalVersion',
                 'name': self.attachment_marker.text.lower(),
             },
             'children': [{
