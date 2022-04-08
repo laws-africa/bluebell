@@ -160,25 +160,6 @@ class IdGenerator:
         num = self.punct_re.sub('-', num)
         return num
 
-    def rewrite_id_prefix(self, root, old_prefix, new_prefix):
-        """ Rewrite the eId attributes of elem and its descendants to replace old_prefix with new_prefix.
-
-        The old_prefix and the new_prefix are both without the '__' suffix, to permit exact and substring matches.
-        """
-        # TODO: test this explicitly?
-        old_prefix = old_prefix or ''
-        offset = len(old_prefix) + 2
-
-        # rewrite element and children
-        for elem in chain([root], root.xpath('.//a:*[@eId]', namespaces={'a': root.nsmap[None]})):
-            old_id = elem.get('eId', '')
-
-            if old_id == old_prefix:
-                elem.set('eId', new_prefix)
-
-            elif old_id.startswith(old_prefix + '__'):
-                elem.set('eId', new_prefix + '__' + old_id[offset:])
-
     def rewrite_all_eids(self, doc_tree, prefix=''):
         """ Rewrites all eId attributes for this tree.
         :param doc_tree: XML tree
@@ -207,8 +188,7 @@ class IdGenerator:
 
             # update prefix on all descendants if changed
             if old_eid != new_eid:
-                self.rewrite_id_prefix(element, old_eid, new_eid)
-
+                element.set('eId', new_eid)
                 # update mappings if changed (ignores duplicates and elements with no eIds in original)
                 if old_eid:
                     self.mappings.setdefault(old_eid, new_eid)
