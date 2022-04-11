@@ -80,93 +80,13 @@ class IdGenerator:
         self.eid_counter = {}
         self.mappings = {}
 
-    def incr(self, prefix, name):
-        sub = self.counters.setdefault(prefix, {})
-        sub[name] = sub.get(name, 0) + 1
-        return sub[name]
-
-    def get_eid(self, prefix, name, num):
-        if name in self.id_exempt:
-            return None
-
-        eid = f'{prefix}__' if prefix else ''
-        eid = eid + self.aliases.get(name, name)
-
-        # some elements are effectively unique and so don't need a differentiating number
-        if name not in self.id_exempt_but_pass_to_children:
-            num, nn = self.get_num(prefix, name, num)
-            eid = self.ensure_unique(f'{eid}_{num}', nn)
-
-        return eid
-
-    def get_num(self, prefix, name, num):
-        nn = False
-
-        # e.g. PARA (a)
-        if num:
-            num = self.clean_num(num)
-
-        # e.g. PARA, or num was cleaned to ''
-        if not num and name in self.num_expected:
-            num = 'nn'
-            nn = True
-
-        # produce e.g. hcontainer_1
-        if not num:
-            num = self.incr(prefix, name)
-
-        return num, nn
-
-    def ensure_unique(self, eid, nn):
-        # update counter with number of elements with this eid, including this one
-        count = self.eid_counter[eid] = self.eid_counter.get(eid, 0) + 1
-
-        # eid must be unique, and unnumbered elements must end with _{count} regardless
-        if count == 1 and not nn:
-            return eid
-
-        # if it's not unique, or the element is unnumbered,
-        # include the count for disambiguation and check for uniqueness
-        return self.ensure_unique(f'{eid}_{count}', nn=False)
-
-    def reset(self):
-        self.counters.clear()
-        self.eid_counter.clear()
-
-    def clean_num(self, num):
-        """ Clean a <num> value for use in an eId
-        See https://docs.oasis-open.org/legaldocml/akn-nc/v1.0/os/akn-nc-v1.0-os.html*_Toc531692306
-
-        "The number part of the identifiers of such elements corresponds to the
-        stripping of all final punctuation, meaningless separations as well as
-        redundant characters in the content of the <num> element. The
-        representation is case-sensitive."
-
-        Our algorithm is:
-        1. strip all leading and trailing whitespace and punctuation (using the unicode punctuation blocks)
-        2. strip all whitespace
-        3. replace all remaining punctuation with a hyphen.
-
-        The General Punctuation block is \u2000-\u206F, and the Supplemental Punctuation block is \u2E00-\u2E7F.
-
-        (i) -> i
-        1.2. -> 1-2
-        “2.3“ -> 2-3
-        3a bis -> 3abis
-        """
-        num = self.leading_punct_re.sub('', num)
-        num = self.trailing_punct_re.sub('', num)
-        num = self.whitespace_re.sub('', num)
-        num = self.punct_re.sub('-', num)
-        return num
-
-    def rewrite_all_eids(self, doc_tree, prefix=''):
+    def rewrite_all_eids(self, element, prefix=''):
         """ Rewrites all eId attributes for this tree.
-        :param doc_tree: XML tree
+        :param element: XML tree
         :returns: mappings of old --> new eids
         """
-        self.mappings = {}
-        self.rewrite_eid(doc_tree, prefix)
+        self.reset()
+        self.rewrite_eid(element, prefix)
         return self.mappings
 
     def rewrite_eid(self, element, prefix=''):
@@ -203,6 +123,87 @@ class IdGenerator:
         # keep drilling down
         for kid in element.iterchildren():
             self.rewrite_eid(kid, prefix)
+
+    def get_eid(self, prefix, name, num):
+        if name in self.id_exempt:
+            return None
+
+        eid = f'{prefix}__' if prefix else ''
+        eid = eid + self.aliases.get(name, name)
+
+        # some elements are effectively unique and so don't need a differentiating number
+        if name not in self.id_exempt_but_pass_to_children:
+            num, nn = self.get_num(prefix, name, num)
+            eid = self.ensure_unique(f'{eid}_{num}', nn)
+
+        return eid
+
+    def get_num(self, prefix, name, num):
+        nn = False
+
+        # e.g. PARA (a)
+        if num:
+            num = self.clean_num(num)
+
+        # e.g. PARA, or num was cleaned to ''
+        if not num and name in self.num_expected:
+            num = 'nn'
+            nn = True
+
+        # produce e.g. hcontainer_1
+        if not num:
+            num = self.incr(prefix, name)
+
+        return num, nn
+
+    def reset(self):
+        self.counters.clear()
+        self.eid_counter.clear()
+        self.mappings.clear()
+
+    def clean_num(self, num):
+        """ Clean a <num> value for use in an eId
+        See https://docs.oasis-open.org/legaldocml/akn-nc/v1.0/os/akn-nc-v1.0-os.html*_Toc531692306
+
+        "The number part of the identifiers of such elements corresponds to the
+        stripping of all final punctuation, meaningless separations as well as
+        redundant characters in the content of the <num> element. The
+        representation is case-sensitive."
+
+        Our algorithm is:
+        1. strip all leading and trailing whitespace and punctuation (using the unicode punctuation blocks)
+        2. strip all whitespace
+        3. replace all remaining punctuation with a hyphen.
+
+        The General Punctuation block is \u2000-\u206F, and the Supplemental Punctuation block is \u2E00-\u2E7F.
+
+        (i) -> i
+        1.2. -> 1-2
+        “2.3“ -> 2-3
+        3a bis -> 3abis
+        """
+        num = self.leading_punct_re.sub('', num)
+        num = self.trailing_punct_re.sub('', num)
+        num = self.whitespace_re.sub('', num)
+        num = self.punct_re.sub('-', num)
+        return num
+
+    def incr(self, prefix, name):
+        sub = self.counters.setdefault(prefix, {})
+        sub[name] = sub.get(name, 0) + 1
+        return sub[name]
+
+    def ensure_unique(self, eid, nn):
+        # update counter with number of elements with this eid, including this one
+        count = self.eid_counter[eid] = self.eid_counter.get(eid, 0) + 1
+
+        # eid must be unique, and unnumbered elements must end with _{count} regardless
+        if count == 1 and not nn:
+            return eid
+
+        # if it's not unique, or the element is unnumbered,
+        # include the count for disambiguation and check for uniqueness
+        return self.ensure_unique(f'{eid}_{count}', nn=False)
 
 
 class XmlGenerator:
