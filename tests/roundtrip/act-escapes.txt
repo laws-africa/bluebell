@@ -94,3 +94,9 @@ CHAP 1 - Heading
 
   Posh doesn't need to be escaped
 
+  \APPENDIX
+
+  \SCHEDULE
+
+  \ATTACHMENT
+

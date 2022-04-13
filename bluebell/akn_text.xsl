@@ -128,7 +128,7 @@
                     $text = 'REMEDIES' or
                     starts-with($text, 'ALINEA') or
                     starts-with($text, 'ANNEXURE') or
-                    starts-with($text, 'APPENDEX') or
+                    starts-with($text, 'APPENDIX') or
                     starts-with($text, 'ART') or
                     starts-with($text, 'ARTICLE') or
                     starts-with($text, 'ATTACHMENT') or
