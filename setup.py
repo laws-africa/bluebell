@@ -29,22 +29,22 @@ setup(
     author='Laws.Africa',
     author_email='greg@laws.africa',
 
-    # Choose your license
-    license='Proprietary',
-
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
         # How mature is this project? Common values are
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
         'Topic :: Text Processing',
         'Topic :: Text Processing :: Markup :: XML',
         'Intended Audience :: Legal Industry',
+
+        # License
+        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
