@@ -584,3 +584,20 @@ and removes the `displaced` element.
 1. We use a version of `canopy` from github, so clone it into the same directory as this directory: `git clone https://github.com/jcoglan/canopy.git`
 2. Build canopy: `cd canopy; npm install; make; cd ..`
 3. Build grammar changes with `make`, which runs our Makefile to compile the grammar
+
+# License
+
+Copyright 2020 Laws.Africa.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
