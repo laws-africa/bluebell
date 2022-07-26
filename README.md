@@ -1,5 +1,7 @@
 # Bluebell
 
+![Bluebell icon](https://laws.africa/img/icons/bluebell.png)
+
 Bluebell is a (fairly) generic Akoma Ntoso 3 parser, supporting all hierarchical elements and multiple document types.
 
 Bluebell supports the following Akoma Ntoso (AKN) document types:
