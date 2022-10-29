@@ -1,0 +1,100 @@
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <act name="act">
+    <meta>
+      <identification source="#cobalt">
+        <FRBRWork>
+          <FRBRthis value="/akn/za/act/2009/10"/>
+          <FRBRuri value="/akn/za/act/2009/10"/>
+          <FRBRalias name="title" value="Untitled"/>
+          <FRBRdate date="2009" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRcountry value="za"/>
+          <FRBRnumber value="10"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/akn/za/act/2009/10/eng"/>
+          <FRBRuri value="/akn/za/act/2009/10/eng"/>
+          <FRBRdate date="TODAY" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRlanguage language="eng"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/akn/za/act/2009/10/eng"/>
+          <FRBRuri value="/akn/za/act/2009/10/eng"/>
+          <FRBRdate date="TODAY" name="Generation"/>
+          <FRBRauthor href=""/>
+        </FRBRManifestation>
+      </identification>
+      <references source="#cobalt">
+        <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+      </references>
+    </meta>
+    <body>
+      <section class="cls" eId="sec_1" style="background-color:red">
+        <num>1</num>
+        <heading>Simple</heading>
+        <content>
+          <p class="cls" eId="sec_1__p_1">just class</p>
+          <p class="cls" eId="sec_1__p_2" style="background-color:blue">class and attribs</p>
+        </content>
+      </section>
+      <section eId="sec_2">
+        <num>2</num>
+        <heading>Tables</heading>
+        <content>
+          <table class="cls" eId="sec_2__table_1" style="background-color:orange">
+            <tr>
+              <td class="cls" rowspan="1" style="background-color:green">
+                <p eId="sec_2__table_1__p_1">Cell with attribs</p>
+              </td>
+              <th class="cls" style="background-color:purple">
+                <p eId="sec_2__table_1__p_2">Heading with attribs</p>
+              </th>
+            </tr>
+          </table>
+        </content>
+      </section>
+      <hcontainer eId="hcontainer_1" name="hcontainer">
+        <content>
+          <p eId="hcontainer_1__p_1">CROSSHEADING.cls{style background-color:pink} Crossheading with attribs</p>
+        </content>
+      </hcontainer>
+      <section class="class" eId="sec_3">
+        <num>3</num>
+        <heading>Items</heading>
+        <content>
+          <blockList class="cls" eId="sec_3__list_1">
+            <listIntroduction eId="sec_3__list_1__intro_1">An intro</listIntroduction>
+            <item eId="sec_3__list_1__item_1">
+              <num>1</num>
+              <p eId="sec_3__list_1__item_1__p_1">an item</p>
+            </item>
+            <item eId="sec_3__list_1__item_2">
+              <num>2</num>
+              <p eId="sec_3__list_1__item_2__p_1">Simple item</p>
+            </item>
+          </blockList>
+        </content>
+      </section>
+      <section class="class" eId="sec_4">
+        <num>4</num>
+        <heading>Bullets</heading>
+        <content>
+          <ul class="cls" eId="sec_4__ul_1">
+            <li eId="sec_4__ul_1__li_1">
+              <p eId="sec_4__ul_1__li_1__p_1">item 1</p>
+            </li>
+            <li eId="sec_4__ul_1__li_2">
+              <p eId="sec_4__ul_1__li_2__p_1">item 2</p>
+            </li>
+          </ul>
+        </content>
+      </section>
+      <hcontainer eId="hcontainer_2" name="hcontainer">
+        <content>
+          <p eId="hcontainer_2__p_1">end</p>
+        </content>
+      </hcontainer>
+    </body>
+  </act>
+</akomaNtoso>
