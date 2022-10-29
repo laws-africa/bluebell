@@ -1,5 +1,7 @@
 import os.path
 from unittest import TestCase
+import re
+import datetime
 
 from lxml import etree
 from cobalt import StructuredDocument
@@ -31,6 +33,31 @@ class RoundTripTestCase(ParserSupport, TestCase):
         # ensure it validates
         doc = StructuredDocument.for_document_type(root)(etree.tostring(xml, encoding='unicode'))
         assert_validates(doc, strict=False)
+
+    def roundtrip_xml(self, file_in, root='statement'):
+        dir = os.path.join(os.path.dirname(__file__), 'roundtrip')
+        fname = os.path.join(dir, f'{file_in}.xml')
+        with open(fname, 'rt') as f:
+            xml_in_pretty = f.read().replace('TODAY', str(datetime.date.today()))
+        xml_in = re.sub(r'\n\s*', '', xml_in_pretty)
+
+        # ensure xml_in validates
+        doc = StructuredDocument.for_document_type(root)(xml_in)
+        assert_validates(doc, strict=False)
+
+        unparsed = self.parser.unparse(xml_in)
+        text = self.parser.pre_parse(unparsed)
+        xml_out = self.parser.parse_to_xml(text, root)
+        xml_out_pretty = self.tostring(xml_out)
+
+        # ensure xml_out validates
+        doc = StructuredDocument.for_document_type(root)(xml_out_pretty)
+        assert_validates(doc, strict=False)
+
+        self.assertMultiLineEqual(xml_in_pretty, xml_out_pretty)
+
+    def test_attribs(self):
+        self.roundtrip_xml('attribs', root='act')
 
     def test_act(self):
         self.roundtrip('act', 'act')
