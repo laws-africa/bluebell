@@ -80,8 +80,11 @@ class RoundTripTestCase(ParserSupport, TestCase):
     def test_nested_attachments(self):
         self.roundtrip('nested_attachments', 'statement')
 
+    def test_debate_report(self):
+        self.roundtrip('debate-report', 'debateReport')
+
     def test_hansard(self):
-        self.roundtrip('hansard', 'debateReport')
+        self.roundtrip('hansard', 'debate')
 
     def test_empty_parts(self):
         self.roundtrip('act-empty', 'act')

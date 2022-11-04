@@ -67,6 +67,10 @@ class NestedBlockElement:
         return many_to_dict(self.content)
 
 
+class NestedAltBlockElement(NestedBlockElement):
+    pass
+
+
 class Preface(BlockIndentElement):
     name = 'preface'
 
@@ -119,6 +123,7 @@ class MainContentElement:
     Used here for <body>, <mainBody>, and <mainBody>'s equivalents such as <background>.
     """
     name = None
+    content_element = 'hier_block_indent'
 
     def empty(self):
         return empty_p()
@@ -163,7 +168,7 @@ class MainContentElement:
         return children
 
     def to_dict(self):
-        kids = many_to_dict(c.hier_block_indent for c in self.content)
+        kids = many_to_dict(getattr(c, self.content_element) for c in self.content)
         kids = self.wrap_children(kids)
         return {
             'type': 'element',
@@ -188,6 +193,8 @@ class Body(MainContentElement):
 
 
 class HierElement:
+    type = 'hier'
+    name_element = 'hier_element_name'
     synonyms = {
         'art': 'article',
         'chap': 'chapter',
@@ -199,7 +206,7 @@ class HierElement:
     }
 
     def to_dict(self):
-        name = self.hier_element_name.text.lower()
+        name = getattr(self, self.name_element).text.lower()
         name = self.synonyms.get(name, name)
         if self.body.text:
             kids = many_to_dict(self.body.content)
@@ -207,7 +214,7 @@ class HierElement:
             kids = []
 
         info = {
-            'type': 'hier',
+            'type': self.type,
             'name': name,
             'children': kids,
         }
@@ -239,6 +246,38 @@ class HierElementHeading:
     def heading_to_dict(self):
         if hasattr(self.heading, 'content') and self.heading.content.text.strip():
             return InlineText.many_to_dict(x for x in self.heading.content)
+
+
+class AltHierElement(HierElement):
+    """ AltHier is the name AKN gives to the hierarchy elements used by debate/speech elements.
+    """
+    type = 'althier'
+    name_element = 'alt_hier_element_name'
+    synonyms = {
+        # TODO: any other weird formatting
+        'debatesection': 'debateSection',
+    }
+
+    def to_dict(self):
+        info = super().to_dict()
+        # TODO: others?
+        if info['name'] == 'debateSection':
+            if 'name' not in info.get('attribs', {}):
+                info.setdefault('attribs', {})['name'] = 'debateSection'
+        return info
+
+
+class AltContainerElement(AltHierElement):
+    name_element = 'alt_container_element_name'
+
+    def to_dict(self):
+        info = super().to_dict()
+        # add from
+        info['from'] = self.body.speech_from.to_dict()
+        if 'by' not in info.get('attribs', {}):
+            # TODO:
+            info.setdefault('attribs', {})['by'] = 'XXX'
+        return info
 
 
 class Attachments:
@@ -323,6 +362,11 @@ class Motivation(MainContentElement):
 
 class Decision(MainContentElement):
     name = 'decision'
+
+
+class DebateBody(MainContentElement):
+    name = 'debateBody'
+    content_element = 'alt_hier_element_indent'
 
 
 # ------------------------------------------------------------------------------
@@ -523,6 +567,11 @@ class Subheading:
             return InlineText.many_to_dict(k for k in self.body.content)
         else:
             return []
+
+
+class From:
+    def to_dict(self):
+        return InlineText.many_to_dict(k for k in self.content)
 
 
 class P:
@@ -909,3 +958,13 @@ class Doc(OpenStructure):
 
 class DebateReport(OpenStructure):
     name = 'debateReport'
+
+
+class DebateStructure(DocumentRoot):
+    children = ['preface', 'debateBody', 'conclusions', 'attachments']
+    name = 'debateStructure'
+    required_children = {'debateBody'}
+
+
+class Debate(DebateStructure):
+    name = 'debate'
