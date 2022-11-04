@@ -318,7 +318,7 @@ class XmlGenerator:
 
         return m(item['name'], *kids, **item.get('attribs', {}))
 
-    def item_to_xml_althier(self, item):
+    def item_to_xml_speechhier(self, item):
         return self.maker(item['name'], *self.kids_to_xml(item), **item.get('attribs', {}))
 
     def item_to_xml_content(self, item):

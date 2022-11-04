@@ -248,11 +248,9 @@ class HierElementHeading:
             return InlineText.many_to_dict(x for x in self.heading.content)
 
 
-class AltHierElement(HierElement):
-    """ AltHier is the name AKN gives to the hierarchy elements used by debate/speech elements.
-    """
-    type = 'althier'
-    name_element = 'alt_hier_element_name'
+class SpeechContainer(HierElement):
+    type = 'speechhier'
+    name_element = 'speech_container_name'
     synonyms = {
         # TODO: any other weird formatting
         'debatesection': 'debateSection',
@@ -267,15 +265,16 @@ class AltHierElement(HierElement):
         return info
 
 
-class AltContainerElement(AltHierElement):
-    name_element = 'alt_container_element_name'
+class SpeechGroup(SpeechContainer):
+    name_element = 'speech_group_name'
 
     def to_dict(self):
         info = super().to_dict()
         # add from
-        info['from'] = self.body.speech_from.to_dict()
+        if self.body.text:
+            info['from'] = self.body.speech_from.to_dict()
         if 'by' not in info.get('attribs', {}):
-            # TODO:
+            # TODO: what if no speech?
             info.setdefault('attribs', {})['by'] = 'XXX'
         return info
 
@@ -366,7 +365,7 @@ class Decision(MainContentElement):
 
 class DebateBody(MainContentElement):
     name = 'debateBody'
-    content_element = 'alt_hier_element_indent'
+    content_element = 'speech_container_indent'
 
 
 # ------------------------------------------------------------------------------

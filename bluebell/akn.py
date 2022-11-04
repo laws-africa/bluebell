@@ -131,7 +131,7 @@ class TreeNode13(TreeNode):
 class TreeNode14(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode14, self).__init__(text, offset, elements)
-        self.alt_hier_element_name = elements[0]
+        self.speech_container_name = elements[0]
         self.attrs = elements[1]
         self.heading = elements[2]
         self.eol = elements[3]
@@ -150,7 +150,7 @@ class TreeNode15(TreeNode):
 class TreeNode16(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode16, self).__init__(text, offset, elements)
-        self.alt_container_element_name = elements[0]
+        self.speech_group_name = elements[0]
         self.attrs = elements[1]
         self.heading = elements[2]
         self.eol = elements[3]
@@ -234,7 +234,7 @@ class TreeNode27(TreeNode):
 class TreeNode28(TreeNode):
     def __init__(self, text, offset, elements):
         super(TreeNode28, self).__init__(text, offset, elements)
-        self.alt_hier_element_indent = elements[2]
+        self.speech_container_indent = elements[2]
 
 
 class TreeNode29(TreeNode):
@@ -1706,9 +1706,9 @@ class Grammar(object):
         self._cache['hier_block_indent'][index0] = (address0, self._offset)
         return address0
 
-    def _read_alt_hier_element_indent(self):
+    def _read_speech_container_indent(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['alt_hier_element_indent'].get(index0)
+        cached = self._cache['speech_container_indent'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -1721,7 +1721,7 @@ class Grammar(object):
             address2 = FAILURE
             remaining0, index3, elements1, address3 = 1, self._offset, [], True
             while address3 is not FAILURE:
-                address3 = self._read_alt_hier_element()
+                address3 = self._read_speech_container()
                 if address3 is not FAILURE:
                     elements1.append(address3)
                     remaining0 -= 1
@@ -1752,10 +1752,10 @@ class Grammar(object):
             self._offset = self._offset
         if address0 is FAILURE:
             self._offset = index1
-            address0 = self._read_alt_hier_element()
+            address0 = self._read_speech_container()
             if address0 is FAILURE:
                 self._offset = index1
-        self._cache['alt_hier_element_indent'][index0] = (address0, self._offset)
+        self._cache['speech_container_indent'][index0] = (address0, self._offset)
         return address0
 
     def _read_hier_element_name(self):
@@ -2278,25 +2278,15 @@ class Grammar(object):
         self._cache['hier_element_name'][index0] = (address0, self._offset)
         return address0
 
-    def _read_speech_section(self):
+    def _read_speech_container(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['speech_section'].get(index0)
-        if cached:
-            self._offset = cached[1]
-            return cached[0]
-        address0 = self._read_alt_hier_element()
-        self._cache['speech_section'][index0] = (address0, self._offset)
-        return address0
-
-    def _read_alt_hier_element(self):
-        address0, index0 = FAILURE, self._offset
-        cached = self._cache['alt_hier_element'].get(index0)
+        cached = self._cache['speech_container'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
         index1, elements0 = self._offset, []
         address1 = FAILURE
-        address1 = self._read_alt_hier_element_name()
+        address1 = self._read_speech_container_name()
         if address1 is not FAILURE:
             elements0.append(address1)
             address2 = FAILURE
@@ -2337,7 +2327,7 @@ class Grammar(object):
                                 address8 = FAILURE
                                 remaining0, index7, elements2, address9 = 0, self._offset, [], True
                                 while address9 is not FAILURE:
-                                    address9 = self._read_alt_hier_block_element()
+                                    address9 = self._read_speech_hier_block_element()
                                     if address9 is not FAILURE:
                                         elements2.append(address9)
                                         remaining0 -= 1
@@ -2396,38 +2386,38 @@ class Grammar(object):
             self._offset = self._offset
         if address0 is not FAILURE:
             cls0 = type(address0)
-            address0.__class__ = type(cls0.__name__ + 'AltHierElement', (cls0, self._types.AltHierElement), {})
-        self._cache['alt_hier_element'][index0] = (address0, self._offset)
+            address0.__class__ = type(cls0.__name__ + 'SpeechContainer', (cls0, self._types.SpeechContainer), {})
+        self._cache['speech_container'][index0] = (address0, self._offset)
         return address0
 
-    def _read_alt_hier_block_element(self):
+    def _read_speech_hier_block_element(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['alt_hier_block_element'].get(index0)
+        cached = self._cache['speech_hier_block_element'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
         index1 = self._offset
-        address0 = self._read_alt_hier_element()
+        address0 = self._read_speech_container()
         if address0 is FAILURE:
             self._offset = index1
-            address0 = self._read_alt_container_element()
+            address0 = self._read_speech_group()
             if address0 is FAILURE:
                 self._offset = index1
-                address0 = self._read_alt_block_element()
+                address0 = self._read_speech_block_element()
                 if address0 is FAILURE:
                     self._offset = index1
-        self._cache['alt_hier_block_element'][index0] = (address0, self._offset)
+        self._cache['speech_hier_block_element'][index0] = (address0, self._offset)
         return address0
 
-    def _read_alt_container_element(self):
+    def _read_speech_group(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['alt_container_element'].get(index0)
+        cached = self._cache['speech_group'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
         index1, elements0 = self._offset, []
         address1 = FAILURE
-        address1 = self._read_alt_container_element_name()
+        address1 = self._read_speech_group_name()
         if address1 is not FAILURE:
             elements0.append(address1)
             address2 = FAILURE
@@ -2472,7 +2462,7 @@ class Grammar(object):
                                     address9 = FAILURE
                                     remaining0, index7, elements2, address10 = 0, self._offset, [], True
                                     while address10 is not FAILURE:
-                                        address10 = self._read_alt_hier_block_element()
+                                        address10 = self._read_speech_hier_block_element()
                                         if address10 is not FAILURE:
                                             elements2.append(address10)
                                             remaining0 -= 1
@@ -2534,8 +2524,8 @@ class Grammar(object):
             self._offset = self._offset
         if address0 is not FAILURE:
             cls0 = type(address0)
-            address0.__class__ = type(cls0.__name__ + 'AltContainerElement', (cls0, self._types.AltContainerElement), {})
-        self._cache['alt_container_element'][index0] = (address0, self._offset)
+            address0.__class__ = type(cls0.__name__ + 'SpeechGroup', (cls0, self._types.SpeechGroup), {})
+        self._cache['speech_group'][index0] = (address0, self._offset)
         return address0
 
     def _read_speech_from(self):
@@ -2606,26 +2596,26 @@ class Grammar(object):
         self._cache['speech_from'][index0] = (address0, self._offset)
         return address0
 
-    def _read_alt_hier_element_name(self):
+    def _read_speech_container_name(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['alt_hier_element_name'].get(index0)
+        cached = self._cache['speech_container_name'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
         index1 = self._offset
-        chunk0, max0 = None, self._offset + 13
+        chunk0, max0 = None, self._offset + 7
         if max0 <= self._input_size:
             chunk0 = self._input[self._offset:max0]
-        if chunk0 == 'DEBATESECTION':
-            address0 = TreeNode(self._input[self._offset:self._offset + 13], self._offset, [])
-            self._offset = self._offset + 13
+        if chunk0 == 'ADDRESS':
+            address0 = TreeNode(self._input[self._offset:self._offset + 7], self._offset, [])
+            self._offset = self._offset + 7
         else:
             address0 = FAILURE
             if self._offset > self._failure:
                 self._failure = self._offset
                 self._expected = []
             if self._offset == self._failure:
-                self._expected.append('\'DEBATESECTION\'')
+                self._expected.append('\'ADDRESS\'')
         if address0 is FAILURE:
             self._offset = index1
             chunk1, max1 = None, self._offset + 11
@@ -2643,12 +2633,282 @@ class Grammar(object):
                     self._expected.append('\'ADJOURNMENT\'')
             if address0 is FAILURE:
                 self._offset = index1
-        self._cache['alt_hier_element_name'][index0] = (address0, self._offset)
+                chunk2, max2 = None, self._offset + 20
+                if max2 <= self._input_size:
+                    chunk2 = self._input[self._offset:max2]
+                if chunk2 == 'ADMINISTRATIONOFOATH':
+                    address0 = TreeNode(self._input[self._offset:self._offset + 20], self._offset, [])
+                    self._offset = self._offset + 20
+                else:
+                    address0 = FAILURE
+                    if self._offset > self._failure:
+                        self._failure = self._offset
+                        self._expected = []
+                    if self._offset == self._failure:
+                        self._expected.append('\'ADMINISTRATIONOFOATH\'')
+                if address0 is FAILURE:
+                    self._offset = index1
+                    chunk3, max3 = None, self._offset + 13
+                    if max3 <= self._input_size:
+                        chunk3 = self._input[self._offset:max3]
+                    if chunk3 == 'COMMUNICATION':
+                        address0 = TreeNode(self._input[self._offset:self._offset + 13], self._offset, [])
+                        self._offset = self._offset + 13
+                    else:
+                        address0 = FAILURE
+                        if self._offset > self._failure:
+                            self._failure = self._offset
+                            self._expected = []
+                        if self._offset == self._failure:
+                            self._expected.append('\'COMMUNICATION\'')
+                    if address0 is FAILURE:
+                        self._offset = index1
+                        chunk4, max4 = None, self._offset + 13
+                        if max4 <= self._input_size:
+                            chunk4 = self._input[self._offset:max4]
+                        if chunk4 == 'DEBATESECTION':
+                            address0 = TreeNode(self._input[self._offset:self._offset + 13], self._offset, [])
+                            self._offset = self._offset + 13
+                        else:
+                            address0 = FAILURE
+                            if self._offset > self._failure:
+                                self._failure = self._offset
+                                self._expected = []
+                            if self._offset == self._failure:
+                                self._expected.append('\'DEBATESECTION\'')
+                        if address0 is FAILURE:
+                            self._offset = index1
+                            chunk5, max5 = None, self._offset + 17
+                            if max5 <= self._input_size:
+                                chunk5 = self._input[self._offset:max5]
+                            if chunk5 == 'DECLARATIONOFVOTE':
+                                address0 = TreeNode(self._input[self._offset:self._offset + 17], self._offset, [])
+                                self._offset = self._offset + 17
+                            else:
+                                address0 = FAILURE
+                                if self._offset > self._failure:
+                                    self._failure = self._offset
+                                    self._expected = []
+                                if self._offset == self._failure:
+                                    self._expected.append('\'DECLARATIONOFVOTE\'')
+                            if address0 is FAILURE:
+                                self._offset = index1
+                                chunk6, max6 = None, self._offset + 21
+                                if max6 <= self._input_size:
+                                    chunk6 = self._input[self._offset:max6]
+                                if chunk6 == 'MINISTERIALSTATEMENTS':
+                                    address0 = TreeNode(self._input[self._offset:self._offset + 21], self._offset, [])
+                                    self._offset = self._offset + 21
+                                else:
+                                    address0 = FAILURE
+                                    if self._offset > self._failure:
+                                        self._failure = self._offset
+                                        self._expected = []
+                                    if self._offset == self._failure:
+                                        self._expected.append('\'MINISTERIALSTATEMENTS\'')
+                                if address0 is FAILURE:
+                                    self._offset = index1
+                                    chunk7, max7 = None, self._offset + 16
+                                    if max7 <= self._input_size:
+                                        chunk7 = self._input[self._offset:max7]
+                                    if chunk7 == 'NATIONALINTEREST':
+                                        address0 = TreeNode(self._input[self._offset:self._offset + 16], self._offset, [])
+                                        self._offset = self._offset + 16
+                                    else:
+                                        address0 = FAILURE
+                                        if self._offset > self._failure:
+                                            self._failure = self._offset
+                                            self._expected = []
+                                        if self._offset == self._failure:
+                                            self._expected.append('\'NATIONALINTEREST\'')
+                                    if address0 is FAILURE:
+                                        self._offset = index1
+                                        chunk8, max8 = None, self._offset + 15
+                                        if max8 <= self._input_size:
+                                            chunk8 = self._input[self._offset:max8]
+                                        if chunk8 == 'NOTICESOFMOTION':
+                                            address0 = TreeNode(self._input[self._offset:self._offset + 15], self._offset, [])
+                                            self._offset = self._offset + 15
+                                        else:
+                                            address0 = FAILURE
+                                            if self._offset > self._failure:
+                                                self._failure = self._offset
+                                                self._expected = []
+                                            if self._offset == self._failure:
+                                                self._expected.append('\'NOTICESOFMOTION\'')
+                                        if address0 is FAILURE:
+                                            self._offset = index1
+                                            chunk9, max9 = None, self._offset + 14
+                                            if max9 <= self._input_size:
+                                                chunk9 = self._input[self._offset:max9]
+                                            if chunk9 == 'ORALSTATEMENTS':
+                                                address0 = TreeNode(self._input[self._offset:self._offset + 14], self._offset, [])
+                                                self._offset = self._offset + 14
+                                            else:
+                                                address0 = FAILURE
+                                                if self._offset > self._failure:
+                                                    self._failure = self._offset
+                                                    self._expected = []
+                                                if self._offset == self._failure:
+                                                    self._expected.append('\'ORALSTATEMENTS\'')
+                                            if address0 is FAILURE:
+                                                self._offset = index1
+                                                chunk10, max10 = None, self._offset + 6
+                                                if max10 <= self._input_size:
+                                                    chunk10 = self._input[self._offset:max10]
+                                                if chunk10 == 'PAPERS':
+                                                    address0 = TreeNode(self._input[self._offset:self._offset + 6], self._offset, [])
+                                                    self._offset = self._offset + 6
+                                                else:
+                                                    address0 = FAILURE
+                                                    if self._offset > self._failure:
+                                                        self._failure = self._offset
+                                                        self._expected = []
+                                                    if self._offset == self._failure:
+                                                        self._expected.append('\'PAPERS\'')
+                                                if address0 is FAILURE:
+                                                    self._offset = index1
+                                                    chunk11, max11 = None, self._offset + 18
+                                                    if max11 <= self._input_size:
+                                                        chunk11 = self._input[self._offset:max11]
+                                                    if chunk11 == 'PERSONALSTATEMENTS':
+                                                        address0 = TreeNode(self._input[self._offset:self._offset + 18], self._offset, [])
+                                                        self._offset = self._offset + 18
+                                                    else:
+                                                        address0 = FAILURE
+                                                        if self._offset > self._failure:
+                                                            self._failure = self._offset
+                                                            self._expected = []
+                                                        if self._offset == self._failure:
+                                                            self._expected.append('\'PERSONALSTATEMENTS\'')
+                                                    if address0 is FAILURE:
+                                                        self._offset = index1
+                                                        chunk12, max12 = None, self._offset + 9
+                                                        if max12 <= self._input_size:
+                                                            chunk12 = self._input[self._offset:max12]
+                                                        if chunk12 == 'PETITIONS':
+                                                            address0 = TreeNode(self._input[self._offset:self._offset + 9], self._offset, [])
+                                                            self._offset = self._offset + 9
+                                                        else:
+                                                            address0 = FAILURE
+                                                            if self._offset > self._failure:
+                                                                self._failure = self._offset
+                                                                self._expected = []
+                                                            if self._offset == self._failure:
+                                                                self._expected.append('\'PETITIONS\'')
+                                                        if address0 is FAILURE:
+                                                            self._offset = index1
+                                                            chunk13, max13 = None, self._offset + 12
+                                                            if max13 <= self._input_size:
+                                                                chunk13 = self._input[self._offset:max13]
+                                                            if chunk13 == 'POINTOFORDER':
+                                                                address0 = TreeNode(self._input[self._offset:self._offset + 12], self._offset, [])
+                                                                self._offset = self._offset + 12
+                                                            else:
+                                                                address0 = FAILURE
+                                                                if self._offset > self._failure:
+                                                                    self._failure = self._offset
+                                                                    self._expected = []
+                                                                if self._offset == self._failure:
+                                                                    self._expected.append('\'POINTOFORDER\'')
+                                                            if address0 is FAILURE:
+                                                                self._offset = index1
+                                                                chunk14, max14 = None, self._offset + 7
+                                                                if max14 <= self._input_size:
+                                                                    chunk14 = self._input[self._offset:max14]
+                                                                if chunk14 == 'PRAYERS':
+                                                                    address0 = TreeNode(self._input[self._offset:self._offset + 7], self._offset, [])
+                                                                    self._offset = self._offset + 7
+                                                                else:
+                                                                    address0 = FAILURE
+                                                                    if self._offset > self._failure:
+                                                                        self._failure = self._offset
+                                                                        self._expected = []
+                                                                    if self._offset == self._failure:
+                                                                        self._expected.append('\'PRAYERS\'')
+                                                                if address0 is FAILURE:
+                                                                    self._offset = index1
+                                                                    chunk15, max15 = None, self._offset + 17
+                                                                    if max15 <= self._input_size:
+                                                                        chunk15 = self._input[self._offset:max15]
+                                                                    if chunk15 == 'PROCEDURALMOTIONS':
+                                                                        address0 = TreeNode(self._input[self._offset:self._offset + 17], self._offset, [])
+                                                                        self._offset = self._offset + 17
+                                                                    else:
+                                                                        address0 = FAILURE
+                                                                        if self._offset > self._failure:
+                                                                            self._failure = self._offset
+                                                                            self._expected = []
+                                                                        if self._offset == self._failure:
+                                                                            self._expected.append('\'PROCEDURALMOTIONS\'')
+                                                                    if address0 is FAILURE:
+                                                                        self._offset = index1
+                                                                        chunk16, max16 = None, self._offset + 9
+                                                                        if max16 <= self._input_size:
+                                                                            chunk16 = self._input[self._offset:max16]
+                                                                        if chunk16 == 'QUESTIONS':
+                                                                            address0 = TreeNode(self._input[self._offset:self._offset + 9], self._offset, [])
+                                                                            self._offset = self._offset + 9
+                                                                        else:
+                                                                            address0 = FAILURE
+                                                                            if self._offset > self._failure:
+                                                                                self._failure = self._offset
+                                                                                self._expected = []
+                                                                            if self._offset == self._failure:
+                                                                                self._expected.append('\'QUESTIONS\'')
+                                                                        if address0 is FAILURE:
+                                                                            self._offset = index1
+                                                                            chunk17, max17 = None, self._offset + 11
+                                                                            if max17 <= self._input_size:
+                                                                                chunk17 = self._input[self._offset:max17]
+                                                                            if chunk17 == 'RESOLUTIONS':
+                                                                                address0 = TreeNode(self._input[self._offset:self._offset + 11], self._offset, [])
+                                                                                self._offset = self._offset + 11
+                                                                            else:
+                                                                                address0 = FAILURE
+                                                                                if self._offset > self._failure:
+                                                                                    self._failure = self._offset
+                                                                                    self._expected = []
+                                                                                if self._offset == self._failure:
+                                                                                    self._expected.append('\'RESOLUTIONS\'')
+                                                                            if address0 is FAILURE:
+                                                                                self._offset = index1
+                                                                                chunk18, max18 = None, self._offset + 8
+                                                                                if max18 <= self._input_size:
+                                                                                    chunk18 = self._input[self._offset:max18]
+                                                                                if chunk18 == 'ROLLCALL':
+                                                                                    address0 = TreeNode(self._input[self._offset:self._offset + 8], self._offset, [])
+                                                                                    self._offset = self._offset + 8
+                                                                                else:
+                                                                                    address0 = FAILURE
+                                                                                    if self._offset > self._failure:
+                                                                                        self._failure = self._offset
+                                                                                        self._expected = []
+                                                                                    if self._offset == self._failure:
+                                                                                        self._expected.append('\'ROLLCALL\'')
+                                                                                if address0 is FAILURE:
+                                                                                    self._offset = index1
+                                                                                    chunk19, max19 = None, self._offset + 17
+                                                                                    if max19 <= self._input_size:
+                                                                                        chunk19 = self._input[self._offset:max19]
+                                                                                    if chunk19 == 'WRITTENSTATEMENTS':
+                                                                                        address0 = TreeNode(self._input[self._offset:self._offset + 17], self._offset, [])
+                                                                                        self._offset = self._offset + 17
+                                                                                    else:
+                                                                                        address0 = FAILURE
+                                                                                        if self._offset > self._failure:
+                                                                                            self._failure = self._offset
+                                                                                            self._expected = []
+                                                                                        if self._offset == self._failure:
+                                                                                            self._expected.append('\'WRITTENSTATEMENTS\'')
+                                                                                    if address0 is FAILURE:
+                                                                                        self._offset = index1
+        self._cache['speech_container_name'][index0] = (address0, self._offset)
         return address0
 
-    def _read_alt_container_element_name(self):
+    def _read_speech_group_name(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['alt_container_element_name'].get(index0)
+        cached = self._cache['speech_group_name'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -2683,7 +2943,97 @@ class Grammar(object):
                     self._expected.append('\'SPEECH\'')
             if address0 is FAILURE:
                 self._offset = index1
-        self._cache['alt_container_element_name'][index0] = (address0, self._offset)
+                chunk2, max2 = None, self._offset + 8
+                if max2 <= self._input_size:
+                    chunk2 = self._input[self._offset:max2]
+                if chunk2 == 'QUESTION':
+                    address0 = TreeNode(self._input[self._offset:self._offset + 8], self._offset, [])
+                    self._offset = self._offset + 8
+                else:
+                    address0 = FAILURE
+                    if self._offset > self._failure:
+                        self._failure = self._offset
+                        self._expected = []
+                    if self._offset == self._failure:
+                        self._expected.append('\'QUESTION\'')
+                if address0 is FAILURE:
+                    self._offset = index1
+                    chunk3, max3 = None, self._offset + 6
+                    if max3 <= self._input_size:
+                        chunk3 = self._input[self._offset:max3]
+                    if chunk3 == 'ANSWER':
+                        address0 = TreeNode(self._input[self._offset:self._offset + 6], self._offset, [])
+                        self._offset = self._offset + 6
+                    else:
+                        address0 = FAILURE
+                        if self._offset > self._failure:
+                            self._failure = self._offset
+                            self._expected = []
+                        if self._offset == self._failure:
+                            self._expected.append('\'ANSWER\'')
+                    if address0 is FAILURE:
+                        self._offset = index1
+                        chunk4, max4 = None, self._offset + 5
+                        if max4 <= self._input_size:
+                            chunk4 = self._input[self._offset:max4]
+                        if chunk4 == 'OTHER':
+                            address0 = TreeNode(self._input[self._offset:self._offset + 5], self._offset, [])
+                            self._offset = self._offset + 5
+                        else:
+                            address0 = FAILURE
+                            if self._offset > self._failure:
+                                self._failure = self._offset
+                                self._expected = []
+                            if self._offset == self._failure:
+                                self._expected.append('\'OTHER\'')
+                        if address0 is FAILURE:
+                            self._offset = index1
+                            chunk5, max5 = None, self._offset + 5
+                            if max5 <= self._input_size:
+                                chunk5 = self._input[self._offset:max5]
+                            if chunk5 == 'SCENE':
+                                address0 = TreeNode(self._input[self._offset:self._offset + 5], self._offset, [])
+                                self._offset = self._offset + 5
+                            else:
+                                address0 = FAILURE
+                                if self._offset > self._failure:
+                                    self._failure = self._offset
+                                    self._expected = []
+                                if self._offset == self._failure:
+                                    self._expected.append('\'SCENE\'')
+                            if address0 is FAILURE:
+                                self._offset = index1
+                                chunk6, max6 = None, self._offset + 9
+                                if max6 <= self._input_size:
+                                    chunk6 = self._input[self._offset:max6]
+                                if chunk6 == 'NARRATIVE':
+                                    address0 = TreeNode(self._input[self._offset:self._offset + 9], self._offset, [])
+                                    self._offset = self._offset + 9
+                                else:
+                                    address0 = FAILURE
+                                    if self._offset > self._failure:
+                                        self._failure = self._offset
+                                        self._expected = []
+                                    if self._offset == self._failure:
+                                        self._expected.append('\'NARRATIVE\'')
+                                if address0 is FAILURE:
+                                    self._offset = index1
+                                    chunk7, max7 = None, self._offset + 7
+                                    if max7 <= self._input_size:
+                                        chunk7 = self._input[self._offset:max7]
+                                    if chunk7 == 'SUMMARY':
+                                        address0 = TreeNode(self._input[self._offset:self._offset + 7], self._offset, [])
+                                        self._offset = self._offset + 7
+                                    else:
+                                        address0 = FAILURE
+                                        if self._offset > self._failure:
+                                            self._failure = self._offset
+                                            self._expected = []
+                                        if self._offset == self._failure:
+                                            self._expected.append('\'SUMMARY\'')
+                                    if address0 is FAILURE:
+                                        self._offset = index1
+        self._cache['speech_group_name'][index0] = (address0, self._offset)
         return address0
 
     def _read_preface(self):
@@ -3050,7 +3400,7 @@ class Grammar(object):
                     if address5 is not FAILURE:
                         elements2.append(address5)
                         address6 = FAILURE
-                        address6 = self._read_alt_hier_element_indent()
+                        address6 = self._read_speech_container_indent()
                         if address6 is not FAILURE:
                             elements2.append(address6)
                         else:
@@ -4693,25 +5043,25 @@ class Grammar(object):
         self._cache['block_elements'][index0] = (address0, self._offset)
         return address0
 
-    def _read_alt_block_element(self):
+    def _read_speech_block_element(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['alt_block_element'].get(index0)
+        cached = self._cache['speech_block_element'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
         index1 = self._offset
-        address0 = self._read_nested_alt_block_element()
+        address0 = self._read_nested_speech_block_element()
         if address0 is FAILURE:
             self._offset = index1
-            address0 = self._read_alt_block_elements()
+            address0 = self._read_speech_block_elements()
             if address0 is FAILURE:
                 self._offset = index1
-        self._cache['alt_block_element'][index0] = (address0, self._offset)
+        self._cache['speech_block_element'][index0] = (address0, self._offset)
         return address0
 
-    def _read_nested_alt_block_element(self):
+    def _read_nested_speech_block_element(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['nested_alt_block_element'].get(index0)
+        cached = self._cache['nested_speech_block_element'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -4723,7 +5073,7 @@ class Grammar(object):
             address2 = FAILURE
             remaining0, index2, elements1, address3 = 1, self._offset, [], True
             while address3 is not FAILURE:
-                address3 = self._read_alt_block_element()
+                address3 = self._read_speech_block_element()
                 if address3 is not FAILURE:
                     elements1.append(address3)
                     remaining0 -= 1
@@ -4755,12 +5105,12 @@ class Grammar(object):
         if address0 is not FAILURE:
             cls0 = type(address0)
             address0.__class__ = type(cls0.__name__ + 'NestedAltBlockElement', (cls0, self._types.NestedAltBlockElement), {})
-        self._cache['nested_alt_block_element'][index0] = (address0, self._offset)
+        self._cache['nested_speech_block_element'][index0] = (address0, self._offset)
         return address0
 
-    def _read_alt_block_elements(self):
+    def _read_speech_block_elements(self):
         address0, index0 = FAILURE, self._offset
-        cached = self._cache['alt_block_elements'].get(index0)
+        cached = self._cache['speech_block_elements'].get(index0)
         if cached:
             self._offset = cached[1]
             return cached[0]
@@ -4783,7 +5133,7 @@ class Grammar(object):
                             address0 = self._read_line()
                             if address0 is FAILURE:
                                 self._offset = index1
-        self._cache['alt_block_elements'][index0] = (address0, self._offset)
+        self._cache['speech_block_elements'][index0] = (address0, self._offset)
         return address0
 
     def _read_longtitle(self):
