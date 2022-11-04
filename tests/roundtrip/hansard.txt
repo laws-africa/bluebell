@@ -1,24 +1,40 @@
 PREFACE
 
-  preface
+  [The President of the Pan-African Parliament, the Hon, Mrs Getrude Mongella in the Chair]
 
-PREAMBLE
+  The House met at 10h49
 
-  preamble
+  A Moment of Silence or Prayers or Meditation was observed.
 
 BODY
+  DEBATESECTION
+    SPEECH{by the-president}
+      FROM THE PRESIDENT:
+      Tukae. Waheshimiwa Wabunge, natumaini wote mnapata tafsiri sahihi nataka nihakikishe kwamba mmepata tafsiri. Mnapata tafsiri? Watafsiri wa Kiswahili mpo? Toeni tafsiri kwa Waheshimiwa Wabunge. Nataka niwe na uhakika kama Waheshimiwa Wabunge, wanapata tafsiri ya Kiswahili and other languages, are you getting translation in English, Arabic, Kifaransa, Ki- Portuguese?</p>
 
-main body text
+    SPEECH
+      FROM AN HON MEMBER:
+      Yes we do.
 
-PART 1
+    SCENE
+      {{*(Applause)}}
 
-  First part
+  DEBATESECTION - KIAPO CHA UAMINIFU
 
-CONCLUSIONS
+    SPEECH{by the-president}
+      FROM THE PRESIDENT:
+      Waheshimiwa Wabunge, kwa kuwa, wapo Waheshimiwa Wabunge waliohudhuria katika Bunge hili kwa mara ya kwanza, tangu wachaguliwe na kuteuliwa kuwa Wabunge wa Bunge la Afrika, sasa ni wakati wao wa kuapa.
 
-  conclusions
+    The following Members took the Oath of Solemn Declaration, signed it and took their seats:
 
-ANNEXURE Annex 1
+    OL
+      * Hon Gendy Abdel Aziz El Mostafa (Egypt);
+      * Dr Kaliny Georgette Sobhi (Egypt);
+      * Hon Shabaan Abdel Aziz Mohammed (Egypt)
 
-  Some content 1
+    SPEECH
+      FROM THE PRESIDENT:
+      Nataka nichukue nafasi hii sasa, kuwapongeza wale wote waliotoa kiapo chao kwa Bunge hili. Kuna wengine ambao hawakuapa hapa kufuatana na Kanuni zetu za Bunge hili, Mbunge yeyote anapokwenda kwenye uchaguzi na akashinda uchaguzi halazimiki kuapa tena ndiyo maana mmeona wale waliorudi hawakuchukua kiapo kwa mara nyingine.
 
+  ADJOURNMENT
+    The House adjourned at 12.06pm

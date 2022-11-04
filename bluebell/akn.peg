@@ -53,6 +53,19 @@ grammar akn
                        <OpenStructure>
 
   # ------------------------------------------------------------------------------
+  # Debate structure (debate)
+  # ------------------------------------------------------------------------------
+
+  debate            <- debate_structure <Debate>
+
+  # TODO: components
+  debate_structure  <- preface:preface?
+                       debateBody
+                       conclusions:conclusions?
+                       attachments:attachments?
+                       <DebateStructure>
+
+  # ------------------------------------------------------------------------------
   # Hierarchical elements
   # ------------------------------------------------------------------------------
 
@@ -87,12 +100,46 @@ grammar akn
                      # indented block, but otherwise contain block and hier content
   hier_block_indent <- (indent content:hier_block_element+ dedent) / hier_block_element
 
+                     # this is for top-level containers that may/may not start with an
+                     # indented block, but otherwise contain block and hier content
+  alt_hier_element_indent <- (indent content:alt_hier_element+ dedent) / alt_hier_element
+
                      # synonyms that are prefixes of other items must come last
   hier_element_name <- ('ALINEA' / 'ARTICLE' / 'BOOK' / 'CHAPTER' / 'CLAUSE' / 'DIVISION' / 'INDENT' / 'LEVEL' / 'LIST'
                         / 'PARAGRAPH' / 'PART' / 'POINT' / 'PROVISO' / 'RULE' / 'SECTION' / 'SUBCHAPTER'
                         / 'SUBCLAUSE' / 'SUBDIVISION' / 'SUBLIST' / 'SUBPARAGRAPH' / 'SUBPART' / 'SUBRULE'
                         / 'SUBSECTION' / 'SUBTITLE' / 'TITLE' / 'TOME' / 'TRANSITIONAL'
                         / 'ART' / 'CHAP' / 'PARA' / 'SEC' / 'SUBCHAP' / 'SUBPARA' / 'SUBSEC')
+
+  # ------------------------------------------------------------------------------
+  # Debate/speech elements
+  # ------------------------------------------------------------------------------
+
+  speech_section    <- alt_hier_element
+
+  alt_hier_element  <- alt_hier_element_name attrs:block_attrs? heading:hier_element_heading? eol
+                       body:(indent
+                         subheading:subheading?
+                         content:alt_hier_block_element*
+                       dedent)? <AltHierElement>
+
+  alt_hier_block_element <- alt_hier_element / alt_container_element / alt_block_element
+
+  alt_container_element <- alt_container_element_name attrs:block_attrs? heading:hier_element_heading? eol
+                           body:(indent
+                             subheading:subheading?
+                             speech_from
+                             content:alt_hier_block_element*
+                           dedent)? <AltContainerElement>
+
+  speech_from           <- 'FROM' space content:inline+ eol <From>
+
+                           # synonyms that are prefixes of other items must come last
+                           # TODO: all
+  alt_hier_element_name <- ('DEBATESECTION' / 'ADJOURNMENT')
+
+  # TODO: question, answer, other, etc.
+  alt_container_element_name <- ('SPEECHGROUP' / 'SPEECH')
 
   # ------------------------------------------------------------------------------
   # Containers
@@ -115,6 +162,11 @@ grammar akn
   mainBody          <- body_marker?
                        content:(!conclusions_marker !attachment_marker hier_block_indent)*
                        <MainBody>
+
+                     # body with mixed block and debate elements
+  debateBody        <- body_marker?
+                       content:(!conclusions_marker !attachment_marker alt_hier_element_indent)*
+                       <DebateBody>
 
   conclusions       <- conclusions_marker
                        content:(!attachment_marker block_element)*
@@ -202,6 +254,20 @@ grammar akn
 
   block_elements    <- block_list / bullet_list / table / longtitle / footnote / block_quote / p / line
 
+  # ------------------------------------------------------------------------------
+  # Alt blocks for debates
+  # ------------------------------------------------------------------------------
+
+  alt_block_element <- nested_alt_block_element / alt_block_elements
+
+  nested_alt_block_element <- indent content:alt_block_element+ dedent <NestedAltBlockElement>
+
+  alt_block_elements <- block_list / bullet_list / table / footnote / p / line
+
+  # ------------------------------------------------------------------------------
+  # Actual block elements
+  # ------------------------------------------------------------------------------
+
   longtitle         <- 'LONGTITLE' body:(space content:inline+)? eol <Longtitle>
 
   subheading        <- 'SUBHEADING' body:(space content:inline+)? eol <Subheading>
@@ -216,6 +282,7 @@ grammar akn
                      # against it, we don't have to guard at every place that
                      # could start a line.
   line              <- !dedent content:inline+ eol <Line>
+
 
   # ------------------------------------------------------------------------------
   # Block lists
