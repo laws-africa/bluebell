@@ -138,7 +138,8 @@ grammar akn
                             / 'PRAYERS' / 'PROCEDURALMOTIONS' / 'QUESTIONS' / 'RESOLUTIONS' / 'ROLLCALL'
                             / 'WRITTENSTATEMENTS')
 
-  speech_group_name <- ('SPEECHGROUP' / 'SPEECH' / 'QUESTION' / 'ANSWER' / 'OTHER' / 'SCENE' / 'NARRATIVE' / 'SUMMARY')
+  # TODO: other
+  speech_group_name <- ('SPEECHGROUP' / 'SPEECH' / 'QUESTION' / 'ANSWER')
 
   # ------------------------------------------------------------------------------
   # Containers
@@ -254,14 +255,18 @@ grammar akn
   block_elements    <- block_list / bullet_list / table / longtitle / footnote / block_quote / p / line
 
   # ------------------------------------------------------------------------------
-  # Alt blocks for debates
+  # Speech blocks for debates
   # ------------------------------------------------------------------------------
 
   speech_block_element <- nested_speech_block_element / speech_block_elements
 
   nested_speech_block_element <- indent content:speech_block_element+ dedent <NestedAltBlockElement>
 
-  speech_block_elements <- block_list / bullet_list / table / footnote / p / line
+  speech_block_elements <- speech_block / block_list / bullet_list / table / footnote / p / line
+
+  speech_block      <- speech_block_name attrs:block_attrs? space content:inline+ eol <SpeechBlock>
+
+  speech_block_name <- 'SCENE' / 'NARRATIVE' / 'SUMMARY'
 
   # ------------------------------------------------------------------------------
   # Actual block elements
