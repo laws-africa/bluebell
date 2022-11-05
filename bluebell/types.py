@@ -252,8 +252,17 @@ class SpeechContainer(HierElement):
     type = 'speechhier'
     name_element = 'speech_container_name'
     synonyms = {
-        # TODO: any other weird formatting
+        'administrationofoath': 'administrationOfOath',
         'debatesection': 'debateSection',
+        'declarationofvote': 'declarationOfVote',
+        'ministerialstatements': 'ministerialStatements',
+        'noticesofmotion': 'noticesOfMotion',
+        'oralstatements': 'oralStatements',
+        'personalstatements': 'personalStatements',
+        'pointoforder': 'pointOfOrder',
+        'proceduralmotions': 'proceduralMotions',
+        'rollcall': 'rollCall',
+        'writtenstatements': 'writtenStatements',
     }
 
     def to_dict(self):
@@ -571,6 +580,20 @@ class Subheading:
 class From:
     def to_dict(self):
         return InlineText.many_to_dict(k for k in self.content)
+
+
+class SpeechBlock:
+    def to_dict(self):
+        info = {
+            'type': 'element',
+            'name': self.speech_block_name.text.lower(),
+            'children': InlineText.many_to_dict(self.content.elements),
+        }
+
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+
+        return info
 
 
 class P:

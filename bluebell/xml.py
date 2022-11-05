@@ -319,7 +319,17 @@ class XmlGenerator:
         return m(item['name'], *kids, **item.get('attribs', {}))
 
     def item_to_xml_speechhier(self, item):
-        return self.maker(item['name'], *self.kids_to_xml(item), **item.get('attribs', {}))
+        """ Speech hier is similar to normal hier, but without having to worry about <content>."""
+        m = self.maker
+        kids = []
+
+        self.add_num_heading_subheading(m, item, kids)
+
+        if 'from' in item:
+            kids.append(getattr(m, 'from')(*(self.item_to_xml(k) for k in item['from'])))
+        kids.extend(self.kids_to_xml(item))
+
+        return m(item['name'], *kids, **item.get('attribs', {}))
 
     def item_to_xml_content(self, item):
         return self.maker(item['name'], *self.kids_to_xml(item), **item.get('attribs', {}))
