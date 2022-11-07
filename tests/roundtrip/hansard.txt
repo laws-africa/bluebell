@@ -24,7 +24,7 @@ DEBATESECTION
 
 DEBATESECTION.class - KIAPO CHA UAMINIFU
 
-  SPEECH{by the-president} num - heading
+  SPEECH num - heading
     SUBHEADING sub-heading
     FROM THE PRESIDENT:
 
