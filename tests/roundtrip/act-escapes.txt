@@ -100,3 +100,15 @@ CHAP 1 - Heading
 
   \ATTACHMENT
 
+CHAP 2 - Speech
+
+  \SPEECH
+
+  \SCENE
+
+  \SCENE
+
+  \ADJOURNMENT
+
+  \DEBATESECTION
+

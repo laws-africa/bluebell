@@ -126,40 +126,66 @@
                     $text = 'PREAMBLE' or
                     $text = 'PREFACE' or
                     $text = 'REMEDIES' or
+                    starts-with($text, 'ADDRESS') or
+                    starts-with($text, 'ADJOURNMENT') or
+                    starts-with($text, 'ADMINISTRATIONOFOATH') or
                     starts-with($text, 'ALINEA') or
                     starts-with($text, 'ANNEXURE') or
+                    starts-with($text, 'ANSWER') or
                     starts-with($text, 'APPENDIX') or
                     starts-with($text, 'ART') or
                     starts-with($text, 'ARTICLE') or
                     starts-with($text, 'ATTACHMENT') or
+                    starts-with($text, 'BLOCKLIST') or
                     starts-with($text, 'BOOK') or
                     starts-with($text, 'BULLETS') or
-                    starts-with($text, 'BLOCKLIST') or
                     starts-with($text, 'CHAP') or
                     starts-with($text, 'CHAPTER') or
                     starts-with($text, 'CLAUSE') or
+                    starts-with($text, 'COMMUNICATION') or
                     starts-with($text, 'CROSSHEADING') or
+                    starts-with($text, 'DEBATESECTION') or
+                    starts-with($text, 'DECLARATIONOFVOTE') or
                     starts-with($text, 'DIVISION') or
                     starts-with($text, 'FOOTNOTE') or
+                    starts-with($text, 'FROM') or
                     starts-with($text, 'HEADING') or
                     starts-with($text, 'INDENT') or
                     starts-with($text, 'ITEMS') or
                     starts-with($text, 'LEVEL') or
                     starts-with($text, 'LIST') or
                     starts-with($text, 'LONGTITLE') or
-                    starts-with($text, 'P{') or
-                    starts-with($text, 'P.') or
+                    starts-with($text, 'MINISTERIALSTATEMENTS') or
+                    starts-with($text, 'NARRATIVE') or
+                    starts-with($text, 'NATIONALINTEREST') or
+                    starts-with($text, 'NOTICESOFMOTION') or
+                    starts-with($text, 'ORALSTATEMENTS') or
                     starts-with($text, 'P ') or
+                    starts-with($text, 'P.') or
+                    starts-with($text, 'PAPERS') or
                     starts-with($text, 'PARA') or
                     starts-with($text, 'PARAGRAPH') or
                     starts-with($text, 'PART') or
+                    starts-with($text, 'PERSONALSTATEMENTS') or
+                    starts-with($text, 'PETITIONS') or
                     starts-with($text, 'POINT') or
+                    starts-with($text, 'POINTOFORDER') or
+                    starts-with($text, 'PRAYERS') or
+                    starts-with($text, 'PROCEDURALMOTIONS') or
                     starts-with($text, 'PROVISO') or
+                    starts-with($text, 'P{') or
+                    starts-with($text, 'QUESTION') or
+                    starts-with($text, 'QUESTIONS') or
                     starts-with($text, 'QUOTE') or
+                    starts-with($text, 'RESOLUTIONS') or
+                    starts-with($text, 'ROLLCALL') or
                     starts-with($text, 'RULE') or
+                    starts-with($text, 'SCENE') or
                     starts-with($text, 'SCHEDULE') or
                     starts-with($text, 'SEC') or
                     starts-with($text, 'SECTION') or
+                    starts-with($text, 'SPEECH') or
+                    starts-with($text, 'SPEECHGROUP') or
                     starts-with($text, 'SUBCHAP') or
                     starts-with($text, 'SUBCHAPTER') or
                     starts-with($text, 'SUBCLAUSE') or
@@ -173,13 +199,15 @@
                     starts-with($text, 'SUBSEC') or
                     starts-with($text, 'SUBSECTION') or
                     starts-with($text, 'SUBTITLE') or
+                    starts-with($text, 'SUMMARY') or
                     starts-with($text, 'TABLE') or
                     starts-with($text, 'TC') or
                     starts-with($text, 'TH') or
                     starts-with($text, 'TITLE') or
                     starts-with($text, 'TOME') or
                     starts-with($text, 'TR') or
-                    starts-with($text, 'TRANSITIONAL')">
+                    starts-with($text, 'TRANSITIONAL') or
+                    starts-with($text, 'WRITTENSTATEMENTS')">
         <xsl:value-of select="'\'" />
       </xsl:if>
     </xsl:variable>
