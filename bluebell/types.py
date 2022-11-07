@@ -987,6 +987,18 @@ class DebateStructure(DocumentRoot):
     name = 'debateStructure'
     required_children = {'debateBody'}
 
+    def make_empty_debateBody(self, tag):
+        return {
+            'type': 'element',
+            'name': tag,
+            'children': [{
+                'type': 'element',
+                'name': 'debateSection',
+                'attribs': {'name': 'debateSection'},
+                'children': [empty_p()]
+            }]
+        }
+
 
 class Debate(DebateStructure):
     name = 'debate'
