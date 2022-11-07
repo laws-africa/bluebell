@@ -528,20 +528,32 @@
       <xsl:value-of select="translate(@class, ' ', '.')" />
     </xsl:if>
 
-    <!-- ignore @eId, @class and @name for <inline name="em"> -->
-    <xsl:if test="@*[local-name() != 'eId' and local-name() != 'class'
+    <!-- ignore:
+       - @eId
+       - @class
+       - @by
+       - @name for elements that match the element name
+       - @name for <inline name="em">
+       -->
+    <xsl:if test="@*[local-name() != 'eId' and local-name() != 'class' and local-name() != 'by'
+                  and (local-name() != 'name' or . != local-name(parent::a:*))
                   and not(parent::a:inline and local-name() = 'name' and . = 'em')]">
       <xsl:text>{</xsl:text>
-      <xsl:apply-templates select="@*[local-name() != 'eId' and local-name() != 'class'
-                                   and not(parent::a:inline and local-name() = 'name' and . = 'em')]" mode="generic" />
+      <xsl:for-each select="@*[local-name() != 'eId' and local-name() != 'class' and local-name() != 'by'
+                  and (local-name() != 'name' or . != local-name(parent::a:*))
+                  and not(parent::a:inline and local-name() = 'name' and . = 'em')]">
+        <xsl:apply-templates select="." mode="generic">
+          <xsl:with-param name="index" select="position()"/>
+        </xsl:apply-templates>
+      </xsl:for-each>
       <xsl:text>}</xsl:text>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="a:debateSection/@name[. = 'debateSection']" mode="generic" />
-
   <xsl:template match="@*" mode="generic">
-    <xsl:if test="position() > 1">
+    <xsl:param name="index">0</xsl:param>
+
+    <xsl:if test="$index > 1">
       <xsl:text>|</xsl:text>
     </xsl:if>
     <xsl:value-of select="local-name(.)" />
