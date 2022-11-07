@@ -37,5 +37,5 @@ class MainDoctypesTestCase(ParserSupport, TestCase):
     def test_empty_debateReport(self):
         self.validate_empty('debateReport', DebateReport)
 
-    def test_empty_debateReport(self):
+    def test_empty_debate(self):
         self.validate_empty('debate', Debate)
