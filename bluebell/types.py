@@ -1,3 +1,4 @@
+import re
 from itertools import groupby
 
 
@@ -67,6 +68,10 @@ class NestedBlockElement:
         return many_to_dict(self.content)
 
 
+class NestedAltBlockElement(NestedBlockElement):
+    pass
+
+
 class Preface(BlockIndentElement):
     name = 'preface'
 
@@ -119,6 +124,7 @@ class MainContentElement:
     Used here for <body>, <mainBody>, and <mainBody>'s equivalents such as <background>.
     """
     name = None
+    content_element = 'hier_block_indent'
 
     def empty(self):
         return empty_p()
@@ -163,7 +169,7 @@ class MainContentElement:
         return children
 
     def to_dict(self):
-        kids = many_to_dict(c.hier_block_indent for c in self.content)
+        kids = many_to_dict(getattr(c, self.content_element) for c in self.content)
         kids = self.wrap_children(kids)
         return {
             'type': 'element',
@@ -188,6 +194,8 @@ class Body(MainContentElement):
 
 
 class HierElement:
+    type = 'hier'
+    name_element = 'hier_element_name'
     synonyms = {
         'art': 'article',
         'chap': 'chapter',
@@ -199,7 +207,7 @@ class HierElement:
     }
 
     def to_dict(self):
-        name = self.hier_element_name.text.lower()
+        name = getattr(self, self.name_element).text.lower()
         name = self.synonyms.get(name, name)
         if self.body.text:
             kids = many_to_dict(self.body.content)
@@ -207,7 +215,7 @@ class HierElement:
             kids = []
 
         info = {
-            'type': 'hier',
+            'type': self.type,
             'name': name,
             'children': kids,
         }
@@ -239,6 +247,47 @@ class HierElementHeading:
     def heading_to_dict(self):
         if hasattr(self.heading, 'content') and self.heading.content.text.strip():
             return InlineText.many_to_dict(x for x in self.heading.content)
+
+
+class SpeechContainer(HierElement):
+    type = 'speechhier'
+    name_element = 'speech_container_name'
+    synonyms = {
+        'administrationofoath': 'administrationOfOath',
+        'debatesection': 'debateSection',
+        'declarationofvote': 'declarationOfVote',
+        'ministerialstatements': 'ministerialStatements',
+        'noticesofmotion': 'noticesOfMotion',
+        'oralstatements': 'oralStatements',
+        'personalstatements': 'personalStatements',
+        'pointoforder': 'pointOfOrder',
+        'proceduralmotions': 'proceduralMotions',
+        'rollcall': 'rollCall',
+        'writtenstatements': 'writtenStatements',
+    }
+
+    def to_dict(self):
+        info = super().to_dict()
+        if info['name'] == 'debateSection':
+            if 'name' not in info.get('attribs', {}):
+                info.setdefault('attribs', {})['name'] = 'debateSection'
+        return info
+
+
+class SpeechGroup(SpeechContainer):
+    name_element = 'speech_group_name'
+    non_letters_re = re.compile(r'[\W]', re.UNICODE)
+
+    def to_dict(self):
+        info = super().to_dict()
+        info['from'] = self.body.speech_from.to_dict()
+        if 'by' not in info.get('attribs', {}):
+            info.setdefault('attribs', {})['by'] = self.make_by()
+
+        return info
+
+    def make_by(self):
+        return '#' + self.non_letters_re.sub('', self.body.speech_from.text)
 
 
 class Attachments:
@@ -323,6 +372,11 @@ class Motivation(MainContentElement):
 
 class Decision(MainContentElement):
     name = 'decision'
+
+
+class DebateBody(MainContentElement):
+    name = 'debateBody'
+    content_element = 'speech_container_indent'
 
 
 # ------------------------------------------------------------------------------
@@ -523,6 +577,25 @@ class Subheading:
             return InlineText.many_to_dict(k for k in self.body.content)
         else:
             return []
+
+
+class From:
+    def to_dict(self):
+        return InlineText.many_to_dict(k for k in self.content)
+
+
+class SpeechBlock:
+    def to_dict(self):
+        info = {
+            'type': 'element',
+            'name': self.speech_block_name.text.lower(),
+            'children': InlineText.many_to_dict(self.content.elements),
+        }
+
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+
+        return info
 
 
 class P:
@@ -909,3 +982,25 @@ class Doc(OpenStructure):
 
 class DebateReport(OpenStructure):
     name = 'debateReport'
+
+
+class DebateStructure(DocumentRoot):
+    children = ['preface', 'debateBody', 'conclusions', 'attachments']
+    name = 'debateStructure'
+    required_children = {'debateBody'}
+
+    def make_empty_debateBody(self, tag):
+        return {
+            'type': 'element',
+            'name': tag,
+            'children': [{
+                'type': 'element',
+                'name': 'debateSection',
+                'attribs': {'name': 'debateSection'},
+                'children': [empty_p()]
+            }]
+        }
+
+
+class Debate(DebateStructure):
+    name = 'debate'

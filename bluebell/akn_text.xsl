@@ -126,40 +126,66 @@
                     $text = 'PREAMBLE' or
                     $text = 'PREFACE' or
                     $text = 'REMEDIES' or
+                    starts-with($text, 'ADDRESS') or
+                    starts-with($text, 'ADJOURNMENT') or
+                    starts-with($text, 'ADMINISTRATIONOFOATH') or
                     starts-with($text, 'ALINEA') or
                     starts-with($text, 'ANNEXURE') or
+                    starts-with($text, 'ANSWER') or
                     starts-with($text, 'APPENDIX') or
                     starts-with($text, 'ART') or
                     starts-with($text, 'ARTICLE') or
                     starts-with($text, 'ATTACHMENT') or
+                    starts-with($text, 'BLOCKLIST') or
                     starts-with($text, 'BOOK') or
                     starts-with($text, 'BULLETS') or
-                    starts-with($text, 'BLOCKLIST') or
                     starts-with($text, 'CHAP') or
                     starts-with($text, 'CHAPTER') or
                     starts-with($text, 'CLAUSE') or
+                    starts-with($text, 'COMMUNICATION') or
                     starts-with($text, 'CROSSHEADING') or
+                    starts-with($text, 'DEBATESECTION') or
+                    starts-with($text, 'DECLARATIONOFVOTE') or
                     starts-with($text, 'DIVISION') or
                     starts-with($text, 'FOOTNOTE') or
+                    starts-with($text, 'FROM') or
                     starts-with($text, 'HEADING') or
                     starts-with($text, 'INDENT') or
                     starts-with($text, 'ITEMS') or
                     starts-with($text, 'LEVEL') or
                     starts-with($text, 'LIST') or
                     starts-with($text, 'LONGTITLE') or
-                    starts-with($text, 'P{') or
-                    starts-with($text, 'P.') or
+                    starts-with($text, 'MINISTERIALSTATEMENTS') or
+                    starts-with($text, 'NARRATIVE') or
+                    starts-with($text, 'NATIONALINTEREST') or
+                    starts-with($text, 'NOTICESOFMOTION') or
+                    starts-with($text, 'ORALSTATEMENTS') or
                     starts-with($text, 'P ') or
+                    starts-with($text, 'P.') or
+                    starts-with($text, 'PAPERS') or
                     starts-with($text, 'PARA') or
                     starts-with($text, 'PARAGRAPH') or
                     starts-with($text, 'PART') or
+                    starts-with($text, 'PERSONALSTATEMENTS') or
+                    starts-with($text, 'PETITIONS') or
                     starts-with($text, 'POINT') or
+                    starts-with($text, 'POINTOFORDER') or
+                    starts-with($text, 'PRAYERS') or
+                    starts-with($text, 'PROCEDURALMOTIONS') or
                     starts-with($text, 'PROVISO') or
+                    starts-with($text, 'P{') or
+                    starts-with($text, 'QUESTION') or
+                    starts-with($text, 'QUESTIONS') or
                     starts-with($text, 'QUOTE') or
+                    starts-with($text, 'RESOLUTIONS') or
+                    starts-with($text, 'ROLLCALL') or
                     starts-with($text, 'RULE') or
+                    starts-with($text, 'SCENE') or
                     starts-with($text, 'SCHEDULE') or
                     starts-with($text, 'SEC') or
                     starts-with($text, 'SECTION') or
+                    starts-with($text, 'SPEECH') or
+                    starts-with($text, 'SPEECHGROUP') or
                     starts-with($text, 'SUBCHAP') or
                     starts-with($text, 'SUBCHAPTER') or
                     starts-with($text, 'SUBCLAUSE') or
@@ -173,13 +199,15 @@
                     starts-with($text, 'SUBSEC') or
                     starts-with($text, 'SUBSECTION') or
                     starts-with($text, 'SUBTITLE') or
+                    starts-with($text, 'SUMMARY') or
                     starts-with($text, 'TABLE') or
                     starts-with($text, 'TC') or
                     starts-with($text, 'TH') or
                     starts-with($text, 'TITLE') or
                     starts-with($text, 'TOME') or
                     starts-with($text, 'TR') or
-                    starts-with($text, 'TRANSITIONAL')">
+                    starts-with($text, 'TRANSITIONAL') or
+                    starts-with($text, 'WRITTENSTATEMENTS')">
         <xsl:value-of select="'\'" />
       </xsl:if>
     </xsl:variable>
@@ -264,7 +292,7 @@
   </xsl:template>
 
   <!-- hier content containers -->
-  <xsl:template match="a:body | a:mainBody | a:judgmentBody">
+  <xsl:template match="a:body | a:mainBody | a:judgmentBody | a:debateBody">
     <xsl:param name="indent">0</xsl:param>
 
     <!-- only add the BODY marker if a preface or preamble comes before the body -->
@@ -281,11 +309,18 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <!-- hierarchical elements -->
+  <!-- Hierarchical, speech-hierarchical and speech container elements. These all have num, heading and subheading
+       and behave very similarly.
+   -->
   <xsl:template match="a:alinea | a:article | a:book | a:chapter | a:clause | a:division | a:indent | a:level | a:list
                        | a:paragraph | a:part | a:point | a:proviso | a:rule | a:section | a:subchapter | a:subclause
                        | a:subdivision | a:sublist | a:subparagraph | a:subpart | a:subrule | a:subsection | a:subtitle
-                       | a:title | a:tome | a:transitional | a:item">
+                       | a:title | a:tome | a:transitional | a:item
+                       | a:address | a:adjournment | a:administrationOfOath | a:communication | a:debateSection
+                       | a:declarationOfVote | a:ministerialStatements | a:nationalInterest | a:noticesOfMotion
+                       | a:oralStatements | a:papers | a:personalStatements | a:petitions | a:pointOfOrder | a:prayers
+                       | a:proceduralMotions | a:questions | a:resolutions | a:rollCall | a:writtenStatements
+                       | a:answer | a:other | a:question | a:speech | a:speechGroup">
     <xsl:param name="indent">0</xsl:param>
 
     <xsl:call-template name="indent">
@@ -325,6 +360,12 @@
         <xsl:with-param name="indent" select="$indent + 1" />
       </xsl:apply-templates>
     </xsl:if>
+    <xsl:if test="a:from">
+      <xsl:text>&#10;</xsl:text>
+      <xsl:apply-templates select="a:from">
+        <xsl:with-param name="indent" select="$indent + 1" />
+      </xsl:apply-templates>
+    </xsl:if>
     <!-- ITEM is the exception, it doesn't get a blank line -->
     <xsl:text>&#10;</xsl:text>
     <xsl:if test="not(self::a:item)">
@@ -335,7 +376,7 @@
       <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
 
-    <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading) and not(self::a:subheading)]">
+    <xsl:apply-templates select="./*[not(self::a:num) and not(self::a:heading) and not(self::a:subheading) and not(self::a:from)]">
       <xsl:with-param name="indent" select="$indent + 1" />
     </xsl:apply-templates>
   </xsl:template>
@@ -515,18 +556,32 @@
       <xsl:value-of select="translate(@class, ' ', '.')" />
     </xsl:if>
 
-    <!-- ignore @eId, @class and @name for <inline name="em"> -->
-    <xsl:if test="@*[local-name() != 'eId' and local-name() != 'class'
+    <!-- ignore:
+       - @eId
+       - @class
+       - @by
+       - @name for elements that match the element name
+       - @name for <inline name="em">
+       -->
+    <xsl:if test="@*[local-name() != 'eId' and local-name() != 'class' and local-name() != 'by'
+                  and (local-name() != 'name' or . != local-name(parent::a:*))
                   and not(parent::a:inline and local-name() = 'name' and . = 'em')]">
       <xsl:text>{</xsl:text>
-      <xsl:apply-templates select="@*[local-name() != 'eId' and local-name() != 'class'
-                                   and not(parent::a:inline and local-name() = 'name' and . = 'em')]" mode="generic" />
+      <xsl:for-each select="@*[local-name() != 'eId' and local-name() != 'class' and local-name() != 'by'
+                  and (local-name() != 'name' or . != local-name(parent::a:*))
+                  and not(parent::a:inline and local-name() = 'name' and . = 'em')]">
+        <xsl:apply-templates select="." mode="generic">
+          <xsl:with-param name="index" select="position()"/>
+        </xsl:apply-templates>
+      </xsl:for-each>
       <xsl:text>}</xsl:text>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="@*" mode="generic">
-    <xsl:if test="position() > 1">
+    <xsl:param name="index">0</xsl:param>
+
+    <xsl:if test="$index > 1">
       <xsl:text>|</xsl:text>
     </xsl:if>
     <xsl:value-of select="local-name(.)" />
@@ -630,6 +685,39 @@
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
     <xsl:text>CROSSHEADING </xsl:text>
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
+    <xsl:text>&#10;&#10;</xsl:text>
+
+    <xsl:apply-templates select=".//a:authorialNote" mode="content">
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template match="a:from">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:text>FROM </xsl:text>
+    <xsl:apply-templates>
+      <xsl:with-param name="indent" select="$indent" />
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template match="a:scene | a:narrative | a:summary">
+    <xsl:param name="indent">0</xsl:param>
+
+    <xsl:call-template name="indent">
+      <xsl:with-param name="level" select="$indent" />
+    </xsl:call-template>
+    <xsl:call-template name="uppercase">
+      <xsl:with-param name="s" select="local-name()"/>
+    </xsl:call-template>
+    <xsl:call-template name="block-attrs" />
+    <xsl:text> </xsl:text>
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
