@@ -3,7 +3,7 @@ from unittest import TestCase
 from lxml import etree
 
 from bluebell.parser import AkomaNtosoParser
-from cobalt import Judgment, Act, FrbrUri, Statement, DebateReport, Bill, Document
+from cobalt import Judgment, Act, FrbrUri, Statement, DebateReport, Bill, Document, Debate
 from cobalt.schemas import assert_validates
 
 from tests.support import ParserSupport
@@ -36,3 +36,6 @@ class MainDoctypesTestCase(ParserSupport, TestCase):
 
     def test_empty_debateReport(self):
         self.validate_empty('debateReport', DebateReport)
+
+    def test_empty_debate(self):
+        self.validate_empty('debate', Debate)
