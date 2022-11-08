@@ -127,8 +127,8 @@ grammar akn
                        body:(indent
                          subheading:subheading?
                          speech_from
-                         content:speech_hier_block_element*
-                       dedent)? <SpeechGroup>
+                         content:speech_hier_block_element+
+                       dedent) <SpeechGroup>
 
   speech_from       <- 'FROM' space content:inline+ eol <From>
 

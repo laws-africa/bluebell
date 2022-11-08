@@ -1,3 +1,4 @@
+import re
 from itertools import groupby
 
 
@@ -267,7 +268,6 @@ class SpeechContainer(HierElement):
 
     def to_dict(self):
         info = super().to_dict()
-        # TODO: others?
         if info['name'] == 'debateSection':
             if 'name' not in info.get('attribs', {}):
                 info.setdefault('attribs', {})['name'] = 'debateSection'
@@ -276,16 +276,18 @@ class SpeechContainer(HierElement):
 
 class SpeechGroup(SpeechContainer):
     name_element = 'speech_group_name'
+    non_letters_re = re.compile(r'[\W]', re.UNICODE)
 
     def to_dict(self):
         info = super().to_dict()
-        # add from
-        if self.body.text:
-            info['from'] = self.body.speech_from.to_dict()
+        info['from'] = self.body.speech_from.to_dict()
         if 'by' not in info.get('attribs', {}):
-            # TODO: what if no speech?
-            info.setdefault('attribs', {})['by'] = 'XXX'
+            info.setdefault('attribs', {})['by'] = self.make_by()
+
         return info
+
+    def make_by(self):
+        return '#' + self.non_letters_re.sub('', self.body.speech_from.text)
 
 
 class Attachments:
