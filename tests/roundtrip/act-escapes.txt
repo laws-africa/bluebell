@@ -112,3 +112,57 @@ CHAP 2 - Speech
 
   \DEBATESECTION
 
+CHAP 3 - Numbers
+
+  SEC 1\-
+
+    escape no heading
+
+  SEC 1 \-
+
+    escape no heading
+
+  SEC 2\- - heading
+
+    with heading
+
+  SEC 2 \- - heading
+
+    with heading
+
+  SEC 3\-
+
+    empty heading
+
+  SEC 3 \-
+
+    empty heading
+
+  SEC 4\- 5
+
+    escaped slash no heading
+
+  SEC 4 \- 5
+
+    escaped slash no heading
+
+  SEC 5\- 6 - with - heading
+
+    escaped slash with heading
+
+  SEC 5 \- 6 - with - heading
+
+    escaped slash with heading
+
+  SEC \-6
+
+    preceding slash
+
+  SEC \- 6
+
+    preceding slash
+
+  SEC 6\-\-7
+
+    multi
+
