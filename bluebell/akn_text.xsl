@@ -110,6 +110,58 @@
     </xsl:call-template>
   </xsl:template>
 
+  <!-- escape inlines, but also escape:
+    - stars at start and end of b tags; and just before the start and just after the end
+    - slashes at start and end of i tags; and just before the start and just after the end
+    - undescores at start and end of u tags; and just before the start and just after the end
+    -->
+  <xsl:template name="escape-inlines-start-end">
+    <xsl:param name="text" />
+
+    <xsl:variable name="escape-start" select="
+      (starts-with($text, '*') and not(starts-with($text, '**')) and (
+        (parent::a:b and not(preceding-sibling::*)) or preceding-sibling::*[1][self::a:b]
+      )) or
+      (starts-with($text, '/') and not(starts-with($text, '//')) and (
+        (parent::a:i and not(preceding-sibling::*)) or preceding-sibling::*[1][self::a:i]
+      )) or
+      (starts-with($text, '_') and not(starts-with($text, '__')) and (
+        (parent::a:u and not(preceding-sibling::*)) or preceding-sibling::*[1][self::a:u]
+      ))
+    " />
+    <xsl:variable name="escape-end" select="
+      (substring($text, string-length($text)) = '*' and not(substring($text, string-length($text)-1) = '**') and (
+        (parent::a:b and not(following-sibling::*)) or following-sibling::*[1][self::a:b]
+      )) or
+      (substring($text, string-length($text)) = '/' and not(substring($text, string-length($text)-1) = '//') and (
+        (parent::a:i and not(following-sibling::*)) or following-sibling::*[1][self::a:i]
+      )) or
+      (substring($text, string-length($text)) = '_' and not(substring($text, string-length($text)-1) = '__') and (
+        (parent::a:u and not(following-sibling::*)) or following-sibling::*[1][self::a:u]
+      ))
+    " />
+
+    <xsl:variable name="escaped">
+      <xsl:call-template name="escape-inlines">
+        <xsl:with-param name="text" select="$text" />
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:if test="$escape-start">
+      <xsl:text>\</xsl:text>
+    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="$escape-end">
+        <xsl:value-of select="substring($escaped, 1, string-length($escaped)-1)" />
+        <xsl:text>\</xsl:text>
+        <xsl:value-of select="substring($escaped, string-length($escaped))" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$escaped" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <!-- Escape prefixes with a backslash -->
   <xsl:template name="escape-prefixes">
     <xsl:param name="text" />
@@ -213,21 +265,6 @@
     </xsl:variable>
 
     <xsl:value-of select="concat($slash, $text)" />
-  </xsl:template>
-
-  <!-- adds a backslash to the start of the text param, if necessary -->
-  <xsl:template name="escape">
-    <xsl:param name="text"/>
-
-    <xsl:variable name="escaped">
-      <xsl:call-template name="escape-inlines">
-        <xsl:with-param name="text" select="$text" />
-      </xsl:call-template>
-    </xsl:variable>
-
-    <xsl:call-template name="escape-prefixes">
-      <xsl:with-param name="text" select="$escaped" />
-    </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="escape-hyphens">
@@ -909,10 +946,14 @@
   <!-- first text nodes of these elems must be left-trimmed and escaped if they have special chars -->
   <xsl:template match="a:*[self::a:p or self::a:listIntroduction or self::a:listWrapUp]
                        /text()[not(preceding-sibling::*)]">
-    <xsl:call-template name="escape">
+    <xsl:call-template name="escape-prefixes">
       <xsl:with-param name="text">
-        <xsl:call-template name="string-ltrim">
-          <xsl:with-param name="text" select="." />
+        <xsl:call-template name="escape-inlines-start-end">
+          <xsl:with-param name="text">
+            <xsl:call-template name="string-ltrim">
+              <xsl:with-param name="text" select="." />
+            </xsl:call-template>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:with-param>
     </xsl:call-template>
@@ -920,7 +961,7 @@
 
   <!-- escape inlines in text nodes -->
   <xsl:template match="text()">
-    <xsl:call-template name="escape-inlines">
+    <xsl:call-template name="escape-inlines-start-end">
       <xsl:with-param name="text" select="." />
     </xsl:call-template>
   </xsl:template>
