@@ -180,7 +180,7 @@ CHAP 4 - inline escapes
 
   outside \/\///italics//\/\/ outside
 
-  inside //\/\/italics\/\/// inside
+  inside //\/italics\/// inside
 
   inside //\/\/italics\/\/// inside
 
