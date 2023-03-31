@@ -1,0 +1,69 @@
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <act name="act">
+    <meta>
+      <identification source="#cobalt">
+        <FRBRWork>
+          <FRBRthis value="/akn/za/act/2009/10"/>
+          <FRBRuri value="/akn/za/act/2009/10"/>
+          <FRBRalias name="title" value="Untitled"/>
+          <FRBRdate date="2009" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRcountry value="za"/>
+          <FRBRnumber value="10"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/akn/za/act/2009/10/eng"/>
+          <FRBRuri value="/akn/za/act/2009/10/eng"/>
+          <FRBRdate date="TODAY" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRlanguage language="eng"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/akn/za/act/2009/10/eng"/>
+          <FRBRuri value="/akn/za/act/2009/10/eng"/>
+          <FRBRdate date="TODAY" name="Generation"/>
+          <FRBRauthor href=""/>
+        </FRBRManifestation>
+      </identification>
+      <references source="#cobalt">
+        <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+      </references>
+    </meta>
+    <body>
+      <section eId="sec_1">
+        <num>1</num>
+        <content>
+          <p eId="sec_1__p_1">
+            <i>some/italics ending in a slash /</i>
+          </p>
+          <p eId="sec_1__p_2"><i>some/italics ending in a slash</i>/</p>
+          <p eId="sec_1__p_3">/<i>some/italics starting in a slash</i></p>
+          <p eId="sec_1__p_4">
+            <i>/some/italics starting in a slash</i>
+          </p>
+          <p eId="sec_1__p_5">/<i>some/italics on both sides</i>/</p>
+          <p eId="sec_1__p_6">
+            <i>/some/italics on both sides/</i>
+          </p>
+        </content>
+      </section>
+      <section eId="sec_2">
+        <num>2</num>
+        <content>
+          <p eId="sec_2__p_1">
+            <b>some*bold ending in a star *</b>
+          </p>
+          <p eId="sec_2__p_2"><b>some*bold ending in a star</b>*</p>
+          <p eId="sec_2__p_3">
+            <b>*some*bold starting in a star</b>
+          </p>
+          <p eId="sec_2__p_4">*<b>some*bold starting in a star</b></p>
+          <p eId="sec_2__p_5">*<b>some*bold on both sides</b>*</p>
+          <p eId="sec_2__p_6">
+            <b>*some*bold on both sides*</b>
+          </p>
+        </content>
+      </section>
+    </body>
+  </act>
+</akomaNtoso>
