@@ -187,3 +187,39 @@ SECTION 1.
   with white ** space** and bold
   and other}}
 '''.strip(), unparsed.strip())
+
+    def test_unparse_inline_escapes(self):
+        xml = '<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><content><p><i>/italics/</i></p><p><b>*bold*</b></p><p><u>_underline_</u></p></content></section>'
+        unparsed = self.parser.unparse(xml)
+        self.assertEqual('''SEC
+
+  //\/italics\///
+
+  **\*bold\***
+
+  __\_underline\___
+'''.strip(), unparsed.strip())
+
+    def test_unparse_inline_escapes_outside(self):
+        xml = '<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><content><p>/<i>italics</i>/</p><p>*<b>bold</b>*</p><p>_<u>underline</u>_</p></content></section>'
+        unparsed = self.parser.unparse(xml)
+        self.assertEqual('''SEC
+
+  \///italics//\/
+
+  \***bold**\*
+
+  \___underline__\_
+'''.strip(), unparsed.strip())
+
+    def test_unparse_inline_escapes_double(self):
+        xml = '<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><content><p><i>//italics//</i></p><p><b>**bold**</b></p><p><u>__underline__</u></p></content></section>'
+        unparsed = self.parser.unparse(xml)
+        self.assertEqual('''SEC
+
+  //\/\/italics\/\///
+
+  **\*\*bold\*\***
+
+  __\_\_underline\_\___
+'''.strip(), unparsed.strip())

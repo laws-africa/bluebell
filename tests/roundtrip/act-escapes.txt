@@ -166,3 +166,41 @@ CHAP 3 - Numbers
 
     multi
 
+CHAP 4 - inline escapes
+
+  outside \***bold**\* outside
+
+  outside \*\***bold**\*\* outside
+
+  inside **\*bold\*** inside
+
+  inside **\*\*bold\*\*** inside
+
+  outside \///italics//\/ outside
+
+  outside \/\///italics//\/\/ outside
+
+  inside //\/italics\/// inside
+
+  inside //\/\/italics\/\/// inside
+
+  outside \___underscore__\_ outside
+
+  outside \_\___underscore__\_\_ outside
+
+  inside __\_underscore\___ inside
+
+  inside __\_\_underscore\_\___ inside
+
+  \PART \***bold**
+
+  \PART \*\***bold**
+
+  \PART \///italics//
+
+  \PART \/\///italics//
+
+  \PART \___underscore__
+
+  \PART \_\___underscore__
+
