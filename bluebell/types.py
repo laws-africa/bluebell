@@ -35,6 +35,13 @@ def empty_hcontainer():
         }]
     }
 
+
+ESCAPE_RE = re.compile(r'\\(.)')
+
+
+def unescape(s):
+    return ESCAPE_RE.sub('\\1', s)
+
 # ------------------------------------------------------------------------------
 # Hier elements and containers
 # ------------------------------------------------------------------------------
@@ -236,7 +243,7 @@ class HierElementHeading:
     def update_dict(self, info):
         if self.text:
             if hasattr(self.num, 'content'):
-                num = self.num.content.text.rstrip(' -')
+                num = unescape(self.num.content.text)
                 if num:
                     info['num'] = num
 
@@ -245,8 +252,8 @@ class HierElementHeading:
                 info['heading'] = heading
 
     def heading_to_dict(self):
-        if hasattr(self.heading, 'content') and self.heading.content.text.strip():
-            return InlineText.many_to_dict(x for x in self.heading.content)
+        if hasattr(self.heading, 'heading_content') and self.heading.heading_content.text:
+            return InlineText.many_to_dict(x for x in self.heading.heading_content.content)
 
 
 class SpeechContainer(HierElement):

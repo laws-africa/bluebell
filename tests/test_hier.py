@@ -622,3 +622,144 @@ BODY
   </body>
 </act>
 """, xml)
+
+    def test_num_hypen(self):
+        tree = self.parse("""
+PART
+
+  SEC 1-
+    no escape no heading
+
+  SEC 1\-
+    escape no heading
+
+  SEC 1 \-
+    escape no heading
+    
+  SEC 2\- - heading
+    with heading
+    
+  SEC 2 \- - heading
+    with heading
+    
+  SEC 3\- -
+    empty heading
+    
+  SEC 3 \- -
+    empty heading
+    
+  SEC 4\- 5
+    escaped slash no heading
+    
+  SEC 4 \- 5
+    escaped slash no heading
+    
+  SEC 5\- 6 - with - heading
+    escaped slash with heading
+    
+  SEC 5 \- 6 - with - heading
+    escaped slash with heading
+    
+  SEC \-6
+    preceding slash
+    
+  SEC \- 6
+    preceding slash
+    
+  SEC 6\-\-7
+    multi
+""", 'hier_element_block')
+
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_nn_1">
+  <section eId="part_nn_1__sec_1">
+    <num>1-</num>
+    <content>
+      <p eId="part_nn_1__sec_1__p_1">no escape no heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_1_2">
+    <num>1-</num>
+    <content>
+      <p eId="part_nn_1__sec_1_2__p_1">escape no heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_1_3">
+    <num>1 -</num>
+    <content>
+      <p eId="part_nn_1__sec_1_3__p_1">escape no heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_2">
+    <num>2-</num>
+    <heading>heading</heading>
+    <content>
+      <p eId="part_nn_1__sec_2__p_1">with heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_2_2">
+    <num>2 -</num>
+    <heading>heading</heading>
+    <content>
+      <p eId="part_nn_1__sec_2_2__p_1">with heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_3">
+    <num>3-</num>
+    <content>
+      <p eId="part_nn_1__sec_3__p_1">empty heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_3_2">
+    <num>3 -</num>
+    <content>
+      <p eId="part_nn_1__sec_3_2__p_1">empty heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_4-5">
+    <num>4- 5</num>
+    <content>
+      <p eId="part_nn_1__sec_4-5__p_1">escaped slash no heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_4-5_2">
+    <num>4 - 5</num>
+    <content>
+      <p eId="part_nn_1__sec_4-5_2__p_1">escaped slash no heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_5-6">
+    <num>5- 6</num>
+    <heading>with - heading</heading>
+    <content>
+      <p eId="part_nn_1__sec_5-6__p_1">escaped slash with heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_5-6_2">
+    <num>5 - 6</num>
+    <heading>with - heading</heading>
+    <content>
+      <p eId="part_nn_1__sec_5-6_2__p_1">escaped slash with heading</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_6">
+    <num>-6</num>
+    <content>
+      <p eId="part_nn_1__sec_6__p_1">preceding slash</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_6_2">
+    <num>- 6</num>
+    <content>
+      <p eId="part_nn_1__sec_6_2__p_1">preceding slash</p>
+    </content>
+  </section>
+  <section eId="part_nn_1__sec_6-7">
+    <num>6--7</num>
+    <content>
+      <p eId="part_nn_1__sec_6-7__p_1">multi</p>
+    </content>
+  </section>
+</part>
+""", xml)

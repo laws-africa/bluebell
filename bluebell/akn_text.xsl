@@ -230,6 +230,16 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template name="escape-hyphens">
+    <xsl:param name="text"/>
+
+    <xsl:call-template name="string-replace-all">
+      <xsl:with-param name="text"><xsl:value-of select="$text" /></xsl:with-param>
+      <xsl:with-param name="value"><xsl:value-of select="'-'" /></xsl:with-param>
+      <xsl:with-param name="replacement"><xsl:value-of select="'\-'" /></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <!-- convert a string to uppercase -->
   <xsl:variable name="lowercase" select="'abcdefghijklmnopqrstuvwxyz'" />
   <xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
@@ -347,7 +357,9 @@
 
     <xsl:if test="a:num">
       <xsl:text> </xsl:text>
-      <xsl:value-of select="a:num" />
+      <xsl:call-template name="escape-hyphens">
+        <xsl:with-param name="text" select="a:num" />
+      </xsl:call-template>
     </xsl:if>
 
     <xsl:if test="a:heading">

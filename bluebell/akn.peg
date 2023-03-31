@@ -86,9 +86,14 @@ grammar akn
                         #     num -
   hier_element_heading <- num:hier_element_heading_num? heading:hier_element_heading_heading? <HierElementHeading>
 
-  hier_element_heading_num     <- !hier_element_heading_heading space content:(!hier_element_heading_heading [^\n])+
+  hier_element_heading_num <- !hier_element_heading_heading space content:(!hier_element_heading_heading num_content)+
 
-  hier_element_heading_heading <- space '-' space content:inline*
+  hier_element_heading_heading <- space '-' heading_content
+
+                     # heading text, or non-capturing eol to indicate no heading
+  heading_content   <- (space content:inline+) / &eol
+
+  num_content       <- escape / [^\n]
 
   hier_block_element <- hier_element / block_element
 
