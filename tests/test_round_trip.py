@@ -59,6 +59,9 @@ class RoundTripTestCase(ParserSupport, TestCase):
     def test_attribs(self):
         self.roundtrip_xml('attribs', root='act')
 
+    def test_escapes(self):
+        self.roundtrip_xml('escapes', root='act')
+
     def test_act(self):
         self.roundtrip('act', 'act')
 
