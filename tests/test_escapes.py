@@ -247,6 +247,7 @@ PART
     <p>foo ** <b>**</b> <ref href="#foo">// **</ref> ** //</p>
     <p>   PART 1</p>
     <p>   ITEMS</p>
+    <p>It is hereby certified that ________________<u>_ of P.O. Box </u>_______ and ID No. _____<u>_ TSC No.</u>_________ having met</p>
   </content>
 </section>"""
         actual = self.parser.unparse(xml)
@@ -267,6 +268,8 @@ PART
   \PART 1
 
   \ITEMS
+
+  It is hereby certified that \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\___\_ of P.O. Box __\_\_\_\_\_\__ and ID No. \_\_\_\_\___\_ TSC No.__\_\_\_\_\_\_\_\__ having met
 
 """, actual)
 
