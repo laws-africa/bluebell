@@ -62,6 +62,22 @@
           <p eId="sec_2__p_6">
             <b>*some*bold on both sides*</b>
           </p>
+          <p eId="sec_2__p_7">***<b>odd bold before</b></p>
+          <p eId="sec_2__p_8">****<b>even bold before</b></p>
+          <p eId="sec_2__p_9"><b>odd bold after</b>***</p>
+          <p eId="sec_2__p_10"><b>even bold after</b>****</p>
+          <p eId="sec_2__p_11">
+            <b>***odd bold before</b>
+          </p>
+          <p eId="sec_2__p_12">
+            <b>****even bold before</b>
+          </p>
+          <p eId="sec_2__p_13">
+            <b>odd bold after***</b>
+          </p>
+          <p eId="sec_2__p_14">
+            <b>even bold after****</b>
+          </p>
         </content>
       </section>
     </body>

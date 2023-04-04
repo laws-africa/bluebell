@@ -24,7 +24,7 @@ CHAP 1 - Heading
 
     some \_\_underline\_\_
 
-    It is hereby certified that \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\____ of P.O. Box __\_\_\_\_\_\__ and ID No. \_\_\_\_____ TSC No.__\_\_\_\_\_\_\_\__ having met the requirements set out under Section 35 (2) (b) of the Teachers Service Commission Act, {{>/akn/ke/act/2012/20 No. 20 of 2012}} is hereby issued with a Teaching Certificate.
+    It is hereby certified that \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\___ of P.O. Box __\_\_\_\_\_\_\_ and ID No. \_\_\_\_\_\_\_\_ TSC No.\_\_\_\_\_\_\_\_\_\__ having met the requirements set out under Section 35 (2) (b) of the Teachers Service Commission Act, {{>/akn/ke/act/2012/20 No. 20 of 2012}} is hereby issued with a Teaching Certificate.
 
     include \{\{^superscripts\}\} and \{\{_subscripts\}\} which are fun
 
