@@ -10,6 +10,8 @@ CHAP 1 - Heading
 
   \PART in intro
 
+  SEC \7.5 - No content
+
   SEC 1 - Section
 
     a plain \\ backslash
