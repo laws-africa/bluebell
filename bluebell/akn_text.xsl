@@ -66,6 +66,34 @@
     </xsl:choose>
   </xsl:template>
 
+  <!-- the run of the same char at the start of the string -->
+  <xsl:template name="prefix-run">
+    <xsl:param name="text" />
+    <xsl:param name="ch" select="substring($text, 1, 1)" />
+
+    <xsl:if test="substring($text, 1, 1) = $ch">
+      <xsl:value-of select="$ch" />
+      <xsl:call-template name="prefix-run">
+        <xsl:with-param name="text" select="substring($text, 2)" />
+        <xsl:with-param name="ch" select="$ch" />
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- the run of chars at the end of the string -->
+  <xsl:template name="suffix-run">
+    <xsl:param name="text" />
+    <xsl:param name="ch" select="substring($text, string-length($text))" />
+
+    <xsl:if test="substring($text, string-length($text)) = $ch">
+      <xsl:value-of select="$ch" />
+      <xsl:call-template name="suffix-run">
+        <xsl:with-param name="text" select="substring($text, 1, string-length($text) - 1)" />
+        <xsl:with-param name="ch" select="$ch" />
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
   <!-- Escape inline markers with a backslash -->
   <xsl:template name="escape-inlines">
     <xsl:param name="text" />
@@ -110,54 +138,97 @@
     </xsl:call-template>
   </xsl:template>
 
-  <!-- escape inlines, but also escape:
-    - stars at start and end of b tags; and just before the start and just after the end
-    - slashes at start and end of i tags; and just before the start and just after the end
-    - undescores at start and end of u tags; and just before the start and just after the end
+  <!-- escape inlines, but also escape special chars when they are adjacent to the start or end of their inlines.
+    - stars and b tags
+    - slashes and i tags
+    - undescores and u tags
+
+    We need to determine whether we escape the run of special chars at the start (prefix) or end (suffix) of the
+    given string. Either way, we only escape the last char of the run, and only if the run is an odd length. This is
+    because the general inline-escaping code will escape the double chars, starting on the left of the string.
+
+    Examples:
+
+    <b>***     - escape prefix
+    <b>***foo  - escape prefix
+    </b>***    - escape prefix
+
+    ***<b>     - escape suffix
+    foo***</b> - escape suffix
+
+    <b>***</b> - either (but not both)
     -->
   <xsl:template name="escape-inlines-start-end">
     <xsl:param name="text" />
 
-    <xsl:variable name="escape-start" select="
-      (starts-with($text, '*') and not(starts-with($text, '**')) and (
-        (parent::a:b and not(preceding-sibling::*)) or preceding-sibling::*[1][self::a:b]
-      )) or
-      (starts-with($text, '/') and not(starts-with($text, '//')) and (
-        (parent::a:i and not(preceding-sibling::*)) or preceding-sibling::*[1][self::a:i]
-      )) or
-      (starts-with($text, '_') and not(starts-with($text, '__')) and (
-        (parent::a:u and not(preceding-sibling::*)) or preceding-sibling::*[1][self::a:u]
-      ))
-    " />
-    <xsl:variable name="escape-end" select="
-      (substring($text, string-length($text)) = '*' and not(substring($text, string-length($text)-1) = '**') and (
-        (parent::a:b and not(following-sibling::*)) or following-sibling::*[1][self::a:b]
-      )) or
-      (substring($text, string-length($text)) = '/' and not(substring($text, string-length($text)-1) = '//') and (
-        (parent::a:i and not(following-sibling::*)) or following-sibling::*[1][self::a:i]
-      )) or
-      (substring($text, string-length($text)) = '_' and not(substring($text, string-length($text)-1) = '__') and (
-        (parent::a:u and not(following-sibling::*)) or following-sibling::*[1][self::a:u]
-      ))
-    " />
-
-    <xsl:variable name="escaped">
-      <xsl:call-template name="escape-inlines">
+    <!-- the run of the same char at the start of the string -->
+    <xsl:variable name="prefix-run">
+      <xsl:call-template name="prefix-run">
         <xsl:with-param name="text" select="$text" />
       </xsl:call-template>
     </xsl:variable>
 
-    <xsl:if test="$escape-start">
-      <xsl:text>\</xsl:text>
-    </xsl:if>
+    <!-- the run of the same char at the end of the string -->
+    <xsl:variable name="suffix-run">
+      <xsl:call-template name="suffix-run">
+        <xsl:with-param name="text" select="$text" />
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:variable name="odd-prefix" select="string-length($prefix-run) mod 2 = 1" />
+    <xsl:variable name="odd-suffix" select="string-length($suffix-run) mod 2 = 1" />
+
+    <xsl:variable name="escape-prefix" select="
+      (starts-with($text, '*') and $odd-prefix and (
+        (parent::a:b and not(preceding-sibling::*)) or preceding-sibling::*[1][self::a:b]
+      )) or
+      (starts-with($text, '/') and $odd-prefix and (
+        (parent::a:i and not(preceding-sibling::*)) or preceding-sibling::*[1][self::a:i]
+      )) or
+      (starts-with($text, '_') and $odd-prefix and (
+        (parent::a:u and not(preceding-sibling::*)) or preceding-sibling::*[1][self::a:u]
+      ))
+    " />
+    <xsl:variable name="escape-suffix" select="
+      (substring($text, string-length($text)) = '*' and $odd-suffix and (
+        (parent::a:b and not(following-sibling::*)) or following-sibling::*[1][self::a:b]
+      )) or
+      (substring($text, string-length($text)) = '/' and $odd-suffix and (
+        (parent::a:i and not(following-sibling::*)) or following-sibling::*[1][self::a:i]
+      )) or
+      (substring($text, string-length($text)) = '_' and $odd-suffix and (
+        (parent::a:u and not(following-sibling::*)) or following-sibling::*[1][self::a:u]
+      ))
+    " />
+
     <xsl:choose>
-      <xsl:when test="$escape-end">
-        <xsl:value-of select="substring($escaped, 1, string-length($escaped)-1)" />
+      <xsl:when test="$escape-prefix and $escape-suffix">
         <xsl:text>\</xsl:text>
-        <xsl:value-of select="substring($escaped, string-length($escaped))" />
+        <xsl:value-of select="substring($text, 1, 1)" />
+        <xsl:call-template name="escape-inlines">
+          <xsl:with-param name="text" select="substring($text, 2, string-length($text) - 2)" />
+        </xsl:call-template>
+        <xsl:text>\</xsl:text>
+        <xsl:value-of select="substring($text, string-length($text))" />
+      </xsl:when>
+      <xsl:when test="$escape-prefix and not($escape-suffix)">
+        <xsl:text>\</xsl:text>
+        <xsl:value-of select="substring($text, 1, 1)" />
+        <xsl:call-template name="escape-inlines">
+          <xsl:with-param name="text" select="substring($text, 2)" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="$escape-suffix and not($escape-prefix)">
+        <xsl:call-template name="escape-inlines">
+          <xsl:with-param name="text" select="substring($text, 1, string-length($text) - 1)" />
+        </xsl:call-template>
+        <xsl:text>\</xsl:text>
+        <xsl:value-of select="substring($text, string-length($text))" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$escaped" />
+        <xsl:call-template name="escape-inlines">
+          <xsl:with-param name="text" select="$text" />
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -274,6 +345,16 @@
       <xsl:with-param name="text"><xsl:value-of select="$text" /></xsl:with-param>
       <xsl:with-param name="value"><xsl:value-of select="'-'" /></xsl:with-param>
       <xsl:with-param name="replacement"><xsl:value-of select="'\-'" /></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="escape-slashes">
+    <xsl:param name="text"/>
+
+    <xsl:call-template name="string-replace-all">
+      <xsl:with-param name="text"><xsl:value-of select="$text" /></xsl:with-param>
+      <xsl:with-param name="value"><xsl:value-of select="'\'" /></xsl:with-param>
+      <xsl:with-param name="replacement"><xsl:value-of select="'\\'" /></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
@@ -395,7 +476,11 @@
     <xsl:if test="a:num">
       <xsl:text> </xsl:text>
       <xsl:call-template name="escape-hyphens">
-        <xsl:with-param name="text" select="a:num" />
+        <xsl:with-param name="text">
+          <xsl:call-template name="escape-slashes">
+            <xsl:with-param name="text" select="a:num" />
+          </xsl:call-template>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:if>
 
