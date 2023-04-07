@@ -45,6 +45,9 @@
           <p eId="sec_1__p_6">
             <i>/some/italics on both sides/</i>
           </p>
+          <p eId="sec_1__p_7">
+            <b><b>Notice</b>s</b>
+          </p>
         </content>
       </section>
       <section eId="sec_2">
