@@ -257,6 +257,7 @@ PART
     <p><b>odd bold after***</b></p>
     <p><b>even bold after****</b></p>
     <p>foo<b>*bold*</b>bar</p>
+    <p>from <u>_ /</u>_<u>_ /</u> [dd/mm/yyyy].</p>
   </content>
 </section>"""
         actual = self.parser.unparse(xml)
@@ -298,5 +299,6 @@ PART
 
   foo**\*bold\***bar
 
+  from __\_ /__\___\_ /__ [dd/mm/yyyy].
 """, actual)
 
