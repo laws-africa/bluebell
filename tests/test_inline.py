@@ -32,6 +32,44 @@ class InlineTestCase(ParserSupport, TestCase):
 </p>
 """, xml)
 
+    def test_double_bold(self):
+        tree = self.parse("""
+****Notice**s**
+""", 'line')
+
+        self.assertDictEqual({
+            'type': 'content',
+            'name': 'p',
+            'children': [{
+                'type': 'inline',
+                'name': 'b',
+                'attribs': {},
+                'children': [
+                    {
+                        'type': 'inline',
+                        'name': 'b',
+                        'children': [
+                            {
+                                'type': 'text',
+                                'value': 'Notice',
+                            },
+                        ],
+                    },
+                    {
+                        'type': 'text',
+                        'value': 's',
+                    },
+                ]
+            }],
+        }, tree.to_dict())
+
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<p xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="p_1">
+  <b><b>Notice</b>s</b>
+</p>
+""", xml)
+
     def test_multiline_remark(self):
         tree = self.parse("""
 {{*[a remark
