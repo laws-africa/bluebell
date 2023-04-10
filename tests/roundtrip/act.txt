@@ -12,7 +12,7 @@ CHAP 1 - Heading
 
     some **text** at //the start// with **multiple //types// of** markup
 
-    ****Notice**s**
+    \***\*Notice**s\*\*
 
     include {{^superscripts}} and {{_subscripts}} which are fun
 

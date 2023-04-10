@@ -248,16 +248,8 @@ PART
     <p>   PART 1</p>
     <p>   ITEMS</p>
     <p>It is hereby certified that ________________<u>_ of P.O. Box </u>_______ and ID No. _____<u>_ TSC No.</u>_________ having met</p>
-    <p>***<b>odd bold before</b></p>
-    <p>****<b>even bold before</b></p>
-    <p><b>odd bold after</b>***</p>
-    <p><b>even bold after</b>****</p>
-    <p><b>***odd bold before</b></p>
-    <p><b>****even bold before</b></p>
-    <p><b>odd bold after***</b></p>
-    <p><b>even bold after****</b></p>
-    <p>foo<b>*bold*</b>bar</p>
     <p>from <u>_ /</u>_<u>_ /</u> [dd/mm/yyyy].</p>
+    <p>*<b>*Notice</b>s**</p>
   </content>
 </section>"""
         actual = self.parser.unparse(xml)
@@ -281,9 +273,41 @@ PART
 
   It is hereby certified that \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\___\_ of P.O. Box __\_\_\_\_\_\_\_ and ID No. \_\_\_\_\___\_ TSC No.__\_\_\_\_\_\_\_\_\_ having met
 
+  from __\_ /__\___\_ /__ [dd/mm/yyyy].
+
+  \***\*Notice**s\*\*
+
+""", actual)
+
+    def test_unescape2(self):
+        xml = """<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <num>1</num>
+  <heading>HEADING ** with stars</heading>
+  <content>
+    <p>*<b>odd bold before</b></p>
+    <p>***<b>odd bold before</b></p>
+    <p>****<b>even bold before</b></p>
+    <p><b>odd bold after</b>*</p>
+    <p><b>odd bold after</b>***</p>
+    <p><b>even bold after</b>****</p>
+    <p><b>***odd bold before</b></p>
+    <p><b>****even bold before</b></p>
+    <p><b>odd bold after***</b></p>
+    <p><b>even bold after****</b></p>
+    <p>foo<b>*bold*</b>bar</p>
+    <p>one<b>*</b>odd middle</p>
+  </content>
+</section>"""
+        actual = self.parser.unparse(xml)
+        self.assertEqual("""SEC 1 - HEADING \\*\\* with stars
+
+  \***odd bold before**
+
   \*\*\***odd bold before**
 
   \*\*\*\***even bold before**
+
+  **odd bold after**\*
 
   **odd bold after**\*\*\*
 
@@ -299,6 +323,6 @@ PART
 
   foo**\*bold\***bar
 
-  from __\_ /__\___\_ /__ [dd/mm/yyyy].
-""", actual)
+  one**\***odd middle
 
+""", actual)
