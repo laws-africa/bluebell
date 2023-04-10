@@ -205,11 +205,13 @@
       <xsl:when test="$escape-prefix and $escape-suffix">
         <xsl:text>\</xsl:text>
         <xsl:value-of select="substring($text, 1, 1)" />
-        <xsl:call-template name="escape-inlines">
-          <xsl:with-param name="text" select="substring($text, 2, string-length($text) - 2)" />
-        </xsl:call-template>
-        <xsl:text>\</xsl:text>
-        <xsl:value-of select="substring($text, string-length($text))" />
+        <xsl:if test="string-length($text) > 1">
+          <xsl:call-template name="escape-inlines">
+            <xsl:with-param name="text" select="substring($text, 2, string-length($text) - 2)" />
+          </xsl:call-template>
+          <xsl:text>\</xsl:text>
+          <xsl:value-of select="substring($text, string-length($text))" />
+        </xsl:if>
       </xsl:when>
       <xsl:when test="$escape-prefix and not($escape-suffix)">
         <xsl:text>\</xsl:text>
