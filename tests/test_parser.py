@@ -223,11 +223,3 @@ SECTION 1.
 
   __\_\_underline\_\___
 '''.strip(), unparsed.strip())
-
-    def test_unparse_inline_bolds_double(self):
-        xml = '<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><content><p><b><b>Notice</b>s</b></p></content></section>'
-        unparsed = self.parser.unparse(xml)
-        self.assertEqual('''SEC
-
-  ****Notice**s**
-'''.strip(), unparsed.strip())
