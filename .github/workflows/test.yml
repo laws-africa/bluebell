@@ -21,7 +21,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        pip install -e 'git+https://git@github.com/laws-africa/cobalt.git@master#egg=cobalt'
+        pip install 'git+https://git@github.com/laws-africa/cobalt.git@master#egg=cobalt'
         pip install -e '.[test]'
     - name: Test with nosetests
       run: nosetests
