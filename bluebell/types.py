@@ -484,7 +484,11 @@ class BulletListItem:
             kids.append(empty_p())
 
         if self.content.text:
-            kids.extend(k.to_dict() for k in self.content.siblings)
+            for kid in self.content.siblings:
+                if hasattr(kid, 'to_dict'):
+                    kids.append(kid.to_dict())
+                else:
+                    kids.extend(kid.to_children())
 
         return {
             'type': 'element',
