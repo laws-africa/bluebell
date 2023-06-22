@@ -16,6 +16,25 @@ while being simple to use and not requiring that authors have an in-depth knowle
 Bluebell will always produce structurally valid Akoma Ntoso, no matter what input is given. It will never refuse to parse
 malformed input. If it does, it's a bug.
 
+## Getting started
+
+1. Install from pypi: `pip install bluebell-akn`
+2. Create an `AkomaNtosoParser` object with a valid FRBR URI, and parse your text:
+
+```python
+from bluebell.parser import AkomaNtosoParser
+from cobalt.uri import FrbrUri
+from lxml import etree
+
+frbr_uri = FrbrUri.parse("/akn/za/act/2009/1")
+parser = AkomaNtosoParser(frbr_uri)
+xml = parser.parse_to_xml("""
+CHAPTER 1
+1. Section 1
+Some text""", "act")
+print(etree.tostring(xml, encoding='unicode'))
+```
+
 ## Elements
 
 ### Preface, preamble and conclusions
