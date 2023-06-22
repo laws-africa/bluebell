@@ -587,6 +587,12 @@ and removes the `displaced` element.
 2. Build canopy: `cd canopy; npm install; make; cd ..`
 3. Build grammar changes with `make`, which runs our Makefile to compile the grammar
 
+## Releasing a new version
+
+1. Update the version by changing the `__version__` variable in [bluebell/__init__.py](bluebell/__init__.py)
+2. Commit your changes and push to the master branch on GitHub
+3. Create a release in GitHub and it will automatically be pushed to PyPi
+
 # License
 
 Copyright 2020 Laws.Africa.

@@ -1,2 +1,0 @@
-include LICENSE README.md VERSION
-recursive-include bluebell *.py *.xsl *.peg
