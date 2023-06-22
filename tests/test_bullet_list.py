@@ -407,3 +407,67 @@ BULLETS
   </li>
 </ul>
 """, xml)
+
+    def test_bad_bullets_with_hier(self):
+        tree = self.parse("""
+  BULLETS
+
+    PARA 24.
+
+      SUBPARA i.
+
+        Bar
+""", 'judgment')
+
+        self.assertEqual({
+            'attribs': {'name': 'judgment'},
+            'children': [
+                {'name': 'header', 'type': 'element'},
+                {'children': [{
+                    'children': [{
+                        'children': [{
+                            'children': [{
+                                'children': [{'type': 'text', 'value': 'PARA 24.'}],
+                                'name': 'p',
+                                'type': 'content'
+                            }, {
+                                'children': [{'type': 'text', 'value': 'SUBPARA i.'}],
+                                'name': 'p',
+                                'type': 'content'
+                            }, {
+                                'children': [{'type': 'text', 'value': 'Bar'}],
+                                'name': 'p',
+                                'type': 'content'
+                            }],
+                            'name': 'li',
+                            'type': 'element'
+                        }],
+                        'name': 'ul',
+                        'type': 'block'}
+                    ],
+                    'name': 'arguments',
+                    'type': 'element'}
+                ],
+                    'name': 'judgmentBody',
+                    'type': 'element'}],
+            'name': 'judgment',
+            'type': 'element'
+        }, tree.to_dict())
+
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<judgment xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" name="judgment">
+  <header/>
+  <judgmentBody>
+    <arguments>
+      <ul eId="arguments__ul_1">
+        <li eId="arguments__ul_1__li_1">
+          <p eId="arguments__ul_1__li_1__p_1">PARA 24.</p>
+          <p eId="arguments__ul_1__li_1__p_2">SUBPARA i.</p>
+          <p eId="arguments__ul_1__li_1__p_3">Bar</p>
+        </li>
+      </ul>
+    </arguments>
+  </judgmentBody>
+</judgment>
+""", xml)
