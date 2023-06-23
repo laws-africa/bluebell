@@ -16,6 +16,25 @@ while being simple to use and not requiring that authors have an in-depth knowle
 Bluebell will always produce structurally valid Akoma Ntoso, no matter what input is given. It will never refuse to parse
 malformed input. If it does, it's a bug.
 
+## Getting started
+
+1. Install from pypi: `pip install bluebell-akn`
+2. Create an `AkomaNtosoParser` object with a valid FRBR URI, and parse your text:
+
+```python
+from bluebell.parser import AkomaNtosoParser
+from cobalt.uri import FrbrUri
+from lxml import etree
+
+frbr_uri = FrbrUri.parse("/akn/za/act/2009/1")
+parser = AkomaNtosoParser(frbr_uri)
+xml = parser.parse_to_xml("""
+CHAPTER 1
+1. Section 1
+Some text""", "act")
+print(etree.tostring(xml, encoding='unicode'))
+```
+
 ## Elements
 
 ### Preface, preamble and conclusions
@@ -586,6 +605,12 @@ and removes the `displaced` element.
 1. We use a version of `canopy` from github, so clone it into the same directory as this directory: `git clone https://github.com/jcoglan/canopy.git`
 2. Build canopy: `cd canopy; npm install; make; cd ..`
 3. Build grammar changes with `make`, which runs our Makefile to compile the grammar
+
+## Releasing a new version
+
+1. Update the version by changing the `__version__` variable in [bluebell/__init__.py](bluebell/__init__.py)
+2. Commit your changes and push to the master branch on GitHub
+3. Create a release in GitHub and it will automatically be pushed to PyPi
 
 # License
 
