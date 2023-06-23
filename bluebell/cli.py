@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import json
 import sys
 import argparse
@@ -16,7 +15,7 @@ def print_with_lines(lines):
         print(f'{i:02}: {line}', file=sys.stderr)
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description='Parse text into Akoma Ntoso.')
     parser.add_argument('frbr_uri', type=str, help='frbr_uri for the document to parse')
     parser.add_argument('root', type=str, help='the type of document to parse (eg. judgment)')
