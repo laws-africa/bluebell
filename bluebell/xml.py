@@ -245,7 +245,7 @@ class XmlGenerator:
     def xml_from_tree(self, tree):
         """ Transform an entire parse tree to XML.
         """
-        return etree.fromstring(etree.tostring(self.item_to_xml(tree), encoding='unicode'))
+        return etree.fromstring(etree.tostring(self.item_to_xml(tree), encoding='utf-8'))
 
     def item_to_xml(self, item):
         return getattr(self, f'item_to_xml_{item["type"]}')(item)
@@ -510,7 +510,7 @@ class XmlGenerator:
         if not self.frbr_uri:
             raise ValueError("An frbr_uri must be provided when generating top-level documents.")
 
-        meta = etree.fromstring(etree.tostring(self.make_meta(self.frbr_uri, True)))
+        meta = etree.fromstring(etree.tostring(self.make_meta(self.frbr_uri, True), encoding='utf-8'))
         list(xml)[0].insert(0, meta)
         return xml
 
