@@ -31,7 +31,7 @@ class RoundTripTestCase(ParserSupport, TestCase):
         self.assertMultiLineEqual(input, actual)
 
         # ensure it validates
-        doc = StructuredDocument.for_document_type(root)(etree.tostring(xml, encoding='unicode'))
+        doc = StructuredDocument.for_document_type(root)(etree.tostring(xml, encoding='utf-8'))
         assert_validates(doc, strict=False)
 
     def roundtrip_xml(self, file_in, root='statement'):
