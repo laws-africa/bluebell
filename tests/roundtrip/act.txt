@@ -10,6 +10,8 @@ CHAP 1 - Heading
 
   SEC.custom-class{status edited} 1 - Section
 
+    emoji 😀
+
     some **text** at //the start// with **multiple //types// of** markup
 
     \***\*Notice**s\*\*
