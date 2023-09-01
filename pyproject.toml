@@ -22,7 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "cobalt>=7.0.0",
+    "cobalt>=8.0.0",
     "lxml>=3.4.1",
 ]
 dynamic = ["version"]
