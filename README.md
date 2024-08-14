@@ -605,6 +605,7 @@ and removes the `displaced` element.
 1. We use a version of `canopy` from github, so clone it into the same directory as this directory: `git clone https://github.com/jcoglan/canopy.git`
 2. Build canopy: `cd canopy; npm install; make; cd ..`
 3. Build grammar changes with `make`, which runs our Makefile to compile the grammar
+4. Run tests with: `python -m unittest`
 
 ## Releasing a new version
 

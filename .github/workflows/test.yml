@@ -23,5 +23,5 @@ jobs:
       run: |
         pip install 'git+https://git@github.com/laws-africa/cobalt.git@master#egg=cobalt'
         pip install -e '.[test]'
-    - name: Test with nosetests
-      run: nosetests
+    - name: Run tests
+      run: python -m unittest
