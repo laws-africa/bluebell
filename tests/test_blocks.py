@@ -422,19 +422,22 @@ PART A
 
   BLOCK.cls{a b}
     foo
-    
+
     ITEMS
       ITEM bar
       ITEM baz
-      
+
     end
-    
+
   BLOCK{name my-block}
     foo
     bar
-    
+
+  BLOCK{name }
+    bad name
+
   BLOCK
-  
+
   tail
 """, 'hier_element_block')
         xml = self.tostring(self.to_xml(tree.to_dict()))
@@ -459,6 +462,9 @@ PART A
     <block eId="part_A__block_2" name="my-block">
       <p eId="part_A__block_2__p_1">foo</p>
       <p eId="part_A__block_2__p_2">bar</p>
+    </block>
+    <block eId="part_A__block_3" name="block">
+      <p eId="part_A__block_3__p_1">bad name</p>
     </block>
     <p eId="part_A__p_1">BLOCK</p>
     <p eId="part_A__p_2">tail</p>
