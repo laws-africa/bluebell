@@ -420,7 +420,7 @@ PART A
         tree = self.parse("""
 PART A
 
-  BLOCK.cls{a b}
+  BLOCKS.cls{a b}
     foo
 
     ITEMS
@@ -429,14 +429,11 @@ PART A
 
     end
 
-  BLOCK{name my-block}
+  BLOCKS
     foo
     bar
 
-  BLOCK{name }
-    bad name
-
-  BLOCK
+  BLOCKS
 
   tail
 """, 'hier_element_block')
@@ -445,28 +442,25 @@ PART A
         self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_A">
   <num>A</num>
   <content>
-    <block a="b" class="cls" eId="part_A__block_1" name="block">
-      <p eId="part_A__block_1__p_1">foo</p>
-      <blockList eId="part_A__block_1__list_1">
-        <item eId="part_A__block_1__list_1__item_bar">
+    <blockContainer a="b" class="cls" eId="part_A__blockContainer_1">
+      <p eId="part_A__blockContainer_1__p_1">foo</p>
+      <blockList eId="part_A__blockContainer_1__list_1">
+        <item eId="part_A__blockContainer_1__list_1__item_bar">
           <num>bar</num>
-          <p eId="part_A__block_1__list_1__item_bar__p_1"/>
+          <p eId="part_A__blockContainer_1__list_1__item_bar__p_1"/>
         </item>
-        <item eId="part_A__block_1__list_1__item_baz">
+        <item eId="part_A__blockContainer_1__list_1__item_baz">
           <num>baz</num>
-          <p eId="part_A__block_1__list_1__item_baz__p_1"/>
+          <p eId="part_A__blockContainer_1__list_1__item_baz__p_1"/>
         </item>
       </blockList>
-      <p eId="part_A__block_1__p_2">end</p>
-    </block>
-    <block eId="part_A__block_2" name="my-block">
-      <p eId="part_A__block_2__p_1">foo</p>
-      <p eId="part_A__block_2__p_2">bar</p>
-    </block>
-    <block eId="part_A__block_3" name="block">
-      <p eId="part_A__block_3__p_1">bad name</p>
-    </block>
-    <p eId="part_A__p_1">BLOCK</p>
+      <p eId="part_A__blockContainer_1__p_2">end</p>
+    </blockContainer>
+    <blockContainer eId="part_A__blockContainer_2">
+      <p eId="part_A__blockContainer_2__p_1">foo</p>
+      <p eId="part_A__blockContainer_2__p_2">bar</p>
+    </blockContainer>
+    <p eId="part_A__p_1">BLOCKS</p>
     <p eId="part_A__p_2">tail</p>
   </content>
 </part>

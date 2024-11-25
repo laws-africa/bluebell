@@ -497,7 +497,7 @@ class BulletListItem:
         }
 
 
-class GenericBlock:
+class BlockContainer:
     def to_dict(self):
         kids = []
 
@@ -508,16 +508,12 @@ class GenericBlock:
 
         info = {
             'type': 'block',
-            'name': 'block',
+            'name': 'blockContainer',
             'children': kids,
-            'attribs': {},
         }
 
         if self.attrs.text:
-            info['attribs'].update(self.attrs.to_dict())
-
-        if not info['attribs'].get('name'):
-            info['attribs']['name'] = 'block'
+            info['attribs'] = self.attrs.to_dict()
 
         return info
 

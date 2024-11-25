@@ -20,7 +20,7 @@ class FuzzingTestCase(ParserSupport, TestCase):
     ARGUMENTS
     ATTACHMENT
     BACKGROUND
-    BLOCK
+    BLOCKS
     BODY
     BULLETS
     *
