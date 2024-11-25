@@ -497,6 +497,28 @@ class BulletListItem:
         }
 
 
+class GenericBlock:
+    def to_dict(self):
+        kids = []
+
+        if self.content.text:
+            kids.extend(many_to_dict(self.content))
+        else:
+            kids.append(empty_p())
+
+        info = {
+            'type': 'block',
+            'name': 'block',
+            'children': kids,
+            'attribs': {'name': 'block'},
+        }
+
+        if self.attrs.text:
+            info['attribs'].update(self.attrs.to_dict())
+
+        return info
+
+
 class Table:
     def to_dict(self):
         info = {

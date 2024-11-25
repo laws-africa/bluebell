@@ -415,3 +415,53 @@ PART A
   <crossHeading eId="part_A__crossHeading_1">test</crossHeading>
 </part>
 """, xml)
+
+    def test_generic_block(self):
+        tree = self.parse("""
+PART A
+
+  BLOCK.cls{a b}
+    foo
+    
+    ITEMS
+      ITEM bar
+      ITEM baz
+      
+    end
+    
+  BLOCK{name my-block}
+    foo
+    bar
+    
+  BLOCK
+  
+  tail
+""", 'hier_element_block')
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_A">
+  <num>A</num>
+  <content>
+    <block a="b" class="cls" eId="part_A__block_1" name="block">
+      <p eId="part_A__block_1__p_1">foo</p>
+      <blockList eId="part_A__block_1__list_1">
+        <item eId="part_A__block_1__list_1__item_bar">
+          <num>bar</num>
+          <p eId="part_A__block_1__list_1__item_bar__p_1"/>
+        </item>
+        <item eId="part_A__block_1__list_1__item_baz">
+          <num>baz</num>
+          <p eId="part_A__block_1__list_1__item_baz__p_1"/>
+        </item>
+      </blockList>
+      <p eId="part_A__block_1__p_2">end</p>
+    </block>
+    <block eId="part_A__block_2" name="my-block">
+      <p eId="part_A__block_2__p_1">foo</p>
+      <p eId="part_A__block_2__p_2">bar</p>
+    </block>
+    <p eId="part_A__p_1">BLOCK</p>
+    <p eId="part_A__p_2">tail</p>
+  </content>
+</part>
+""", xml)
