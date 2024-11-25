@@ -510,11 +510,14 @@ class GenericBlock:
             'type': 'block',
             'name': 'block',
             'children': kids,
-            'attribs': {'name': 'block'},
+            'attribs': {},
         }
 
         if self.attrs.text:
             info['attribs'].update(self.attrs.to_dict())
+
+        if not info['attribs'].get('name'):
+            info['attribs']['name'] = 'block'
 
         return info
 
