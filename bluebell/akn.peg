@@ -257,7 +257,7 @@ grammar akn
 
   nested_block_element <- indent content:block_element+ dedent <NestedBlockElement>
 
-  block_elements    <- block_list / bullet_list / table / longtitle / footnote / block_quote / p / line
+  block_elements    <- block_list / bullet_list / table / longtitle / footnote / block_quote / blocks / p / line
 
   # ------------------------------------------------------------------------------
   # Speech blocks for debates
@@ -291,6 +291,26 @@ grammar akn
                      # against it, we don't have to guard at every place that
                      # could start a line.
   line              <- !dedent content:inline+ eol <Line>
+
+  # ------------------------------------------------------------------------------
+  # Block container, which can contain other blocks
+  #
+  # Note: the intro and wrapUp contain blocks, which actually means they're not necessary because the blockContainer
+  #       can contain any block. So we just don't use them.
+  #
+  # BLOCKS
+  #   intro
+  #
+  #   ITEMS
+  #     ITEM 1
+  #
+  #   wrapUp
+
+                     # block container element, for grouping blocks
+  blocks            <- 'BLOCKS' attrs:block_attrs? eol
+                       indent
+                         content:block_element+
+                       dedent <BlockContainer>
 
 
   # ------------------------------------------------------------------------------
