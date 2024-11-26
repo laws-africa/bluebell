@@ -63,6 +63,18 @@ CHAP 1 - Heading
           TC
             cell 2
 
+      BLOCKS
+        some block text
+
+        ITEMS
+          ITEM 1
+            item 1
+
+          ITEM 2
+            item 2
+
+        tail
+
   text in the middle
 
   SEC 2

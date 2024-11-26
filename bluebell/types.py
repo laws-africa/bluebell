@@ -497,6 +497,27 @@ class BulletListItem:
         }
 
 
+class BlockContainer:
+    def to_dict(self):
+        kids = []
+
+        if self.content.text:
+            kids.extend(many_to_dict(self.content))
+        else:
+            kids.append(empty_p())
+
+        info = {
+            'type': 'block',
+            'name': 'blockContainer',
+            'children': kids,
+        }
+
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+
+        return info
+
+
 class Table:
     def to_dict(self):
         info = {
