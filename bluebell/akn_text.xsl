@@ -31,6 +31,7 @@
         <xsl:when test="contains($trim, substring($text, 1, 1))">
           <xsl:call-template name="string-ltrim">
             <xsl:with-param name="text" select="substring($text, 2)" />
+            <xsl:with-param name="trim" select="$trim" />
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
