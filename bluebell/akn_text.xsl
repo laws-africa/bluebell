@@ -71,7 +71,7 @@
     <xsl:param name="text" />
     <xsl:param name="ch" select="substring($text, 1, 1)" />
 
-    <xsl:if test="substring($text, 1, 1) = $ch">
+    <xsl:if test="string-length($text) &gt; 0 and substring($text, 1, 1) = $ch">
       <xsl:value-of select="$ch" />
       <xsl:call-template name="prefix-run">
         <xsl:with-param name="text" select="substring($text, 2)" />
@@ -85,7 +85,7 @@
     <xsl:param name="text" />
     <xsl:param name="ch" select="substring($text, string-length($text))" />
 
-    <xsl:if test="substring($text, string-length($text)) = $ch">
+    <xsl:if test="string-length($text) &gt; 0 and substring($text, string-length($text)) = $ch">
       <xsl:value-of select="$ch" />
       <xsl:call-template name="suffix-run">
         <xsl:with-param name="text" select="substring($text, 1, string-length($text) - 1)" />
