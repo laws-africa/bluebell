@@ -1,8 +1,9 @@
 import re
-from itertools import groupby, chain
+from collections import defaultdict
+from itertools import groupby
 
-from cobalt.akn import get_maker, StructuredDocument
 import lxml.etree as etree
+from cobalt.akn import get_maker, StructuredDocument, FrbrUri
 
 
 class IdGenerator:
@@ -404,6 +405,7 @@ class XmlGenerator:
         xml = self.resolve_displaced_content(xml)
         xml = self.normalise(xml)
         xml = self.generate_eids(xml)
+        xml = self.rewrite_all_attachment_work_components(xml)
         xml = self.set_attachment_titles(xml)
         return xml
 
@@ -451,6 +453,32 @@ class XmlGenerator:
             # remove the empty element
             displaced.getparent().remove(displaced)
 
+        return xml
+
+    def rewrite_all_attachment_work_components(self, xml):
+        """ Set unique and accurate work components on all attachments.
+        """
+        counter = defaultdict(lambda: 0)
+        ns = xml.nsmap[None]
+        for doc in xml.xpath('//a:attachment/a:doc', namespaces={'a': ns}):
+            parent = doc.getparent().xpath('ancestor::a:attachment/a:doc/a:meta/a:identification/a:FRBRWork/a:FRBRthis', namespaces={'a': ns})
+            prefix = FrbrUri.parse(parent[0].attrib['value']).work_component + '/' if parent else ''
+            name = doc.attrib['name']
+            # e.g. schedule_1/schedule, schedule_2/appendix, etc.
+            prefix_name = f'{prefix}{name}'
+            counter[prefix_name] += 1
+            # e.g. schedule_1/schedule_3, schedule_2/appendix_1, etc.
+            work_component = f'{prefix_name}_{counter[prefix_name]}'
+
+            for part in ['a:FRBRWork', 'a:FRBRExpression', 'a:FRBRManifestation']:
+                for element in doc.xpath('./a:meta/a:identification/' + part + '/a:FRBRthis', namespaces={'a': ns}):
+                    frbr_uri = FrbrUri.parse(element.attrib['value'])
+                    frbr_uri.work_component = work_component
+                    element.attrib['value'] = {
+                        'a:FRBRWork': lambda: frbr_uri.work_uri(),
+                        'a:FRBRExpression': lambda: frbr_uri.expression_uri(),
+                        'a:FRBRManifestation': lambda: frbr_uri.manifestation_uri(),
+                    }[part]()
         return xml
 
     def set_attachment_titles(self, xml):
