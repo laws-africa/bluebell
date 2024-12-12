@@ -457,6 +457,8 @@ class XmlGenerator:
 
     def rewrite_all_attachment_work_components(self, xml):
         """ Set unique and accurate work components on all attachments.
+            When attachments are renamed, this can affect other attachments' work components as well.
+            And because they can be edited independently, postprocessing might be our only opportunity to update the others.
         """
         counter = defaultdict(lambda: 0)
         ns = xml.nsmap[None]
