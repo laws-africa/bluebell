@@ -1,0 +1,117 @@
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <act contains="singleVersion" name="act">
+    <meta>
+      <identification source="#cobalt">
+        <FRBRWork>
+          <FRBRthis value="/akn/za/act/2021/6/!main"/>
+          <FRBRuri value="/akn/za/act/2021/6"/>
+          <FRBRalias name="title" value="Work with uncommenced provisions, only one commencement so far"/>
+          <FRBRdate date="2021" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRcountry value="za"/>
+          <FRBRnumber value="6"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/akn/za/act/2021/6/sot@2022-08-12/!main"/>
+          <FRBRuri value="/akn/za/act/2021/6/sot@2022-08-12"/>
+          <FRBRdate date="2022-08-12" name="Generation"/>
+          <FRBRauthor href=""/>
+          <FRBRlanguage language="sot"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/akn/za/act/2021/6/sot@2022-08-12/!main"/>
+          <FRBRuri value="/akn/za/act/2021/6/sot@2022-08-12"/>
+          <FRBRdate date="2022-02-03" name="Generation"/>
+          <FRBRauthor href=""/>
+        </FRBRManifestation>
+      </identification>
+      <publication date="2021-10-11" name="" number="" showAs=""/>
+      <lifecycle source="#Laws-Africa">
+        <eventRef date="2021-10-20" eId="amendment-2021-10-20" source="#amendment-0-source" type="amendment"/>
+      </lifecycle>
+      <references source="#cobalt">
+        <TLCOrganization eId="Laws-Africa" href="http://localhost:8000" showAs="Laws.Africa"/>
+        <TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>
+        <passiveRef eId="amendment-0-source" href="/akn/za/act/2021/6" showAs="Work with uncommenced provisions, only one commencement so far"/>
+      </references>
+    </meta>
+    <body>
+      <chapter eId="chp_1">
+        <num>1</num>
+        <heading>Heading</heading>
+      </chapter>
+    </body>
+    <attachments>
+      <attachment eId="att_1">
+        <heading>a heading</heading>
+        <subheading>subheading</subheading>
+        <doc name="annexure">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/!annexure_1"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1"/>
+                <FRBRalias name="title" value="Untitled"/>
+                <FRBRdate date="2021" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="xx-playground"/>
+                <FRBRnumber value="1"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!annexure_1"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!annexure_1"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+          </meta>
+          <mainBody>
+            <p eId="att_1__p_1">some text</p>
+          </mainBody>
+        </doc>
+      </attachment>
+      <attachment eId="att_1">
+        <heading>a heading</heading>
+        <subheading>subheading</subheading>
+        <doc name="annexure">
+          <meta>
+            <identification source="#cobalt">
+              <FRBRWork>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/!annexure_2"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1"/>
+                <FRBRalias name="title" value="Untitled"/>
+                <FRBRdate date="2021" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRcountry value="xx-playground"/>
+                <FRBRnumber value="1"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!annexure_2"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+                <FRBRlanguage language="eng"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/xx-playground/act/2021/1/eng@2022-02-07/!annexure_2"/>
+                <FRBRuri value="/akn/xx-playground/act/2021/1/eng@2022-02-07"/>
+                <FRBRdate date="2022-02-08" name="Generation"/>
+                <FRBRauthor href=""/>
+              </FRBRManifestation>
+            </identification>
+          </meta>
+          <mainBody>
+            <p eId="att_1__p_1">some text</p>
+          </mainBody>
+        </doc>
+      </attachment>
+    </attachments>
+  </act>
+</akomaNtoso>
