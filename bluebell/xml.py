@@ -462,7 +462,7 @@ class XmlGenerator:
         ns = xml.nsmap[None]
         for doc in xml.xpath('//a:attachment/a:doc', namespaces={'a': ns}):
             parent = doc.getparent().xpath('ancestor::a:attachment/a:doc/a:meta/a:identification/a:FRBRWork/a:FRBRthis', namespaces={'a': ns})
-            prefix = FrbrUri.parse(parent[0].attrib['value']).work_component + '/' if parent else ''
+            prefix = FrbrUri.parse(parent[-1].attrib['value']).work_component + '/' if parent else ''
             name = doc.attrib['name']
             # e.g. schedule_1/schedule, schedule_2/appendix, etc.
             prefix_name = f'{prefix}{name}'
