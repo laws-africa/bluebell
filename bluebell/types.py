@@ -67,7 +67,7 @@ class BlockIndentElement:
             'name': self.name,
             'children': many_to_dict(c.block_element for c in self.content),
         }
-        if self.attrs.text:
+        if hasattr(self, 'attrs') and self.attrs.text:
             info['attribs'] = self.attrs.to_dict()
         return info
 
