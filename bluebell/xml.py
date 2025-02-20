@@ -373,7 +373,7 @@ class XmlGenerator:
                      m('doc',
                        self.make_meta(self.attachment_frbr_uri(attachment_name), False),
                        *self.kids_to_xml(kids=item['children']),
-                       **item.get('attribs', {})))
+                       **item.get('attribs', {})), **item.get('att_attribs', {}))
         finally:
             self.attachment_names.pop()
 
