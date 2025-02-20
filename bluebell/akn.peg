@@ -150,11 +150,11 @@ grammar akn
   # Containers
   # ------------------------------------------------------------------------------
 
-  preface           <- preface_marker
+  preface           <- preface_marker attrs:block_attrs? eol
                        content:(!preamble_marker !body_marker block_element)*
                        <Preface>
 
-  preamble          <- preamble_marker
+  preamble          <- preamble_marker attrs:block_attrs? eol
                        content:(!body_marker block_element)*
                        <Preamble>
 
@@ -207,7 +207,7 @@ grammar akn
 
                        # an attachment's body may be indented with a subheading, or go
                        # directly into content, or a mixture
-  attachment        <- attachment_marker heading:attachment_heading? eol
+  attachment        <- attachment_marker attrs:block_attrs? heading:attachment_heading? eol
                        indented:(
                          indent
                            subheading:subheading?
@@ -226,9 +226,9 @@ grammar akn
 
   conclusions_marker <- 'CONCLUSIONS' eol
 
-  preamble_marker   <- 'PREAMBLE' eol
+  preamble_marker   <- 'PREAMBLE'
 
-  preface_marker    <- 'PREFACE' eol
+  preface_marker    <- 'PREFACE'
 
   # Judgment markers
 
@@ -281,7 +281,7 @@ grammar akn
 
   subheading        <- 'SUBHEADING' body:(space content:inline+)? eol <Subheading>
 
-  crossheading      <- 'CROSSHEADING' body:(space content:inline+)? eol <Crossheading>
+  crossheading      <- 'CROSSHEADING' attrs:block_attrs? body:(space content:inline+)? eol <Crossheading>
 
                      # explicit P tag with attribute support
   p                 <- 'P' attrs:block_attrs? space content:inline+ eol <P>
