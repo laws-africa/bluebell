@@ -415,6 +415,7 @@
     <xsl:call-template name="uppercase">
       <xsl:with-param name="s" select="local-name()"/>
     </xsl:call-template>
+    <xsl:call-template name="block-attrs"/>
     <xsl:text>&#10;&#10;</xsl:text>
 
     <xsl:apply-templates>
@@ -754,6 +755,7 @@
     <xsl:call-template name="uppercase">
       <xsl:with-param name="s" select="a:doc/@name" />
     </xsl:call-template>
+    <xsl:call-template name="block-attrs"/>
 
     <xsl:if test="a:heading">
       <xsl:text> </xsl:text>
@@ -836,7 +838,9 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>CROSSHEADING </xsl:text>
+    <xsl:text>CROSSHEADING</xsl:text>
+    <xsl:call-template name="block-attrs"/>
+    <xsl:text> </xsl:text>
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>

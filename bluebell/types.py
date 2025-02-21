@@ -62,11 +62,14 @@ class BlockIndentElement:
     name = None
 
     def to_dict(self):
-        return {
+        info = {
             'type': 'element',
             'name': self.name,
             'children': many_to_dict(c.block_element for c in self.content),
         }
+        if hasattr(self, 'attrs') and self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+        return info
 
 
 class NestedBlockElement:
@@ -118,11 +121,14 @@ class Crossheading:
         else:
             kids = []
 
-        return {
+        info = {
             'type': 'element',
             'name': 'crossHeading',
             'children': kids
         }
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+        return info
 
 
 class MainContentElement:
@@ -335,6 +341,8 @@ class Attachment(MainContentElement):
         }
         if attachments:
             info['children'].append(attachments)
+        if self.attrs.text:
+            info['att_attribs'] = self.attrs.to_dict()
 
         if self.heading.text:
             heading = self.heading.heading_to_dict()
