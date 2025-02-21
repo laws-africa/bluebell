@@ -1,4 +1,4 @@
-PREAMBLE
+PREAMBLE.class-name
 
   some preamble text
 
@@ -111,7 +111,7 @@ CHAP 1 - Heading
 
     PART
 
-      CROSSHEADING a lonely crossheading
+      CROSSHEADING.with-class a lonely crossheading
 
     SEC - a heading
 
@@ -119,7 +119,7 @@ CHAP 1 - Heading
 
   wrap up
 
-ANNEXURE Annex 1
+ANNEXURE.class-name Annex 1
 
   Some content
 
