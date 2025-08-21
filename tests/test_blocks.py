@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, expectedFailure
 
 from tests.support import ParserSupport
 
@@ -465,3 +465,42 @@ PART A
   </content>
 </part>
 """, xml)
+
+    def test_blocks(self):
+        tree = self.parse("""
+BLOCKS.cls{a b}
+  foo
+
+  ITEMS
+    ITEM bar
+    ITEM baz
+
+  end
+""", 'blocks')
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual("""<blockContainer xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" a="b" class="cls" eId="blockContainer_1">
+  <p eId="blockContainer_1__p_1">foo</p>
+  <blockList eId="blockContainer_1__list_1">
+    <item eId="blockContainer_1__list_1__item_bar">
+      <num>bar</num>
+      <p eId="blockContainer_1__list_1__item_bar__p_1"/>
+    </item>
+    <item eId="blockContainer_1__list_1__item_baz">
+      <num>baz</num>
+      <p eId="blockContainer_1__list_1__item_baz__p_1"/>
+    </item>
+  </blockList>
+  <p eId="blockContainer_1__p_2">end</p>
+</blockContainer>
+""", xml)
+
+    @expectedFailure
+    def test_blocks_multiple_fail(self):
+        self.parse("""
+BLOCKS.cls{a b}
+  first block
+
+BLOCKS.cls{a b}
+  second block, can't parse both of these as blocks!
+""", 'blocks')
