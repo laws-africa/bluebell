@@ -12,10 +12,15 @@ nav:
   - Advanced: advanced.md
 theme:
   name: material
+  logo: https://laws.africa/img/icons/bluebell.png
+  palette:
+    primary: red
   features:
     - navigation.sections
     - navigation.instant
     - toc.follow
+extra_css:
+  - css/extra.css
 markdown_extensions:
   - admonition
   - codehilite
