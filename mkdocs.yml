@@ -1,0 +1,22 @@
+site_name: Bluebell
+site_description: Akoma Ntoso parser documentation
+site_url: https://laws-africa.github.io/bluebell/
+repo_url: https://github.com/laws-africa/bluebell
+repo_name: laws-africa/bluebell
+nav:
+  - Getting starting: index.md
+  - Grammar: grammar.md
+  - Commandline Usage: cli.md
+  - Library Usage: library.md
+  - Troubleshooting: troubleshooting.md
+  - Advanced: advanced.md
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.instant
+    - toc.follow
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
