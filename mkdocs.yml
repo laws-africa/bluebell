@@ -5,6 +5,7 @@ repo_url: https://github.com/laws-africa/bluebell
 repo_name: laws-africa/bluebell
 nav:
   - Getting starting: index.md
+  - Demo: demo.md
   - Grammar: grammar.md
   - Commandline Usage: cli.md
   - Library Usage: library.md
@@ -21,6 +22,8 @@ theme:
     - toc.follow
 extra_css:
   - css/extra.css
+extra_javascript:
+  - js/demo.js
 markdown_extensions:
   - admonition
   - codehilite
