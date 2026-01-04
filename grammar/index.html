@@ -1,0 +1,1430 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Akoma Ntoso parser documentation">
+      
+      
+      
+        <link rel="canonical" href="https://laws-africa.github.io/bluebell/grammar/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../cli/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Grammar - Bluebell</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../css/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#grammar" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Bluebell" class="md-header__button md-logo" aria-label="Bluebell" data-md-component="logo">
+      
+  <img src="https://laws.africa/img/icons/bluebell.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Bluebell
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Grammar
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/laws-africa/bluebell" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    laws-africa/bluebell
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Bluebell" class="md-nav__button md-logo" aria-label="Bluebell" data-md-component="logo">
+      
+  <img src="https://laws.africa/img/icons/bluebell.png" alt="logo">
+
+    </a>
+    Bluebell
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/laws-africa/bluebell" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    laws-africa/bluebell
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting starting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grammar
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grammar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#document-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#containers-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Containers &amp; Hierarchy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Containers &amp; Hierarchy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#indentation-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indentation Tips
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preface-preamble-body-conclusions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preface, Preamble, Body, Conclusions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#judgment-sections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Judgment Sections
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hierarchical-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarchical Elements
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hierarchical Elements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#crossheading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crossheading
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attachments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attachments
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block Elements
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Block Elements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#numbered-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Numbered Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bulleted-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bulleted Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-quotes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block Quotes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#longtitle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Longtitle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inline-markup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inline Markup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Inline Markup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abbreviations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Abbreviations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editorial-remarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editorial Remarks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emphasis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emphasis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References (Links)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generic-inline-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic Inline Elements
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#footnotes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Footnotes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-act-snippet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Act Snippet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Tips
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Commandline Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#document-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#containers-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Containers &amp; Hierarchy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Containers &amp; Hierarchy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#indentation-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indentation Tips
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preface-preamble-body-conclusions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preface, Preamble, Body, Conclusions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#judgment-sections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Judgment Sections
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hierarchical-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarchical Elements
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hierarchical Elements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#crossheading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crossheading
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attachments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attachments
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block Elements
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Block Elements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#numbered-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Numbered Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bulleted-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bulleted Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-quotes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block Quotes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#longtitle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Longtitle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inline-markup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inline Markup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Inline Markup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abbreviations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Abbreviations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editorial-remarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editorial Remarks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emphasis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emphasis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References (Links)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generic-inline-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic Inline Elements
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#footnotes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Footnotes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-act-snippet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Act Snippet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Tips
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="grammar">Grammar</h1>
+<p>Bluebell targets the Akoma Ntoso 3 grammar using its own well-structured plaintext format. Authors describe hierarchy
+with indentation and headings (think of it as “Markdown for AKN”), and the parser turns that structure into Akoma Ntoso
+XML. Understanding the document types, structural keywords, inline markup, and footnotes will help you prepare input
+that round-trips cleanly.</p>
+<h2 id="document-types">Document Types</h2>
+<p>Choose the root type that matches your document. The root determines which structural keywords are recognised and which
+containers must appear. Inline markup is largely shared across types, but hierarchical and block elements vary.</p>
+<table>
+<thead>
+<tr>
+<th>Root</th>
+<th>AKN structure</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>act</code>, <code>bill</code></td>
+<td><code>hierarchicalStructure</code></td>
+<td>Statutes with chapters, parts, sections, etc.</td>
+</tr>
+<tr>
+<td><code>judgment</code></td>
+<td><code>judgmentStructure</code></td>
+<td>Judgments split into INTRODUCTION/BACKGROUND/etc.</td>
+</tr>
+<tr>
+<td><code>debateReport</code></td>
+<td><code>openStructure</code></td>
+<td>Hansard-style debate reports.</td>
+</tr>
+<tr>
+<td><code>doc</code>, <code>statement</code></td>
+<td><code>openStructure</code></td>
+<td>Open, lightly structured narrative documents.</td>
+</tr>
+<tr>
+<td><code>debate</code></td>
+<td><code>debateStructure</code></td>
+<td>Parliamentary debates with speech containers and groups.</td>
+</tr>
+</tbody>
+</table>
+<p>All document types support attachments and inline markup. Acts/bills and judgments enforce stricter hierarchical rules
+than the open/debate structures.</p>
+<h2 id="containers-hierarchy">Containers &amp; Hierarchy</h2>
+<p>Bluebell expresses structure through indentation: every hierarchical or block element contains indented child content.
+Use consistent two-space indentation for nested paragraphs, lists, tables, and speech blocks.</p>
+<h3 id="indentation-tips">Indentation Tips</h3>
+<ol>
+<li>Use two spaces per indent level (tabs are converted automatically, but consistent spaces make intent clearer).</li>
+<li>Dedent only when closing the current container; do not skip levels.</li>
+<li>Ensure the file ends with a newline so trailing containers close properly.</li>
+</ol>
+<h3 id="preface-preamble-body-conclusions">Preface, Preamble, Body, Conclusions</h3>
+<p>These container keywords bracket introductory and closing material:</p>
+<div class="highlight"><pre><span></span><code>PREFACE
+  ...
+
+PREAMBLE
+  ...
+
+BODY
+  ...
+
+CONCLUSIONS
+  ...
+</code></pre></div>
+<p><code>BODY</code> marks where the main hierarchy (sections, parts, etc.) begins. <code>CONCLUSIONS</code> is optional but recommended for
+closing remarks.</p>
+<h3 id="judgment-sections">Judgment Sections</h3>
+<p>Judgment documents use labelled sections:</p>
+<div class="highlight"><pre><span></span><code>INTRODUCTION
+BACKGROUND
+ARGUMENTS
+REMEDIES
+MOTIVATION
+DECISION
+</code></pre></div>
+<p>The order is important.</p>
+<h3 id="hierarchical-elements">Hierarchical Elements</h3>
+<p>These keywords indicate hierarchical containers:</p>
+<ul>
+<li><code>ALINEA</code></li>
+<li><code>ARTICLE</code>, <code>ART</code></li>
+<li><code>BOOK</code></li>
+<li><code>CHAPTER</code>, <code>CHAP</code></li>
+<li><code>CLAUSE</code></li>
+<li><code>DIVISION</code></li>
+<li><code>INDENT</code></li>
+<li><code>LEVEL</code></li>
+<li><code>LIST</code></li>
+<li><code>PARAGRAPH</code>, <code>PARA</code></li>
+<li><code>PART</code></li>
+<li><code>POINT</code></li>
+<li><code>PROVISO</code></li>
+<li><code>RULE</code></li>
+<li><code>SECTION</code>, <code>SEC</code></li>
+<li><code>SUBCHAPTER</code>, <code>SUBCHAP</code></li>
+<li><code>SUBCLAUSE</code></li>
+<li><code>SUBDIVISION</code></li>
+<li><code>SUBLIST</code></li>
+<li><code>SUBPARAGRAPH</code>, <code>SUBPARA</code></li>
+<li><code>SUBPART</code></li>
+<li><code>SUBRULE</code></li>
+<li><code>SUBSECTION</code>, <code>SUBSEC</code></li>
+<li><code>SUBTITLE</code></li>
+<li><code>TITLE</code></li>
+<li><code>TOME</code></li>
+<li><code>TRANSITIONAL</code></li>
+</ul>
+<p>All AKN hierarchical containers (CHAPTER, PART, SECTION, ARTICLE, etc.) follow the same syntax:</p>
+<div class="highlight"><pre><span></span><code>&lt;hier&gt;&lt;attribs&gt;
+  ...
+
+&lt;hier&gt;&lt;attribs&gt;
+  SUBHEADING &lt;subheading&gt;
+  ...
+
+&lt;hier&gt;&lt;attribs&gt; &lt;num&gt;
+  ...
+
+&lt;hier&gt;&lt;attribs&gt; &lt;num&gt; - &lt;heading&gt;
+  ...
+
+&lt;hier&gt;&lt;attribs&gt; - &lt;heading&gt;
+  ...
+</code></pre></div>
+<ul>
+<li><code>&lt;hier&gt;</code>: uppercase keyword such as <code>CHAPTER</code>, <code>SECTION</code>, <code>PARAGRAPH</code>, or a synonym.</li>
+<li><code>&lt;attribs&gt;</code>: optional <code>{attr value|...}</code> block (see attributes section below).</li>
+<li><code>&lt;num&gt;</code>: optional number (<code>1</code>, <code>1A</code>, <code>2(bis)</code>, etc.).</li>
+<li><code>&lt;heading&gt;</code>: optional heading text after <code>-</code>.</li>
+<li><code>SUBHEADING</code> provides an optional subheading within the container.</li>
+</ul>
+<h4 id="crossheading">Crossheading</h4>
+<p>Use <code>CROSSHEADING &lt;heading&gt;</code> between hierarchical elements when you need a heading but not a new container.</p>
+<h3 id="attachments">Attachments</h3>
+<p>All document types may end with attachments (which can nest). Keywords such as <code>APPENDIX</code>, <code>SCHEDULE</code>, and <code>ANNEXURE</code>
+are aliases for <code>ATTACHMENT</code>.</p>
+<div class="highlight"><pre><span></span><code>ATTACHMENT &lt;heading&gt;
+  ...
+
+ATTACHMENT &lt;heading&gt;
+  SUBHEADING &lt;subheading&gt;
+  ...
+</code></pre></div>
+<h3 id="block-elements">Block Elements</h3>
+<p>Block elements indicate structure within sections and also rely on indentation.</p>
+<h4 id="numbered-lists">Numbered Lists</h4>
+<div class="highlight"><pre><span></span><code>ITEMS
+  introductory text
+
+  ITEM (a)
+    ...
+
+  ITEM (b) - Heading
+    SUBHEADING Subheading
+    ...
+</code></pre></div>
+<h4 id="bulleted-lists">Bulleted Lists</h4>
+<div class="highlight"><pre><span></span><code>BULLETS
+  * Item 1
+  * Item 2 spanning
+    multiple lines
+</code></pre></div>
+<h4 id="block-quotes">Block Quotes</h4>
+<div class="highlight"><pre><span></span><code>QUOTE{startQuote &quot;}
+  Quoted material
+</code></pre></div>
+<h4 id="tables">Tables</h4>
+<div class="highlight"><pre><span></span><code>TABLE.class-name
+  TR
+    TH{colspan 2}
+      Heading cell
+    TC
+      Cell text
+</code></pre></div>
+<h4 id="longtitle">Longtitle</h4>
+<div class="highlight"><pre><span></span><code>LONGTITLE The long title of an Act
+</code></pre></div>
+<h2 id="inline-markup">Inline Markup</h2>
+<p>Apart from a few shorthand formats (<code>**bold**</code>, <code>//italics//</code>, <code>__underline__</code>, <code>{{^superscript}}</code>, <code>{{_subscript}}</code>),
+inline markup uses <code>{{ ... }}</code> blocks. Nest inline elements freely within paragraphs, headings, and list items.</p>
+<h3 id="abbreviations">Abbreviations</h3>
+<div class="highlight"><pre><span></span><code>{{abbr{title Akoma Ntoso} AKN}}
+</code></pre></div>
+<h3 id="editorial-remarks">Editorial Remarks</h3>
+<div class="highlight"><pre><span></span><code>{{*remark content}}
+
+A {{*remark may
+span multiple lines.}}
+</code></pre></div>
+<h3 id="emphasis">Emphasis</h3>
+<div class="highlight"><pre><span></span><code>{{em{type strong} Important text}}
+</code></pre></div>
+<h3 id="images">Images</h3>
+<div class="highlight"><pre><span></span><code>{{IMG /images/figure.png Figure description}}
+</code></pre></div>
+<h3 id="references-links">References (Links)</h3>
+<div class="highlight"><pre><span></span><code>{{&gt;https://example.com link text}}
+</code></pre></div>
+<h3 id="terms">Terms</h3>
+<div class="highlight"><pre><span></span><code>{{term{refersTo #definition-term} defined term}}
+</code></pre></div>
+<h3 id="generic-inline-elements">Generic Inline Elements</h3>
+<div class="highlight"><pre><span></span><code>{{inline{name custom} text}}
+</code></pre></div>
+<h2 id="footnotes">Footnotes</h2>
+<p>Footnotes use two parts: an inline marker and a matching <code>FOOTNOTE</code> block at the same indent level.</p>
+<div class="highlight"><pre><span></span><code>This sentence includes the {{^{{FOOTNOTE *}}}} marker.
+
+FOOTNOTE *
+  This is the footnote content.
+</code></pre></div>
+<ul>
+<li>The marker is <code>{{FOOTNOTE &lt;symbol&gt;}}</code>, often wrapped in superscript (<code>{{^...}}</code>).</li>
+<li>The block must appear immediately after the paragraph (no indentation change) and reuse the same symbol.</li>
+<li>Footnotes can contain block and inline markup just like body content.</li>
+</ul>
+<h2 id="attributes">Attributes</h2>
+<p>Any element that accepts attributes can use <code>{name value|name2 value2}</code> immediately after the keyword. Class attributes can
+be written with dot notation preceding the attribute block.</p>
+<div class="highlight"><pre><span></span><code>SECTION.class-one.class-two{status amended}
+  ...
+</code></pre></div>
+<p>This is equivalent to <code>{class class-one class-two|status amended}</code>.</p>
+<h2 id="example-act-snippet">Example Act Snippet</h2>
+<div class="highlight"><pre><span></span><code>PREFACE
+  This is in the preface
+
+PREAMBLE
+  This is in the preamble
+
+BODY
+
+Introductory text in the body.
+
+SECTION 1.
+  Text in section one, with some list items:
+
+  SUBSECTION (a)
+    cheese
+
+  SUBSECTION (b)
+    fish, both:
+
+    SUBSECTION (i)
+      fresh, and
+
+    SUBSECTION (ii)
+      tinned.
+
+PART 1 - The First Part
+  SUBHEADING Very exciting
+
+  SECTION 2.
+    This is the second section inside part 1.
+
+SCHEDULE - First Schedule
+  SUBHEADING With a subheading
+
+  Text of the schedule
+</code></pre></div>
+<h2 id="practical-tips">Practical Tips</h2>
+<ul>
+<li>Keywords are uppercase to avoid clashing with body text.</li>
+<li>When in doubt, inspect the generated XML to confirm the hierarchy and headings appear as expected.</li>
+<li>If Bluebell encounters unknown constructs, it keeps the text so you can edit and re-run the parser.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.instant", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
