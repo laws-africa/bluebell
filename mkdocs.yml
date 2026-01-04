@@ -5,10 +5,10 @@ repo_url: https://github.com/laws-africa/bluebell
 repo_name: laws-africa/bluebell
 nav:
   - Getting starting: index.md
-  - Demo: demo.md
   - Grammar: grammar.md
   - Commandline Usage: cli.md
   - Library Usage: library.md
+  - Live Demo: demo.md
   - Troubleshooting: troubleshooting.md
   - Advanced: advanced.md
 theme:
