@@ -18,7 +18,6 @@ theme:
     primary: red
   features:
     - navigation.sections
-    - navigation.instant
     - toc.follow
 extra_css:
   - css/extra.css
