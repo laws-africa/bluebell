@@ -7,13 +7,13 @@ Current status:
 - `pre_parse` is implemented and covered against the Python examples.
 - `bluebell/akn.peg` has been ported to a `pest` grammar.
 - The CLI can parse Bluebell text for the supported document roots.
-- The CLI can emit native Rust XML for a growing core subset: empty roots, paragraphs, hierarchy, common inline elements, block attributes, and generated eIds.
+- The CLI can emit native Rust XML for a growing core subset: empty roots, paragraphs, hierarchy, block/bullet lists, tables, common inline elements, refs/images, block attributes, and generated eIds.
 - `bench-income-tax` uses the existing Python/XSLT unparse path as an oracle, then benchmarks the Rust preprocessing and pest parse.
 
 Not implemented yet:
 
 - Full typed model parity for all Bluebell constructs.
-- Full XML generation parity for lists, tables, attachments, debate structures, displaced footnotes, metadata insertion, and post-processing.
+- Full XML generation parity for attachments, debate structures, matched displaced footnotes, metadata insertion, and post-processing.
 - Native Rust unparse from Akoma Ntoso XML back to Bluebell text.
 
 Useful commands:

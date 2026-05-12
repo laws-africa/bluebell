@@ -199,6 +199,7 @@ fn collect_blocks(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut Vec<XmlEle
         Rule::block_list => blocks.push(block_list_to_xml(pair)),
         Rule::bullet_list => blocks.push(bullet_list_to_xml(pair)),
         Rule::table => blocks.push(table_to_xml(pair)),
+        Rule::footnote => {}
         _ => {
             for child in pair.into_inner() {
                 collect_blocks(child, blocks);
@@ -465,6 +466,10 @@ fn collect_inline_nodes_inner(pair: pest::iterators::Pair<'_, Rule>, nodes: &mut
                 .attr("status", "editorial")
                 .children_nodes(collect_inline_nodes_from_children(pair)),
         )),
+        Rule::image => nodes.push(XmlNode::Element(image_to_xml(pair.as_str()))),
+        Rule::ref_ => nodes.push(XmlNode::Element(ref_to_xml(pair.as_str()))),
+        Rule::footnote_ref => nodes.push(XmlNode::Element(footnote_ref_to_xml(pair.as_str()))),
+        Rule::standard_inline => nodes.push(XmlNode::Element(standard_inline_to_xml(pair))),
         Rule::block_attrs
         | Rule::block_attr_class
         | Rule::block_attr_pairs
@@ -477,6 +482,99 @@ fn collect_inline_nodes_inner(pair: pest::iterators::Pair<'_, Rule>, nodes: &mut
                 collect_inline_nodes_inner(child, nodes);
             }
         }
+    }
+}
+
+fn image_to_xml(text: &str) -> XmlElement {
+    let body = text
+        .strip_prefix("{{IMG")
+        .and_then(|s| s.strip_suffix("}}"))
+        .unwrap_or("")
+        .trim();
+    let (src, alt) = split_first_word(body);
+    let mut img = XmlElement::new("img").attr("src", src);
+    if !alt.is_empty() {
+        img.attrs.insert("alt".to_string(), alt.to_string());
+    }
+    img
+}
+
+fn ref_to_xml(text: &str) -> XmlElement {
+    let body = text
+        .strip_prefix("{{>")
+        .and_then(|s| s.strip_suffix("}}"))
+        .unwrap_or("");
+    let (href, label) = split_first_word(body);
+    let mut ref_el = XmlElement::new("ref").attr("href", href);
+    if !label.is_empty() {
+        ref_el.children.push(XmlNode::Text(label.to_string()));
+    }
+    ref_el
+}
+
+fn footnote_ref_to_xml(text: &str) -> XmlElement {
+    let marker = text
+        .strip_prefix("{{FOOTNOTE")
+        .and_then(|s| s.strip_suffix("}}"))
+        .unwrap_or("")
+        .trim();
+    XmlElement::new("authorialNote")
+        .attr("marker", marker)
+        .attr("placement", "bottom")
+        .child(XmlElement::new("p").text("(content missing)"))
+}
+
+fn standard_inline_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut tag = "inline".to_string();
+    let mut attrs = BTreeMap::new();
+    let mut children = Vec::new();
+
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::standard_inline_marker => tag = child.as_str().to_string(),
+            Rule::block_attrs => attrs.extend(block_attrs_to_map(child)),
+            _ => collect_inline_nodes_inner(child, &mut children),
+        }
+    }
+
+    let mut name = tag.as_str();
+    match tag.as_str() {
+        "em" => {
+            name = "inline";
+            attrs
+                .entry("name".to_string())
+                .or_insert_with(|| "em".to_string());
+        }
+        "+" => name = "ins",
+        "-" => name = "del",
+        "abbr" => {
+            attrs.entry("title".to_string()).or_insert_with(String::new);
+        }
+        "term" => {
+            attrs
+                .entry("refersTo".to_string())
+                .or_insert_with(String::new);
+        }
+        "inline" => {
+            attrs
+                .entry("name".to_string())
+                .or_insert_with(|| "inline".to_string());
+        }
+        _ => {}
+    }
+
+    let mut el = XmlElement::new(name);
+    el.attrs = attrs;
+    el.children = merge_adjacent_text(children);
+    el
+}
+
+fn split_first_word(text: &str) -> (&str, &str) {
+    let trimmed = text.trim();
+    if let Some((first, rest)) = trimmed.split_once(char::is_whitespace) {
+        (first, rest.trim_start())
+    } else {
+        (trimmed, "")
     }
 }
 
@@ -942,5 +1040,28 @@ mod tests {
         assert!(xml.contains("<table eId=\"table_1\">"));
         assert!(xml.contains("<th><p eId=\"table_1__p_1\">heading</p></th>"));
         assert!(xml.contains("<td colspan=\"2\"><p eId=\"table_1__p_2\">cell</p></td>"));
+    }
+
+    #[test]
+    fn refs_images_and_footnote_refs_xml() {
+        let xml = parse_to_xml(
+            "P See {{>https://example.com example}} {{IMG /x.png alt text}} {{FOOTNOTE 1}}",
+            DocumentRoot::Statement,
+        )
+        .unwrap();
+        assert!(xml.contains("<ref eId=\"p_1__ref_1\" href=\"https://example.com\">example</ref>"));
+        assert!(xml.contains("<img alt=\"alt text\" src=\"/x.png\"/>"));
+        assert!(xml.contains("<authorialNote eId=\"p_1__authorialNote_1\" marker=\"1\" placement=\"bottom\"><p eId=\"p_1__authorialNote_1__p_1\">(content missing)</p></authorialNote>"));
+    }
+
+    #[test]
+    fn standard_inline_xml() {
+        let xml = parse_to_xml(
+            "P Text with {{term{refersTo #x}a term}} and {{+inserted}}",
+            DocumentRoot::Statement,
+        )
+        .unwrap();
+        assert!(xml.contains("<term eId=\"p_1__term_1\" refersTo=\"#x\">a term</term>"));
+        assert!(xml.contains("<ins>inserted</ins>"));
     }
 }
