@@ -31,6 +31,15 @@ enum Command {
         root: RootArg,
         input: PathBuf,
     },
+    ToAknXml {
+        frbr_uri: String,
+        #[arg(value_enum)]
+        root: RootArg,
+        input: PathBuf,
+    },
+    Unparse {
+        input: PathBuf,
+    },
     BenchText {
         #[arg(value_enum)]
         root: RootArg,
@@ -88,6 +97,23 @@ fn main() -> anyhow::Result<()> {
             let text = fs::read_to_string(&input)
                 .with_context(|| format!("failed to read {}", input.display()))?;
             println!("{}", bluebell_rs::parse_to_xml(&text, root.into())?);
+        }
+        Command::ToAknXml {
+            frbr_uri,
+            root,
+            input,
+        } => {
+            let text = fs::read_to_string(&input)
+                .with_context(|| format!("failed to read {}", input.display()))?;
+            println!(
+                "{}",
+                bluebell_rs::parse_to_akn_xml(&text, root.into(), &frbr_uri)?
+            );
+        }
+        Command::Unparse { input } => {
+            let xml = fs::read_to_string(&input)
+                .with_context(|| format!("failed to read {}", input.display()))?;
+            print!("{}", bluebell_rs::unparse(&xml)?);
         }
         Command::BenchText { root, input } => {
             let text = fs::read_to_string(&input)

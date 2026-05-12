@@ -73,6 +73,52 @@ pub fn parse_to_xml(text: &str, root: DocumentRoot) -> Result<String, XmlError> 
     parse_preprocessed_to_xml(&preprocessed, root)
 }
 
+pub fn parse_to_akn_xml(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+) -> Result<String, XmlError> {
+    let preprocessed = pre_parse(text);
+    parse_preprocessed_to_akn_xml(&preprocessed, root, frbr_uri)
+}
+
+pub fn parse_preprocessed_to_akn_xml(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+) -> Result<String, XmlError> {
+    let pairs = parse_pairs_preprocessed(text, root)?;
+    let mut doc_el = document_to_xml(root, pairs);
+    doc_el.attrs.remove("xmlns");
+    add_attachment_doc_meta(&mut doc_el, frbr_uri);
+    resolve_displaced_content(&mut doc_el);
+    doc_el
+        .children
+        .insert(0, XmlNode::Element(make_meta(frbr_uri, root_name(root))));
+    let mut akn = XmlElement::new("akomaNtoso").attr("xmlns", AKN_NS);
+    akn.children.push(XmlNode::Element(doc_el));
+    rewrite_all_eids(&mut akn, "");
+    Ok(akn.to_xml_string())
+}
+
+fn add_attachment_doc_meta(element: &mut XmlElement, frbr_uri: &str) {
+    if element.name == "doc"
+        && !element
+            .children
+            .iter()
+            .any(|child| matches!(child, XmlNode::Element(el) if el.name == "meta"))
+    {
+        element
+            .children
+            .insert(0, XmlNode::Element(make_attachment_meta(frbr_uri)));
+    }
+    for child in &mut element.children {
+        if let XmlNode::Element(el) = child {
+            add_attachment_doc_meta(el, frbr_uri);
+        }
+    }
+}
+
 pub fn parse_preprocessed_to_xml(text: &str, root: DocumentRoot) -> Result<String, XmlError> {
     let pairs = parse_pairs_preprocessed(text, root)?;
     let mut root_el = document_to_xml(root, pairs);
@@ -211,6 +257,162 @@ fn root_name(root: DocumentRoot) -> &'static str {
     }
 }
 
+fn make_meta(frbr_uri: &str, root_name: &str) -> XmlElement {
+    let info = FrbrInfo::parse(frbr_uri, root_name);
+    XmlElement::new("meta")
+        .child(
+            XmlElement::new("identification")
+                .attr("source", "#cobalt")
+                .child(
+                    XmlElement::new("FRBRWork")
+                        .child(XmlElement::new("FRBRthis").attr("value", info.work_uri.clone()))
+                        .child(XmlElement::new("FRBRuri").attr("value", info.work_uri.clone()))
+                        .child(
+                            XmlElement::new("FRBRalias")
+                                .attr("value", "Untitled")
+                                .attr("name", "title"),
+                        )
+                        .child(
+                            XmlElement::new("FRBRdate")
+                                .attr("date", info.work_date())
+                                .attr("name", "Generation"),
+                        )
+                        .child(XmlElement::new("FRBRauthor").attr("href", ""))
+                        .child(XmlElement::new("FRBRcountry").attr("value", info.country.clone()))
+                        .child(XmlElement::new("FRBRnumber").attr("value", info.number.clone())),
+                )
+                .child(
+                    XmlElement::new("FRBRExpression")
+                        .child(XmlElement::new("FRBRthis").attr("value", info.expr_uri.clone()))
+                        .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri.clone()))
+                        .child(
+                            XmlElement::new("FRBRdate")
+                                .attr("date", "2026-05-12")
+                                .attr("name", "Generation"),
+                        )
+                        .child(XmlElement::new("FRBRauthor").attr("href", ""))
+                        .child(XmlElement::new("FRBRlanguage").attr("language", "eng")),
+                )
+                .child(
+                    XmlElement::new("FRBRManifestation")
+                        .child(XmlElement::new("FRBRthis").attr("value", info.expr_uri.clone()))
+                        .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri))
+                        .child(
+                            XmlElement::new("FRBRdate")
+                                .attr("date", "2026-05-12")
+                                .attr("name", "Generation"),
+                        )
+                        .child(XmlElement::new("FRBRauthor").attr("href", "")),
+                ),
+        )
+        .child(
+            XmlElement::new("references")
+                .attr("source", "#cobalt")
+                .child(
+                    XmlElement::new("TLCOrganization")
+                        .attr("eId", "cobalt")
+                        .attr("href", "https://github.com/laws-africa/cobalt")
+                        .attr("showAs", "cobalt"),
+                ),
+        )
+}
+
+fn make_attachment_meta(frbr_uri: &str) -> XmlElement {
+    let info = FrbrInfo::parse(frbr_uri, "doc");
+    XmlElement::new("meta").child(
+        XmlElement::new("identification")
+            .attr("source", "#cobalt")
+            .child(
+                XmlElement::new("FRBRWork")
+                    .child(
+                        XmlElement::new("FRBRthis")
+                            .attr("value", format!("{}/!attachment_1", info.work_uri)),
+                    )
+                    .child(XmlElement::new("FRBRuri").attr("value", info.work_uri.clone()))
+                    .child(
+                        XmlElement::new("FRBRalias")
+                            .attr("value", "Untitled")
+                            .attr("name", "title"),
+                    )
+                    .child(
+                        XmlElement::new("FRBRdate")
+                            .attr("date", info.work_date())
+                            .attr("name", "Generation"),
+                    )
+                    .child(XmlElement::new("FRBRauthor").attr("href", ""))
+                    .child(XmlElement::new("FRBRcountry").attr("value", info.country.clone()))
+                    .child(XmlElement::new("FRBRnumber").attr("value", info.number.clone())),
+            )
+            .child(
+                XmlElement::new("FRBRExpression")
+                    .child(
+                        XmlElement::new("FRBRthis")
+                            .attr("value", format!("{}/!attachment_1", info.expr_uri)),
+                    )
+                    .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri.clone()))
+                    .child(
+                        XmlElement::new("FRBRdate")
+                            .attr("date", "2026-05-12")
+                            .attr("name", "Generation"),
+                    )
+                    .child(XmlElement::new("FRBRauthor").attr("href", ""))
+                    .child(XmlElement::new("FRBRlanguage").attr("language", "eng")),
+            )
+            .child(
+                XmlElement::new("FRBRManifestation")
+                    .child(
+                        XmlElement::new("FRBRthis")
+                            .attr("value", format!("{}/!attachment_1", info.expr_uri)),
+                    )
+                    .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri))
+                    .child(
+                        XmlElement::new("FRBRdate")
+                            .attr("date", "2026-05-12")
+                            .attr("name", "Generation"),
+                    )
+                    .child(XmlElement::new("FRBRauthor").attr("href", "")),
+            ),
+    )
+}
+
+struct FrbrInfo {
+    work_uri: String,
+    expr_uri: String,
+    country: String,
+    year: String,
+    number: String,
+}
+
+impl FrbrInfo {
+    fn parse(frbr_uri: &str, root_name: &str) -> Self {
+        let parts: Vec<_> = frbr_uri.trim_matches('/').split('/').collect();
+        let country = parts.get(1).copied().unwrap_or("za").to_string();
+        let year = parts.get(3).copied().unwrap_or("2026").to_string();
+        let number = parts.get(4).copied().unwrap_or("1").to_string();
+        let work_uri = if frbr_uri.starts_with("/akn/") {
+            frbr_uri.to_string()
+        } else {
+            format!("/akn/{country}/{root_name}/{year}/{number}")
+        };
+        let expr_uri = format!("{work_uri}/eng");
+        Self {
+            work_uri,
+            expr_uri,
+            country,
+            year,
+            number,
+        }
+    }
+
+    fn work_date(&self) -> String {
+        if self.year.len() == 4 && self.year.chars().all(|c| c.is_ascii_digit()) {
+            format!("{}-01-01", self.year)
+        } else {
+            self.year.clone()
+        }
+    }
+}
+
 fn push_part(root: &mut XmlElement, parts: &[XmlElement], name: &str) {
     if let Some(part) = parts
         .iter()
@@ -263,7 +465,34 @@ fn container_to_xml(
 ) -> XmlElement {
     let mut blocks = Vec::new();
     collect_container_blocks(pair, &mut blocks, allow_hier);
-    XmlElement::new(name).children(blocks)
+    XmlElement::new(name).children(wrap_top_level_crossheadings(blocks))
+}
+
+fn wrap_top_level_crossheadings(blocks: Vec<XmlElement>) -> Vec<XmlElement> {
+    let mut out = Vec::new();
+    let mut pending = Vec::new();
+    for block in blocks {
+        if block.name == "crossHeading" {
+            pending.push(block);
+        } else {
+            if !pending.is_empty() {
+                out.push(
+                    XmlElement::new("hcontainer")
+                        .attr("name", "hcontainer")
+                        .children(std::mem::take(&mut pending)),
+                );
+            }
+            out.push(block);
+        }
+    }
+    if !pending.is_empty() {
+        out.push(
+            XmlElement::new("hcontainer")
+                .attr("name", "hcontainer")
+                .children(pending),
+        );
+    }
+    out
 }
 
 fn body_container_to_xml(name: &str, pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
@@ -322,8 +551,13 @@ fn body_from_blocks(blocks: Vec<XmlElement>) -> XmlElement {
                 .child(XmlElement::new("content").child(XmlElement::new("p"))),
         );
     }
-    if blocks.iter().all(|block| is_hier_name(&block.name)) {
-        XmlElement::new("body").children(blocks)
+    if blocks
+        .iter()
+        .any(|block| is_hier_name(&block.name) || block.name == "crossHeading")
+    {
+        let mut body = XmlElement::new("body");
+        body.children = body_mixed_children(blocks);
+        body
     } else {
         XmlElement::new("body").child(
             XmlElement::new("hcontainer")
@@ -419,16 +653,15 @@ fn attachment_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let main_body = XmlElement::new("mainBody").children(if blocks.is_empty() {
         vec![XmlElement::new("p")]
     } else {
-        blocks
+        wrap_top_level_crossheadings(blocks)
     });
-    attachment.children.push(XmlNode::Element(
-        XmlElement::new("doc")
-            .attr("name", marker_name)
-            .child(main_body),
-    ));
+    let mut doc = XmlElement::new("doc")
+        .attr("name", marker_name)
+        .child(main_body);
     if let Some(nested) = nested {
-        attachment.children.push(XmlNode::Element(nested));
+        doc.children.push(XmlNode::Element(nested));
     }
+    attachment.children.push(XmlNode::Element(doc));
     attachment
 }
 
@@ -454,10 +687,7 @@ fn speech_hier_to_xml(pair: pest::iterators::Pair<'_, Rule>, group: bool) -> Xml
             }
             Rule::block_attrs => attrs.extend(block_attrs_to_map(child)),
             Rule::hier_element_heading => {
-                let (num, h) = parse_heading(child);
-                if let Some(num) = num.filter(|num| !num.is_empty()) {
-                    blocks.insert(0, XmlElement::new("num").text(num));
-                }
+                let (_num, h) = parse_heading(child);
                 heading = h;
             }
             Rule::speech_from => from = Some(collect_inline_text(child).trim().to_string()),
@@ -543,6 +773,11 @@ fn line_element_to_xml(pair: pest::iterators::Pair<'_, Rule>, name: &str) -> Xml
         }
     }
     el.children = merge_adjacent_text(std::mem::take(&mut el.children));
+    if name == "longTitle" && !el.children.is_empty() {
+        let mut p = XmlElement::new("p");
+        p.children = std::mem::take(&mut el.children);
+        el.children.push(XmlNode::Element(p));
+    }
     el
 }
 
@@ -779,15 +1014,123 @@ fn hier_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
         el.children.push(XmlNode::Element(
             XmlElement::new("content").child(XmlElement::new("p")),
         ));
-    } else if content.iter().any(|c| is_hier_name(&c.name)) {
-        el.children
-            .extend(content.into_iter().map(XmlNode::Element));
+    } else if content
+        .iter()
+        .any(|c| is_hier_name(&c.name) || c.name == "crossHeading")
+    {
+        el.children.extend(mixed_hier_children(content));
     } else {
         el.children.push(XmlNode::Element(
             XmlElement::new("content").children(content),
         ));
     }
     el
+}
+
+fn mixed_hier_children(content: Vec<XmlElement>) -> Vec<XmlNode> {
+    let mut children = Vec::new();
+    let mut pending = Vec::new();
+    let mut seen_hier = false;
+
+    for child in content {
+        let is_hier = is_hier_name(&child.name) || child.name == "crossHeading";
+        if is_hier {
+            if !pending.is_empty() {
+                let wrapper = if seen_hier { "hcontainer" } else { "intro" };
+                children.push(XmlNode::Element(wrap_content_group(
+                    wrapper,
+                    std::mem::take(&mut pending),
+                )));
+            }
+            seen_hier = true;
+            children.push(XmlNode::Element(child));
+        } else {
+            pending.push(child);
+        }
+    }
+
+    if !pending.is_empty() {
+        let wrapper = if seen_hier { "wrapUp" } else { "intro" };
+        children.push(XmlNode::Element(wrap_content_group(wrapper, pending)));
+    }
+
+    children
+}
+
+fn body_mixed_children(content: Vec<XmlElement>) -> Vec<XmlNode> {
+    let mut children = Vec::new();
+    let mut pending_cross = Vec::new();
+    let mut pending_blocks = Vec::new();
+
+    for child in content {
+        if child.name == "crossHeading" {
+            if !pending_blocks.is_empty() {
+                children.push(XmlNode::Element(
+                    XmlElement::new("hcontainer")
+                        .attr("name", "hcontainer")
+                        .child(
+                            XmlElement::new("content")
+                                .children(std::mem::take(&mut pending_blocks)),
+                        ),
+                ));
+            }
+            pending_cross.push(child);
+        } else if is_hier_name(&child.name) {
+            if !pending_cross.is_empty() {
+                children.push(XmlNode::Element(
+                    XmlElement::new("hcontainer")
+                        .attr("name", "hcontainer")
+                        .children(std::mem::take(&mut pending_cross)),
+                ));
+            }
+            if !pending_blocks.is_empty() {
+                children.push(XmlNode::Element(
+                    XmlElement::new("hcontainer")
+                        .attr("name", "hcontainer")
+                        .child(
+                            XmlElement::new("content")
+                                .children(std::mem::take(&mut pending_blocks)),
+                        ),
+                ));
+            }
+            children.push(XmlNode::Element(child));
+        } else {
+            if !pending_cross.is_empty() {
+                children.push(XmlNode::Element(
+                    XmlElement::new("hcontainer")
+                        .attr("name", "hcontainer")
+                        .children(std::mem::take(&mut pending_cross)),
+                ));
+            }
+            pending_blocks.push(child);
+        }
+    }
+
+    if !pending_cross.is_empty() {
+        children.push(XmlNode::Element(
+            XmlElement::new("hcontainer")
+                .attr("name", "hcontainer")
+                .children(pending_cross),
+        ));
+    }
+    if !pending_blocks.is_empty() {
+        children.push(XmlNode::Element(
+            XmlElement::new("hcontainer")
+                .attr("name", "hcontainer")
+                .child(XmlElement::new("content").children(pending_blocks)),
+        ));
+    }
+    children
+}
+
+fn wrap_content_group(name: &str, blocks: Vec<XmlElement>) -> XmlElement {
+    if name == "hcontainer" {
+        XmlElement::new("hcontainer")
+            .attr("name", "hcontainer")
+            .child(XmlElement::new("content").children(blocks))
+    } else {
+        XmlElement::new(name).children(blocks)
+    }
 }
 
 fn collect_hier_content(pair: pest::iterators::Pair<'_, Rule>, content: &mut Vec<XmlElement>) {
@@ -1558,5 +1901,18 @@ mod tests {
         assert!(
             xml.contains("<narrative eId=\"dbsect_1__speech_1__narrative_1\">Hello</narrative>")
         );
+    }
+
+    #[test]
+    fn full_akn_xml_wraps_meta() {
+        let xml = parse_to_akn_xml(
+            "P Hello",
+            DocumentRoot::Statement,
+            "/akn/za/statement/2022/1",
+        )
+        .unwrap();
+        assert!(xml.starts_with("<akomaNtoso xmlns=\"http://docs.oasis-open.org/legaldocml/ns/akn/3.0\"><statement name=\"statement\"><meta>"));
+        assert!(xml.contains("<FRBRuri value=\"/akn/za/statement/2022/1\"/>"));
+        assert!(xml.contains("<mainBody><p eId=\"p_1\">Hello</p></mainBody>"));
     }
 }
