@@ -247,6 +247,7 @@ fn collect_document_parts(pair: pest::iterators::Pair<'_, Rule>, parts: &mut Vec
         Rule::body => parts.push(body_container_to_xml("body", pair)),
         Rule::mainBody => parts.push(body_container_to_xml("mainBody", pair)),
         Rule::debateBody => parts.push(body_container_to_xml("debateBody", pair)),
+        Rule::attachments => parts.push(attachments_to_xml(pair)),
         _ => {
             for child in pair.into_inner() {
                 collect_document_parts(child, parts);
@@ -291,6 +292,9 @@ fn collect_container_blocks(
         }
         Rule::line
         | Rule::p
+        | Rule::speech_container
+        | Rule::speech_group
+        | Rule::speech_block
         | Rule::block_list
         | Rule::bullet_list
         | Rule::table
@@ -355,6 +359,9 @@ fn collect_blocks(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut Vec<XmlEle
         Rule::block_list => blocks.push(block_list_to_xml(pair)),
         Rule::bullet_list => blocks.push(bullet_list_to_xml(pair)),
         Rule::table => blocks.push(table_to_xml(pair)),
+        Rule::speech_container => blocks.push(speech_container_to_xml(pair)),
+        Rule::speech_group => blocks.push(speech_group_to_xml(pair)),
+        Rule::speech_block => blocks.push(speech_block_to_xml(pair)),
         Rule::longtitle => blocks.push(line_element_to_xml(pair, "longTitle")),
         Rule::crossheading => blocks.push(line_element_to_xml(pair, "crossHeading")),
         Rule::block_quote => blocks.push(block_quote_to_xml(pair)),
@@ -364,6 +371,166 @@ fn collect_blocks(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut Vec<XmlEle
                 collect_blocks(child, blocks);
             }
         }
+    }
+}
+
+fn attachments_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut attachments = XmlElement::new("attachments");
+    for child in pair.into_inner() {
+        if child.as_rule() == Rule::attachment {
+            attachments
+                .children
+                .push(XmlNode::Element(attachment_to_xml(child)));
+        }
+    }
+    attachments
+}
+
+fn attachment_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut marker_name = "attachment".to_string();
+    let mut att_attrs = BTreeMap::new();
+    let mut heading = None;
+    let mut blocks = Vec::new();
+    let mut nested = None;
+
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::attachment_marker => marker_name = child.as_str().to_ascii_lowercase(),
+            Rule::block_attrs => att_attrs.extend(block_attrs_to_map(child)),
+            Rule::attachment_heading => {
+                let text = collect_inline_text(child).trim().to_string();
+                if !text.is_empty() {
+                    heading = Some(text);
+                }
+            }
+            Rule::attachments => nested = Some(attachments_to_xml(child)),
+            _ => collect_block_descendants(child, &mut blocks),
+        }
+    }
+
+    let mut attachment = XmlElement::new("attachment");
+    attachment.attrs = att_attrs;
+    if let Some(heading) = heading {
+        attachment
+            .children
+            .push(XmlNode::Element(XmlElement::new("heading").text(heading)));
+    }
+
+    let main_body = XmlElement::new("mainBody").children(if blocks.is_empty() {
+        vec![XmlElement::new("p")]
+    } else {
+        blocks
+    });
+    attachment.children.push(XmlNode::Element(
+        XmlElement::new("doc")
+            .attr("name", marker_name)
+            .child(main_body),
+    ));
+    if let Some(nested) = nested {
+        attachment.children.push(XmlNode::Element(nested));
+    }
+    attachment
+}
+
+fn speech_container_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    speech_hier_to_xml(pair, false)
+}
+
+fn speech_group_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    speech_hier_to_xml(pair, true)
+}
+
+fn speech_hier_to_xml(pair: pest::iterators::Pair<'_, Rule>, group: bool) -> XmlElement {
+    let mut name = if group { "speech" } else { "debateSection" }.to_string();
+    let mut attrs = BTreeMap::new();
+    let mut heading = None;
+    let mut from = None;
+    let mut blocks = Vec::new();
+
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::speech_container_name | Rule::speech_group_name => {
+                name = speech_name(child.as_str())
+            }
+            Rule::block_attrs => attrs.extend(block_attrs_to_map(child)),
+            Rule::hier_element_heading => {
+                let (num, h) = parse_heading(child);
+                if let Some(num) = num.filter(|num| !num.is_empty()) {
+                    blocks.insert(0, XmlElement::new("num").text(num));
+                }
+                heading = h;
+            }
+            Rule::speech_from => from = Some(collect_inline_text(child).trim().to_string()),
+            Rule::speech_container => blocks.push(speech_container_to_xml(child)),
+            Rule::speech_group => blocks.push(speech_group_to_xml(child)),
+            Rule::speech_block => blocks.push(speech_block_to_xml(child)),
+            Rule::line | Rule::p | Rule::block_list | Rule::bullet_list | Rule::table => {
+                collect_blocks(child, &mut blocks)
+            }
+            _ => collect_block_descendants(child, &mut blocks),
+        }
+    }
+
+    if name == "debateSection" {
+        attrs
+            .entry("name".to_string())
+            .or_insert_with(|| "debateSection".to_string());
+    }
+    if group && !attrs.contains_key("by") {
+        if let Some(from) = &from {
+            let by: String = from.chars().filter(|c| c.is_alphanumeric()).collect();
+            attrs.insert("by".to_string(), format!("#{by}"));
+        }
+    }
+
+    let mut el = XmlElement::new(name);
+    el.attrs = attrs;
+    if let Some(heading) = heading.filter(|heading| !heading.is_empty()) {
+        el.children
+            .push(XmlNode::Element(XmlElement::new("heading").text(heading)));
+    }
+    if let Some(from) = from {
+        el.children
+            .push(XmlNode::Element(XmlElement::new("from").text(from)));
+    }
+    el.children.extend(blocks.into_iter().map(XmlNode::Element));
+    if el.children.is_empty() {
+        el.children.push(XmlNode::Element(XmlElement::new("p")));
+    }
+    el
+}
+
+fn speech_block_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut name = "narrative".to_string();
+    let mut attrs = BTreeMap::new();
+    let mut children = Vec::new();
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::speech_block_name => name = child.as_str().to_ascii_lowercase(),
+            Rule::block_attrs => attrs.extend(block_attrs_to_map(child)),
+            _ => collect_inline_nodes_inner(child, &mut children),
+        }
+    }
+    let mut el = XmlElement::new(name);
+    el.attrs = attrs;
+    el.children = merge_adjacent_text(children);
+    el
+}
+
+fn speech_name(name: &str) -> String {
+    match name.to_ascii_lowercase().as_str() {
+        "administrationofoath" => "administrationOfOath".to_string(),
+        "debatesection" => "debateSection".to_string(),
+        "declarationofvote" => "declarationOfVote".to_string(),
+        "ministerialstatements" => "ministerialStatements".to_string(),
+        "noticesofmotion" => "noticesOfMotion".to_string(),
+        "oralstatements" => "oralStatements".to_string(),
+        "personalstatements" => "personalStatements".to_string(),
+        "pointoforder" => "pointOfOrder".to_string(),
+        "proceduralmotions" => "proceduralMotions".to_string(),
+        "rollcall" => "rollCall".to_string(),
+        "writtenstatements" => "writtenStatements".to_string(),
+        other => other.to_string(),
     }
 }
 
@@ -554,6 +721,9 @@ fn collect_block_descendants(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut
         Rule::line
         | Rule::p
         | Rule::hier_element_block
+        | Rule::speech_container
+        | Rule::speech_group
+        | Rule::speech_block
         | Rule::block_list
         | Rule::bullet_list
         | Rule::table
@@ -1362,5 +1532,31 @@ mod tests {
         .unwrap();
         assert!(xml.contains("<authorialNote eId=\"p_1__authorialNote_1\" marker=\"1\" placement=\"bottom\"><p eId=\"p_1__authorialNote_1__p_1\">footnote text</p></authorialNote>"));
         assert!(!xml.contains("displaced"));
+    }
+
+    #[test]
+    fn attachment_xml() {
+        let xml = parse_to_xml(
+            "ATTACHMENT Schedule\n  attached text",
+            DocumentRoot::Statement,
+        )
+        .unwrap();
+        assert!(xml.contains("<attachments>"));
+        assert!(xml.contains("<attachment eId=\"att_1\"><heading>Schedule</heading><doc name=\"attachment\"><mainBody><p eId=\"att_1__p_1\">attached text</p></mainBody></doc></attachment>"));
+    }
+
+    #[test]
+    fn debate_speech_xml() {
+        let xml = parse_to_xml(
+            "DEBATESECTION 1 - Debate\n  SPEECH\n    FROM Speaker Name\n    NARRATIVE Hello",
+            DocumentRoot::Debate,
+        )
+        .unwrap();
+        assert!(xml.contains("<debateSection eId=\"dbsect_1\" name=\"debateSection\">"));
+        assert!(xml.contains("<speech by=\"#SpeakerName\" eId=\"dbsect_1__speech_1\">"));
+        assert!(xml.contains("<from eId=\"dbsect_1__speech_1__from_1\">Speaker Name</from>"));
+        assert!(
+            xml.contains("<narrative eId=\"dbsect_1__speech_1__narrative_1\">Hello</narrative>")
+        );
     }
 }
