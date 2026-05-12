@@ -1,0 +1,160 @@
+act_doc = { SOI ~ act ~ EOI }
+bill_doc = { SOI ~ bill ~ EOI }
+debate_doc = { SOI ~ debate ~ EOI }
+debate_report_doc = { SOI ~ debateReport ~ EOI }
+doc_doc = { SOI ~ doc ~ EOI }
+judgment_doc = { SOI ~ judgment ~ EOI }
+statement_doc = { SOI ~ statement ~ EOI }
+
+judgment = { judgmentBody ~ conclusions? ~ attachments? }
+judgmentBody = { introduction? ~ background? ~ arguments? ~ remedies? ~ motivation? ~ decision? }
+
+act = { hierarchical_structure }
+bill = { hierarchical_structure }
+hierarchical_structure = { preface? ~ preamble? ~ body ~ conclusions? ~ attachments? }
+
+debateReport = { open_structure }
+doc = { open_structure }
+statement = { open_structure }
+open_structure = { preface? ~ preamble? ~ mainBody ~ conclusions? ~ attachments? }
+
+debate = { debate_structure }
+debate_structure = { preface? ~ debateBody ~ conclusions? ~ attachments? }
+
+hier_element = { crossheading | hier_element_block }
+hier_element_block = { hier_element_name ~ block_attrs? ~ hier_element_heading? ~ eol ~ (indent ~ subheading? ~ hier_block_element* ~ dedent)? }
+hier_element_heading = { hier_element_heading_num? ~ hier_element_heading_heading? }
+hier_element_heading_num = { !hier_element_heading_heading ~ space ~ (!hier_element_heading_heading ~ num_content)+ }
+hier_element_heading_heading = { space ~ "-" ~ heading_content }
+heading_content = { (space ~ inline+) | &eol }
+num_content = { escape | not_newline }
+hier_block_element = { hier_element | block_element }
+hier_indent = { (indent ~ hier_element+ ~ dedent) | hier_element }
+hier_block_indent = { (indent ~ hier_block_element+ ~ dedent) | hier_block_element }
+speech_container_indent = { (indent ~ speech_container+ ~ dedent) | speech_container }
+
+hier_element_name = {
+    "ALINEA" | "ARTICLE" | "BOOK" | "CHAPTER" | "CLAUSE" | "DIVISION" | "INDENT" | "LEVEL" | "LIST"
+    | "PARAGRAPH" | "PART" | "POINT" | "PROVISO" | "RULE" | "SECTION" | "SUBCHAPTER"
+    | "SUBCLAUSE" | "SUBDIVISION" | "SUBLIST" | "SUBPARAGRAPH" | "SUBPART" | "SUBRULE"
+    | "SUBSECTION" | "SUBTITLE" | "TITLE" | "TOME" | "TRANSITIONAL"
+    | "ART" | "CHAP" | "PARA" | "SEC" | "SUBCHAP" | "SUBPARA" | "SUBSEC"
+}
+
+speech_container = { speech_container_name ~ block_attrs? ~ hier_element_heading? ~ eol ~ (indent ~ subheading? ~ speech_hier_block_element* ~ dedent)? }
+speech_hier_block_element = { speech_container | speech_group | speech_block_element }
+speech_group = { speech_group_name ~ block_attrs? ~ hier_element_heading? ~ eol ~ (indent ~ subheading? ~ speech_from ~ speech_hier_block_element+ ~ dedent) }
+speech_from = { "FROM" ~ space ~ inline+ ~ eol }
+speech_container_name = {
+    "ADDRESS" | "ADJOURNMENT" | "ADMINISTRATIONOFOATH" | "COMMUNICATION" | "DEBATESECTION"
+    | "DECLARATIONOFVOTE" | "MINISTERIALSTATEMENTS" | "NATIONALINTEREST" | "NOTICESOFMOTION"
+    | "ORALSTATEMENTS" | "PAPERS" | "PERSONALSTATEMENTS" | "PETITIONS" | "POINTOFORDER"
+    | "PRAYERS" | "PROCEDURALMOTIONS" | "QUESTIONS" | "RESOLUTIONS" | "ROLLCALL"
+    | "WRITTENSTATEMENTS"
+}
+speech_group_name = { "SPEECHGROUP" | "SPEECH" | "QUESTION" | "ANSWER" }
+
+preface = { preface_marker ~ block_attrs? ~ eol ~ (!preamble_marker ~ !body_marker ~ block_element)* }
+preamble = { preamble_marker ~ block_attrs? ~ eol ~ (!body_marker ~ block_element)* }
+body = { body_marker? ~ (!conclusions_marker ~ !attachment_marker ~ hier_block_indent)* }
+mainBody = { body_marker? ~ (!conclusions_marker ~ !attachment_marker ~ hier_block_indent)* }
+debateBody = { body_marker? ~ (!conclusions_marker ~ !attachment_marker ~ speech_container_indent)* }
+conclusions = { conclusions_marker ~ (!attachment_marker ~ block_element)* }
+
+introduction = { introduction_marker ~ (!background_marker ~ !arguments_marker ~ !remedies_marker ~ !motivation_marker ~ !decision_marker ~ !conclusions_marker ~ !attachment_marker ~ hier_block_indent)* }
+background = { background_marker ~ (!arguments_marker ~ !remedies_marker ~ !motivation_marker ~ !decision_marker ~ !conclusions_marker ~ !attachment_marker ~ hier_block_indent)* }
+arguments = { arguments_marker? ~ (!remedies_marker ~ !motivation_marker ~ !decision_marker ~ !conclusions_marker ~ !attachment_marker ~ hier_block_indent)* }
+remedies = { remedies_marker ~ (!motivation_marker ~ !decision_marker ~ !conclusions_marker ~ !attachment_marker ~ hier_block_indent)* }
+motivation = { motivation_marker ~ (!decision_marker ~ !conclusions_marker ~ !attachment_marker ~ hier_block_indent)* }
+decision = { decision_marker ~ (!conclusions_marker ~ !attachment_marker ~ hier_block_indent)* }
+
+attachments = { attachment+ }
+attachment = {
+    attachment_marker ~ block_attrs? ~ attachment_heading? ~ eol
+    ~ (indent ~ subheading? ~ (!attachment_marker ~ hier_block_element)* ~ attachments? ~ dedent)?
+    ~ (!attachment_marker ~ hier_block_indent)*
+}
+attachment_heading = { space ~ inline* }
+
+body_marker = { "BODY" ~ eol }
+conclusions_marker = { "CONCLUSIONS" ~ eol }
+preamble_marker = { "PREAMBLE" }
+preface_marker = { "PREFACE" }
+introduction_marker = { "INTRODUCTION" ~ eol }
+background_marker = { "BACKGROUND" ~ eol }
+arguments_marker = { "ARGUMENTS" ~ eol }
+remedies_marker = { "REMEDIES" ~ eol }
+motivation_marker = { "MOTIVATION" ~ eol }
+decision_marker = { "DECISION" ~ eol }
+attachment_marker = { "ATTACHMENT" | "APPENDIX" | "SCHEDULE" | "ANNEXURE" }
+
+block_element = { nested_block_element | block_elements }
+nested_block_element = { indent ~ block_element+ ~ dedent }
+block_elements = { block_list | bullet_list | table | longtitle | footnote | block_quote | blocks | p | line }
+
+speech_block_element = { nested_speech_block_element | speech_block_elements }
+nested_speech_block_element = { indent ~ speech_block_element+ ~ dedent }
+speech_block_elements = { speech_block | block_list | bullet_list | table | footnote | p | line }
+speech_block = { speech_block_name ~ block_attrs? ~ space ~ inline+ ~ eol }
+speech_block_name = { "SCENE" | "NARRATIVE" | "SUMMARY" }
+
+longtitle = { "LONGTITLE" ~ (space ~ inline+)? ~ eol }
+subheading = { "SUBHEADING" ~ (space ~ inline+)? ~ eol }
+crossheading = { "CROSSHEADING" ~ block_attrs? ~ (space ~ inline+)? ~ eol }
+p = { "P" ~ block_attrs? ~ space ~ inline+ ~ eol }
+line = { !dedent ~ inline+ ~ eol }
+
+blocks = { "BLOCKS" ~ block_attrs? ~ eol ~ indent ~ block_element+ ~ dedent }
+
+block_list = { ("BLOCKLIST" | "ITEMS") ~ block_attrs? ~ eol ~ indent ~ block_list_intro? ~ block_list_item+ ~ block_list_wrapup? ~ dedent }
+block_list_intro = { !"ITEM" ~ line ~ footnote* }
+block_list_wrapup = { line ~ footnote* }
+block_list_item = { "ITEM" ~ hier_element_heading? ~ eol ~ (indent ~ subheading? ~ block_element+ ~ dedent)? }
+
+bullet_list = { "BULLETS" ~ block_attrs? ~ eol ~ indent ~ bullet_list_item+ ~ dedent }
+bullet_list_item = { ("*" ~ space?)? ~ (block_elements | eol) ~ (indent ~ block_element+ ~ dedent)? }
+
+table = { "TABLE" ~ block_attrs? ~ eol ~ indent ~ table_row+ ~ dedent }
+table_row = { "TR" ~ eol ~ indent ~ table_cell+ ~ dedent }
+table_cell = { ("TH" | "TC") ~ block_attrs? ~ eol ~ (indent ~ block_element+ ~ dedent)? }
+
+block_attrs = { block_attr_class* ~ block_attr_pairs? }
+block_attr_class = { "." ~ class_name? }
+block_attr_pairs = { "{" ~ block_attr? ~ space? ~ ("|" ~ space? ~ block_attr?)* ~ "}" }
+block_attr = { attr_name ~ (space ~ attr_value)? }
+class_name = @{ (!(space | "\n" | "|" | "{" | "}" | ".") ~ ANY)+ }
+attr_name = @{ (!(space | "\n" | "|" | "{" | "}") ~ ANY)+ }
+attr_value = @{ (!("\n" | "|" | "}") ~ ANY)* }
+
+block_quote = { "QUOTE" ~ block_attrs? ~ eol ~ indent ~ hier_block_element+ ~ dedent }
+footnote = { "FOOTNOTE" ~ space ~ marker ~ space? ~ eol ~ indent ~ hier_block_element+ ~ dedent }
+marker = @{ (!(" " | "\n") ~ ANY)+ }
+
+inline = { non_inline_start | escape | inline_marker | not_newline }
+non_inline_start = @{ (!("*" | "/" | "_" | "{" | "\n" | "\\") ~ ANY)+ }
+inline_nested = { inline_nested_start | escape | (!inline_close ~ inline_marker | not_newline) }
+inline_nested_start = @{ (!("*" | "/" | "_" | "{" | "\n" | "\\" | "}") ~ ANY)+ }
+inline_marker = { bold | footnote_ref | image | italics | ref_ | remark | sup | sub | standard_inline | underline }
+escape = @{ "\\" ~ not_newline }
+bold = { "**" ~ (!"**" ~ inline)+ ~ "**" }
+italics = { "//" ~ (!"//" ~ inline)+ ~ "//" }
+underline = { "__" ~ (!"__" ~ inline)+ ~ "__" }
+remark = { inline_open ~ "*" ~ (!inline_close ~ !indent ~ !dedent ~ ("\n" | inline_nested))+ ~ inline_close }
+image = { inline_open ~ "IMG" ~ space? ~ (!inline_close ~ !(" " | "\n") ~ ANY)+ ~ (!inline_close ~ not_newline)* ~ inline_close }
+sup = { inline_open ~ "^" ~ (!inline_close ~ inline_nested)+ ~ inline_close }
+sub = { inline_open ~ "_" ~ (!inline_close ~ inline_nested)+ ~ inline_close }
+ref_ = { inline_open ~ ">" ~ (!inline_close ~ !(" " | "\n") ~ ANY)* ~ " "? ~ (!inline_close ~ inline_nested)* ~ inline_close }
+footnote_ref = { inline_open ~ "FOOTNOTE" ~ space ~ (!inline_close ~ not_newline)+ ~ inline_close }
+standard_inline = { inline_open ~ standard_inline_marker ~ block_attrs? ~ " "? ~ (!inline_close ~ inline_nested)* ~ inline_close }
+inline_open = { "{{" }
+inline_close = { "}}" }
+standard_inline_marker = { "abbr" | "def" | "em" | "inline" | "term" | "-" | "+" }
+
+eol = { newline ~ empty_line* }
+empty_line = { newline }
+space = { " "+ }
+newline = { "\n" }
+indent = { "\u{000E}" ~ eol }
+dedent = { "\u{000F}" ~ eol }
+not_newline = { !"\n" ~ ANY }
+
