@@ -196,9 +196,166 @@ fn collect_blocks(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut Vec<XmlEle
         Rule::hier_element_block => {
             blocks.push(hier_to_xml(pair));
         }
+        Rule::block_list => blocks.push(block_list_to_xml(pair)),
+        Rule::bullet_list => blocks.push(bullet_list_to_xml(pair)),
+        Rule::table => blocks.push(table_to_xml(pair)),
         _ => {
             for child in pair.into_inner() {
                 collect_blocks(child, blocks);
+            }
+        }
+    }
+}
+
+fn block_list_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut list = XmlElement::new("blockList");
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::block_attrs => list.attrs.extend(block_attrs_to_map(child)),
+            Rule::block_list_intro => list.children.push(XmlNode::Element(line_like_to_named_xml(
+                child,
+                "listIntroduction",
+            ))),
+            Rule::block_list_wrapup => list.children.push(XmlNode::Element(
+                line_like_to_named_xml(child, "listWrapUp"),
+            )),
+            Rule::block_list_item => list
+                .children
+                .push(XmlNode::Element(block_list_item_to_xml(child))),
+            _ => {}
+        }
+    }
+    list
+}
+
+fn line_like_to_named_xml(pair: pest::iterators::Pair<'_, Rule>, name: &str) -> XmlElement {
+    let mut el = XmlElement::new(name);
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::line | Rule::p => el.children.extend(p_to_xml(child).children),
+            Rule::footnote => {}
+            _ => {}
+        }
+    }
+    el
+}
+
+fn block_list_item_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut item = XmlElement::new("item");
+    let mut blocks = Vec::new();
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::hier_element_heading => {
+                let (num, heading) = parse_heading(child);
+                if let Some(num) = num.filter(|num| !num.is_empty()) {
+                    item.children
+                        .push(XmlNode::Element(XmlElement::new("num").text(num)));
+                }
+                if let Some(heading) = heading.filter(|heading| !heading.is_empty()) {
+                    item.children
+                        .push(XmlNode::Element(XmlElement::new("heading").text(heading)));
+                }
+            }
+            Rule::block_element => collect_blocks(child, &mut blocks),
+            Rule::subheading => {}
+            _ => collect_block_descendants(child, &mut blocks),
+        }
+    }
+    if blocks.is_empty() {
+        blocks.push(XmlElement::new("p"));
+    }
+    item.children
+        .extend(blocks.into_iter().map(XmlNode::Element));
+    item
+}
+
+fn bullet_list_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut ul = XmlElement::new("ul");
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::block_attrs => ul.attrs.extend(block_attrs_to_map(child)),
+            Rule::bullet_list_item => ul
+                .children
+                .push(XmlNode::Element(bullet_list_item_to_xml(child))),
+            _ => {}
+        }
+    }
+    ul
+}
+
+fn bullet_list_item_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut blocks = Vec::new();
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::block_elements | Rule::block_element => collect_blocks(child, &mut blocks),
+            _ => collect_block_descendants(child, &mut blocks),
+        }
+    }
+    if blocks.is_empty() {
+        blocks.push(XmlElement::new("p"));
+    }
+    XmlElement::new("li").children(blocks)
+}
+
+fn table_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut table = XmlElement::new("table");
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::block_attrs => table.attrs.extend(block_attrs_to_map(child)),
+            Rule::table_row => table
+                .children
+                .push(XmlNode::Element(table_row_to_xml(child))),
+            _ => {}
+        }
+    }
+    table
+}
+
+fn table_row_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut row = XmlElement::new("tr");
+    for child in pair.into_inner() {
+        if child.as_rule() == Rule::table_cell {
+            row.children
+                .push(XmlNode::Element(table_cell_to_xml(child)));
+        }
+    }
+    row
+}
+
+fn table_cell_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let name = if pair.as_str().starts_with("TH") {
+        "th"
+    } else {
+        "td"
+    };
+    let mut cell = XmlElement::new(name);
+    let mut blocks = Vec::new();
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::block_attrs => cell.attrs.extend(block_attrs_to_map(child)),
+            Rule::block_element => collect_blocks(child, &mut blocks),
+            _ => collect_block_descendants(child, &mut blocks),
+        }
+    }
+    if blocks.is_empty() {
+        blocks.push(XmlElement::new("p"));
+    }
+    cell.children
+        .extend(blocks.into_iter().map(XmlNode::Element));
+    cell
+}
+
+fn collect_block_descendants(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut Vec<XmlElement>) {
+    match pair.as_rule() {
+        Rule::line
+        | Rule::p
+        | Rule::hier_element_block
+        | Rule::block_list
+        | Rule::bullet_list
+        | Rule::table => collect_blocks(pair, blocks),
+        _ => {
+            for child in pair.into_inner() {
+                collect_block_descendants(child, blocks);
             }
         }
     }
@@ -753,5 +910,37 @@ mod tests {
     fn paragraph_attrs_are_preserved() {
         let xml = parse_to_xml("P.rtl{foo bar} Text", DocumentRoot::Statement).unwrap();
         assert!(xml.contains("<p class=\"rtl\" eId=\"p_1\" foo=\"bar\">Text</p>"));
+    }
+
+    #[test]
+    fn block_list_xml() {
+        let xml = parse_to_xml(
+            "ITEMS\n  ITEM (a)\n    first\n\n  ITEM (b) - Heading\n    second",
+            DocumentRoot::Statement,
+        )
+        .unwrap();
+        assert!(xml.contains("<blockList eId=\"list_1\">"));
+        assert!(xml.contains("<item eId=\"list_1__item_a\">"));
+        assert!(xml.contains("<num>(a)</num>"));
+        assert!(xml.contains("<heading>Heading</heading>"));
+    }
+
+    #[test]
+    fn bullet_list_xml() {
+        let xml = parse_to_xml("BULLETS\n  * first\n  * second", DocumentRoot::Statement).unwrap();
+        assert!(xml.contains("<ul eId=\"ul_1\">"));
+        assert!(xml.contains("<li eId=\"ul_1__li_1\"><p eId=\"ul_1__li_1__p_1\">first</p></li>"));
+    }
+
+    #[test]
+    fn table_xml() {
+        let xml = parse_to_xml(
+            "TABLE\n  TR\n    TH\n      heading\n    TC{colspan 2}\n      cell",
+            DocumentRoot::Statement,
+        )
+        .unwrap();
+        assert!(xml.contains("<table eId=\"table_1\">"));
+        assert!(xml.contains("<th><p eId=\"table_1__p_1\">heading</p></th>"));
+        assert!(xml.contains("<td colspan=\"2\"><p eId=\"table_1__p_2\">cell</p></td>"));
     }
 }
