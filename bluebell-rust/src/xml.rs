@@ -75,12 +75,8 @@ pub fn parse_to_xml(text: &str, root: DocumentRoot) -> Result<String, XmlError> 
 
 pub fn parse_preprocessed_to_xml(text: &str, root: DocumentRoot) -> Result<String, XmlError> {
     let pairs = parse_pairs_preprocessed(text, root)?;
-    let mut root_el = build_document(root);
-    let mut blocks = Vec::new();
-    for pair in pairs {
-        collect_blocks(pair, &mut blocks);
-    }
-    insert_blocks(&mut root_el, root, blocks);
+    let mut root_el = document_to_xml(root, pairs);
+    resolve_displaced_content(&mut root_el);
     rewrite_all_eids(&mut root_el, "");
     root_el
         .attrs
@@ -130,46 +126,206 @@ fn open_doc(name: &str) -> XmlElement {
         .child(XmlElement::new("mainBody").child(XmlElement::new("p")))
 }
 
-fn insert_blocks(root_el: &mut XmlElement, root: DocumentRoot, blocks: Vec<XmlElement>) {
-    if blocks.is_empty() {
-        return;
+fn document_to_xml(root: DocumentRoot, pairs: pest::iterators::Pairs<'_, Rule>) -> XmlElement {
+    let mut parts = Vec::new();
+    for pair in pairs {
+        collect_document_parts(pair, &mut parts);
     }
+    if parts.is_empty() {
+        return build_document(root);
+    }
+
+    let mut root_el = XmlElement::new(root_name(root)).attr("name", root_name(root));
     match root {
         DocumentRoot::Act | DocumentRoot::Bill => {
-            let body = if blocks.iter().all(|block| is_hier_name(&block.name)) {
-                XmlElement::new("body").children(blocks)
-            } else {
-                XmlElement::new("body").child(
-                    XmlElement::new("hcontainer")
-                        .attr("name", "hcontainer")
-                        .child(XmlElement::new("content").children(blocks)),
-                )
-            };
-            root_el.children = vec![XmlNode::Element(body)];
+            push_part(&mut root_el, &parts, "preface");
+            push_part(&mut root_el, &parts, "preamble");
+            push_required_part(&mut root_el, &parts, "body", default_body());
+            push_part(&mut root_el, &parts, "conclusions");
+            push_part(&mut root_el, &parts, "attachments");
         }
         DocumentRoot::Statement | DocumentRoot::Doc | DocumentRoot::DebateReport => {
-            root_el.children = vec![XmlNode::Element(
-                XmlElement::new("mainBody").children(blocks),
-            )];
+            push_part(&mut root_el, &parts, "preface");
+            push_part(&mut root_el, &parts, "preamble");
+            push_required_part(
+                &mut root_el,
+                &parts,
+                "mainBody",
+                XmlElement::new("mainBody").child(XmlElement::new("p")),
+            );
+            push_part(&mut root_el, &parts, "conclusions");
+            push_part(&mut root_el, &parts, "attachments");
         }
         DocumentRoot::Judgment => {
-            root_el.children = vec![
-                XmlNode::Element(XmlElement::new("header")),
-                XmlNode::Element(
-                    XmlElement::new("judgmentBody")
-                        .child(XmlElement::new("introduction").children(blocks)),
-                ),
-            ];
+            root_el
+                .children
+                .push(XmlNode::Element(XmlElement::new("header")));
+            let mut judgment_body = XmlElement::new("judgmentBody");
+            for name in [
+                "introduction",
+                "background",
+                "arguments",
+                "remedies",
+                "motivation",
+                "decision",
+            ] {
+                push_part(&mut judgment_body, &parts, name);
+            }
+            if judgment_body.children.is_empty() {
+                judgment_body.children.push(XmlNode::Element(
+                    XmlElement::new("introduction").child(XmlElement::new("p")),
+                ));
+            }
+            root_el.children.push(XmlNode::Element(judgment_body));
+            push_part(&mut root_el, &parts, "conclusions");
+            push_part(&mut root_el, &parts, "attachments");
         }
         DocumentRoot::Debate => {
-            root_el.children = vec![XmlNode::Element(
+            push_part(&mut root_el, &parts, "preface");
+            push_required_part(
+                &mut root_el,
+                &parts,
+                "debateBody",
                 XmlElement::new("debateBody").child(
                     XmlElement::new("debateSection")
                         .attr("name", "debateSection")
-                        .children(blocks),
+                        .child(XmlElement::new("p")),
                 ),
-            )];
+            );
+            push_part(&mut root_el, &parts, "conclusions");
+            push_part(&mut root_el, &parts, "attachments");
         }
+    }
+    root_el
+}
+
+fn root_name(root: DocumentRoot) -> &'static str {
+    match root {
+        DocumentRoot::Act => "act",
+        DocumentRoot::Bill => "bill",
+        DocumentRoot::Debate => "debate",
+        DocumentRoot::DebateReport => "debateReport",
+        DocumentRoot::Doc => "doc",
+        DocumentRoot::Judgment => "judgment",
+        DocumentRoot::Statement => "statement",
+    }
+}
+
+fn push_part(root: &mut XmlElement, parts: &[XmlElement], name: &str) {
+    if let Some(part) = parts
+        .iter()
+        .find(|part| part.name == name && !part.children.is_empty())
+    {
+        root.children.push(XmlNode::Element(part.clone()));
+    }
+}
+
+fn push_required_part(
+    root: &mut XmlElement,
+    parts: &[XmlElement],
+    name: &str,
+    default: XmlElement,
+) {
+    if let Some(part) = parts.iter().find(|part| part.name == name) {
+        root.children.push(XmlNode::Element(part.clone()));
+    } else {
+        root.children.push(XmlNode::Element(default));
+    }
+}
+
+fn collect_document_parts(pair: pest::iterators::Pair<'_, Rule>, parts: &mut Vec<XmlElement>) {
+    match pair.as_rule() {
+        Rule::preface => parts.push(container_to_xml("preface", pair, false)),
+        Rule::preamble => parts.push(container_to_xml("preamble", pair, false)),
+        Rule::conclusions => parts.push(container_to_xml("conclusions", pair, false)),
+        Rule::introduction => parts.push(container_to_xml("introduction", pair, true)),
+        Rule::background => parts.push(container_to_xml("background", pair, true)),
+        Rule::arguments => parts.push(container_to_xml("arguments", pair, true)),
+        Rule::remedies => parts.push(container_to_xml("remedies", pair, true)),
+        Rule::motivation => parts.push(container_to_xml("motivation", pair, true)),
+        Rule::decision => parts.push(container_to_xml("decision", pair, true)),
+        Rule::body => parts.push(body_container_to_xml("body", pair)),
+        Rule::mainBody => parts.push(body_container_to_xml("mainBody", pair)),
+        Rule::debateBody => parts.push(body_container_to_xml("debateBody", pair)),
+        _ => {
+            for child in pair.into_inner() {
+                collect_document_parts(child, parts);
+            }
+        }
+    }
+}
+
+fn container_to_xml(
+    name: &str,
+    pair: pest::iterators::Pair<'_, Rule>,
+    allow_hier: bool,
+) -> XmlElement {
+    let mut blocks = Vec::new();
+    collect_container_blocks(pair, &mut blocks, allow_hier);
+    XmlElement::new(name).children(blocks)
+}
+
+fn body_container_to_xml(name: &str, pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut blocks = Vec::new();
+    collect_container_blocks(pair, &mut blocks, true);
+    match name {
+        "body" => body_from_blocks(blocks),
+        "debateBody" => XmlElement::new(name).children(blocks),
+        _ => XmlElement::new(name).children(if blocks.is_empty() {
+            vec![XmlElement::new("p")]
+        } else {
+            blocks
+        }),
+    }
+}
+
+fn collect_container_blocks(
+    pair: pest::iterators::Pair<'_, Rule>,
+    blocks: &mut Vec<XmlElement>,
+    allow_hier: bool,
+) {
+    match pair.as_rule() {
+        Rule::hier_element_block if allow_hier => blocks.push(hier_to_xml(pair)),
+        Rule::hier_element_block => {
+            blocks.push(XmlElement::new("p").text(pair.as_str().trim().to_string()))
+        }
+        Rule::line
+        | Rule::p
+        | Rule::block_list
+        | Rule::bullet_list
+        | Rule::table
+        | Rule::longtitle
+        | Rule::crossheading
+        | Rule::footnote
+        | Rule::block_quote => collect_blocks(pair, blocks),
+        _ => {
+            for child in pair.into_inner() {
+                collect_container_blocks(child, blocks, allow_hier);
+            }
+        }
+    }
+}
+
+fn default_body() -> XmlElement {
+    body_from_blocks(Vec::new())
+}
+
+fn body_from_blocks(blocks: Vec<XmlElement>) -> XmlElement {
+    if blocks.is_empty() {
+        return XmlElement::new("body").child(
+            XmlElement::new("hcontainer")
+                .attr("name", "hcontainer")
+                .child(XmlElement::new("content").child(XmlElement::new("p"))),
+        );
+    }
+    if blocks.iter().all(|block| is_hier_name(&block.name)) {
+        XmlElement::new("body").children(blocks)
+    } else {
+        XmlElement::new("body").child(
+            XmlElement::new("hcontainer")
+                .attr("name", "hcontainer")
+                .child(XmlElement::new("content").children(blocks)),
+        )
     }
 }
 
@@ -199,13 +355,60 @@ fn collect_blocks(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut Vec<XmlEle
         Rule::block_list => blocks.push(block_list_to_xml(pair)),
         Rule::bullet_list => blocks.push(bullet_list_to_xml(pair)),
         Rule::table => blocks.push(table_to_xml(pair)),
-        Rule::footnote => {}
+        Rule::longtitle => blocks.push(line_element_to_xml(pair, "longTitle")),
+        Rule::crossheading => blocks.push(line_element_to_xml(pair, "crossHeading")),
+        Rule::block_quote => blocks.push(block_quote_to_xml(pair)),
+        Rule::footnote => blocks.push(footnote_to_xml(pair)),
         _ => {
             for child in pair.into_inner() {
                 collect_blocks(child, blocks);
             }
         }
     }
+}
+
+fn line_element_to_xml(pair: pest::iterators::Pair<'_, Rule>, name: &str) -> XmlElement {
+    let mut el = XmlElement::new(name);
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::block_attrs => el.attrs.extend(block_attrs_to_map(child)),
+            _ => collect_inline_nodes_inner(child, &mut el.children),
+        }
+    }
+    el.children = merge_adjacent_text(std::mem::take(&mut el.children));
+    el
+}
+
+fn block_quote_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut quote_attrs = BTreeMap::new();
+    let mut blocks = Vec::new();
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::block_attrs => quote_attrs.extend(block_attrs_to_map(child)),
+            _ => collect_block_descendants(child, &mut blocks),
+        }
+    }
+    let mut embedded = XmlElement::new("embeddedStructure").children(blocks);
+    embedded.attrs = quote_attrs;
+    XmlElement::new("block")
+        .attr("name", "quote")
+        .child(embedded)
+}
+
+fn footnote_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut marker = String::new();
+    let mut blocks = Vec::new();
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::marker => marker = child.as_str().trim().to_string(),
+            _ => collect_block_descendants(child, &mut blocks),
+        }
+    }
+    let mut displaced = XmlElement::new("displaced")
+        .attr("marker", marker)
+        .attr("name", "footnote");
+    displaced.children = blocks.into_iter().map(XmlNode::Element).collect();
+    displaced
 }
 
 fn block_list_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
@@ -353,7 +556,11 @@ fn collect_block_descendants(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut
         | Rule::hier_element_block
         | Rule::block_list
         | Rule::bullet_list
-        | Rule::table => collect_blocks(pair, blocks),
+        | Rule::table
+        | Rule::longtitle
+        | Rule::crossheading
+        | Rule::footnote
+        | Rule::block_quote => collect_blocks(pair, blocks),
         _ => {
             for child in pair.into_inner() {
                 collect_block_descendants(child, blocks);
@@ -521,7 +728,6 @@ fn footnote_ref_to_xml(text: &str) -> XmlElement {
     XmlElement::new("authorialNote")
         .attr("marker", marker)
         .attr("placement", "bottom")
-        .child(XmlElement::new("p").text("(content missing)"))
 }
 
 fn standard_inline_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
@@ -762,6 +968,64 @@ fn is_hier_name(name: &str) -> bool {
 fn rewrite_all_eids(element: &mut XmlElement, prefix: &str) {
     let mut rewriter = EidRewriter::default();
     rewriter.rewrite(element, prefix);
+}
+
+fn resolve_displaced_content(root: &mut XmlElement) {
+    let mut footnotes = HashMap::new();
+    collect_displaced(root, &mut footnotes);
+    apply_displaced(root, &footnotes);
+    remove_displaced(root);
+}
+
+fn collect_displaced(element: &XmlElement, footnotes: &mut HashMap<String, Vec<XmlNode>>) {
+    if element.name == "displaced"
+        && element
+            .attrs
+            .get("name")
+            .map(|name| name == "footnote")
+            .unwrap_or(false)
+    {
+        if let Some(marker) = element.attrs.get("marker") {
+            footnotes.insert(marker.clone(), element.children.clone());
+        }
+    }
+    for child in &element.children {
+        if let XmlNode::Element(el) = child {
+            collect_displaced(el, footnotes);
+        }
+    }
+}
+
+fn apply_displaced(element: &mut XmlElement, footnotes: &HashMap<String, Vec<XmlNode>>) {
+    if element.name == "authorialNote" {
+        let marker = element.attrs.get("marker").cloned().unwrap_or_default();
+        element.children = footnotes.get(&marker).cloned().unwrap_or_else(|| {
+            vec![XmlNode::Element(
+                XmlElement::new("p").text("(content missing)"),
+            )]
+        });
+    }
+    for child in &mut element.children {
+        if let XmlNode::Element(el) = child {
+            apply_displaced(el, footnotes);
+        }
+    }
+}
+
+fn remove_displaced(element: &mut XmlElement) {
+    element.children.retain(|child| {
+        !matches!(
+            child,
+            XmlNode::Element(el)
+                if el.name == "displaced"
+                    && el.attrs.get("name").map(|name| name == "footnote").unwrap_or(false)
+        )
+    });
+    for child in &mut element.children {
+        if let XmlNode::Element(el) = child {
+            remove_displaced(el);
+        }
+    }
 }
 
 #[derive(Default)]
@@ -1063,5 +1327,40 @@ mod tests {
         .unwrap();
         assert!(xml.contains("<term eId=\"p_1__term_1\" refersTo=\"#x\">a term</term>"));
         assert!(xml.contains("<ins>inserted</ins>"));
+    }
+
+    #[test]
+    fn document_containers_are_preserved() {
+        let xml = parse_to_xml(
+            "PREFACE\n  preface text\nPREAMBLE\n  preamble text\nBODY\n  body text\nCONCLUSIONS\n  done",
+            DocumentRoot::Act,
+        )
+        .unwrap();
+        assert!(xml.contains("<preface><p eId=\"preface__p_1\">preface text</p></preface>"));
+        assert!(xml.contains("<preamble><p eId=\"preamble__p_1\">preamble text</p></preamble>"));
+        assert!(xml.contains("<body><hcontainer eId=\"hcontainer_1\" name=\"hcontainer\"><content><p eId=\"hcontainer_1__p_1\">body text</p></content></hcontainer></body>"));
+        assert!(xml.contains("<conclusions><p eId=\"conclusions__p_1\">done</p></conclusions>"));
+    }
+
+    #[test]
+    fn quote_and_crossheading_xml() {
+        let xml = parse_to_xml(
+            "CROSSHEADING Intro\n\nQUOTE\n  quoted text",
+            DocumentRoot::Statement,
+        )
+        .unwrap();
+        assert!(xml.contains("<crossHeading eId=\"crossHeading_1\">Intro</crossHeading>"));
+        assert!(xml.contains("<block eId=\"block_1\" name=\"quote\"><embeddedStructure eId=\"block_1__embeddedStructure_1\"><p eId=\"block_1__embeddedStructure_1__p_1\">quoted text</p></embeddedStructure></block>"));
+    }
+
+    #[test]
+    fn footnote_content_is_resolved() {
+        let xml = parse_to_xml(
+            "P hello {{FOOTNOTE 1}} there\n\nFOOTNOTE 1\n  footnote text",
+            DocumentRoot::Statement,
+        )
+        .unwrap();
+        assert!(xml.contains("<authorialNote eId=\"p_1__authorialNote_1\" marker=\"1\" placement=\"bottom\"><p eId=\"p_1__authorialNote_1__p_1\">footnote text</p></authorialNote>"));
+        assert!(!xml.contains("displaced"));
     }
 }
