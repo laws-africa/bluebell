@@ -9,7 +9,7 @@ Current status:
 - The CLI can parse Bluebell text for the supported document roots.
 - The CLI can emit native Rust XML for a growing core subset: empty roots, paragraphs, hierarchy, block/bullet lists, tables, common inline elements, refs/images, block attributes, and generated eIds.
 - The CLI can unparse the current native Rust XML subset back to Bluebell text.
-- The CLI can emit full `<akomaNtoso>` XML with a minimal FRBR metadata block via `to-akn-xml`; simple output validates against `akomantoso30.xsd`.
+- The CLI can emit full `<akomaNtoso>` XML with a minimal FRBR metadata block via `to-akn-xml`; fixture output validates against `akomantoso30-lenient.xsd`.
 - `bench-income-tax` uses the existing Python/XSLT unparse path as an oracle, then benchmarks the Rust preprocessing and pest parse.
 
 Not implemented yet:

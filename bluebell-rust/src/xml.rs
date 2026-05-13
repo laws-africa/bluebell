@@ -1,4 +1,5 @@
 use std::collections::{BTreeMap, HashMap, HashSet};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::eid::IdGenerator;
 use crate::parser::{parse_pairs_preprocessed, DocumentRoot, ParseError, Rule};
@@ -90,8 +91,9 @@ pub fn parse_preprocessed_to_akn_xml(
     let pairs = parse_pairs_preprocessed(text, root)?;
     let mut doc_el = document_to_xml(root, pairs);
     doc_el.attrs.remove("xmlns");
-    add_attachment_doc_meta(&mut doc_el, frbr_uri);
     resolve_displaced_content(&mut doc_el);
+    normalise_empty_elements(&mut doc_el);
+    add_attachment_doc_meta(&mut doc_el, frbr_uri);
     doc_el
         .children
         .insert(0, XmlNode::Element(make_meta(frbr_uri, root_name(root))));
@@ -102,19 +104,77 @@ pub fn parse_preprocessed_to_akn_xml(
 }
 
 fn add_attachment_doc_meta(element: &mut XmlElement, frbr_uri: &str) {
-    if element.name == "doc"
-        && !element
-            .children
-            .iter()
-            .any(|child| matches!(child, XmlNode::Element(el) if el.name == "meta"))
-    {
-        element
-            .children
-            .insert(0, XmlNode::Element(make_attachment_meta(frbr_uri)));
+    add_attachment_doc_meta_scoped(element, frbr_uri, "");
+}
+
+fn add_attachment_doc_meta_scoped(element: &mut XmlElement, frbr_uri: &str, parent_suffix: &str) {
+    if element.name == "attachments" {
+        let mut counts: HashMap<String, usize> = HashMap::new();
+        for child in &mut element.children {
+            let XmlNode::Element(attachment) = child else {
+                continue;
+            };
+            if attachment.name != "attachment" {
+                continue;
+            }
+            let Some((doc_name, title)) = attachment_doc_name_and_title(attachment) else {
+                continue;
+            };
+            let count = counts.entry(doc_name.clone()).or_insert(0);
+            *count += 1;
+            let local = format!("{doc_name}_{count}");
+            let suffix = if parent_suffix.is_empty() {
+                format!("!{local}")
+            } else {
+                format!("{parent_suffix}/{local}")
+            };
+            insert_attachment_meta(attachment, frbr_uri, &suffix, &title);
+            add_attachment_doc_meta_scoped(attachment, frbr_uri, &suffix);
+        }
+        return;
     }
     for child in &mut element.children {
         if let XmlNode::Element(el) = child {
-            add_attachment_doc_meta(el, frbr_uri);
+            add_attachment_doc_meta_scoped(el, frbr_uri, parent_suffix);
+        }
+    }
+}
+
+fn attachment_doc_name_and_title(attachment: &XmlElement) -> Option<(String, String)> {
+    let doc_name = attachment.children.iter().find_map(|child| match child {
+        XmlNode::Element(doc) if doc.name == "doc" => Some(
+            doc.attrs
+                .get("name")
+                .cloned()
+                .unwrap_or_else(|| "attachment".to_string()),
+        ),
+        _ => None,
+    })?;
+    let title = attachment
+        .children
+        .iter()
+        .find_map(|child| match child {
+            XmlNode::Element(el) if el.name == "heading" => Some(el.text_content()),
+            _ => None,
+        })
+        .unwrap_or_else(|| "Untitled".to_string());
+    Some((doc_name, title))
+}
+
+fn insert_attachment_meta(attachment: &mut XmlElement, frbr_uri: &str, suffix: &str, title: &str) {
+    for child in &mut attachment.children {
+        if let XmlNode::Element(doc) = child {
+            if doc.name == "doc"
+                && !doc
+                    .children
+                    .iter()
+                    .any(|child| matches!(child, XmlNode::Element(el) if el.name == "meta"))
+            {
+                doc.children.insert(
+                    0,
+                    XmlNode::Element(make_attachment_meta(frbr_uri, suffix, title)),
+                );
+            }
         }
     }
 }
@@ -123,6 +183,7 @@ pub fn parse_preprocessed_to_xml(text: &str, root: DocumentRoot) -> Result<Strin
     let pairs = parse_pairs_preprocessed(text, root)?;
     let mut root_el = document_to_xml(root, pairs);
     resolve_displaced_content(&mut root_el);
+    normalise_empty_elements(&mut root_el);
     rewrite_all_eids(&mut root_el, "");
     root_el
         .attrs
@@ -259,6 +320,7 @@ fn root_name(root: DocumentRoot) -> &'static str {
 
 fn make_meta(frbr_uri: &str, root_name: &str) -> XmlElement {
     let info = FrbrInfo::parse(frbr_uri, root_name);
+    let today = today_iso_date();
     XmlElement::new("meta")
         .child(
             XmlElement::new("identification")
@@ -274,7 +336,7 @@ fn make_meta(frbr_uri: &str, root_name: &str) -> XmlElement {
                         )
                         .child(
                             XmlElement::new("FRBRdate")
-                                .attr("date", info.work_date())
+                                .attr("date", info.year.clone())
                                 .attr("name", "Generation"),
                         )
                         .child(XmlElement::new("FRBRauthor").attr("href", ""))
@@ -287,7 +349,7 @@ fn make_meta(frbr_uri: &str, root_name: &str) -> XmlElement {
                         .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri.clone()))
                         .child(
                             XmlElement::new("FRBRdate")
-                                .attr("date", "2026-05-12")
+                                .attr("date", today.clone())
                                 .attr("name", "Generation"),
                         )
                         .child(XmlElement::new("FRBRauthor").attr("href", ""))
@@ -299,7 +361,7 @@ fn make_meta(frbr_uri: &str, root_name: &str) -> XmlElement {
                         .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri))
                         .child(
                             XmlElement::new("FRBRdate")
-                                .attr("date", "2026-05-12")
+                                .attr("date", today)
                                 .attr("name", "Generation"),
                         )
                         .child(XmlElement::new("FRBRauthor").attr("href", "")),
@@ -317,8 +379,9 @@ fn make_meta(frbr_uri: &str, root_name: &str) -> XmlElement {
         )
 }
 
-fn make_attachment_meta(frbr_uri: &str) -> XmlElement {
+fn make_attachment_meta(frbr_uri: &str, suffix: &str, title: &str) -> XmlElement {
     let info = FrbrInfo::parse(frbr_uri, "doc");
+    let today = today_iso_date();
     XmlElement::new("meta").child(
         XmlElement::new("identification")
             .attr("source", "#cobalt")
@@ -326,17 +389,17 @@ fn make_attachment_meta(frbr_uri: &str) -> XmlElement {
                 XmlElement::new("FRBRWork")
                     .child(
                         XmlElement::new("FRBRthis")
-                            .attr("value", format!("{}/!attachment_1", info.work_uri)),
+                            .attr("value", format!("{}/{}", info.work_uri, suffix)),
                     )
                     .child(XmlElement::new("FRBRuri").attr("value", info.work_uri.clone()))
                     .child(
                         XmlElement::new("FRBRalias")
-                            .attr("value", "Untitled")
+                            .attr("value", title)
                             .attr("name", "title"),
                     )
                     .child(
                         XmlElement::new("FRBRdate")
-                            .attr("date", info.work_date())
+                            .attr("date", info.year.clone())
                             .attr("name", "Generation"),
                     )
                     .child(XmlElement::new("FRBRauthor").attr("href", ""))
@@ -347,12 +410,12 @@ fn make_attachment_meta(frbr_uri: &str) -> XmlElement {
                 XmlElement::new("FRBRExpression")
                     .child(
                         XmlElement::new("FRBRthis")
-                            .attr("value", format!("{}/!attachment_1", info.expr_uri)),
+                            .attr("value", format!("{}/{}", info.expr_uri, suffix)),
                     )
                     .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri.clone()))
                     .child(
                         XmlElement::new("FRBRdate")
-                            .attr("date", "2026-05-12")
+                            .attr("date", today.clone())
                             .attr("name", "Generation"),
                     )
                     .child(XmlElement::new("FRBRauthor").attr("href", ""))
@@ -362,17 +425,40 @@ fn make_attachment_meta(frbr_uri: &str) -> XmlElement {
                 XmlElement::new("FRBRManifestation")
                     .child(
                         XmlElement::new("FRBRthis")
-                            .attr("value", format!("{}/!attachment_1", info.expr_uri)),
+                            .attr("value", format!("{}/{}", info.expr_uri, suffix)),
                     )
                     .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri))
                     .child(
                         XmlElement::new("FRBRdate")
-                            .attr("date", "2026-05-12")
+                            .attr("date", today)
                             .attr("name", "Generation"),
                     )
                     .child(XmlElement::new("FRBRauthor").attr("href", "")),
             ),
     )
+}
+
+fn today_iso_date() -> String {
+    let days = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|duration| (duration.as_secs() / 86_400) as i64)
+        .unwrap_or(0);
+    let (year, month, day) = civil_from_days(days);
+    format!("{year:04}-{month:02}-{day:02}")
+}
+
+fn civil_from_days(days_since_unix_epoch: i64) -> (i64, i64, i64) {
+    let z = days_since_unix_epoch + 719_468;
+    let era = if z >= 0 { z } else { z - 146_096 } / 146_097;
+    let doe = z - era * 146_097;
+    let yoe = (doe - doe / 1_460 + doe / 36_524 - doe / 146_096) / 365;
+    let y = yoe + era * 400;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let day = doy - (153 * mp + 2) / 5 + 1;
+    let month = mp + if mp < 10 { 3 } else { -9 };
+    let year = y + if month <= 2 { 1 } else { 0 };
+    (year, month, day)
 }
 
 struct FrbrInfo {
@@ -401,14 +487,6 @@ impl FrbrInfo {
             country,
             year,
             number,
-        }
-    }
-
-    fn work_date(&self) -> String {
-        if self.year.len() == 4 && self.year.chars().all(|c| c.is_ascii_digit()) {
-            format!("{}-01-01", self.year)
-        } else {
-            self.year.clone()
         }
     }
 }
@@ -463,9 +541,20 @@ fn container_to_xml(
     pair: pest::iterators::Pair<'_, Rule>,
     allow_hier: bool,
 ) -> XmlElement {
+    let mut attrs = BTreeMap::new();
     let mut blocks = Vec::new();
-    collect_container_blocks(pair, &mut blocks, allow_hier);
-    XmlElement::new(name).children(wrap_top_level_crossheadings(blocks))
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::block_attrs => attrs.extend(block_attrs_to_map(child)),
+            _ => collect_container_blocks(child, &mut blocks, allow_hier),
+        }
+    }
+    if allow_hier && blocks.is_empty() {
+        blocks.push(XmlElement::new("p"));
+    }
+    let mut el = XmlElement::new(name).children(wrap_top_level_crossheadings(blocks));
+    el.attrs = attrs;
+    el
 }
 
 fn wrap_top_level_crossheadings(blocks: Vec<XmlElement>) -> Vec<XmlElement> {
@@ -527,6 +616,7 @@ fn collect_container_blocks(
         | Rule::block_list
         | Rule::bullet_list
         | Rule::table
+        | Rule::blocks
         | Rule::longtitle
         | Rule::crossheading
         | Rule::footnote
@@ -593,6 +683,7 @@ fn collect_blocks(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut Vec<XmlEle
         Rule::block_list => blocks.push(block_list_to_xml(pair)),
         Rule::bullet_list => blocks.push(bullet_list_to_xml(pair)),
         Rule::table => blocks.push(table_to_xml(pair)),
+        Rule::blocks => blocks.push(blocks_to_xml(pair)),
         Rule::speech_container => blocks.push(speech_container_to_xml(pair)),
         Rule::speech_group => blocks.push(speech_group_to_xml(pair)),
         Rule::speech_block => blocks.push(speech_block_to_xml(pair)),
@@ -623,7 +714,8 @@ fn attachments_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
 fn attachment_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let mut marker_name = "attachment".to_string();
     let mut att_attrs = BTreeMap::new();
-    let mut heading = None;
+    let mut heading: Option<Vec<XmlNode>> = None;
+    let mut subheading: Option<Vec<XmlNode>> = None;
     let mut blocks = Vec::new();
     let mut nested = None;
 
@@ -632,11 +724,12 @@ fn attachment_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
             Rule::attachment_marker => marker_name = child.as_str().to_ascii_lowercase(),
             Rule::block_attrs => att_attrs.extend(block_attrs_to_map(child)),
             Rule::attachment_heading => {
-                let text = collect_inline_text(child).trim().to_string();
-                if !text.is_empty() {
-                    heading = Some(text);
+                let nodes = line_inline_nodes(child);
+                if !nodes.is_empty() {
+                    heading = Some(nodes);
                 }
             }
+            Rule::subheading => subheading = Some(line_inline_nodes(child)),
             Rule::attachments => nested = Some(attachments_to_xml(child)),
             _ => collect_block_descendants(child, &mut blocks),
         }
@@ -645,9 +738,14 @@ fn attachment_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let mut attachment = XmlElement::new("attachment");
     attachment.attrs = att_attrs;
     if let Some(heading) = heading {
-        attachment
-            .children
-            .push(XmlNode::Element(XmlElement::new("heading").text(heading)));
+        attachment.children.push(XmlNode::Element(
+            XmlElement::new("heading").children_nodes(heading),
+        ));
+    }
+    if let Some(subheading) = subheading.filter(|subheading| !subheading.is_empty()) {
+        attachment.children.push(XmlNode::Element(
+            XmlElement::new("subheading").children_nodes(subheading),
+        ));
     }
 
     let main_body = XmlElement::new("mainBody").children(if blocks.is_empty() {
@@ -676,8 +774,11 @@ fn speech_group_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
 fn speech_hier_to_xml(pair: pest::iterators::Pair<'_, Rule>, group: bool) -> XmlElement {
     let mut name = if group { "speech" } else { "debateSection" }.to_string();
     let mut attrs = BTreeMap::new();
+    let mut num = None;
     let mut heading = None;
+    let mut subheading = None;
     let mut from = None;
+    let mut by = None;
     let mut blocks = Vec::new();
 
     for child in pair.into_inner() {
@@ -687,10 +788,21 @@ fn speech_hier_to_xml(pair: pest::iterators::Pair<'_, Rule>, group: bool) -> Xml
             }
             Rule::block_attrs => attrs.extend(block_attrs_to_map(child)),
             Rule::hier_element_heading => {
-                let (_num, h) = parse_heading(child);
+                let (n, h) = parse_heading(child);
+                num = n;
                 heading = h;
             }
-            Rule::speech_from => from = Some(collect_inline_text(child).trim().to_string()),
+            Rule::subheading => subheading = Some(line_inline_nodes(child)),
+            Rule::speech_from => {
+                by = Some(
+                    child
+                        .as_str()
+                        .chars()
+                        .filter(|c| c.is_alphanumeric())
+                        .collect::<String>(),
+                );
+                from = Some(collect_inline_text(child).trim().to_string());
+            }
             Rule::speech_container => blocks.push(speech_container_to_xml(child)),
             Rule::speech_group => blocks.push(speech_group_to_xml(child)),
             Rule::speech_block => blocks.push(speech_block_to_xml(child)),
@@ -707,17 +819,26 @@ fn speech_hier_to_xml(pair: pest::iterators::Pair<'_, Rule>, group: bool) -> Xml
             .or_insert_with(|| "debateSection".to_string());
     }
     if group && !attrs.contains_key("by") {
-        if let Some(from) = &from {
-            let by: String = from.chars().filter(|c| c.is_alphanumeric()).collect();
+        if let Some(by) = &by {
             attrs.insert("by".to_string(), format!("#{by}"));
         }
     }
 
     let mut el = XmlElement::new(name);
     el.attrs = attrs;
-    if let Some(heading) = heading.filter(|heading| !heading.is_empty()) {
+    if let Some(num) = num.filter(|num| !num.is_empty()) {
         el.children
-            .push(XmlNode::Element(XmlElement::new("heading").text(heading)));
+            .push(XmlNode::Element(XmlElement::new("num").text(num)));
+    }
+    if let Some(heading) = heading.filter(|heading| !heading.is_empty()) {
+        el.children.push(XmlNode::Element(
+            XmlElement::new("heading").children_nodes(heading),
+        ));
+    }
+    if let Some(subheading) = subheading.filter(|subheading| !subheading.is_empty()) {
+        el.children.push(XmlNode::Element(
+            XmlElement::new("subheading").children_nodes(subheading),
+        ));
     }
     if let Some(from) = from {
         el.children
@@ -797,6 +918,24 @@ fn block_quote_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
         .child(embedded)
 }
 
+fn blocks_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let mut attrs = BTreeMap::new();
+    let mut blocks = Vec::new();
+    for child in pair.into_inner() {
+        match child.as_rule() {
+            Rule::block_attrs => attrs.extend(block_attrs_to_map(child)),
+            Rule::block_element => collect_blocks(child, &mut blocks),
+            _ => collect_block_descendants(child, &mut blocks),
+        }
+    }
+    if blocks.is_empty() {
+        blocks.push(XmlElement::new("p"));
+    }
+    let mut el = XmlElement::new("blockContainer").children(blocks);
+    el.attrs = attrs;
+    el
+}
+
 fn footnote_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let mut marker = String::new();
     let mut blocks = Vec::new();
@@ -818,13 +957,16 @@ fn block_list_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     for child in pair.into_inner() {
         match child.as_rule() {
             Rule::block_attrs => list.attrs.extend(block_attrs_to_map(child)),
-            Rule::block_list_intro => list.children.push(XmlNode::Element(line_like_to_named_xml(
-                child,
-                "listIntroduction",
-            ))),
-            Rule::block_list_wrapup => list.children.push(XmlNode::Element(
-                line_like_to_named_xml(child, "listWrapUp"),
-            )),
+            Rule::block_list_intro => list.children.extend(
+                line_like_to_named_elements(child, "listIntroduction")
+                    .into_iter()
+                    .map(XmlNode::Element),
+            ),
+            Rule::block_list_wrapup => list.children.extend(
+                line_like_to_named_elements(child, "listWrapUp")
+                    .into_iter()
+                    .map(XmlNode::Element),
+            ),
             Rule::block_list_item => list
                 .children
                 .push(XmlNode::Element(block_list_item_to_xml(child))),
@@ -834,21 +976,28 @@ fn block_list_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     list
 }
 
-fn line_like_to_named_xml(pair: pest::iterators::Pair<'_, Rule>, name: &str) -> XmlElement {
+fn line_like_to_named_elements(
+    pair: pest::iterators::Pair<'_, Rule>,
+    name: &str,
+) -> Vec<XmlElement> {
     let mut el = XmlElement::new(name);
+    let mut siblings = Vec::new();
     for child in pair.into_inner() {
         match child.as_rule() {
             Rule::line | Rule::p => el.children.extend(p_to_xml(child).children),
-            Rule::footnote => {}
+            Rule::footnote => siblings.push(footnote_to_xml(child)),
             _ => {}
         }
     }
-    el
+    let mut elements = vec![el];
+    elements.extend(siblings);
+    elements
 }
 
 fn block_list_item_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let mut item = XmlElement::new("item");
     let mut blocks = Vec::new();
+    let mut subheading = None;
     for child in pair.into_inner() {
         match child.as_rule() {
             Rule::hier_element_heading => {
@@ -858,14 +1007,20 @@ fn block_list_item_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
                         .push(XmlNode::Element(XmlElement::new("num").text(num)));
                 }
                 if let Some(heading) = heading.filter(|heading| !heading.is_empty()) {
-                    item.children
-                        .push(XmlNode::Element(XmlElement::new("heading").text(heading)));
+                    item.children.push(XmlNode::Element(
+                        XmlElement::new("heading").children_nodes(heading),
+                    ));
                 }
             }
+            Rule::subheading => subheading = Some(line_inline_nodes(child)),
             Rule::block_element => collect_blocks(child, &mut blocks),
-            Rule::subheading => {}
             _ => collect_block_descendants(child, &mut blocks),
         }
+    }
+    if let Some(subheading) = subheading.filter(|subheading| !subheading.is_empty()) {
+        item.children.push(XmlNode::Element(
+            XmlElement::new("subheading").children_nodes(subheading),
+        ));
     }
     if blocks.is_empty() {
         blocks.push(XmlElement::new("p"));
@@ -962,6 +1117,7 @@ fn collect_block_descendants(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut
         | Rule::block_list
         | Rule::bullet_list
         | Rule::table
+        | Rule::blocks
         | Rule::longtitle
         | Rule::crossheading
         | Rule::footnote
@@ -977,7 +1133,8 @@ fn collect_block_descendants(pair: pest::iterators::Pair<'_, Rule>, blocks: &mut
 fn hier_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let mut name = "hcontainer".to_string();
     let mut num = None;
-    let mut heading = None;
+    let mut heading: Option<Vec<XmlNode>> = None;
+    let mut subheading: Option<Vec<XmlNode>> = None;
     let mut attrs = BTreeMap::new();
     let mut content = Vec::new();
 
@@ -990,6 +1147,7 @@ fn hier_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
                 num = n;
                 heading = h;
             }
+            Rule::subheading => subheading = Some(line_inline_nodes(child)),
             Rule::line | Rule::p => content.push(p_to_xml(child)),
             Rule::hier_element_block => content.push(hier_to_xml(child)),
             _ => collect_hier_content(child, &mut content),
@@ -1004,22 +1162,22 @@ fn hier_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
                 .push(XmlNode::Element(XmlElement::new("num").text(num)));
         }
     }
-    if let Some(heading) = heading {
-        if !heading.is_empty() {
-            el.children
-                .push(XmlNode::Element(XmlElement::new("heading").text(heading)));
-        }
-    }
-    if content.is_empty() {
+    if let Some(heading) = heading.filter(|heading| !heading.is_empty()) {
         el.children.push(XmlNode::Element(
-            XmlElement::new("content").child(XmlElement::new("p")),
+            XmlElement::new("heading").children_nodes(heading),
         ));
-    } else if content
+    }
+    if let Some(subheading) = subheading.filter(|subheading| !subheading.is_empty()) {
+        el.children.push(XmlNode::Element(
+            XmlElement::new("subheading").children_nodes(subheading),
+        ));
+    }
+    if content
         .iter()
         .any(|c| is_hier_name(&c.name) || c.name == "crossHeading")
     {
         el.children.extend(mixed_hier_children(content));
-    } else {
+    } else if !content.is_empty() {
         el.children.push(XmlNode::Element(
             XmlElement::new("content").children(content),
         ));
@@ -1137,6 +1295,17 @@ fn collect_hier_content(pair: pest::iterators::Pair<'_, Rule>, content: &mut Vec
     match pair.as_rule() {
         Rule::line | Rule::p => content.push(p_to_xml(pair)),
         Rule::hier_element_block => content.push(hier_to_xml(pair)),
+        Rule::speech_container
+        | Rule::speech_group
+        | Rule::speech_block
+        | Rule::block_list
+        | Rule::bullet_list
+        | Rule::table
+        | Rule::blocks
+        | Rule::longtitle
+        | Rule::crossheading
+        | Rule::footnote
+        | Rule::block_quote => collect_blocks(pair, content),
         _ => {
             for child in pair.into_inner() {
                 collect_hier_content(child, content);
@@ -1181,13 +1350,9 @@ fn collect_inline_nodes_inner(pair: pest::iterators::Pair<'_, Rule>, nodes: &mut
         Rule::sub => nodes.push(XmlNode::Element(
             XmlElement::new("sub").children_nodes(collect_inline_nodes_from_children(pair)),
         )),
-        Rule::remark => nodes.push(XmlNode::Element(
-            XmlElement::new("remark")
-                .attr("status", "editorial")
-                .children_nodes(collect_inline_nodes_from_children(pair)),
-        )),
+        Rule::remark => nodes.push(XmlNode::Element(remark_to_xml(pair))),
         Rule::image => nodes.push(XmlNode::Element(image_to_xml(pair.as_str()))),
-        Rule::ref_ => nodes.push(XmlNode::Element(ref_to_xml(pair.as_str()))),
+        Rule::ref_ => nodes.push(XmlNode::Element(ref_to_xml(pair))),
         Rule::footnote_ref => nodes.push(XmlNode::Element(footnote_ref_to_xml(pair.as_str()))),
         Rule::standard_inline => nodes.push(XmlNode::Element(standard_inline_to_xml(pair))),
         Rule::block_attrs
@@ -1219,16 +1384,44 @@ fn image_to_xml(text: &str) -> XmlElement {
     img
 }
 
-fn ref_to_xml(text: &str) -> XmlElement {
-    let body = text
+fn remark_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let span = pair.as_span();
+    let inner_start = span.start() + "{{*".len();
+    let inner_end = span.end().saturating_sub("}}".len());
+    let mut cursor = inner_start;
+    let mut nodes = Vec::new();
+
+    for child in pair.into_inner() {
+        let child_span = child.as_span();
+        if child_span.end() <= inner_start || child_span.start() >= inner_end {
+            continue;
+        }
+        push_remark_gap_breaks(&mut nodes, child_span.start().saturating_sub(cursor));
+        collect_inline_nodes_inner(child, &mut nodes);
+        cursor = child_span.end();
+    }
+    push_remark_gap_breaks(&mut nodes, inner_end.saturating_sub(cursor));
+
+    XmlElement::new("remark")
+        .attr("status", "editorial")
+        .children_nodes(merge_adjacent_text(nodes))
+}
+
+fn push_remark_gap_breaks(nodes: &mut Vec<XmlNode>, bytes: usize) {
+    for _ in 0..bytes {
+        nodes.push(XmlNode::Element(XmlElement::new("br")));
+    }
+}
+
+fn ref_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let body = pair
+        .as_str()
         .strip_prefix("{{>")
         .and_then(|s| s.strip_suffix("}}"))
         .unwrap_or("");
-    let (href, label) = split_first_word(body);
+    let (href, _) = split_first_word(body);
     let mut ref_el = XmlElement::new("ref").attr("href", href);
-    if !label.is_empty() {
-        ref_el.children.push(XmlNode::Text(label.to_string()));
-    }
+    ref_el.children = collect_inline_nodes_from_children(pair);
     ref_el
 }
 
@@ -1406,7 +1599,7 @@ fn collect_inline_text_inner(pair: pest::iterators::Pair<'_, Rule>, out: &mut St
     }
 }
 
-fn parse_heading(pair: pest::iterators::Pair<'_, Rule>) -> (Option<String>, Option<String>) {
+fn parse_heading(pair: pest::iterators::Pair<'_, Rule>) -> (Option<String>, Option<Vec<XmlNode>>) {
     let mut num = None;
     let mut heading = None;
     for child in pair.into_inner() {
@@ -1418,18 +1611,25 @@ fn parse_heading(pair: pest::iterators::Pair<'_, Rule>) -> (Option<String>, Opti
                 }
             }
             Rule::hier_element_heading_heading => {
-                let mut text = collect_inline_text(child).trim().to_string();
-                if let Some(stripped) = text.strip_prefix('-') {
-                    text = stripped.trim_start().to_string();
-                }
-                if !text.is_empty() {
-                    heading = Some(text);
+                let nodes = line_inline_nodes(child);
+                if !nodes.is_empty() {
+                    heading = Some(nodes);
                 }
             }
             _ => {}
         }
     }
     (num, heading)
+}
+
+fn line_inline_nodes(pair: pest::iterators::Pair<'_, Rule>) -> Vec<XmlNode> {
+    collect_inline_nodes_from_children(pair)
+        .into_iter()
+        .filter(|node| match node {
+            XmlNode::Text(text) => !text.trim().is_empty(),
+            XmlNode::Element(_) => true,
+        })
+        .collect()
 }
 
 fn hier_name(name: &str) -> String {
@@ -1484,45 +1684,134 @@ fn rewrite_all_eids(element: &mut XmlElement, prefix: &str) {
 }
 
 fn resolve_displaced_content(root: &mut XmlElement) {
-    let mut footnotes = HashMap::new();
-    collect_displaced(root, &mut footnotes);
-    apply_displaced(root, &footnotes);
+    let mut displaced = Vec::new();
+    let mut notes = Vec::new();
+    collect_displaced_and_notes(root, &mut Vec::new(), &mut displaced, &mut notes);
+
+    let mut used = HashSet::new();
+    for note in notes.iter().rev() {
+        let children = find_displaced_for_note(note, &displaced, &used)
+            .map(|idx| {
+                used.insert(idx);
+                element_at_path(root, &displaced[idx].path)
+                    .map(|el| el.children.clone())
+                    .unwrap_or_else(|| displaced[idx].children.clone())
+            })
+            .unwrap_or_else(|| {
+                vec![XmlNode::Element(
+                    XmlElement::new("p").text("(content missing)"),
+                )]
+            });
+        if let Some(el) = element_mut_at_path(root, &note.path) {
+            el.children = children;
+        }
+    }
     remove_displaced(root);
 }
 
-fn collect_displaced(element: &XmlElement, footnotes: &mut HashMap<String, Vec<XmlNode>>) {
-    if element.name == "displaced"
-        && element
-            .attrs
-            .get("name")
-            .map(|name| name == "footnote")
-            .unwrap_or(false)
-    {
-        if let Some(marker) = element.attrs.get("marker") {
-            footnotes.insert(marker.clone(), element.children.clone());
+#[derive(Clone)]
+struct DisplacedContent {
+    path: Vec<usize>,
+    marker: String,
+    name: String,
+    children: Vec<XmlNode>,
+}
+
+struct DisplacedRef {
+    path: Vec<usize>,
+    marker: String,
+}
+
+fn collect_displaced_and_notes(
+    element: &XmlElement,
+    path: &mut Vec<usize>,
+    displaced: &mut Vec<DisplacedContent>,
+    notes: &mut Vec<DisplacedRef>,
+) {
+    if element.name == "displaced" {
+        if let (Some(name), Some(marker)) = (element.attrs.get("name"), element.attrs.get("marker"))
+        {
+            displaced.push(DisplacedContent {
+                path: path.clone(),
+                marker: marker.clone(),
+                name: name.clone(),
+                children: element.children.clone(),
+            });
         }
+    } else if element.name == "authorialNote" {
+        notes.push(DisplacedRef {
+            path: path.clone(),
+            marker: element.attrs.get("marker").cloned().unwrap_or_default(),
+        });
     }
-    for child in &element.children {
+    for (idx, child) in element.children.iter().enumerate() {
         if let XmlNode::Element(el) = child {
-            collect_displaced(el, footnotes);
+            path.push(idx);
+            collect_displaced_and_notes(el, path, displaced, notes);
+            path.pop();
         }
     }
 }
 
-fn apply_displaced(element: &mut XmlElement, footnotes: &HashMap<String, Vec<XmlNode>>) {
-    if element.name == "authorialNote" {
-        let marker = element.attrs.get("marker").cloned().unwrap_or_default();
-        element.children = footnotes.get(&marker).cloned().unwrap_or_else(|| {
-            vec![XmlNode::Element(
-                XmlElement::new("p").text("(content missing)"),
-            )]
-        });
-    }
-    for child in &mut element.children {
-        if let XmlNode::Element(el) = child {
-            apply_displaced(el, footnotes);
+fn find_displaced_for_note(
+    note: &DisplacedRef,
+    displaced: &[DisplacedContent],
+    used: &HashSet<usize>,
+) -> Option<usize> {
+    for depth in (0..note.path.len()).rev() {
+        let ancestor = &note.path[..depth];
+        if let Some(idx) = displaced.iter().enumerate().find_map(|(idx, item)| {
+            (!used.contains(&idx)
+                && item.name == "footnote"
+                && item.marker == note.marker
+                && is_descendant_path(ancestor, &item.path)
+                && item.path > note.path)
+                .then_some(idx)
+        }) {
+            return Some(idx);
         }
     }
+
+    for depth in (0..note.path.len()).rev() {
+        let ancestor = &note.path[..depth];
+        if let Some(idx) = displaced.iter().enumerate().find_map(|(idx, item)| {
+            (!used.contains(&idx)
+                && item.name == "footnote"
+                && item.marker == note.marker
+                && is_descendant_path(ancestor, &item.path))
+            .then_some(idx)
+        }) {
+            return Some(idx);
+        }
+    }
+    None
+}
+
+fn is_descendant_path(ancestor: &[usize], path: &[usize]) -> bool {
+    path.len() > ancestor.len() && path.starts_with(ancestor)
+}
+
+fn element_mut_at_path<'a>(
+    mut element: &'a mut XmlElement,
+    path: &[usize],
+) -> Option<&'a mut XmlElement> {
+    for idx in path {
+        match element.children.get_mut(*idx) {
+            Some(XmlNode::Element(child)) => element = child,
+            _ => return None,
+        }
+    }
+    Some(element)
+}
+
+fn element_at_path<'a>(mut element: &'a XmlElement, path: &[usize]) -> Option<&'a XmlElement> {
+    for idx in path {
+        match element.children.get(*idx) {
+            Some(XmlNode::Element(child)) => element = child,
+            _ => return None,
+        }
+    }
+    Some(element)
 }
 
 fn remove_displaced(element: &mut XmlElement) {
@@ -1539,6 +1828,24 @@ fn remove_displaced(element: &mut XmlElement) {
             remove_displaced(el);
         }
     }
+}
+
+fn normalise_empty_elements(element: &mut XmlElement) {
+    for child in &mut element.children {
+        if let XmlNode::Element(el) = child {
+            normalise_empty_elements(el);
+        }
+    }
+    element.children.retain(|child| {
+        !matches!(
+            child,
+            XmlNode::Element(el)
+                if matches!(
+                    el.name.as_str(),
+                    "crossHeading" | "longTitle" | "content" | "preface" | "preamble" | "conclusions"
+                ) && el.children.is_empty()
+        )
+    });
 }
 
 #[derive(Default)]
@@ -1896,7 +2203,7 @@ mod tests {
         )
         .unwrap();
         assert!(xml.contains("<debateSection eId=\"dbsect_1\" name=\"debateSection\">"));
-        assert!(xml.contains("<speech by=\"#SpeakerName\" eId=\"dbsect_1__speech_1\">"));
+        assert!(xml.contains("<speech by=\"#FROMSpeakerName\" eId=\"dbsect_1__speech_1\">"));
         assert!(xml.contains("<from eId=\"dbsect_1__speech_1__from_1\">Speaker Name</from>"));
         assert!(
             xml.contains("<narrative eId=\"dbsect_1__speech_1__narrative_1\">Hello</narrative>")

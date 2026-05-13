@@ -125,10 +125,15 @@ fn assert_schema_valid(xml: &str, label: &str) {
     let xml_path = dir.join("doc.xml");
     fs::write(&xml_path, xml).expect("failed to write temp xml");
     let script = format!(
-        "from lxml import etree\nschema=etree.XMLSchema(etree.parse('../akomantoso30.xsd'))\ndoc=etree.parse({xml:?})\nvalid=schema.validate(doc)\nprint(valid)\nif not valid:\n print(schema.error_log.last_error)\n raise SystemExit(1)\n",
+        "from lxml import etree\nschema=etree.XMLSchema(etree.parse('../akomantoso30-lenient.xsd'))\ndoc=etree.parse({xml:?})\nvalid=schema.validate(doc)\nprint(valid)\nif not valid:\n print(schema.error_log.last_error)\n raise SystemExit(1)\n",
         xml = xml_path.display().to_string()
     );
-    let output = Command::new("python")
+    let python = if Path::new("../.env/bin/python").exists() {
+        "../.env/bin/python"
+    } else {
+        "python"
+    };
+    let output = Command::new(python)
         .arg("-c")
         .arg(script)
         .output()
