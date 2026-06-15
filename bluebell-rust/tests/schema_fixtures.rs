@@ -182,11 +182,7 @@ fn python_unparse(xml: &str, label: &str) -> String {
 }
 
 fn python() -> &'static str {
-    if Path::new("../.env/bin/python").exists() {
-        "../.env/bin/python"
-    } else {
-        "python"
-    }
+    "python"
 }
 
 fn tempfile_dir() -> &'static Path {

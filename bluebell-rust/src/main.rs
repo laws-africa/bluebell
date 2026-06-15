@@ -1,6 +1,7 @@
 use std::fs;
-use std::path::PathBuf;
-use std::time::Instant;
+use std::path::{Path, PathBuf};
+use std::process::Command as ProcessCommand;
+use std::time::{Duration, Instant};
 
 use anyhow::Context;
 use clap::{Parser, Subcommand, ValueEnum};
@@ -77,7 +78,7 @@ enum Command {
         #[arg(value_name = "INPUT")]
         input: PathBuf,
     },
-    /// Benchmark income-tax.xml by first applying the canonical XSLT unparse.
+    /// Benchmark income-tax.xml against Rust and Python after canonical XSLT unparse.
     BenchIncomeTax {
         /// Akoma Ntoso XML input file.
         #[arg(value_name = "INPUT")]
@@ -162,14 +163,26 @@ fn main() -> anyhow::Result<()> {
             let text = bluebell_rs::unparse(&xml).context("failed to apply akn_text.xsl")?;
             let unparse_elapsed = start.elapsed();
             println!("xslt_unparse_ms={}", unparse_elapsed.as_millis());
-            bench_text(&text, DocumentRoot::Act)?;
+            let rust = bench_text(&text, DocumentRoot::Act)?;
+            let python = bench_python_parse(&text, "act", "/akn/za/act/1962/58")?;
+            println!("python_parse_ms={}", python.as_millis());
+            if python.as_nanos() > 0 {
+                println!(
+                    "rust_parse_speedup={:.2}x",
+                    python.as_secs_f64() / rust.parse.as_secs_f64()
+                );
+            }
         }
     }
 
     Ok(())
 }
 
-fn bench_text(text: &str, root: DocumentRoot) -> anyhow::Result<()> {
+struct RustBench {
+    parse: Duration,
+}
+
+fn bench_text(text: &str, root: DocumentRoot) -> anyhow::Result<RustBench> {
     let start = Instant::now();
     let preprocessed = pre_parse(text);
     let preparse_elapsed = start.elapsed();
@@ -183,5 +196,48 @@ fn bench_text(text: &str, root: DocumentRoot) -> anyhow::Result<()> {
     println!("preprocessed_bytes={}", preprocessed.len());
     println!("preparse_ms={}", preparse_elapsed.as_millis());
     println!("parse_ms={}", parse_elapsed.as_millis());
-    Ok(())
+    Ok(RustBench {
+        parse: parse_elapsed,
+    })
+}
+
+fn bench_python_parse(text: &str, python_root: &str, frbr_uri: &str) -> anyhow::Result<Duration> {
+    let text_path = std::env::temp_dir().join("bluebell-rs-bench-income-tax.txt");
+    fs::write(&text_path, text)
+        .with_context(|| format!("failed to write {}", text_path.display()))?;
+    let script = format!(
+        "from pathlib import Path\nfrom bluebell.parser import AkomaNtosoParser\nfrom cobalt import FrbrUri\np=AkomaNtosoParser(FrbrUri.parse({uri:?}))\np.parse_to_xml(Path({text:?}).read_text(), {root:?})\n",
+        uri = frbr_uri,
+        text = text_path.display().to_string(),
+        root = python_root,
+    );
+
+    let start = Instant::now();
+    let output = ProcessCommand::new(python())
+        .arg("-c")
+        .arg(script)
+        .env("PYTHONPATH", python_path())
+        .output()
+        .context("failed to run Python Bluebell benchmark")?;
+    let elapsed = start.elapsed();
+    if !output.status.success() {
+        anyhow::bail!(
+            "Python Bluebell benchmark failed:\nstdout:\n{}\nstderr:\n{}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+    Ok(elapsed)
+}
+
+fn python() -> &'static str {
+    "python"
+}
+
+fn python_path() -> &'static str {
+    if Path::new("bluebell").exists() {
+        "."
+    } else {
+        ".."
+    }
 }

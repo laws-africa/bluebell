@@ -574,9 +574,5 @@ fn artifact_dir(case_name: &str) -> PathBuf {
 }
 
 fn python() -> &'static str {
-    if Path::new("../.env/bin/python").exists() {
-        "../.env/bin/python"
-    } else {
-        "python"
-    }
+    "python"
 }

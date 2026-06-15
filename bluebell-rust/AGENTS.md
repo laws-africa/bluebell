@@ -65,7 +65,7 @@ From the repository root:
 
 ```sh
 cargo test --manifest-path bluebell-rust/Cargo.toml
-.env/bin/python -m unittest discover -s tests -t .
+python -m unittest discover -s tests -t .
 ```
 
 For focused parity work:
