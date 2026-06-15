@@ -9,7 +9,7 @@ Current status:
 - The CLI can parse Bluebell text for the supported document roots.
 - The CLI can emit native Rust XML for the round-trip text fixtures, matching Python canonical XML output for those fixtures.
 - The CLI can unparse XML by applying the canonical `bluebell/akn_text.xsl` stylesheet through `xsltproc`; there is no separate Rust-native unparse implementation.
-- The CLI can emit full `<akomaNtoso>` XML with a minimal FRBR metadata block via `to-akn-xml`; fixture output validates against `akomantoso30-lenient.xsd`.
+- The CLI can emit full `<akomaNtoso>` XML with a minimal FRBR metadata block via `to-akn-xml`; fixture output validates against `schemas/akomantoso30-lenient.xsd`.
 - `bench-income-tax` applies `bluebell/akn_text.xsl` through the Rust unparse wrapper, then benchmarks Rust preprocessing and pest parse.
 
 Not implemented yet:

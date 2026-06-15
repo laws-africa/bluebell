@@ -148,7 +148,7 @@ fn assert_schema_valid(xml: &str, label: &str) {
         .parse_string(xml)
         .unwrap_or_else(|err| panic!("{label} failed XML parsing before schema validation: {err}"));
 
-    let mut schema_parser = SchemaParserContext::from_file("../akomantoso30-lenient.xsd");
+    let mut schema_parser = SchemaParserContext::from_file("schemas/akomantoso30-lenient.xsd");
     let mut validation = SchemaValidationContext::from_parser(&mut schema_parser)
         .unwrap_or_else(|errors| panic!("failed to parse lenient AKN schema: {errors:?}"));
 
