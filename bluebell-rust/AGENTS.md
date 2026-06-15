@@ -74,6 +74,22 @@ For focused parity work:
 cargo test --manifest-path bluebell-rust/Cargo.toml --test python_xml_parity -- --nocapture
 ```
 
+For large real-document parity, run the ignored `income-tax.xml` check
+explicitly:
+
+```sh
+cargo test --manifest-path bluebell-rust/Cargo.toml --test python_xml_parity income_tax_xml_roundtrip_parse_matches_python -- --ignored --nocapture
+```
+
+This test applies the canonical XSLT unparse to
+`tests/fixtures/income-tax.xml`, parses the generated Bluebell with both Python
+and Rust, then compares canonical XML. It is ignored by default because it takes
+roughly one to two minutes. Run it when a change touches grammar recognition,
+pre-processing, inline/text handling, hierarchy construction, `eId` generation,
+attachments, XSLT unparse integration, or anything else that could affect
+realistic act-sized documents. Also run it before claiming a broad parity
+milestone or before using the Rust parser for benchmarking.
+
 The Python test command uses `-t .` so tests with package-relative imports are
 loaded correctly.
 

@@ -1053,6 +1053,7 @@ fn bullet_list_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
 }
 
 fn bullet_list_item_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
+    let starts_with_empty_paragraph = starts_with_empty_bullet_paragraph(pair.as_str());
     let mut blocks = Vec::new();
     for child in pair.into_inner() {
         match child.as_rule() {
@@ -1062,8 +1063,15 @@ fn bullet_list_item_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement 
     }
     if blocks.is_empty() {
         blocks.push(XmlElement::new("p"));
+    } else if starts_with_empty_paragraph {
+        blocks.insert(0, XmlElement::new("p"));
     }
     XmlElement::new("li").children(blocks)
+}
+
+fn starts_with_empty_bullet_paragraph(text: &str) -> bool {
+    let trimmed = text.trim_start();
+    trimmed == "*" || trimmed.starts_with("*\n") || trimmed.starts_with("*\r\n")
 }
 
 fn table_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
@@ -1427,10 +1435,19 @@ fn ref_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
         .strip_prefix("{{>")
         .and_then(|s| s.strip_suffix("}}"))
         .unwrap_or("");
-    let (href, _) = split_first_word(body);
+    let href = ref_href(body);
     let mut ref_el = XmlElement::new("ref").attr("href", href);
     ref_el.children = collect_inline_nodes_from_children(pair);
     ref_el
+}
+
+fn ref_href(body: &str) -> &str {
+    if body.starts_with(' ') {
+        return "";
+    }
+    body.split_once([' ', '\n'])
+        .map(|(href, _)| href)
+        .unwrap_or(body)
 }
 
 fn footnote_ref_to_xml(text: &str) -> XmlElement {
@@ -1631,13 +1648,17 @@ fn parse_heading(pair: pest::iterators::Pair<'_, Rule>) -> (Option<String>, Opti
 }
 
 fn line_inline_nodes(pair: pest::iterators::Pair<'_, Rule>) -> Vec<XmlNode> {
-    collect_inline_nodes_from_children(pair)
-        .into_iter()
-        .filter(|node| match node {
-            XmlNode::Text(text) => !text.trim().is_empty(),
-            XmlNode::Element(_) => true,
-        })
-        .collect()
+    trim_edge_whitespace_text_nodes(collect_inline_nodes_from_children(pair))
+}
+
+fn trim_edge_whitespace_text_nodes(mut nodes: Vec<XmlNode>) -> Vec<XmlNode> {
+    while matches!(nodes.first(), Some(XmlNode::Text(text)) if text.trim().is_empty()) {
+        nodes.remove(0);
+    }
+    while matches!(nodes.last(), Some(XmlNode::Text(text)) if text.trim().is_empty()) {
+        nodes.pop();
+    }
+    nodes
 }
 
 fn hier_name(name: &str) -> String {

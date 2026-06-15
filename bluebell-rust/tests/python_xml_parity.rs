@@ -2,119 +2,164 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use bluebell_rs::{parse_to_akn_xml, DocumentRoot};
+use bluebell_rs::{parse_to_akn_xml, unparse, DocumentRoot};
 
 struct ParityCase {
-    name: &'static str,
+    name: String,
     root: DocumentRoot,
     python_root: &'static str,
-    frbr_uri: &'static str,
+    frbr_uri: String,
     input: CaseInput,
 }
 
 enum CaseInput {
-    File(&'static str),
+    File(PathBuf),
+    XmlFixture(PathBuf),
     Text(&'static str),
 }
 
 #[test]
 fn parsed_bluebell_xml_matches_python() {
     for case in parity_cases() {
-        let text = case.input.read(case.name);
-        let rust_xml = parse_to_akn_xml(&text, case.root, case.frbr_uri)
-            .unwrap_or_else(|err| panic!("Rust failed to parse {}: {err}", case.name));
-        let python_xml = python_parse_to_xml(&case, &text);
-
-        let rust_c14n = python_canonicalize(&rust_xml, case.name, "rust");
-        let python_c14n = python_canonicalize(&python_xml, case.name, "python");
-
-        if rust_c14n != python_c14n {
-            write_failure_artifacts(&case, &rust_xml, &python_xml);
-        }
-        assert_eq!(
-            python_c14n, rust_c14n,
-            "XML parity failed for {}",
-            case.name
-        );
+        assert_case_matches_python(&case);
     }
 }
 
+#[test]
+#[ignore = "large real-document parity check; run explicitly with --ignored"]
+fn income_tax_xml_roundtrip_parse_matches_python() {
+    let case = xml_fixture_case(
+        "income-tax".to_string(),
+        DocumentRoot::Act,
+        "act",
+        "/akn/za/act/1962/58".to_string(),
+        PathBuf::from("tests/fixtures/income-tax.xml"),
+    );
+    assert_case_matches_python(&case);
+}
+
+fn assert_case_matches_python(case: &ParityCase) {
+    let text = case.input.read(&case.name);
+    let rust_xml = parse_to_akn_xml(&text, case.root, &case.frbr_uri)
+        .unwrap_or_else(|err| panic!("Rust failed to parse {}: {err}", case.name));
+    let python_xml = python_parse_to_xml(case, &text);
+
+    let rust_c14n = python_canonicalize(&rust_xml, &case.name, "rust");
+    let python_c14n = python_canonicalize(&python_xml, &case.name, "python");
+
+    if rust_c14n != python_c14n {
+        write_failure_artifacts(case, &rust_xml, &python_xml);
+    }
+    assert!(
+        python_c14n == rust_c14n,
+        "XML parity failed for {}; artifacts written to {}",
+        case.name,
+        artifact_dir(&case.name).display()
+    );
+}
+
 fn parity_cases() -> Vec<ParityCase> {
-    let mut cases = vec![
-        file_case(
-            "roundtrip-act-empty",
-            DocumentRoot::Act,
-            "act",
-            "/akn/za/act/2022/1",
-            "../tests/roundtrip/act-empty.txt",
-        ),
-        file_case(
-            "roundtrip-act-escapes",
-            DocumentRoot::Act,
-            "act",
-            "/akn/za/act/2022/1",
-            "../tests/roundtrip/act-escapes.txt",
-        ),
-        file_case(
-            "roundtrip-act-footnotes",
-            DocumentRoot::Act,
-            "act",
-            "/akn/za/act/2022/1",
-            "../tests/roundtrip/act-footnotes.txt",
-        ),
-        file_case(
-            "roundtrip-act",
-            DocumentRoot::Act,
-            "act",
-            "/akn/za/act/2022/1",
-            "../tests/roundtrip/act.txt",
-        ),
-        file_case(
-            "roundtrip-debate-report",
-            DocumentRoot::DebateReport,
-            "debateReport",
-            "/akn/za/debateReport/2022/1",
-            "../tests/roundtrip/debate-report.txt",
-        ),
-        file_case(
-            "roundtrip-eids",
-            DocumentRoot::Statement,
-            "statement",
-            "/akn/za/statement/2022/1",
-            "../tests/roundtrip/eids.txt",
-        ),
-        file_case(
-            "roundtrip-hansard",
-            DocumentRoot::Debate,
-            "debate",
-            "/akn/za/debate/2022/1",
-            "../tests/roundtrip/hansard.txt",
-        ),
-        file_case(
-            "roundtrip-judgment-attachments",
-            DocumentRoot::Judgment,
-            "judgment",
-            "/akn/za/judgment/2022/1",
-            "../tests/roundtrip/judgment-attachments.txt",
-        ),
-        file_case(
-            "roundtrip-judgment",
-            DocumentRoot::Judgment,
-            "judgment",
-            "/akn/za/judgment/2022/1",
-            "../tests/roundtrip/judgment.txt",
-        ),
-        file_case(
-            "roundtrip-nested-attachments",
-            DocumentRoot::Statement,
-            "statement",
-            "/akn/za/statement/2022/1",
-            "../tests/roundtrip/nested_attachments.txt",
-        ),
-    ];
+    let mut cases = discovered_roundtrip_text_cases();
+    cases.extend(discovered_roundtrip_xml_cases());
 
     cases.extend(focused_cases());
     cases
+}
+
+fn discovered_roundtrip_text_cases() -> Vec<ParityCase> {
+    let mut paths = fs::read_dir("../tests/roundtrip")
+        .expect("failed to read roundtrip fixture directory")
+        .map(|entry| {
+            entry
+                .expect("failed to read roundtrip fixture entry")
+                .path()
+        })
+        .filter(|path| path.extension().is_some_and(|ext| ext == "txt"))
+        .collect::<Vec<_>>();
+    paths.sort();
+
+    paths
+        .into_iter()
+        .map(|path| {
+            let stem = path
+                .file_stem()
+                .and_then(|stem| stem.to_str())
+                .unwrap_or_else(|| panic!("roundtrip fixture path is not valid UTF-8: {path:?}"));
+            let (root, python_root) = roundtrip_fixture_root(stem);
+            file_case(
+                format!("roundtrip-{stem}"),
+                root,
+                python_root,
+                default_roundtrip_frbr_uri(root),
+                path,
+            )
+        })
+        .collect()
+}
+
+fn discovered_roundtrip_xml_cases() -> Vec<ParityCase> {
+    let mut paths = fs::read_dir("../tests/roundtrip")
+        .expect("failed to read roundtrip fixture directory")
+        .map(|entry| {
+            entry
+                .expect("failed to read roundtrip fixture entry")
+                .path()
+        })
+        .filter(|path| path.extension().is_some_and(|ext| ext == "xml"))
+        .collect::<Vec<_>>();
+    paths.sort();
+
+    paths
+        .into_iter()
+        .map(|path| {
+            let stem = path
+                .file_stem()
+                .and_then(|stem| stem.to_str())
+                .unwrap_or_else(|| panic!("roundtrip fixture path is not valid UTF-8: {path:?}"));
+            let (root, python_root) = roundtrip_xml_fixture_root(stem);
+            xml_fixture_case(
+                format!("roundtrip-xml-{stem}"),
+                root,
+                python_root,
+                default_roundtrip_frbr_uri(root),
+                path,
+            )
+        })
+        .collect()
+}
+
+fn roundtrip_fixture_root(stem: &str) -> (DocumentRoot, &'static str) {
+    match stem {
+        "act" | "act-empty" | "act-escapes" | "act-footnotes" => (DocumentRoot::Act, "act"),
+        "debate-report" => (DocumentRoot::DebateReport, "debateReport"),
+        "eids" | "nested_attachments" => (DocumentRoot::Statement, "statement"),
+        "hansard" => (DocumentRoot::Debate, "debate"),
+        "judgment" | "judgment-attachments" => (DocumentRoot::Judgment, "judgment"),
+        _ => panic!("no document root mapping for roundtrip fixture {stem}.txt"),
+    }
+}
+
+fn roundtrip_xml_fixture_root(stem: &str) -> (DocumentRoot, &'static str) {
+    match stem {
+        "attribs" | "eids_basic" | "eids_edge" | "escapes" | "nested_attachments" => {
+            (DocumentRoot::Act, "act")
+        }
+        "eids_debatereport" => (DocumentRoot::DebateReport, "debateReport"),
+        _ => panic!("no document root mapping for roundtrip XML fixture {stem}.xml"),
+    }
+}
+
+fn default_roundtrip_frbr_uri(root: DocumentRoot) -> String {
+    match root {
+        DocumentRoot::Act => "/akn/za/act/2022/1",
+        DocumentRoot::Bill => "/akn/za/bill/2022/1",
+        DocumentRoot::Debate => "/akn/za/debate/2022/1",
+        DocumentRoot::DebateReport => "/akn/za/debateReport/2022/1",
+        DocumentRoot::Doc => "/akn/za/doc/2022/1",
+        DocumentRoot::Judgment => "/akn/za/judgment/2022/1",
+        DocumentRoot::Statement => "/akn/za/statement/2022/1",
+    }
+    .to_string()
 }
 
 fn focused_cases() -> Vec<ParityCase> {
@@ -138,10 +183,70 @@ fn focused_cases() -> Vec<ParityCase> {
             "P some **bold //italics// text** and escaped \\{\\{ curlies \\}\\}.",
         ),
         text_case(
+            "inline-remark-nested-ref",
+            DocumentRoot::Statement,
+            "statement",
+            "P {{*[{{>https://example.com a link}}]}} and **bold {{^super {{*[foo {{>/bar link}} end]}}}} {{*[and another]}}**",
+        ),
+        text_case(
+            "inline-ref-edge-cases",
+            DocumentRoot::Statement,
+            "statement",
+            "P {{>https://example.com  a link{{^2}} **with stuff**}} {{>https://example.com}} {{> link text}}",
+        ),
+        text_case(
+            "inline-image-edge-cases",
+            DocumentRoot::Statement,
+            "statement",
+            "P {{IMG /foo.png}} {{IMG/foo.png}} {{IMGfoo.png}} {{IMG /foo.png  description text }} {{IMG }} {{IMG}}",
+        ),
+        text_case(
+            "inline-sup-sub-ins-del",
+            DocumentRoot::Statement,
+            "statement",
+            "P {{^super {{_s}ub}} **bo*ld**}} and {{+ ins {{- de}l}} **bo*ld**}}",
+        ),
+        text_case(
             "hierarchy-unnumbered-duplicates",
             DocumentRoot::Act,
             "act",
             "BODY\nSEC - Heading\n  text\nSEC - Heading\n  more text",
+        ),
+        text_case(
+            "hierarchy-heading-adjacent-inline-spacing",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nSEC 8B. - Taxation of {{term{refersTo #term-employee} employee}} {{term{refersTo #term-share} share}} plan\n  text",
+        ),
+        text_case(
+            "hierarchy-crossheading-containers",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nCROSSHEADING first\nCROSSHEADING second\n\ntext\n\nPART 1\n  ITEMS\n    ITEM\n      item 1\n  CROSSHEADING inside\n  wrap",
+        ),
+        text_case(
+            "hierarchy-mixed-intro-interstitial-wrapup",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nPART\n  some intro text\n  SECTION 1\n    section 1 text\n  some interstitial text\n  SECTION 2\n    section 2 text\n  conclusion",
+        ),
+        text_case(
+            "hierarchy-empty-heading-num",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nSEC 1.\n  PART\n    no num no heading\n  PART 1. -\n    no heading\n  PART -\n    no num no heading\n  PART 2.\n    no heading\n  PART - heading\n    no num\n  PART 3-a - head-ing and - here\n    dash in num and heading",
+        ),
+        text_case(
+            "hierarchy-escaped-hyphen-nums",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nPART\n  SEC 1-\n    no escape no heading\n  SEC 1\\-\n    escape no heading\n  SEC 1 \\-\n    escape no heading\n  SEC 2\\- - heading\n    with heading\n  SEC \\-6\n    preceding slash\n  SEC 6\\-\\-7\n    multi",
+        ),
+        text_case(
+            "hierarchy-empty-elements",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nPART\n  SEC 1 - heading\n  SEC\n    SUBHEADING subheading\n  PART\n  CHAPTER - heading",
         ),
         text_case(
             "block-list-with-subheading",
@@ -150,10 +255,46 @@ fn focused_cases() -> Vec<ParityCase> {
             "ITEMS\n  intro\n  ITEM (a)\n    first\n  ITEM (b)\n    SUBHEADING sub\n    second\n  wrap",
         ),
         text_case(
+            "block-list-footnotes",
+            DocumentRoot::Statement,
+            "statement",
+            "ITEMS\n  some intro with {{FOOTNOTE 1}} and {{FOOTNOTE 2}}\n  FOOTNOTE 1\n    footnote 1\n  FOOTNOTE 2\n    footnote 2\n  ITEM (a)\n    item a\n  wrap up with {{FOOTNOTE 3}}\n  FOOTNOTE 3\n    footnote 3",
+        ),
+        text_case(
+            "block-list-nested",
+            DocumentRoot::Statement,
+            "statement",
+            "ITEMS\n  some intro\n  ITEM (a)\n    ITEMS{foo bar}\n      item a\n      ITEM (i)\n        item a(i)\n      and a wrap up\n  ITEM (b)\n    item b",
+        ),
+        text_case(
+            "block-list-broken-empty-item",
+            DocumentRoot::Statement,
+            "statement",
+            "ITEMS\n  ITEM (a)",
+        ),
+        text_case(
             "block-container-and-quote",
             DocumentRoot::Statement,
             "statement",
             "BLOCKS.cls{a b}\n  some block text\n  QUOTE{startQuote \"|endQuote \"}\n    quoted text",
+        ),
+        text_case(
+            "block-container-generic",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nPART A\n  BLOCKS.cls{a b}\n    foo\n    ITEMS\n      ITEM bar\n      ITEM baz\n    end\n  BLOCKS\n    foo\n    bar\n  tail",
+        ),
+        text_case(
+            "block-attrs-longtitle-crossheading",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nPART A\n  P.baz{class foo bar} text with classes\n  P{style text-align: center} text with style tag\n  LONGTITLE test\n  CROSSHEADING crossheading",
+        ),
+        text_case(
+            "containers-indent-and-conclusions",
+            DocumentRoot::Act,
+            "act",
+            "PREAMBLE\n  not indented\n    indented\nBODY\n  body\nCONCLUSIONS\n    PART 1\n    text\n    ITEMS\n      ITEM (a)\n        item a",
         ),
         text_case(
             "tables-and-bullets",
@@ -162,16 +303,70 @@ fn focused_cases() -> Vec<ParityCase> {
             "BULLETS\n  * one\n  * two\nTABLE.my-table\n  TR\n    TH\n      heading\n    TC{colspan 2}\n      cell",
         ),
         text_case(
+            "bullets-nested-and-mixed",
+            DocumentRoot::Statement,
+            "statement",
+            "BULLETS{class spiffy}\n  * item 1\n  * item 2\n    BULLETS\n      * item 2a\n      * item 2b\n  *\n  * an empty item (valid)\n  *\n    an item that starts empty",
+        ),
+        text_case(
+            "bullets-non-starred-items",
+            DocumentRoot::Statement,
+            "statement",
+            "BULLETS\n  * bullet 1\n    with multiple lines\n  no star 1\n\n  no star 2\n    with indent\n  * a star\n\n  no star 3",
+        ),
+        text_case(
+            "bullets-bad-hier-fallback",
+            DocumentRoot::Judgment,
+            "judgment",
+            "BULLETS\n  PARA 24.\n    SUBPARA i.\n      Bar",
+        ),
+        text_case(
+            "table-attrs-and-broken-fallback",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nSECTION 1.\n  SUBSECTION (a)\n    TABLE{class my-table}\n      TR\n        TC{colspan 2}\n          r1c1\n        TC{rowspan 1 | colspan 3\"}\n          r1c2\n  bar\n  SUBSECTION (b)\n    TABLE\n      TR\n  baz",
+        ),
+        text_case(
+            "judgment-no-explicit-structure",
+            DocumentRoot::Judgment,
+            "judgment",
+            "hello\n\nthere",
+        ),
+        text_case(
             "subflows-footnotes",
             DocumentRoot::Judgment,
             "judgment",
             "BACKGROUND\n  hello {{FOOTNOTE 1}} there\n  FOOTNOTE 1\n    footnote text\nARGUMENTS\n  argument",
         ),
         text_case(
+            "subflows-footnote-complex-content",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nPART 1\n  this section [{{FOOTNOTE 1}}] uses a footnote.\n  FOOTNOTE 1\n    some text\n    PART 1\n      ITEMS\n        ITEM (a)\n          item",
+        ),
+        text_case(
+            "subflows-quote-embedded-structure",
+            DocumentRoot::Judgment,
+            "judgment",
+            "INTRODUCTION\n  some text\n  QUOTE\n    quoted\n    ITEMS\n      ITEM (a)\n        list item\n    PART 1 - Heading\n      part 1 text\n  something else",
+        ),
+        text_case(
             "attachments-nested-metadata",
             DocumentRoot::Judgment,
             "judgment",
             "ARGUMENTS\n  argument\nANNEXURE Annex 1\n  annex text\nAPPENDIX Appendix 1\n  APPENDIX Nested\n    nested text",
+        ),
+        text_case(
+            "attachments-multiple-crossheading",
+            DocumentRoot::Act,
+            "act",
+            "BODY\n  body\nANNEXURE a heading\n  SUBHEADING subheading\n  some text\n  CROSSHEADING crossheading\nCROSSHEADING crossheading2\nSCHEDULE heading\n  schedule text",
+        ),
+        text_case(
+            "attachments-no-indent",
+            DocumentRoot::Act,
+            "act",
+            "BODY\n  body\nANNEXURE a heading\nSUBHEADING not matched as a subheading\n\n  some text\nSCHEDULE heading\n\nschedule text",
         ),
         text_case(
             "debate-speech",
@@ -215,15 +410,27 @@ fn focused_cases() -> Vec<ParityCase> {
             "act",
             "BODY\nPART 1\n  SEC 1\n    first\n  SEC 1\n    second",
         ),
+        text_case(
+            "eids-doc-no-num-and-duplicates",
+            DocumentRoot::Doc,
+            "doc",
+            "PARA\n  Intro\nPARA 1.\n  First para\nPARA 1A.\n  Added in later\nPARA\n  Unnumbered\nPARA 2.\n  Second para.\nPARA 2.\n  Another para with the num 2.\nPARA 2.3..74.5.\n  Interesting number.\nPARA 2.3..74.5.\n  Duplicate interesting number.",
+        ),
+        text_case(
+            "eids-doc-nn-collisions",
+            DocumentRoot::Doc,
+            "doc",
+            "PARA\n  Unnumbered para.\nPARA\n  Second unnumbered para.\nPARA (nn)\n  Perfectly possible paragraph numbering.\nPARA nn_2\n  Para nn_2, which is the second para's eId.\nPARA nn_2\n  Para nn_2, which is a dup of the second para's eId.\nPARA nn-2\n  Para nn-2, which we do support because we support hyphens in numbers",
+        ),
     ]
 }
 
 fn file_case(
-    name: &'static str,
+    name: String,
     root: DocumentRoot,
     python_root: &'static str,
-    frbr_uri: &'static str,
-    path: &'static str,
+    frbr_uri: String,
+    path: PathBuf,
 ) -> ParityCase {
     ParityCase {
         name,
@@ -234,6 +441,22 @@ fn file_case(
     }
 }
 
+fn xml_fixture_case(
+    name: String,
+    root: DocumentRoot,
+    python_root: &'static str,
+    frbr_uri: String,
+    path: PathBuf,
+) -> ParityCase {
+    ParityCase {
+        name,
+        root,
+        python_root,
+        frbr_uri,
+        input: CaseInput::XmlFixture(path),
+    }
+}
+
 fn text_case(
     name: &'static str,
     root: DocumentRoot,
@@ -241,10 +464,10 @@ fn text_case(
     text: &'static str,
 ) -> ParityCase {
     ParityCase {
-        name,
+        name: name.to_string(),
         root,
         python_root,
-        frbr_uri: default_frbr_uri(root),
+        frbr_uri: default_frbr_uri(root).to_string(),
         input: CaseInput::Text(text),
     }
 }
@@ -266,20 +489,25 @@ impl CaseInput {
         match self {
             CaseInput::File(path) => fs::read_to_string(path)
                 .unwrap_or_else(|err| panic!("failed to read {name}: {err}")),
+            CaseInput::XmlFixture(path) => {
+                let xml = fs::read_to_string(path)
+                    .unwrap_or_else(|err| panic!("failed to read {name}: {err}"));
+                unparse(&xml).unwrap_or_else(|err| panic!("failed to unparse {name}: {err}"))
+            }
             CaseInput::Text(text) => text.to_string(),
         }
     }
 }
 
 fn python_parse_to_xml(case: &ParityCase, text: &str) -> String {
-    let text_path = write_temp_file(case.name, "input.txt", text);
+    let text_path = write_temp_file(&case.name, "input.txt", text);
     let script = format!(
         "from pathlib import Path\nfrom bluebell.parser import AkomaNtosoParser\nfrom cobalt import FrbrUri\nfrom lxml import etree\np=AkomaNtosoParser(FrbrUri.parse({uri:?}))\nxml=p.parse_to_xml(Path({text:?}).read_text(), {root:?})\nprint(etree.tostring(xml, encoding='unicode'), end='')\n",
         uri = case.frbr_uri,
         text = text_path.display().to_string(),
         root = case.python_root,
     );
-    run_python(&script, case.name, "python parse_to_xml")
+    run_python(&script, &case.name, "python parse_to_xml")
 }
 
 fn python_canonicalize(xml: &str, name: &str, label: &str) -> String {
@@ -292,19 +520,19 @@ fn python_canonicalize(xml: &str, name: &str, label: &str) -> String {
 }
 
 fn write_failure_artifacts(case: &ParityCase, rust_xml: &str, python_xml: &str) {
-    let dir = artifact_dir(case.name);
+    let dir = artifact_dir(&case.name);
     fs::create_dir_all(&dir).expect("failed to create parity artifact dir");
     fs::write(
         dir.join("rust.xml"),
-        pretty_xml(rust_xml, case.name, "rust"),
+        pretty_xml(rust_xml, &case.name, "rust"),
     )
     .expect("failed to write rust parity artifact");
     fs::write(
         dir.join("python.xml"),
-        pretty_xml(python_xml, case.name, "python"),
+        pretty_xml(python_xml, &case.name, "python"),
     )
     .expect("failed to write python parity artifact");
-    fs::write(dir.join("input.txt"), case.input.read(case.name))
+    fs::write(dir.join("input.txt"), case.input.read(&case.name))
         .expect("failed to write parity input artifact");
 }
 

@@ -17,6 +17,9 @@ Not implemented yet:
 - Full typed model parity for all Bluebell constructs.
 - Broader XML generation parity against the full Python test corpus, beyond the round-trip text fixtures.
 - Removing the `xsltproc` process dependency if a suitable Rust/libxslt binding is chosen later.
+- bluebell python should automatically use the rust parser when available
+- library and cli versioning that matches the bluebell version
+- clean build and release process and documentation
 
 Useful commands:
 
@@ -26,5 +29,5 @@ cargo run -- parse act ../tests/roundtrip/act.txt
 cargo run -- to-xml act ../tests/roundtrip/act.txt
 cargo run -- to-akn-xml /akn/za/act/2022/1 act ../tests/roundtrip/act.txt
 cargo run -- unparse some-akn.xml
-cargo run -- bench-income-tax ../income-tax.xml
+cargo run -- bench-income-tax tests/fixtures/income-tax.xml
 ```
