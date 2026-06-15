@@ -10,6 +10,9 @@ use bluebell_rs::{parse, pre_parse, DocumentRoot};
 #[derive(Debug, Parser)]
 #[command(name = "bluebell-rs")]
 #[command(about = "Experimental Rust parser for Bluebell Akoma Ntoso markup")]
+#[command(
+    long_about = "Experimental Rust implementation of Bluebell parsing.\n\nUse `to-akn-xml` when you want output comparable to Python Bluebell's parse_to_xml. Use `unparse` to apply the canonical bluebell/akn_text.xsl stylesheet to Akoma Ntoso XML."
+)]
 struct Cli {
     #[command(subcommand)]
     command: Command,
@@ -17,34 +20,67 @@ struct Cli {
 
 #[derive(Debug, Subcommand)]
 enum Command {
+    /// Run Bluebell preprocessing and print the preprocessed text.
     Preparse {
+        /// Bluebell input file.
+        #[arg(value_name = "INPUT")]
         input: PathBuf,
     },
+    /// Parse Bluebell text and print parser statistics without XML output.
     Parse {
+        /// Document root rule to parse with.
         #[arg(value_enum)]
         root: RootArg,
+        /// Bluebell input file.
+        #[arg(value_name = "INPUT")]
         input: PathBuf,
     },
+    /// Parse Bluebell text to the document element only.
+    ///
+    /// This is mainly useful for debugging the Rust XML generator. For full
+    /// Akoma Ntoso XML with metadata, use `to-akn-xml`.
     ToXml {
+        /// Document root to emit, such as `act`, `statement`, or `judgment`.
         #[arg(value_enum)]
         root: RootArg,
+        /// Bluebell input file.
+        #[arg(value_name = "INPUT")]
         input: PathBuf,
     },
+    /// Parse Bluebell text to full Akoma Ntoso XML.
+    ///
+    /// This wraps the document element in `<akomaNtoso>` and inserts generated
+    /// FRBR metadata based on the supplied URI.
     ToAknXml {
+        /// FRBR work URI, for example `/akn/za/act/2022/1`.
+        #[arg(value_name = "FRBR_URI")]
         frbr_uri: String,
+        /// Document root to emit, such as `act`, `statement`, or `judgment`.
         #[arg(value_enum)]
         root: RootArg,
+        /// Bluebell input file.
+        #[arg(value_name = "INPUT")]
         input: PathBuf,
     },
+    /// Convert Akoma Ntoso XML to Bluebell text with bluebell/akn_text.xsl.
     Unparse {
+        /// Akoma Ntoso XML input file.
+        #[arg(value_name = "INPUT")]
         input: PathBuf,
     },
+    /// Benchmark preprocessing and parsing for an existing Bluebell text file.
     BenchText {
+        /// Document root rule to parse with.
         #[arg(value_enum)]
         root: RootArg,
+        /// Bluebell input file.
+        #[arg(value_name = "INPUT")]
         input: PathBuf,
     },
+    /// Benchmark income-tax.xml by first applying the canonical XSLT unparse.
     BenchIncomeTax {
+        /// Akoma Ntoso XML input file.
+        #[arg(value_name = "INPUT")]
         input: PathBuf,
     },
 }
