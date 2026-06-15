@@ -56,7 +56,7 @@ from bluebell import parse_to_xml
 xml = parse_to_xml(text, root="act", frbr_uri="/akn/za/act/2022/1")
 ```
 
-That function can use the Rust extension when installed and fall back to the
+That function uses the Rust extension when installed and falls back to the
 existing Python implementation when it is not available. Existing
 `AkomaNtosoParser` users can keep working unchanged while callers migrate to the
 function API deliberately.
@@ -101,6 +101,7 @@ cargo run -p bluebell-rs -- parse act tests/roundtrip/act.txt
 cargo run -p bluebell-rs -- to-xml act tests/roundtrip/act.txt
 cargo run -p bluebell-rs -- to-akn-xml /akn/za/act/2022/1 act tests/roundtrip/act.txt
 cargo run -p bluebell-rs -- bench-income-tax crates/bluebell-core/tests/fixtures/income-tax.xml
+cd crates/bluebell-python && maturin develop
 ```
 
 The large real-document parity test is ignored by default:
@@ -114,8 +115,7 @@ results.
 
 ## Outstanding Work
 
-- Add the PyO3 extension and Python `bluebell.parse_to_xml(...)` fallback
-  wrapper.
+- Add release automation for the optional `bluebell-akn-rs` extension wheel.
 - Add the WASM package exposing parse-to-XML for browser use.
 - Keep the Rust workspace version in root `Cargo.toml` aligned with Python
   `bluebell.__version__` for releases.

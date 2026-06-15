@@ -1,0 +1,13 @@
+[package]
+name = "bluebell-python"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "_bluebell_rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+bluebell-core = { path = "../bluebell-core" }
+pyo3 = { version = "0.23", features = ["extension-module"] }

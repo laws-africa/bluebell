@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "crates/bluebell-core",
     "crates/bluebell-cli",
+    "crates/bluebell-python",
 ]
 
 [workspace.package]

@@ -185,4 +185,12 @@ class AkomaNtosoParser:
 
 
 def parse_to_xml(text, root, frbr_uri, eid_prefix=''):
+    if not eid_prefix:
+        try:
+            from _bluebell_rs import parse_to_xml as rust_parse_to_xml
+        except ImportError:
+            pass
+        else:
+            return etree.fromstring(rust_parse_to_xml(text, root, str(frbr_uri)))
+
     return AkomaNtosoParser(frbr_uri, eid_prefix).parse_to_xml(text, root)
