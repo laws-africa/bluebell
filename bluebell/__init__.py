@@ -1,4 +1,7 @@
-__version__ = "3.1.1"
+__version__ = "4.0.0"
 
 
-from .parser import parse_to_xml
+def parse_to_xml(text, root, frbr_uri, eid_prefix=''):
+    from .parser import parse_to_xml as _parse_to_xml
+
+    return _parse_to_xml(text, root, frbr_uri, eid_prefix)

@@ -117,6 +117,6 @@ results.
 - Add the PyO3 extension and Python `bluebell.parse_to_xml(...)` fallback
   wrapper.
 - Add the WASM package exposing parse-to-XML for browser use.
-- Decide release/versioning strategy across the Python package, Rust crates,
-  CLI, and WASM package.
+- Keep the Rust workspace version in root `Cargo.toml` aligned with Python
+  `bluebell.__version__` for releases.
 - Add build and release automation for wheels, CLI binaries, and WASM artifacts.

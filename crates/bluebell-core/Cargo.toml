@@ -1,8 +1,8 @@
 [package]
 name = "bluebell-core"
-version = "0.1.0"
-edition = "2021"
-license = "LGPL-3.0-or-later"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
 
 [lib]
 name = "bluebell_core"
