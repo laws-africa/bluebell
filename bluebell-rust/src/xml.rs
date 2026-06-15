@@ -520,7 +520,9 @@ fn collect_document_parts(pair: pest::iterators::Pair<'_, Rule>, parts: &mut Vec
         Rule::conclusions => parts.push(container_to_xml("conclusions", pair, false)),
         Rule::introduction => parts.push(container_to_xml("introduction", pair, true)),
         Rule::background => parts.push(container_to_xml("background", pair, true)),
-        Rule::arguments => parts.push(container_to_xml("arguments", pair, true)),
+        Rule::arguments if !pair.as_str().trim().is_empty() => {
+            parts.push(container_to_xml("arguments", pair, true))
+        }
         Rule::remedies => parts.push(container_to_xml("remedies", pair, true)),
         Rule::motivation => parts.push(container_to_xml("motivation", pair, true)),
         Rule::decision => parts.push(container_to_xml("decision", pair, true)),
@@ -589,7 +591,13 @@ fn body_container_to_xml(name: &str, pair: pest::iterators::Pair<'_, Rule>) -> X
     collect_container_blocks(pair, &mut blocks, true);
     match name {
         "body" => body_from_blocks(blocks),
-        "debateBody" => XmlElement::new(name).children(blocks),
+        "debateBody" => XmlElement::new(name).children(if blocks.is_empty() {
+            vec![XmlElement::new("debateSection")
+                .attr("name", "debateSection")
+                .child(XmlElement::new("p"))]
+        } else {
+            blocks
+        }),
         _ => XmlElement::new(name).children(if blocks.is_empty() {
             vec![XmlElement::new("p")]
         } else {
