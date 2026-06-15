@@ -1,6 +1,5 @@
 use std::fs;
 use std::path::PathBuf;
-use std::process::Command as ProcessCommand;
 use std::time::Instant;
 
 use anyhow::Context;
@@ -121,29 +120,12 @@ fn main() -> anyhow::Result<()> {
             bench_text(&text, root.into())?;
         }
         Command::BenchIncomeTax { input } => {
-            let xml_path = input
-                .canonicalize()
-                .with_context(|| format!("failed to resolve {}", input.display()))?;
-            let script = format!(
-                "from pathlib import Path\nfrom bluebell.parser import AkomaNtosoParser\nfrom cobalt import FrbrUri\np=AkomaNtosoParser(FrbrUri.parse('/akn/za/act/1962/58'))\nprint(p.unparse(Path({xml_path:?}).read_bytes()), end='')\n",
-                xml_path = xml_path.display().to_string()
-            );
+            let xml = fs::read_to_string(&input)
+                .with_context(|| format!("failed to read {}", input.display()))?;
             let start = Instant::now();
-            let output = ProcessCommand::new("python")
-                .arg("-c")
-                .arg(script)
-                .env("PYTHONPATH", python_oracle_path()?)
-                .output()
-                .context("failed to run Python unparse oracle")?;
-            if !output.status.success() {
-                anyhow::bail!(
-                    "Python unparse oracle failed: {}",
-                    String::from_utf8_lossy(&output.stderr)
-                );
-            }
+            let text = bluebell_rs::unparse(&xml).context("failed to apply akn_text.xsl")?;
             let unparse_elapsed = start.elapsed();
-            let text = String::from_utf8(output.stdout).context("oracle emitted non-UTF-8 text")?;
-            println!("oracle_unparse_ms={}", unparse_elapsed.as_millis());
+            println!("xslt_unparse_ms={}", unparse_elapsed.as_millis());
             bench_text(&text, DocumentRoot::Act)?;
         }
     }
@@ -166,17 +148,4 @@ fn bench_text(text: &str, root: DocumentRoot) -> anyhow::Result<()> {
     println!("preparse_ms={}", preparse_elapsed.as_millis());
     println!("parse_ms={}", parse_elapsed.as_millis());
     Ok(())
-}
-
-fn python_oracle_path() -> anyhow::Result<PathBuf> {
-    let cwd = std::env::current_dir().context("failed to inspect current directory")?;
-    if cwd.join("bluebell").is_dir() {
-        return Ok(cwd);
-    }
-    if let Some(parent) = cwd.parent() {
-        if parent.join("bluebell").is_dir() {
-            return Ok(parent.to_path_buf());
-        }
-    }
-    Ok(cwd)
 }

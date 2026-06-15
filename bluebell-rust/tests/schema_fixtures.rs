@@ -3,6 +3,8 @@ use std::path::Path;
 use std::process::Command;
 
 use bluebell_rs::{parse, parse_to_akn_xml, unparse, DocumentRoot};
+use libxml::parser::Parser;
+use libxml::schemas::{SchemaParserContext, SchemaValidationContext};
 
 #[test]
 fn roundtrip_text_fixtures_emit_schema_valid_akn() {
@@ -73,7 +75,7 @@ fn roundtrip_text_fixtures_emit_schema_valid_akn() {
 }
 
 #[test]
-fn xml_fixtures_native_unparse_back_to_schema_valid_akn() {
+fn xml_fixtures_xslt_unparse_back_to_schema_valid_akn() {
     let fixtures = [
         (
             DocumentRoot::Act,
@@ -112,38 +114,79 @@ fn xml_fixtures_native_unparse_back_to_schema_valid_akn() {
             fs::read_to_string(path).unwrap_or_else(|err| panic!("failed to read {path}: {err}"));
         let text = unparse(&xml).unwrap_or_else(|err| panic!("failed to unparse {path}: {err}"));
         parse(&text, root)
-            .unwrap_or_else(|err| panic!("failed to parse native unparse for {path}: {err}"));
+            .unwrap_or_else(|err| panic!("failed to parse XSLT unparse for {path}: {err}"));
         let regenerated = parse_to_akn_xml(&text, root, frbr_uri)
             .unwrap_or_else(|err| panic!("failed to regenerate {path}: {err}"));
         assert_schema_valid(&regenerated, path);
     }
 }
 
+#[test]
+fn xslt_unparse_matches_python_unparse() {
+    let fixtures = [
+        "../tests/roundtrip/attribs.xml",
+        "../tests/roundtrip/eids_basic.xml",
+        "../tests/roundtrip/eids_debatereport.xml",
+        "../tests/roundtrip/eids_edge.xml",
+        "../tests/roundtrip/escapes.xml",
+        "../tests/roundtrip/nested_attachments.xml",
+    ];
+
+    for path in fixtures {
+        let xml =
+            fs::read_to_string(path).unwrap_or_else(|err| panic!("failed to read {path}: {err}"));
+        let rust_text =
+            unparse(&xml).unwrap_or_else(|err| panic!("failed to unparse {path}: {err}"));
+        let python_text = python_unparse(&xml, path);
+        assert_eq!(python_text, rust_text, "XSLT unparse mismatch for {path}");
+    }
+}
+
 fn assert_schema_valid(xml: &str, label: &str) {
+    let parser = Parser::default();
+    let doc = parser
+        .parse_string(xml)
+        .unwrap_or_else(|err| panic!("{label} failed XML parsing before schema validation: {err}"));
+
+    let mut schema_parser = SchemaParserContext::from_file("../akomantoso30-lenient.xsd");
+    let mut validation = SchemaValidationContext::from_parser(&mut schema_parser)
+        .unwrap_or_else(|errors| panic!("failed to parse lenient AKN schema: {errors:?}"));
+
+    validation
+        .validate_document(&doc)
+        .unwrap_or_else(|errors| panic!("{label} failed schema validation: {errors:?}"));
+}
+
+fn python_unparse(xml: &str, label: &str) -> String {
     let dir = tempfile_dir();
     fs::create_dir_all(dir).expect("failed to create temp dir");
-    let xml_path = dir.join("doc.xml");
+    let xml_path = dir.join("unparse.xml");
     fs::write(&xml_path, xml).expect("failed to write temp xml");
     let script = format!(
-        "from lxml import etree\nschema=etree.XMLSchema(etree.parse('../akomantoso30-lenient.xsd'))\ndoc=etree.parse({xml:?})\nvalid=schema.validate(doc)\nprint(valid)\nif not valid:\n print(schema.error_log.last_error)\n raise SystemExit(1)\n",
+        "from pathlib import Path\nfrom bluebell.parser import AkomaNtosoParser\nfrom cobalt import FrbrUri\np=AkomaNtosoParser(FrbrUri.parse('/akn/za/act/2022/1'))\nprint(p.unparse(Path({xml:?}).read_bytes()), end='')\n",
         xml = xml_path.display().to_string()
     );
-    let python = if Path::new("../.env/bin/python").exists() {
-        "../.env/bin/python"
-    } else {
-        "python"
-    };
-    let output = Command::new(python)
+    let output = Command::new(python())
         .arg("-c")
         .arg(script)
+        .env("PYTHONPATH", "..")
         .output()
-        .expect("failed to run python schema validation");
+        .unwrap_or_else(|err| panic!("failed to run python unparse for {label}: {err}"));
     assert!(
         output.status.success(),
-        "{label} failed schema validation:\nstdout:\n{}\nstderr:\n{}",
+        "{label} failed python unparse:\nstdout:\n{}\nstderr:\n{}",
         String::from_utf8_lossy(&output.stdout),
         String::from_utf8_lossy(&output.stderr)
     );
+    String::from_utf8(output.stdout).expect("python unparse emitted non-UTF-8 output")
+}
+
+fn python() -> &'static str {
+    if Path::new("../.env/bin/python").exists() {
+        "../.env/bin/python"
+    } else {
+        "python"
+    }
 }
 
 fn tempfile_dir() -> &'static Path {
