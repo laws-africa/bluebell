@@ -1,12 +1,14 @@
 use std::fs;
+use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::Command as ProcessCommand;
+use std::process::Stdio;
 use std::time::{Duration, Instant};
 
 use anyhow::Context;
 use clap::{Parser, Subcommand, ValueEnum};
 
-use bluebell_rs::{parse, pre_parse, DocumentRoot};
+use bluebell_core::{parse, pre_parse, DocumentRoot};
 
 #[derive(Debug, Parser)]
 #[command(name = "bluebell-rs")]
@@ -132,7 +134,7 @@ fn main() -> anyhow::Result<()> {
         Command::ToXml { root, input } => {
             let text = fs::read_to_string(&input)
                 .with_context(|| format!("failed to read {}", input.display()))?;
-            println!("{}", bluebell_rs::parse_to_xml(&text, root.into())?);
+            println!("{}", bluebell_core::parse_to_xml(&text, root.into())?);
         }
         Command::ToAknXml {
             frbr_uri,
@@ -143,13 +145,13 @@ fn main() -> anyhow::Result<()> {
                 .with_context(|| format!("failed to read {}", input.display()))?;
             println!(
                 "{}",
-                bluebell_rs::parse_to_akn_xml(&text, root.into(), &frbr_uri)?
+                bluebell_core::parse_to_akn_xml(&text, root.into(), &frbr_uri)?
             );
         }
         Command::Unparse { input } => {
             let xml = fs::read_to_string(&input)
                 .with_context(|| format!("failed to read {}", input.display()))?;
-            print!("{}", bluebell_rs::unparse(&xml)?);
+            print!("{}", unparse(&xml)?);
         }
         Command::BenchText { root, input } => {
             let text = fs::read_to_string(&input)
@@ -160,7 +162,7 @@ fn main() -> anyhow::Result<()> {
             let xml = fs::read_to_string(&input)
                 .with_context(|| format!("failed to read {}", input.display()))?;
             let start = Instant::now();
-            let text = bluebell_rs::unparse(&xml).context("failed to apply akn_text.xsl")?;
+            let text = unparse(&xml).context("failed to apply akn_text.xsl")?;
             let unparse_elapsed = start.elapsed();
             println!("xslt_unparse_ms={}", unparse_elapsed.as_millis());
             let rust = bench_text(&text, DocumentRoot::Act)?;
@@ -188,7 +190,7 @@ fn bench_text(text: &str, root: DocumentRoot) -> anyhow::Result<RustBench> {
     let preparse_elapsed = start.elapsed();
 
     let start = Instant::now();
-    let parsed = bluebell_rs::parse_preprocessed(&preprocessed, root)?;
+    let parsed = bluebell_core::parse_preprocessed(&preprocessed, root)?;
     let parse_elapsed = start.elapsed();
 
     println!("root={:?}", parsed.root);
@@ -238,6 +240,53 @@ fn python_path() -> &'static str {
     if Path::new("bluebell").exists() {
         "."
     } else {
-        ".."
+        "../.."
     }
+}
+
+#[derive(Debug, thiserror::Error)]
+enum UnparseError {
+    #[error("canonical unparse stylesheet not found at {0}")]
+    MissingStylesheet(PathBuf),
+    #[error("failed to run xsltproc: {0}")]
+    Io(#[from] std::io::Error),
+    #[error("xsltproc failed: {0}")]
+    Xslt(String),
+    #[error("xsltproc emitted non-UTF-8 output: {0}")]
+    Utf8(#[from] std::string::FromUtf8Error),
+}
+
+fn unparse(xml: &str) -> Result<String, UnparseError> {
+    let stylesheet = stylesheet_path();
+    if !stylesheet.exists() {
+        return Err(UnparseError::MissingStylesheet(stylesheet));
+    }
+
+    let mut child = ProcessCommand::new("xsltproc")
+        .arg(stylesheet)
+        .arg("-")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()?;
+
+    if let Some(mut stdin) = child.stdin.take() {
+        stdin.write_all(xml.as_bytes())?;
+    }
+
+    let output = child.wait_with_output()?;
+    if !output.status.success() {
+        return Err(UnparseError::Xslt(
+            String::from_utf8_lossy(&output.stderr).trim().to_string(),
+        ));
+    }
+
+    Ok(String::from_utf8(output.stdout)?)
+}
+
+fn stylesheet_path() -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join("bluebell")
+        .join("akn_text.xsl")
 }

@@ -1,10 +1,24 @@
 from unittest import TestCase
 
+from cobalt import FrbrUri
+from lxml import etree
+
+from bluebell import parse_to_xml
 from .support import ParserSupport
 
 
 class ParserTestCase(ParserSupport, TestCase):
     maxDiff = None
+
+    def test_top_level_parse_to_xml_function(self):
+        xml = parse_to_xml("P hello", "statement", FrbrUri.parse("/akn/za/statement/2022/1"))
+
+        ns = {'a': 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'}
+        self.assertEqual('akomaNtoso', etree.QName(xml).localname)
+        self.assertEqual(
+            ['hello'],
+            xml.xpath('/a:akomaNtoso/a:statement/a:mainBody/a:p/text()', namespaces=ns),
+        )
 
     def test_pre_parse_empty(self):
         self.assertEqual(

@@ -2,9 +2,12 @@ use std::fs;
 use std::path::Path;
 use std::process::Command;
 
-use bluebell_rs::{parse, parse_to_akn_xml, unparse, DocumentRoot};
+use bluebell_core::{parse, parse_to_akn_xml, DocumentRoot};
 use libxml::parser::Parser;
 use libxml::schemas::{SchemaParserContext, SchemaValidationContext};
+
+mod support;
+use support::{python_path, repo_path, unparse};
 
 #[test]
 fn roundtrip_text_fixtures_emit_schema_valid_akn() {
@@ -12,58 +15,58 @@ fn roundtrip_text_fixtures_emit_schema_valid_akn() {
         (
             DocumentRoot::Act,
             "/akn/za/act/2022/1",
-            "../tests/roundtrip/act-empty.txt",
+            "tests/roundtrip/act-empty.txt",
         ),
         (
             DocumentRoot::Act,
             "/akn/za/act/2022/1",
-            "../tests/roundtrip/act-escapes.txt",
+            "tests/roundtrip/act-escapes.txt",
         ),
         (
             DocumentRoot::Act,
             "/akn/za/act/2022/1",
-            "../tests/roundtrip/act-footnotes.txt",
+            "tests/roundtrip/act-footnotes.txt",
         ),
         (
             DocumentRoot::Act,
             "/akn/za/act/2022/1",
-            "../tests/roundtrip/act.txt",
+            "tests/roundtrip/act.txt",
         ),
         (
             DocumentRoot::DebateReport,
             "/akn/za/debateReport/2022/1",
-            "../tests/roundtrip/debate-report.txt",
+            "tests/roundtrip/debate-report.txt",
         ),
         (
             DocumentRoot::Statement,
             "/akn/za/statement/2022/1",
-            "../tests/roundtrip/eids.txt",
+            "tests/roundtrip/eids.txt",
         ),
         (
             DocumentRoot::Debate,
             "/akn/za/debate/2022/1",
-            "../tests/roundtrip/hansard.txt",
+            "tests/roundtrip/hansard.txt",
         ),
         (
             DocumentRoot::Judgment,
             "/akn/za/judgment/2022/1",
-            "../tests/roundtrip/judgment-attachments.txt",
+            "tests/roundtrip/judgment-attachments.txt",
         ),
         (
             DocumentRoot::Judgment,
             "/akn/za/judgment/2022/1",
-            "../tests/roundtrip/judgment.txt",
+            "tests/roundtrip/judgment.txt",
         ),
         (
             DocumentRoot::Statement,
             "/akn/za/statement/2022/1",
-            "../tests/roundtrip/nested_attachments.txt",
+            "tests/roundtrip/nested_attachments.txt",
         ),
     ];
 
     for (root, frbr_uri, path) in fixtures {
-        let text =
-            fs::read_to_string(path).unwrap_or_else(|err| panic!("failed to read {path}: {err}"));
+        let text = fs::read_to_string(repo_path(path))
+            .unwrap_or_else(|err| panic!("failed to read {path}: {err}"));
         let xml = parse_to_akn_xml(&text, root, frbr_uri)
             .unwrap_or_else(|err| panic!("failed to parse {path}: {err}"));
         assert_schema_valid(&xml, path);
@@ -80,38 +83,38 @@ fn xml_fixtures_xslt_unparse_back_to_schema_valid_akn() {
         (
             DocumentRoot::Act,
             "/akn/za/act/2022/1",
-            "../tests/roundtrip/attribs.xml",
+            "tests/roundtrip/attribs.xml",
         ),
         (
             DocumentRoot::Act,
             "/akn/za/act/2022/1",
-            "../tests/roundtrip/eids_basic.xml",
+            "tests/roundtrip/eids_basic.xml",
         ),
         (
             DocumentRoot::DebateReport,
             "/akn/za/debateReport/2022/1",
-            "../tests/roundtrip/eids_debatereport.xml",
+            "tests/roundtrip/eids_debatereport.xml",
         ),
         (
             DocumentRoot::Act,
             "/akn/za/act/2022/1",
-            "../tests/roundtrip/eids_edge.xml",
+            "tests/roundtrip/eids_edge.xml",
         ),
         (
             DocumentRoot::Act,
             "/akn/za/act/2022/1",
-            "../tests/roundtrip/escapes.xml",
+            "tests/roundtrip/escapes.xml",
         ),
         (
             DocumentRoot::Act,
             "/akn/za/act/2022/1",
-            "../tests/roundtrip/nested_attachments.xml",
+            "tests/roundtrip/nested_attachments.xml",
         ),
     ];
 
     for (root, frbr_uri, path) in fixtures {
-        let xml =
-            fs::read_to_string(path).unwrap_or_else(|err| panic!("failed to read {path}: {err}"));
+        let xml = fs::read_to_string(repo_path(path))
+            .unwrap_or_else(|err| panic!("failed to read {path}: {err}"));
         let text = unparse(&xml).unwrap_or_else(|err| panic!("failed to unparse {path}: {err}"));
         parse(&text, root)
             .unwrap_or_else(|err| panic!("failed to parse XSLT unparse for {path}: {err}"));
@@ -124,17 +127,17 @@ fn xml_fixtures_xslt_unparse_back_to_schema_valid_akn() {
 #[test]
 fn xslt_unparse_matches_python_unparse() {
     let fixtures = [
-        "../tests/roundtrip/attribs.xml",
-        "../tests/roundtrip/eids_basic.xml",
-        "../tests/roundtrip/eids_debatereport.xml",
-        "../tests/roundtrip/eids_edge.xml",
-        "../tests/roundtrip/escapes.xml",
-        "../tests/roundtrip/nested_attachments.xml",
+        "tests/roundtrip/attribs.xml",
+        "tests/roundtrip/eids_basic.xml",
+        "tests/roundtrip/eids_debatereport.xml",
+        "tests/roundtrip/eids_edge.xml",
+        "tests/roundtrip/escapes.xml",
+        "tests/roundtrip/nested_attachments.xml",
     ];
 
     for path in fixtures {
-        let xml =
-            fs::read_to_string(path).unwrap_or_else(|err| panic!("failed to read {path}: {err}"));
+        let xml = fs::read_to_string(repo_path(path))
+            .unwrap_or_else(|err| panic!("failed to read {path}: {err}"));
         let rust_text =
             unparse(&xml).unwrap_or_else(|err| panic!("failed to unparse {path}: {err}"));
         let python_text = python_unparse(&xml, path);
@@ -148,7 +151,12 @@ fn assert_schema_valid(xml: &str, label: &str) {
         .parse_string(xml)
         .unwrap_or_else(|err| panic!("{label} failed XML parsing before schema validation: {err}"));
 
-    let mut schema_parser = SchemaParserContext::from_file("schemas/akomantoso30-lenient.xsd");
+    let schema_path = repo_path("crates/bluebell-core/schemas/akomantoso30-lenient.xsd");
+    let mut schema_parser = SchemaParserContext::from_file(
+        schema_path
+            .to_str()
+            .expect("schema path should be valid UTF-8"),
+    );
     let mut validation = SchemaValidationContext::from_parser(&mut schema_parser)
         .unwrap_or_else(|errors| panic!("failed to parse lenient AKN schema: {errors:?}"));
 
@@ -169,7 +177,7 @@ fn python_unparse(xml: &str, label: &str) -> String {
     let output = Command::new(python())
         .arg("-c")
         .arg(script)
-        .env("PYTHONPATH", "..")
+        .env("PYTHONPATH", python_path())
         .output()
         .unwrap_or_else(|err| panic!("failed to run python unparse for {label}: {err}"));
     assert!(

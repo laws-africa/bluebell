@@ -1,12 +1,13 @@
 [package]
-name = "bluebell-rs"
+name = "bluebell-core"
 version = "0.1.0"
 edition = "2021"
 license = "LGPL-3.0-or-later"
 
+[lib]
+name = "bluebell_core"
+
 [dependencies]
-anyhow = "1.0"
-clap = { version = "4.5", features = ["derive"] }
 pest = "2.7"
 pest_derive = "2.7"
 thiserror = "2.0"

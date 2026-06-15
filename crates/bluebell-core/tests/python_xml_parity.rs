@@ -2,7 +2,10 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use bluebell_rs::{parse_to_akn_xml, unparse, DocumentRoot};
+use bluebell_core::{parse_to_akn_xml, DocumentRoot};
+
+mod support;
+use support::{python_path, repo_path, unparse};
 
 struct ParityCase {
     name: String,
@@ -33,7 +36,9 @@ fn income_tax_xml_roundtrip_parse_matches_python() {
         DocumentRoot::Act,
         "act",
         "/akn/za/act/1962/58".to_string(),
-        PathBuf::from("tests/fixtures/income-tax.xml"),
+        PathBuf::from(repo_path(
+            "crates/bluebell-core/tests/fixtures/income-tax.xml",
+        )),
     );
     assert_case_matches_python(&case);
 }
@@ -67,7 +72,7 @@ fn parity_cases() -> Vec<ParityCase> {
 }
 
 fn discovered_roundtrip_text_cases() -> Vec<ParityCase> {
-    let mut paths = fs::read_dir("../tests/roundtrip")
+    let mut paths = fs::read_dir(repo_path("tests/roundtrip"))
         .expect("failed to read roundtrip fixture directory")
         .map(|entry| {
             entry
@@ -98,7 +103,7 @@ fn discovered_roundtrip_text_cases() -> Vec<ParityCase> {
 }
 
 fn discovered_roundtrip_xml_cases() -> Vec<ParityCase> {
-    let mut paths = fs::read_dir("../tests/roundtrip")
+    let mut paths = fs::read_dir(repo_path("tests/roundtrip"))
         .expect("failed to read roundtrip fixture directory")
         .map(|entry| {
             entry
@@ -549,7 +554,7 @@ fn run_python(script: &str, case_name: &str, action: &str) -> String {
     let output = Command::new(python())
         .arg("-c")
         .arg(script)
-        .env("PYTHONPATH", "..")
+        .env("PYTHONPATH", python_path())
         .output()
         .unwrap_or_else(|err| panic!("{action} failed for {case_name}: {err}"));
     assert!(

@@ -101,15 +101,23 @@ dependencies = [
 ]
 
 [[package]]
-name = "bluebell-rs"
+name = "bluebell-core"
 version = "0.1.0"
 dependencies = [
- "anyhow",
- "clap",
  "libxml",
  "pest",
  "pest_derive",
  "pretty_assertions",
+ "thiserror",
+]
+
+[[package]]
+name = "bluebell-rs"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bluebell-core",
+ "clap",
  "thiserror",
 ]
 
@@ -293,9 +301,9 @@ dependencies = [
 
 [[package]]
 name = "memchr"
-version = "2.8.0"
+version = "2.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
+checksum = "88904434abc2901f197fe8cc55f0445e7ded921dba5911dad2e2b39b48e663c4"
 
 [[package]]
 name = "minimal-lexical"
@@ -487,9 +495,9 @@ dependencies = [
 
 [[package]]
 name = "typenum"
-version = "1.20.0"
+version = "1.20.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "40ce102ab67701b8526c123c1bab5cbe42d7040ccfd0f64af1a385808d2f43de"
+checksum = "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
 
 [[package]]
 name = "ucd-trie"

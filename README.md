@@ -23,6 +23,9 @@ Full documentation: https://laws.africa/bluebell/
 
 See https://laws.africa/bluebell/ for installation, CLI usage, and grammar guides.
 
+The Rust parser workspace lives in `crates/`; see `crates/README.md` for its
+current status, parity checks, and CLI commands.
+
 ### Quick start
 
 Install from PyPI:
@@ -40,12 +43,11 @@ bluebell /za/act/2020/1 act act.txt --pretty
 From Python code, parse the same file:
 
 ```python
-from bluebell.parser import AkomaNtosoParser
 from cobalt.uri import FrbrUri
+from bluebell import parse_to_xml
 
 frbr_uri = FrbrUri.parse("/akn/za/act/2009/1")
-parser = AkomaNtosoParser(frbr_uri)
-xml = parser.parse_to_xml("""
+xml = parse_to_xml("""
 CHAPTER 1 - Heading
 
   SECTION 1 - Short title
@@ -62,7 +64,7 @@ CHAPTER 1 - Heading
 
       ITEM (B)
         Here is item (b) text.
-""")
+""", "act", frbr_uri)
 print(xml)
 ```
 

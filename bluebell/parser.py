@@ -182,3 +182,7 @@ class AkomaNtosoParser:
         xslt = etree.XSLT(etree.parse(fname))
 
         return str(xslt(xml))
+
+
+def parse_to_xml(text, root, frbr_uri, eid_prefix=''):
+    return AkomaNtosoParser(frbr_uri, eid_prefix).parse_to_xml(text, root)

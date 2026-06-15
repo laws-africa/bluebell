@@ -1,5 +1,7 @@
+#![allow(dead_code)]
+
 use std::io::Write;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
 #[derive(Debug, thiserror::Error)]
@@ -42,28 +44,16 @@ pub fn unparse(xml: &str) -> Result<String, UnparseError> {
     Ok(String::from_utf8(output.stdout)?)
 }
 
-fn stylesheet_path() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .unwrap_or_else(|| std::path::Path::new("."))
-        .join("bluebell")
-        .join("akn_text.xsl")
+pub fn repo_path(path: &str) -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(path)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::xml::parse_to_akn_xml;
-    use crate::DocumentRoot;
+pub fn python_path() -> &'static str {
+    "../.."
+}
 
-    #[test]
-    fn unparse_uses_canonical_stylesheet() {
-        let xml = parse_to_akn_xml(
-            "P Hello **bold**",
-            DocumentRoot::Statement,
-            "/akn/za/statement/2022/1",
-        )
-        .unwrap();
-        assert_eq!("Hello **bold**\n\n", unparse(&xml).unwrap());
-    }
+fn stylesheet_path() -> PathBuf {
+    repo_path("bluebell/akn_text.xsl")
 }
