@@ -44,10 +44,10 @@ From Python code, parse the same file:
 
 ```python
 from cobalt.uri import FrbrUri
-from bluebell import parse_to_xml
+from bluebell import parse_to_xml, parse_to_xml_bytes, parse_to_xml_str
 
 frbr_uri = FrbrUri.parse("/akn/za/act/2009/1")
-xml = parse_to_xml("""
+xml = parse_to_xml_str("""
 CHAPTER 1 - Heading
 
   SECTION 1 - Short title
@@ -66,6 +66,9 @@ CHAPTER 1 - Heading
         Here is item (b) text.
 """, "act", frbr_uri)
 print(xml)
+
+xml_bytes = parse_to_xml_bytes("P Hello", "statement", "/akn/za/statement/2024/1")
+xml_tree = parse_to_xml("P Hello", "statement", "/akn/za/statement/2024/1")
 ```
 
 ## Development

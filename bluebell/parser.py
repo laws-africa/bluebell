@@ -185,12 +185,24 @@ class AkomaNtosoParser:
 
 
 def parse_to_xml(text, root, frbr_uri, eid_prefix=''):
+    """Parse text for a particular root rule into an XML document."""
+    return etree.fromstring(parse_to_xml_bytes(text, root, frbr_uri, eid_prefix))
+
+
+def parse_to_xml_str(text, root, frbr_uri, eid_prefix='') -> str:
+    """Parse text for a particular root rule into an XML string."""
+    return parse_to_xml_bytes(text, root, frbr_uri, eid_prefix).decode('utf-8')
+
+
+def parse_to_xml_bytes(text, root, frbr_uri, eid_prefix='') -> bytes:
+    """Parse text for a particular root rule into UTF-8 encoded XML bytes."""
     if not eid_prefix:
         try:
-            from _bluebell_rs import parse_to_xml as rust_parse_to_xml
+            from _bluebell_rs import parse_to_xml as rust_parse_to_xml_bytes
         except ImportError:
             pass
         else:
-            return etree.fromstring(rust_parse_to_xml(text, root, str(frbr_uri)))
+            return rust_parse_to_xml_bytes(text, root, str(frbr_uri))
 
-    return AkomaNtosoParser(frbr_uri, eid_prefix).parse_to_xml(text, root)
+    xml = AkomaNtosoParser(frbr_uri, eid_prefix).parse_to_xml(text, root)
+    return etree.tostring(xml, encoding='utf-8')

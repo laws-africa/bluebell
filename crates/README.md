@@ -51,13 +51,17 @@ The Python package should expose a new function API, rather than changing
 `AkomaNtosoParser.parse_to_xml()` to delegate internally:
 
 ```python
-from bluebell import parse_to_xml
+from bluebell import parse_to_xml, parse_to_xml_bytes, parse_to_xml_str
 
 xml = parse_to_xml(text, root="act", frbr_uri="/akn/za/act/2022/1")
+xml_text = parse_to_xml_str(text, root="act", frbr_uri="/akn/za/act/2022/1")
+xml_bytes = parse_to_xml_bytes(text, root="act", frbr_uri="/akn/za/act/2022/1")
 ```
 
-That function uses the Rust extension when installed and falls back to the
-existing Python implementation when it is not available. Existing
+`parse_to_xml()` returns an lxml element, `parse_to_xml_str()` returns a Python
+`str`, and `parse_to_xml_bytes()` returns UTF-8 encoded `bytes`. These functions
+use the Rust extension when installed and fall back to the existing Python
+implementation when it is not available. Existing
 `AkomaNtosoParser` users can keep working unchanged while callers migrate to the
 function API deliberately.
 

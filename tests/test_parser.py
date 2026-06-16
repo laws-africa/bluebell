@@ -7,7 +7,7 @@ from cobalt import FrbrUri
 from lxml import etree
 
 import bluebell.parser
-from bluebell import parse_to_xml
+from bluebell import parse_to_xml, parse_to_xml_bytes, parse_to_xml_str
 from .support import ParserSupport
 
 
@@ -23,6 +23,20 @@ class ParserTestCase(ParserSupport, TestCase):
             ['hello'],
             xml.xpath('/a:akomaNtoso/a:statement/a:mainBody/a:p/text()', namespaces=ns),
         )
+
+    def test_top_level_parse_to_xml_str_function(self):
+        xml = parse_to_xml_str("P hello", "statement", FrbrUri.parse("/akn/za/statement/2022/1"))
+
+        self.assertIsInstance(xml, str)
+        self.assertIn('<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">', xml)
+        self.assertIn('>hello</p>', xml)
+
+    def test_top_level_parse_to_xml_bytes_function(self):
+        xml = parse_to_xml_bytes("P hello", "statement", FrbrUri.parse("/akn/za/statement/2022/1"))
+
+        self.assertIsInstance(xml, bytes)
+        self.assertIn(b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">', xml)
+        self.assertIn(b'>hello</p>', xml)
 
     def test_top_level_parse_to_xml_uses_rust_extension_when_available(self):
         module = types.ModuleType("_bluebell_rs")
@@ -40,6 +54,42 @@ class ParserTestCase(ParserSupport, TestCase):
             )
 
         self.assertEqual(["rust"], xml.xpath("//*[local-name()='p']/text()"))
+
+    def test_top_level_parse_to_xml_str_decodes_rust_extension_bytes(self):
+        module = types.ModuleType("_bluebell_rs")
+        module.parse_to_xml = lambda text, root, frbr_uri: (
+            b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
+            b'<statement name="statement"><mainBody><p eId="p_1">rust</p></mainBody></statement>'
+            b'</akomaNtoso>'
+        )
+
+        with patch.dict(sys.modules, {"_bluebell_rs": module}):
+            xml = bluebell.parser.parse_to_xml_str(
+                "P ignored",
+                "statement",
+                FrbrUri.parse("/akn/za/statement/2022/1"),
+            )
+
+        self.assertIsInstance(xml, str)
+        self.assertIn(">rust</p>", xml)
+
+    def test_top_level_parse_to_xml_bytes_uses_rust_extension_when_available(self):
+        module = types.ModuleType("_bluebell_rs")
+        module.parse_to_xml = lambda text, root, frbr_uri: (
+            b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
+            b'<statement name="statement"><mainBody><p eId="p_1">rust</p></mainBody></statement>'
+            b'</akomaNtoso>'
+        )
+
+        with patch.dict(sys.modules, {"_bluebell_rs": module}):
+            xml = bluebell.parser.parse_to_xml_bytes(
+                "P ignored",
+                "statement",
+                FrbrUri.parse("/akn/za/statement/2022/1"),
+            )
+
+        self.assertIsInstance(xml, bytes)
+        self.assertIn(b">rust</p>", xml)
 
     def test_top_level_parse_to_xml_skips_rust_extension_for_eid_prefix(self):
         module = types.ModuleType("_bluebell_rs")
