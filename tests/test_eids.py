@@ -35,6 +35,11 @@ class IdGeneratorTestCase(ParserSupport, TestCase):
         self.assertEqual("3é", self.generator.ids.clean_num("3é"))
         self.assertEqual("3a-4-9", self.generator.ids.clean_num(" -3a--4,9"))
 
+        # backslashes are punctuation, too
+        self.assertEqual("5", self.generator.ids.clean_num("5\\"))
+        self.assertEqual("5", self.generator.ids.clean_num("\\5"))
+        self.assertEqual("5-6", self.generator.ids.clean_num("5\\6"))
+
         # hebrew aleph
         self.assertEqual("א", self.generator.ids.clean_num("(א)"))
         # chinese 3
