@@ -83,7 +83,7 @@ xml_tree = parse_to_xml("P Hello", "statement", "/akn/za/statement/2024/1")
 1. Update the Python version in `bluebell/__init__.py` and the Rust workspace
    version in the root `Cargo.toml` under `[workspace.package]`. They should
    match for a release.
-2. Commit your changes and push to the master branch on GitHub
+2. Commit your changes and push to the main branch on GitHub
 3. Create a release in GitHub and it will automatically be pushed to PyPi
 
 # License
