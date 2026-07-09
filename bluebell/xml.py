@@ -9,13 +9,13 @@ class IdGenerator:
     """ Support class for generating ID elements when building an XML document.
     """
     # leading whitespace and punctuation
-    leading_punct_re = re.compile(r'^[\s\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~]+')
+    leading_punct_re = re.compile(r'^[\s\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\\\]^_`{|}~]+')
     # trailing whitespace and punctuation
-    trailing_punct_re = re.compile(r'[\s\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~]+$')
+    trailing_punct_re = re.compile(r'[\s\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\\\]^_`{|}~]+$')
     # whitespace
     whitespace_re = re.compile(r'\s')
     # general punctuation
-    punct_re = re.compile(r'[\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~]+')
+    punct_re = re.compile(r'[\u2000-\u206f\u2e00-\u2e7f!"#$%&\'()*+,\-./:;<=>?@\[\\\]^_`{|}~]+')
 
     id_exempt = set("akomaNtoso act amendment amendmentList bill debate debateReport doc documentCollection judgment"
                     " officialGazette portion statement"
