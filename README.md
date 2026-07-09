@@ -76,7 +76,7 @@ print(xml)
 ## Releasing a new version
 
 1. Update the version by changing the `__version__` variable in `bluebell/__init__.py`
-2. Commit your changes and push to the master branch on GitHub
+2. Commit your changes and push to the main branch on GitHub
 3. Create a release in GitHub and it will automatically be pushed to PyPi
 
 # License

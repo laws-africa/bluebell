@@ -3,7 +3,7 @@ name: Update bluebell-monaco
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'bluebell/akn_text.xsl'
 
