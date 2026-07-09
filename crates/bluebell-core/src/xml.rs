@@ -2,6 +2,7 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::eid::IdGenerator;
+use crate::frbr::{FrbrUri, InvalidFrbrUri};
 use crate::parser::{parse_pairs_preprocessed, DocumentRoot, ParseError, Rule};
 use crate::preprocess::pre_parse;
 
@@ -67,6 +68,8 @@ impl From<&str> for XmlNode {
 pub enum XmlError {
     #[error(transparent)]
     Parse(#[from] ParseError),
+    #[error(transparent)]
+    FrbrUri(#[from] InvalidFrbrUri),
 }
 
 pub fn parse_to_xml(text: &str, root: DocumentRoot) -> Result<String, XmlError> {
@@ -88,26 +91,27 @@ pub fn parse_preprocessed_to_akn_xml(
     root: DocumentRoot,
     frbr_uri: &str,
 ) -> Result<String, XmlError> {
+    let frbr_uri = FrbrUri::parse(frbr_uri)?;
     let pairs = parse_pairs_preprocessed(text, root)?;
     let mut doc_el = document_to_xml(root, pairs);
     doc_el.attrs.remove("xmlns");
     resolve_displaced_content(&mut doc_el);
     normalise_empty_elements(&mut doc_el);
-    add_attachment_doc_meta(&mut doc_el, frbr_uri);
+    add_attachment_doc_meta(&mut doc_el, &frbr_uri);
     doc_el
         .children
-        .insert(0, XmlNode::Element(make_meta(frbr_uri, root_name(root))));
+        .insert(0, XmlNode::Element(make_meta(&frbr_uri)));
     let mut akn = XmlElement::new("akomaNtoso").attr("xmlns", AKN_NS);
     akn.children.push(XmlNode::Element(doc_el));
     rewrite_all_eids(&mut akn, "");
     Ok(akn.to_xml_string())
 }
 
-fn add_attachment_doc_meta(element: &mut XmlElement, frbr_uri: &str) {
+fn add_attachment_doc_meta(element: &mut XmlElement, frbr_uri: &FrbrUri) {
     add_attachment_doc_meta_scoped(element, frbr_uri, "");
 }
 
-fn add_attachment_doc_meta_scoped(element: &mut XmlElement, frbr_uri: &str, parent_suffix: &str) {
+fn add_attachment_doc_meta_scoped(element: &mut XmlElement, frbr_uri: &FrbrUri, parent: &str) {
     if element.name == "attachments" {
         let mut counts: HashMap<String, usize> = HashMap::new();
         for child in &mut element.children {
@@ -123,19 +127,19 @@ fn add_attachment_doc_meta_scoped(element: &mut XmlElement, frbr_uri: &str, pare
             let count = counts.entry(doc_name.clone()).or_insert(0);
             *count += 1;
             let local = format!("{doc_name}_{count}");
-            let suffix = if parent_suffix.is_empty() {
-                format!("!{local}")
+            let component = if parent.is_empty() {
+                local
             } else {
-                format!("{parent_suffix}/{local}")
+                format!("{parent}/{local}")
             };
-            insert_attachment_meta(attachment, frbr_uri, &suffix, &title);
-            add_attachment_doc_meta_scoped(attachment, frbr_uri, &suffix);
+            insert_attachment_meta(attachment, frbr_uri, &component, &title);
+            add_attachment_doc_meta_scoped(attachment, frbr_uri, &component);
         }
         return;
     }
     for child in &mut element.children {
         if let XmlNode::Element(el) = child {
-            add_attachment_doc_meta_scoped(el, frbr_uri, parent_suffix);
+            add_attachment_doc_meta_scoped(el, frbr_uri, parent);
         }
     }
 }
@@ -161,7 +165,12 @@ fn attachment_doc_name_and_title(attachment: &XmlElement) -> Option<(String, Str
     Some((doc_name, title))
 }
 
-fn insert_attachment_meta(attachment: &mut XmlElement, frbr_uri: &str, suffix: &str, title: &str) {
+fn insert_attachment_meta(
+    attachment: &mut XmlElement,
+    frbr_uri: &FrbrUri,
+    component: &str,
+    title: &str,
+) {
     for child in &mut attachment.children {
         if let XmlNode::Element(doc) = child {
             if doc.name == "doc"
@@ -172,7 +181,7 @@ fn insert_attachment_meta(attachment: &mut XmlElement, frbr_uri: &str, suffix: &
             {
                 doc.children.insert(
                     0,
-                    XmlNode::Element(make_attachment_meta(frbr_uri, suffix, title)),
+                    XmlNode::Element(make_attachment_meta(frbr_uri, component, title)),
                 );
             }
         }
@@ -318,80 +327,34 @@ fn root_name(root: DocumentRoot) -> &'static str {
     }
 }
 
-fn make_meta(frbr_uri: &str, root_name: &str) -> XmlElement {
-    let info = FrbrInfo::parse(frbr_uri, root_name);
-    let today = today_iso_date();
-    XmlElement::new("meta")
-        .child(
-            XmlElement::new("identification")
-                .attr("source", "#cobalt")
-                .child(
-                    XmlElement::new("FRBRWork")
-                        .child(XmlElement::new("FRBRthis").attr("value", info.work_uri.clone()))
-                        .child(XmlElement::new("FRBRuri").attr("value", info.work_uri.clone()))
-                        .child(
-                            XmlElement::new("FRBRalias")
-                                .attr("value", "Untitled")
-                                .attr("name", "title"),
-                        )
-                        .child(
-                            XmlElement::new("FRBRdate")
-                                .attr("date", info.year.clone())
-                                .attr("name", "Generation"),
-                        )
-                        .child(XmlElement::new("FRBRauthor").attr("href", ""))
-                        .child(XmlElement::new("FRBRcountry").attr("value", info.country.clone()))
-                        .child(XmlElement::new("FRBRnumber").attr("value", info.number.clone())),
-                )
-                .child(
-                    XmlElement::new("FRBRExpression")
-                        .child(XmlElement::new("FRBRthis").attr("value", info.expr_uri.clone()))
-                        .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri.clone()))
-                        .child(
-                            XmlElement::new("FRBRdate")
-                                .attr("date", today.clone())
-                                .attr("name", "Generation"),
-                        )
-                        .child(XmlElement::new("FRBRauthor").attr("href", ""))
-                        .child(XmlElement::new("FRBRlanguage").attr("language", "eng")),
-                )
-                .child(
-                    XmlElement::new("FRBRManifestation")
-                        .child(XmlElement::new("FRBRthis").attr("value", info.expr_uri.clone()))
-                        .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri))
-                        .child(
-                            XmlElement::new("FRBRdate")
-                                .attr("date", today)
-                                .attr("name", "Generation"),
-                        )
-                        .child(XmlElement::new("FRBRauthor").attr("href", "")),
-                ),
-        )
-        .child(
-            XmlElement::new("references")
-                .attr("source", "#cobalt")
-                .child(
-                    XmlElement::new("TLCOrganization")
-                        .attr("eId", "cobalt")
-                        .attr("href", "https://github.com/laws-africa/cobalt")
-                        .attr("showAs", "cobalt"),
-                ),
-        )
+fn make_meta(frbr_uri: &FrbrUri) -> XmlElement {
+    identification_meta(frbr_uri, "Untitled").child(
+        XmlElement::new("references")
+            .attr("source", "#cobalt")
+            .child(
+                XmlElement::new("TLCOrganization")
+                    .attr("eId", "cobalt")
+                    .attr("href", "https://github.com/laws-africa/cobalt")
+                    .attr("showAs", "cobalt"),
+            ),
+    )
 }
 
-fn make_attachment_meta(frbr_uri: &str, suffix: &str, title: &str) -> XmlElement {
-    let info = FrbrInfo::parse(frbr_uri, "doc");
+fn make_attachment_meta(frbr_uri: &FrbrUri, component: &str, title: &str) -> XmlElement {
+    let mut frbr_uri = frbr_uri.clone();
+    frbr_uri.work_component = Some(component.to_string());
+    identification_meta(&frbr_uri, title)
+}
+
+fn identification_meta(frbr_uri: &FrbrUri, title: &str) -> XmlElement {
     let today = today_iso_date();
     XmlElement::new("meta").child(
         XmlElement::new("identification")
             .attr("source", "#cobalt")
             .child(
                 XmlElement::new("FRBRWork")
-                    .child(
-                        XmlElement::new("FRBRthis")
-                            .attr("value", format!("{}/{}", info.work_uri, suffix)),
-                    )
-                    .child(XmlElement::new("FRBRuri").attr("value", info.work_uri.clone()))
+                    .child(XmlElement::new("FRBRthis").attr("value", frbr_uri.work_uri(true)))
+                    .child(XmlElement::new("FRBRuri").attr("value", frbr_uri.work_uri(false)))
                     .child(
                         XmlElement::new("FRBRalias")
                             .attr("value", title)
@@ -399,35 +362,36 @@ fn make_attachment_meta(frbr_uri: &str, suffix: &str, title: &str) -> XmlElement
                     )
                     .child(
                         XmlElement::new("FRBRdate")
-                            .attr("date", info.year.clone())
+                            .attr("date", frbr_uri.date.clone())
                             .attr("name", "Generation"),
                     )
                     .child(XmlElement::new("FRBRauthor").attr("href", ""))
-                    .child(XmlElement::new("FRBRcountry").attr("value", info.country.clone()))
-                    .child(XmlElement::new("FRBRnumber").attr("value", info.number.clone())),
+                    .child(XmlElement::new("FRBRcountry").attr("value", frbr_uri.place()))
+                    .child(XmlElement::new("FRBRnumber").attr("value", frbr_uri.number.clone())),
             )
             .child(
                 XmlElement::new("FRBRExpression")
-                    .child(
-                        XmlElement::new("FRBRthis")
-                            .attr("value", format!("{}/{}", info.expr_uri, suffix)),
-                    )
-                    .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri.clone()))
+                    .child(XmlElement::new("FRBRthis").attr("value", frbr_uri.expression_uri(true)))
+                    .child(XmlElement::new("FRBRuri").attr("value", frbr_uri.expression_uri(false)))
                     .child(
                         XmlElement::new("FRBRdate")
                             .attr("date", today.clone())
                             .attr("name", "Generation"),
                     )
                     .child(XmlElement::new("FRBRauthor").attr("href", ""))
-                    .child(XmlElement::new("FRBRlanguage").attr("language", "eng")),
+                    .child(
+                        XmlElement::new("FRBRlanguage")
+                            .attr("language", frbr_uri.language.clone()),
+                    ),
             )
             .child(
                 XmlElement::new("FRBRManifestation")
                     .child(
-                        XmlElement::new("FRBRthis")
-                            .attr("value", format!("{}/{}", info.expr_uri, suffix)),
+                        XmlElement::new("FRBRthis").attr("value", frbr_uri.manifestation_uri(true)),
                     )
-                    .child(XmlElement::new("FRBRuri").attr("value", info.expr_uri))
+                    .child(
+                        XmlElement::new("FRBRuri").attr("value", frbr_uri.manifestation_uri(false)),
+                    )
                     .child(
                         XmlElement::new("FRBRdate")
                             .attr("date", today)
@@ -459,36 +423,6 @@ fn civil_from_days(days_since_unix_epoch: i64) -> (i64, i64, i64) {
     let month = mp + if mp < 10 { 3 } else { -9 };
     let year = y + if month <= 2 { 1 } else { 0 };
     (year, month, day)
-}
-
-struct FrbrInfo {
-    work_uri: String,
-    expr_uri: String,
-    country: String,
-    year: String,
-    number: String,
-}
-
-impl FrbrInfo {
-    fn parse(frbr_uri: &str, root_name: &str) -> Self {
-        let parts: Vec<_> = frbr_uri.trim_matches('/').split('/').collect();
-        let country = parts.get(1).copied().unwrap_or("za").to_string();
-        let year = parts.get(3).copied().unwrap_or("2026").to_string();
-        let number = parts.get(4).copied().unwrap_or("1").to_string();
-        let work_uri = if frbr_uri.starts_with("/akn/") {
-            frbr_uri.to_string()
-        } else {
-            format!("/akn/{country}/{root_name}/{year}/{number}")
-        };
-        let expr_uri = format!("{work_uri}/eng");
-        Self {
-            work_uri,
-            expr_uri,
-            country,
-            year,
-            number,
-        }
-    }
 }
 
 fn push_part(root: &mut XmlElement, parts: &[XmlElement], name: &str) {
@@ -1710,112 +1644,160 @@ fn rewrite_all_eids(element: &mut XmlElement, prefix: &str) {
     rewriter.rewrite(element, prefix);
 }
 
-fn resolve_displaced_content(root: &mut XmlElement) {
-    let mut displaced = Vec::new();
-    let mut notes = Vec::new();
-    collect_displaced_and_notes(root, &mut Vec::new(), &mut displaced, &mut notes);
+/// Transient attribute used to give authorialNote elements a stable identity
+/// while displaced content is moved around, mirroring lxml element identity in
+/// the Python implementation. Never serialized: stripped before returning.
+const NOTE_RID_ATTR: &str = "\u{1}rid";
 
-    let mut used = HashSet::new();
-    for note in notes.iter().rev() {
-        let children = find_displaced_for_note(note, &displaced, &used)
-            .map(|idx| {
-                used.insert(idx);
-                element_at_path(root, &displaced[idx].path)
-                    .map(|el| el.children.clone())
-                    .unwrap_or_else(|| displaced[idx].children.clone())
-            })
-            .unwrap_or_else(|| {
-                vec![XmlNode::Element(
-                    XmlElement::new("p").text("(content missing)"),
-                )]
-            });
-        if let Some(el) = element_mut_at_path(root, &note.path) {
-            el.children = children;
+/// Resolve displaced content (ie. footnotes), mirroring Python's
+/// XmlGenerator.resolve_displaced_content: process refs in document order,
+/// find the matching displaced element by walking ancestors nearest-first and
+/// scanning each ancestor's subtree in document order, and move (not copy) the
+/// displaced children into the ref. Unused displaced content is converted to
+/// a "FOOTNOTE <marker>" paragraph followed by its children, in place.
+fn resolve_displaced_content(root: &mut XmlElement) {
+    let mut note_count = 0usize;
+    tag_note_rids(root, &mut note_count);
+
+    for rid in 0..note_count {
+        let rid = rid.to_string();
+        let Some(note_path) = find_element_path(root, &mut Vec::new(), &|el, _| {
+            el.attrs.get(NOTE_RID_ATTR) == Some(&rid)
+        }) else {
+            continue;
+        };
+        let marker = element_at_path(root, &note_path)
+            .and_then(|el| el.attrs.get("marker").cloned())
+            .unwrap_or_default();
+
+        let mut found = None;
+        for depth in (0..note_path.len()).rev() {
+            let ancestor_path = &note_path[..depth];
+            let Some(ancestor) = element_at_path(root, ancestor_path) else {
+                continue;
+            };
+            if let Some(displaced_path) = find_element_path(
+                ancestor,
+                &mut ancestor_path.to_vec(),
+                &|el: &XmlElement, path: &[usize]| {
+                    el.name == "displaced"
+                        && el.attrs.get("name").map(String::as_str) == Some("footnote")
+                        && el.attrs.get("marker") == Some(&marker)
+                        // never match displaced content that contains the note
+                        // itself; Python raises on this pathological case
+                        && !note_path.starts_with(path)
+                },
+            ) {
+                found = Some(displaced_path);
+                break;
+            }
+        }
+
+        let children = match &found {
+            Some(displaced_path) => element_mut_at_path(root, displaced_path)
+                .map(|el| std::mem::take(&mut el.children))
+                .unwrap_or_default(),
+            None => vec![XmlNode::Element(
+                XmlElement::new("p").text("(content missing)"),
+            )],
+        };
+        if let Some(note) = element_mut_at_path(root, &note_path) {
+            note.children.extend(children);
+        }
+        if let Some(displaced_path) = found {
+            remove_element_at_path(root, &displaced_path);
         }
     }
-    remove_displaced(root);
+
+    convert_leftover_displaced(root);
+    strip_note_rids(root);
 }
 
-#[derive(Clone)]
-struct DisplacedContent {
-    path: Vec<usize>,
-    marker: String,
-    name: String,
-    children: Vec<XmlNode>,
+fn tag_note_rids(element: &mut XmlElement, next: &mut usize) {
+    if element.name == "authorialNote" {
+        element
+            .attrs
+            .insert(NOTE_RID_ATTR.to_string(), next.to_string());
+        *next += 1;
+    }
+    for child in &mut element.children {
+        if let XmlNode::Element(el) = child {
+            tag_note_rids(el, next);
+        }
+    }
 }
 
-struct DisplacedRef {
-    path: Vec<usize>,
-    marker: String,
+fn strip_note_rids(element: &mut XmlElement) {
+    element.attrs.remove(NOTE_RID_ATTR);
+    for child in &mut element.children {
+        if let XmlNode::Element(el) = child {
+            strip_note_rids(el);
+        }
+    }
 }
 
-fn collect_displaced_and_notes(
+/// Find the first element (in document order, including `element` itself) that
+/// matches `pred`. `path` holds the path to `element` and the predicate is
+/// given each candidate's full path.
+fn find_element_path(
     element: &XmlElement,
     path: &mut Vec<usize>,
-    displaced: &mut Vec<DisplacedContent>,
-    notes: &mut Vec<DisplacedRef>,
-) {
-    if element.name == "displaced" {
-        if let (Some(name), Some(marker)) = (element.attrs.get("name"), element.attrs.get("marker"))
-        {
-            displaced.push(DisplacedContent {
-                path: path.clone(),
-                marker: marker.clone(),
-                name: name.clone(),
-                children: element.children.clone(),
-            });
-        }
-    } else if element.name == "authorialNote" {
-        notes.push(DisplacedRef {
-            path: path.clone(),
-            marker: element.attrs.get("marker").cloned().unwrap_or_default(),
-        });
+    pred: &impl Fn(&XmlElement, &[usize]) -> bool,
+) -> Option<Vec<usize>> {
+    if pred(element, path) {
+        return Some(path.clone());
     }
     for (idx, child) in element.children.iter().enumerate() {
         if let XmlNode::Element(el) = child {
             path.push(idx);
-            collect_displaced_and_notes(el, path, displaced, notes);
+            if let Some(found) = find_element_path(el, path, pred) {
+                return Some(found);
+            }
             path.pop();
-        }
-    }
-}
-
-fn find_displaced_for_note(
-    note: &DisplacedRef,
-    displaced: &[DisplacedContent],
-    used: &HashSet<usize>,
-) -> Option<usize> {
-    for depth in (0..note.path.len()).rev() {
-        let ancestor = &note.path[..depth];
-        if let Some(idx) = displaced.iter().enumerate().find_map(|(idx, item)| {
-            (!used.contains(&idx)
-                && item.name == "footnote"
-                && item.marker == note.marker
-                && is_descendant_path(ancestor, &item.path)
-                && item.path > note.path)
-                .then_some(idx)
-        }) {
-            return Some(idx);
-        }
-    }
-
-    for depth in (0..note.path.len()).rev() {
-        let ancestor = &note.path[..depth];
-        if let Some(idx) = displaced.iter().enumerate().find_map(|(idx, item)| {
-            (!used.contains(&idx)
-                && item.name == "footnote"
-                && item.marker == note.marker
-                && is_descendant_path(ancestor, &item.path))
-            .then_some(idx)
-        }) {
-            return Some(idx);
         }
     }
     None
 }
 
-fn is_descendant_path(ancestor: &[usize], path: &[usize]) -> bool {
-    path.len() > ancestor.len() && path.starts_with(ancestor)
+fn remove_element_at_path(root: &mut XmlElement, path: &[usize]) {
+    let Some((&idx, parent_path)) = path.split_last() else {
+        return;
+    };
+    if let Some(parent) = element_mut_at_path(root, parent_path) {
+        if idx < parent.children.len() {
+            parent.children.remove(idx);
+        }
+    }
+}
+
+/// Don't lose unused displaced content: change it to a "FOOTNOTE <marker>" p
+/// tag and pull its children in as siblings, like Python.
+fn convert_leftover_displaced(root: &mut XmlElement) {
+    while let Some(path) = find_element_path(root, &mut Vec::new(), &|el: &XmlElement, _: &[usize]| {
+        el.name == "displaced"
+    }) {
+        let Some((&idx, parent_path)) = path.split_last() else {
+            return;
+        };
+        let Some(parent) = element_mut_at_path(root, parent_path) else {
+            return;
+        };
+        let XmlNode::Element(displaced) = parent.children.remove(idx) else {
+            return;
+        };
+        let name = displaced
+            .attrs
+            .get("name")
+            .cloned()
+            .unwrap_or_default()
+            .to_uppercase();
+        let marker = displaced.attrs.get("marker").cloned().unwrap_or_default();
+        let mut replacement = vec![XmlNode::Element(
+            XmlElement::new("p").text(format!("{name} {marker}")),
+        )];
+        replacement.extend(displaced.children);
+        parent.children.splice(idx..idx, replacement);
+    }
 }
 
 fn element_mut_at_path<'a>(
@@ -1839,22 +1821,6 @@ fn element_at_path<'a>(mut element: &'a XmlElement, path: &[usize]) -> Option<&'
         }
     }
     Some(element)
-}
-
-fn remove_displaced(element: &mut XmlElement) {
-    element.children.retain(|child| {
-        !matches!(
-            child,
-            XmlNode::Element(el)
-                if el.name == "displaced"
-                    && el.attrs.get("name").map(|name| name == "footnote").unwrap_or(false)
-        )
-    });
-    for child in &mut element.children {
-        if let XmlNode::Element(el) = child {
-            remove_displaced(el);
-        }
-    }
 }
 
 fn normalise_empty_elements(element: &mut XmlElement) {
@@ -2011,6 +1977,8 @@ fn escape_text(text: &str, out: &mut String) {
             '&' => out.push_str("&amp;"),
             '<' => out.push_str("&lt;"),
             '>' => out.push_str("&gt;"),
+            // a literal \r would be normalized to \n by XML parsers
+            '\r' => out.push_str("&#13;"),
             _ => out.push(c),
         }
     }
@@ -2022,6 +1990,10 @@ fn escape_attr(text: &str, out: &mut String) {
             '&' => out.push_str("&amp;"),
             '<' => out.push_str("&lt;"),
             '"' => out.push_str("&quot;"),
+            // literal whitespace would be normalized to spaces by XML parsers
+            '\t' => out.push_str("&#9;"),
+            '\n' => out.push_str("&#10;"),
+            '\r' => out.push_str("&#13;"),
             _ => out.push(c),
         }
     }

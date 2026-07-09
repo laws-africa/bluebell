@@ -114,6 +114,7 @@ dependencies = [
  "pest",
  "pest_derive",
  "pretty_assertions",
+ "regex",
  "thiserror",
 ]
 

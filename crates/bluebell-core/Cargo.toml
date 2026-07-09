@@ -10,6 +10,7 @@ name = "bluebell_core"
 [dependencies]
 pest = "2.7"
 pest_derive = "2.7"
+regex = "1"
 thiserror = "2.0"
 
 [dev-dependencies]

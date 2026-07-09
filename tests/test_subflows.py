@@ -249,6 +249,84 @@ FOOTNOTE 99
 </remedies>
 """, xml)
 
+    def test_footnote_two_refs_one_content(self):
+        # when two refs share a marker but there is only one footnote body,
+        # the first ref in document order gets the content
+        tree = self.parse("""
+PART 1
+  a {{FOOTNOTE 1}} and b {{FOOTNOTE 1}}
+
+  FOOTNOTE 1
+
+    only one
+""", 'hier_element')
+
+        xml = self.tostring(self.generator.to_xml(tree))
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
+  <num>1</num>
+  <content>
+    <p eId="part_1__p_1">a <authorialNote eId="part_1__p_1__authorialNote_1" marker="1" placement="bottom"><p eId="part_1__p_1__authorialNote_1__p_1">only one</p></authorialNote> and b <authorialNote eId="part_1__p_1__authorialNote_2" marker="1" placement="bottom"><p eId="part_1__p_1__authorialNote_2__p_1">(content missing)</p></authorialNote></p>
+  </content>
+</part>
+""", xml)
+
+    def test_footnote_nested_orphans(self):
+        # unused footnote content is preserved, including unused footnotes
+        # nested inside it, flattened in document order
+        tree = self.parse("""
+PART 1
+  text
+
+  FOOTNOTE 1
+
+    outer
+
+    FOOTNOTE 2
+
+      inner
+""", 'hier_element')
+
+        xml = self.tostring(self.generator.to_xml(tree))
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
+  <num>1</num>
+  <content>
+    <p eId="part_1__p_1">text</p>
+    <p eId="part_1__p_2">FOOTNOTE 1</p>
+    <p eId="part_1__p_3">outer</p>
+    <p eId="part_1__p_4">FOOTNOTE 2</p>
+    <p eId="part_1__p_5">inner</p>
+  </content>
+</part>
+""", xml)
+
+    def test_footnote_orphan_inside_used(self):
+        # an unused footnote nested inside used footnote content is converted
+        # in its new location inside the authorialNote
+        tree = self.parse("""
+PART 1
+  a {{FOOTNOTE 1}}
+
+  FOOTNOTE 1
+
+    outer
+
+    FOOTNOTE 2
+
+      inner orphan
+""", 'hier_element')
+
+        xml = self.tostring(self.generator.to_xml(tree))
+
+        self.assertEqual("""<part xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="part_1">
+  <num>1</num>
+  <content>
+    <p eId="part_1__p_1">a <authorialNote eId="part_1__p_1__authorialNote_1" marker="1" placement="bottom"><p eId="part_1__p_1__authorialNote_1__p_1">outer</p><p eId="part_1__p_1__authorialNote_1__p_2">FOOTNOTE 2</p><p eId="part_1__p_1__authorialNote_1__p_3">inner orphan</p></authorialNote></p>
+  </content>
+</part>
+""", xml)
+
     def test_footnote_xml(self):
         tree = self.parse("""
 PART 1

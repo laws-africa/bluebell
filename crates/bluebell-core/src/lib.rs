@@ -1,4 +1,5 @@
 pub mod eid;
+pub mod frbr;
 pub mod parser;
 pub mod preprocess;
 pub mod xml;

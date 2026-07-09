@@ -229,6 +229,58 @@ SECTION 1.
     |}
 """))
 
+    def test_pre_parse_crlf_line_endings(self):
+        # \r is not a line separator and is preserved in the text
+        self.assertEqual(
+            "BODY\r\ntext\n",
+            self.parser.pre_parse("BODY\r\ntext\r\n"),
+        )
+        self.assertEqual(
+            "a\rb\n",
+            self.parser.pre_parse("a\rb"),
+        )
+        # trailing spaces are only stripped before a newline, not before a \r
+        self.assertEqual(
+            "a \r\nb\n",
+            self.parser.pre_parse("a \r\nb"),
+        )
+
+    def test_pre_parse_control_char_whitespace(self):
+        # \x0b, \x0c and \x1c-\x1f count as whitespace at the document edges
+        self.assertEqual("a\n", self.parser.pre_parse("\x1ca\x1f"))
+        self.assertEqual("a\n", self.parser.pre_parse("\x0ba\x0c"))
+        # but are preserved inside the document
+        self.assertEqual("a\x1cb\n", self.parser.pre_parse("a\x1cb"))
+
+    def test_pre_parse_unicode_whitespace(self):
+        # unicode whitespace is stripped at the document edges
+        self.assertEqual("a\n", self.parser.pre_parse("\xa0a\xa0"))
+        self.assertEqual("a\n", self.parser.pre_parse("\x85a"))
+        # but is not treated as indentation and is preserved in text
+        self.assertEqual("a\n\xa0 b\n", self.parser.pre_parse("a\n\xa0 b"))
+        self.assertEqual("a\n\u2003b\n", self.parser.pre_parse("a\n\u2003b"))
+
+    def test_parse_crlf_line_endings(self):
+        # \r is not a line separator: markers followed by \r are not recognised,
+        # and the \r stays in the text
+        xml = self.parser.parse_to_xml("BODY\r\nSEC 1. - Heading\r\n  Some text.\r\n", 'act')
+
+        self.assertEqual("""<body xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <hcontainer eId="hcontainer_1" name="hcontainer">
+    <content>
+      <p eId="hcontainer_1__p_1">BODY&#13;</p>
+    </content>
+  </hcontainer>
+  <section eId="sec_1">
+    <num>1.</num>
+    <heading>Heading&#13;</heading>
+    <content>
+      <p eId="sec_1__p_1">Some text.</p>
+    </content>
+  </section>
+</body>
+""", self.tostring(etree.tostring(xml.find('.//{*}body'), encoding='unicode')))
+
     def test_unparse_strip_newlines_and_whitespace(self):
         # strip newlines anywhere
         # strip whitespace at the start of P, listIntroduction and listWrapup

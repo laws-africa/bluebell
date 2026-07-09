@@ -410,6 +410,120 @@ fn focused_cases() -> Vec<ParityCase> {
             "P hello {{FOOTNOTE 99}} there",
         ),
         text_case(
+            "footnote-orphan-content",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nSEC 1.\n  text\n  FOOTNOTE *\n    orphan footnote text",
+        ),
+        text_case(
+            "footnote-two-refs-one-content",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nSEC 1.\n  a {{FOOTNOTE 1}} and b {{FOOTNOTE 1}}\n  FOOTNOTE 1\n    only one",
+        ),
+        text_case(
+            "footnote-nested-orphans",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nSEC 1.\n  text\n  FOOTNOTE 1\n    outer\n    FOOTNOTE 2\n      inner",
+        ),
+        text_case(
+            "footnote-orphan-inside-used",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nSEC 1.\n  a {{FOOTNOTE 1}}\n  FOOTNOTE 1\n    outer\n    FOOTNOTE 2\n      inner orphan",
+        ),
+        text_case(
+            "crlf-line-endings",
+            DocumentRoot::Act,
+            "act",
+            "BODY\r\nSEC 1. - Heading\r\n  Some text.\r\n",
+        ),
+        text_case(
+            "cr-only-line-endings",
+            DocumentRoot::Act,
+            "act",
+            "BODY\rSEC 1.\r  text\r",
+        ),
+        text_case(
+            "control-char-edges",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nSEC 1.\n  text\u{1c}",
+        ),
+        text_case(
+            "trailing-space-before-cr",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nSEC 1.\n  a \r\n  b",
+        ),
+        text_case(
+            "unicode-whitespace-in-text",
+            DocumentRoot::Act,
+            "act",
+            "BODY\nSEC 1.\n  a\u{a0}b and\u{2003}c\n  \u{a0}leading nbsp\n\u{2003}leading em space",
+        ),
+        text_case(
+            "attr-value-with-cr",
+            DocumentRoot::Statement,
+            "statement",
+            "P{style a\rb} text",
+        ),
+        text_case(
+            "xml-special-chars",
+            DocumentRoot::Statement,
+            "statement",
+            "P a & b < c > d \"quoted\" '&amp;' {{term{refersTo #a&b<c>\"d} text}}",
+        ),
+        text_case(
+            "bullets-crlf",
+            DocumentRoot::Statement,
+            "statement",
+            "BULLETS\r\n  *\r\n  * item\r\n    more\r\n",
+        ),
+        uri_text_case(
+            "frbr-uri-subtype",
+            DocumentRoot::Act,
+            "act",
+            "/akn/za/act/gn/2022/r1234",
+        ),
+        uri_text_case(
+            "frbr-uri-locality-subtype",
+            DocumentRoot::Act,
+            "act",
+            "/akn/za-cpt/act/by-law/2016/control",
+        ),
+        uri_text_case(
+            "frbr-uri-language",
+            DocumentRoot::Act,
+            "act",
+            "/akn/za/act/2022/1/afr",
+        ),
+        uri_text_case(
+            "frbr-uri-expression-date",
+            DocumentRoot::Act,
+            "act",
+            "/akn/za/act/2022/1/eng@2023-01-01",
+        ),
+        uri_text_case(
+            "frbr-uri-actor",
+            DocumentRoot::Statement,
+            "statement",
+            "/akn/aa-au/statement/deliberation/mpc/2011/24",
+        ),
+        uri_text_case(
+            "frbr-uri-full-date",
+            DocumentRoot::Act,
+            "act",
+            "/akn/za/act/2022-03-01/12",
+        ),
+        uri_text_case(
+            "frbr-uri-no-akn-prefix",
+            DocumentRoot::Act,
+            "act",
+            "/za/act/2022/1",
+        ),
+        text_case(
             "duplicate-numbered-hierarchy",
             DocumentRoot::Act,
             "act",
@@ -483,6 +597,25 @@ fn text_case(
     }
 }
 
+/// A case that exercises meta generation for a specific FRBR URI shape,
+/// including attachment metadata.
+fn uri_text_case(
+    name: &'static str,
+    root: DocumentRoot,
+    python_root: &'static str,
+    frbr_uri: &'static str,
+) -> ParityCase {
+    ParityCase {
+        name: name.to_string(),
+        root,
+        python_root,
+        frbr_uri: frbr_uri.to_string(),
+        input: CaseInput::Text(
+            "BODY\nSEC 1. - Heading\n  Some text.\nSCHEDULE First Schedule\n  schedule text",
+        ),
+    }
+}
+
 fn default_frbr_uri(root: DocumentRoot) -> &'static str {
     match root {
         DocumentRoot::Act => "/akn/za/act/2009/10",
@@ -512,8 +645,10 @@ impl CaseInput {
 
 fn python_parse_to_xml(case: &ParityCase, text: &str) -> String {
     let text_path = write_temp_file(&case.name, "input.txt", text);
+    // read_bytes + decode: read_text would translate \r\n to \n (universal
+    // newlines) and hide line-ending behaviour from the parity check
     let script = format!(
-        "from pathlib import Path\nfrom bluebell.parser import AkomaNtosoParser\nfrom cobalt import FrbrUri\nfrom lxml import etree\np=AkomaNtosoParser(FrbrUri.parse({uri:?}))\nxml=p.parse_to_xml(Path({text:?}).read_text(), {root:?})\nprint(etree.tostring(xml, encoding='unicode'), end='')\n",
+        "from pathlib import Path\nfrom bluebell.parser import AkomaNtosoParser\nfrom cobalt import FrbrUri\nfrom lxml import etree\np=AkomaNtosoParser(FrbrUri.parse({uri:?}))\nxml=p.parse_to_xml(Path({text:?}).read_bytes().decode('utf-8'), {root:?})\nprint(etree.tostring(xml, encoding='unicode'), end='')\n",
         uri = case.frbr_uri,
         text = text_path.display().to_string(),
         root = case.python_root,

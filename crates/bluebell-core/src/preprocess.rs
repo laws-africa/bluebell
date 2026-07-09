@@ -13,12 +13,17 @@ pub fn pre_parse_with_markers(
     dedent: char,
     indent_size: usize,
 ) -> String {
-    let mut text = text.replace('\t', &" ".repeat(indent_size));
-    text = text.trim().to_string();
+    let text = text.replace('\t', &" ".repeat(indent_size));
+    let text = text.trim_matches(is_python_whitespace);
+    if text.is_empty() {
+        return String::new();
+    }
 
-    let lines: Vec<String> = text
-        .lines()
-        .map(|line| line.trim_end_matches(' ').to_string())
+    // Split on newlines only: like Python, \r is not a line terminator and is
+    // preserved in the text.
+    let lines: Vec<&str> = text
+        .split('\n')
+        .map(|line| line.trim_end_matches(' '))
         .collect();
 
     let mut out = String::new();
@@ -70,13 +75,16 @@ pub fn pre_parse_with_markers(
         out.push('\n');
     }
 
-    if out.is_empty() {
-        return out;
-    }
-
     let skip = indent.len_utf8() + 1;
     let end = out.len().saturating_sub(skip);
     out[skip..end].to_string()
+}
+
+/// Whitespace as Python's str.strip() sees it: Unicode whitespace plus the
+/// C0 separator control characters \x1c-\x1f, which Rust's char::is_whitespace
+/// does not include.
+fn is_python_whitespace(c: char) -> bool {
+    c.is_whitespace() || ('\u{1c}'..='\u{1f}').contains(&c)
 }
 
 #[cfg(test)]
@@ -107,6 +115,37 @@ mod tests {
             "one\n{\ntwo\nthree\n}\n",
             pre_parse_with_markers("\none\n  two\n three\n  \n\n", '{', '}', 2)
         );
+    }
+
+    #[test]
+    fn carriage_returns_are_preserved_like_python() {
+        // \r is not a line terminator: it survives mid-line and mid-document,
+        // and is only stripped at the document edges (Python str.strip).
+        assert_eq!("BODY\r\ntext\n", pre_parse("BODY\r\ntext\r\n"));
+        assert_eq!("a\rb\n", pre_parse("a\rb"));
+        // trailing spaces are only stripped before a newline, not before a \r
+        assert_eq!("a \r\nb\n", pre_parse("a \r\nb"));
+    }
+
+    #[test]
+    fn control_char_whitespace_matches_python() {
+        // \x0b, \x0c and \x1c-\x1f count as whitespace at the document edges
+        // (\x1c-\x1f are whitespace to Python's str.strip but not to
+        // char::is_whitespace)
+        assert_eq!("a\n", pre_parse("\u{1c}a\u{1f}"));
+        assert_eq!("a\n", pre_parse("\u{0b}a\u{0c}"));
+        // but they are preserved inside the document
+        assert_eq!("a\u{1c}b\n", pre_parse("a\u{1c}b"));
+    }
+
+    #[test]
+    fn unicode_whitespace_matches_python() {
+        // unicode whitespace is stripped at the document edges
+        assert_eq!("a\n", pre_parse("\u{a0}a\u{a0}"));
+        assert_eq!("a\n", pre_parse("\u{85}a"));
+        // but is not treated as indentation and is preserved in text
+        assert_eq!("a\n\u{a0} b\n", pre_parse("a\n\u{a0} b"));
+        assert_eq!("a\n\u{2003}b\n", pre_parse("a\n\u{2003}b"));
     }
 
     #[test]
