@@ -1530,7 +1530,10 @@ fn push_text(nodes: &mut Vec<XmlNode>, text: String) {
 }
 
 fn unescaped(text: &str) -> String {
-    text.strip_prefix('\\').unwrap_or(text).to_string()
+    match text.strip_prefix('\\') {
+        Some(stripped) if !stripped.is_empty() => stripped.to_string(),
+        _ => text.to_string(),
+    }
 }
 
 fn merge_adjacent_text(nodes: Vec<XmlNode>) -> Vec<XmlNode> {
@@ -1609,12 +1612,7 @@ fn collect_inline_text_inner(pair: pest::iterators::Pair<'_, Rule>, out: &mut St
         | Rule::marker
         | Rule::attr_value
         | Rule::num_content => {
-            let text = pair.as_str();
-            if let Some(stripped) = text.strip_prefix('\\') {
-                out.push_str(stripped);
-            } else {
-                out.push_str(text);
-            }
+            out.push_str(&unescaped(pair.as_str()));
         }
         _ => {
             for child in pair.into_inner() {

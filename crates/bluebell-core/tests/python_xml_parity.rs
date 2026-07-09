@@ -422,6 +422,12 @@ fn focused_cases() -> Vec<ParityCase> {
             "PARA\n  Intro\nPARA 1.\n  First para\nPARA 1A.\n  Added in later\nPARA\n  Unnumbered\nPARA 2.\n  Second para.\nPARA 2.\n  Another para with the num 2.\nPARA 2.3..74.5.\n  Interesting number.\nPARA 2.3..74.5.\n  Duplicate interesting number.",
         ),
         text_case(
+            "eids-backslash-punctuation",
+            DocumentRoot::Doc,
+            "doc",
+            "PARA 5\\\n  trailing backslash\nPARA \\5\n  leading backslash\nPARA 5\\6\n  middle backslash",
+        ),
+        text_case(
             "eids-doc-nn-collisions",
             DocumentRoot::Doc,
             "doc",

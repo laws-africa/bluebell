@@ -46,6 +46,7 @@ fn is_punctuation(c: char) -> bool {
             | '!'..='/'
             | ':'..='@'
             | '['
+            | '\\'
             | ']'..='`'
             | '{'..='~'
     )
@@ -78,7 +79,9 @@ mod tests {
         assert_eq!("3abis", ids.clean_num("3a bis"));
         assert_eq!("3é", ids.clean_num("3é"));
         assert_eq!("3a-4-9", ids.clean_num(" -3a--4,9"));
-        assert_eq!("\\7-5", ids.clean_num("\\7.5"));
+        assert_eq!("5", ids.clean_num("5\\"));
+        assert_eq!("5", ids.clean_num("\\5"));
+        assert_eq!("5-6", ids.clean_num("5\\6"));
         assert_eq!("א", ids.clean_num("(א)"));
         assert_eq!("三", ids.clean_num("(三)"));
     }
