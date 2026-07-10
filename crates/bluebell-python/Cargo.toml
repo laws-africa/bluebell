@@ -12,4 +12,4 @@ crate-type = ["cdylib"]
 bluebell-core = { path = "../bluebell-core" }
 # abi3-py312 builds stable-ABI wheels: one wheel per platform covers
 # CPython 3.12+ instead of one wheel per Python version.
-pyo3 = { version = "0.23", features = ["extension-module", "abi3-py312"] }
+pyo3 = { version = "0.29", features = ["extension-module", "abi3-py312"] }
