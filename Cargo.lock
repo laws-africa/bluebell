@@ -119,7 +119,7 @@ dependencies = [
 
 [[package]]
 name = "bluebell-core"
-version = "4.0.0"
+version = "4.1.0"
 dependencies = [
  "js-sys",
  "libxml",
@@ -132,7 +132,7 @@ dependencies = [
 
 [[package]]
 name = "bluebell-python"
-version = "4.0.0"
+version = "4.1.0"
 dependencies = [
  "bluebell-core",
  "pyo3",
@@ -140,7 +140,7 @@ dependencies = [
 
 [[package]]
 name = "bluebell-rs"
-version = "4.0.0"
+version = "4.1.0"
 dependencies = [
  "anyhow",
  "bluebell-core",
@@ -150,7 +150,7 @@ dependencies = [
 
 [[package]]
 name = "bluebell-wasm"
-version = "4.0.0"
+version = "4.1.0"
 dependencies = [
  "bluebell-core",
  "console_error_panic_hook",
