@@ -11,7 +11,8 @@ published to crates.io; it exists only to produce the
 
 ```ts
 // Parse Bluebell markup into an Akoma Ntoso XML string.
-// root is one of: "act", "bill", "debate", "debateReport", "doc", "judgment", "statement".
+// root is a Python-compatible grammar root such as "act", "statement",
+// "hier_element_block", "attachment", or "block_list_item".
 // Throws an Error for an unknown root, an invalid FRBR URI, or a parse failure.
 function parseToXml(text: string, root: string, frbr_uri: string, eid_prefix?: string): string;
 
@@ -20,8 +21,10 @@ function version(): string;
 ```
 
 The XML is returned as a string. The call signature matches Python Bluebell's
-top-level `parse_to_xml(text, root, frbr_uri, eid_prefix="")` API. In the
-browser, feed the returned XML to `DOMParser` if you need a document tree:
+top-level `parse_to_xml(text, root, frbr_uri, eid_prefix="")` API. Document
+roots return a full `<akomaNtoso>` document; fragment roots return the fragment
+element. In the browser, feed the returned XML to `DOMParser` if you need a
+document tree:
 
 ```js
 const doc = new DOMParser().parseFromString(xml, "text/xml");

@@ -128,6 +128,51 @@ class ParserTestCase(ParserSupport, TestCase):
         self.assertIn('<FRBRuri value="/akn/za/statement/2022/1"/>', xml)
         self.assertIn('>hello</p>', xml)
 
+    def test_top_level_parse_to_xml_supports_fragment_roots_without_rust_extension(self):
+        cases = [
+            ("hier_element_block", "SEC 1. - Heading\n  text", "section"),
+            ("attachment", "SCHEDULE Schedule\n  text", "attachment"),
+            ("attachments", "SCHEDULE One\n  one\nSCHEDULE Two\n  two", "attachments"),
+            ("block_list_item", "ITEM (a)\n  text", "item"),
+            (
+                "speech_container",
+                "DEBATESECTION 1 - Debate\n  SPEECH\n    FROM Speaker\n    NARRATIVE Hello",
+                "debateSection",
+            ),
+            ("speech_group", "SPEECH\n  FROM Speaker\n  NARRATIVE Hello", "speech"),
+        ]
+
+        with patch.dict(sys.modules, {"_bluebell_rs": None}):
+            for root, text, expected_name in cases:
+                with self.subTest(root=root):
+                    xml = bluebell.parser.parse_to_xml(
+                        text,
+                        root,
+                        FrbrUri.parse("/akn/za/act/2009/10"),
+                    )
+
+                    self.assertEqual(expected_name, etree.QName(xml).localname)
+                    self.assertNotEqual("akomaNtoso", etree.QName(xml).localname)
+                    self.assertTrue(xml.xpath(".//@eId"))
+
+    def test_top_level_parse_to_xml_fragment_attachment_includes_meta_without_rust_extension(self):
+        with patch.dict(sys.modules, {"_bluebell_rs": None}):
+            xml = bluebell.parser.parse_to_xml(
+                "SCHEDULE Schedule\n  text",
+                "attachment",
+                FrbrUri.parse("/akn/za/act/2009/10"),
+            )
+
+        self.assertEqual("attachment", etree.QName(xml).localname)
+        self.assertEqual(
+            ["/akn/za/act/2009/10/!schedule_1"],
+            xml.xpath("//*[local-name()='FRBRWork']/*[local-name()='FRBRthis']/@value"),
+        )
+        self.assertEqual(
+            ["Schedule"],
+            xml.xpath("//*[local-name()='FRBRalias'][@name='title']/@value"),
+        )
+
     def test_pre_parse_empty(self):
         self.assertEqual(
             "",

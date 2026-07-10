@@ -8,7 +8,7 @@
 //! `bluebell-core` stays dependency-light and wasm-agnostic; all
 //! `wasm-bindgen` glue lives here.
 
-use bluebell_core::{parse_to_akn_xml_with_eid_prefix, DocumentRoot};
+use bluebell_core::{parse_to_xml_document_or_fragment_with_eid_prefix, DocumentRoot};
 use wasm_bindgen::prelude::*;
 
 /// Runs once when the wasm module is instantiated. Forwards Rust panics to
@@ -22,16 +22,16 @@ pub fn init() {
 /// Parses Bluebell markup into Akoma Ntoso XML.
 ///
 /// - `text`: the Bluebell markup source.
-/// - `root`: the document root, one of `"act"`, `"bill"`, `"debate"`,
-///   `"debateReport"` (or `"debatereport"`), `"doc"`, `"judgment"`, or
-///   `"statement"`.
+/// - `root`: the Python-compatible grammar root to parse with, such as
+///   `"act"`, `"statement"`, `"hier_element_block"`, or `"attachment"`.
 /// - `frbr_uri`: the FRBR work URI for the document, e.g.
 ///   `"/akn/za/act/2022/1"`.
 /// - `eid_prefix`: optional `eId` prefix.
 ///
-/// Returns the generated `<akomaNtoso>` XML document as a string. Throws a
-/// JS exception (via `JsError`) if `root` is not recognised, if `frbr_uri`
-/// is not a valid FRBR URI, or if `text` fails to parse as Bluebell markup.
+/// Returns the generated XML as a string. Document roots return a full
+/// `<akomaNtoso>` document; fragment roots return the fragment element. Throws
+/// a JS exception (via `JsError`) if `root` is not recognised, if `frbr_uri` is
+/// not a valid FRBR URI, or if `text` fails to parse as Bluebell markup.
 #[wasm_bindgen(js_name = parseToXml)]
 pub fn parse_to_xml(
     text: &str,
@@ -40,8 +40,13 @@ pub fn parse_to_xml(
     eid_prefix: Option<String>,
 ) -> Result<String, JsError> {
     let root = document_root(root)?;
-    parse_to_akn_xml_with_eid_prefix(text, root, frbr_uri, eid_prefix.as_deref().unwrap_or(""))
-        .map_err(|err| JsError::new(&err.to_string()))
+    parse_to_xml_document_or_fragment_with_eid_prefix(
+        text,
+        root,
+        frbr_uri,
+        eid_prefix.as_deref().unwrap_or(""),
+    )
+    .map_err(|err| JsError::new(&err.to_string()))
 }
 
 /// Returns the crate version, e.g. `"4.0.0"`. Useful for confirming which
@@ -52,14 +57,6 @@ pub fn version() -> String {
 }
 
 fn document_root(root: &str) -> Result<DocumentRoot, JsError> {
-    match root {
-        "act" => Ok(DocumentRoot::Act),
-        "bill" => Ok(DocumentRoot::Bill),
-        "debate" => Ok(DocumentRoot::Debate),
-        "debateReport" | "debatereport" => Ok(DocumentRoot::DebateReport),
-        "doc" => Ok(DocumentRoot::Doc),
-        "judgment" => Ok(DocumentRoot::Judgment),
-        "statement" => Ok(DocumentRoot::Statement),
-        _ => Err(JsError::new(&format!("unsupported Bluebell root: {root}"))),
-    }
+    DocumentRoot::from_name(root)
+        .ok_or_else(|| JsError::new(&format!("unsupported Bluebell root: {root}")))
 }

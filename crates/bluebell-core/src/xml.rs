@@ -87,6 +87,30 @@ pub fn parse_to_xml_with_eid_prefix(
     parse_preprocessed_to_xml_with_eid_prefix(&preprocessed, root, eid_prefix)
 }
 
+pub fn parse_to_xml_document_or_fragment(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+) -> Result<String, XmlError> {
+    let preprocessed = pre_parse(text);
+    parse_preprocessed_to_xml_document_or_fragment(&preprocessed, root, frbr_uri)
+}
+
+pub fn parse_to_xml_document_or_fragment_with_eid_prefix(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+    eid_prefix: &str,
+) -> Result<String, XmlError> {
+    let preprocessed = pre_parse(text);
+    parse_preprocessed_to_xml_document_or_fragment_with_eid_prefix(
+        &preprocessed,
+        root,
+        frbr_uri,
+        eid_prefix,
+    )
+}
+
 pub fn parse_to_akn_xml(
     text: &str,
     root: DocumentRoot,
@@ -120,6 +144,12 @@ pub fn parse_preprocessed_to_akn_xml_with_eid_prefix(
     frbr_uri: &str,
     eid_prefix: &str,
 ) -> Result<String, XmlError> {
+    if !root.is_document() {
+        return parse_preprocessed_to_xml_fragment_with_eid_prefix(
+            text, root, frbr_uri, eid_prefix,
+        );
+    }
+
     let frbr_uri = FrbrUri::parse(frbr_uri)?;
     let pairs = parse_pairs_preprocessed(text, root)?;
     let mut doc_el = document_to_xml(root, pairs);
@@ -136,7 +166,59 @@ pub fn parse_preprocessed_to_akn_xml_with_eid_prefix(
     Ok(akn.to_xml_string())
 }
 
+pub fn parse_preprocessed_to_xml_document_or_fragment(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+) -> Result<String, XmlError> {
+    parse_preprocessed_to_xml_document_or_fragment_with_eid_prefix(text, root, frbr_uri, "")
+}
+
+pub fn parse_preprocessed_to_xml_document_or_fragment_with_eid_prefix(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+    eid_prefix: &str,
+) -> Result<String, XmlError> {
+    if root.is_document() {
+        parse_preprocessed_to_akn_xml_with_eid_prefix(text, root, frbr_uri, eid_prefix)
+    } else {
+        parse_preprocessed_to_xml_fragment_with_eid_prefix(text, root, frbr_uri, eid_prefix)
+    }
+}
+
+fn parse_preprocessed_to_xml_fragment_with_eid_prefix(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+    eid_prefix: &str,
+) -> Result<String, XmlError> {
+    let frbr_uri = FrbrUri::parse(frbr_uri)?;
+    let pairs = parse_pairs_preprocessed(text, root)?;
+    let mut root_el = fragment_to_xml(pairs);
+    resolve_displaced_content(&mut root_el);
+    normalise_empty_elements(&mut root_el);
+    add_attachment_doc_meta(&mut root_el, &frbr_uri);
+    rewrite_all_eids(&mut root_el, eid_prefix);
+    root_el
+        .attrs
+        .insert("xmlns".to_string(), AKN_NS.to_string());
+    Ok(root_el.to_xml_string())
+}
+
 fn add_attachment_doc_meta(element: &mut XmlElement, frbr_uri: &FrbrUri) {
+    if element.name == "attachment" {
+        if let Some((doc_name, title)) = attachment_doc_name_and_title(element) {
+            let component = format!("{doc_name}_1");
+            insert_attachment_meta(element, frbr_uri, &component, &title);
+            for child in &mut element.children {
+                if let XmlNode::Element(el) = child {
+                    add_attachment_doc_meta_scoped(el, frbr_uri, &component);
+                }
+            }
+            return;
+        }
+    }
     add_attachment_doc_meta_scoped(element, frbr_uri, "");
 }
 
@@ -227,7 +309,11 @@ pub fn parse_preprocessed_to_xml_with_eid_prefix(
     eid_prefix: &str,
 ) -> Result<String, XmlError> {
     let pairs = parse_pairs_preprocessed(text, root)?;
-    let mut root_el = document_to_xml(root, pairs);
+    let mut root_el = if root.is_document() {
+        document_to_xml(root, pairs)
+    } else {
+        fragment_to_xml(pairs)
+    };
     resolve_displaced_content(&mut root_el);
     normalise_empty_elements(&mut root_el);
     rewrite_all_eids(&mut root_el, eid_prefix);
@@ -270,6 +356,7 @@ fn build_document(root: DocumentRoot) -> XmlElement {
         DocumentRoot::DebateReport => open_doc("debateReport"),
         DocumentRoot::Doc => open_doc("doc"),
         DocumentRoot::Statement => open_doc("statement"),
+        _ => unreachable!("build_document only supports document roots"),
     }
 }
 
@@ -348,8 +435,54 @@ fn document_to_xml(root: DocumentRoot, pairs: pest::iterators::Pairs<'_, Rule>) 
             push_part(&mut root_el, &parts, "conclusions");
             push_part(&mut root_el, &parts, "attachments");
         }
+        _ => unreachable!("document_to_xml only supports document roots"),
     }
     root_el
+}
+
+fn fragment_to_xml(pairs: pest::iterators::Pairs<'_, Rule>) -> XmlElement {
+    pairs
+        .into_iter()
+        .find_map(fragment_pair_to_xml)
+        .expect("fragment parser returned no XML-producing pair")
+}
+
+fn fragment_pair_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> Option<XmlElement> {
+    match pair.as_rule() {
+        Rule::preface => Some(container_to_xml("preface", pair, false)),
+        Rule::preamble => Some(container_to_xml("preamble", pair, false)),
+        Rule::body => Some(body_container_to_xml("body", pair)),
+        Rule::mainBody => Some(body_container_to_xml("mainBody", pair)),
+        Rule::debateBody => Some(body_container_to_xml("debateBody", pair)),
+        Rule::conclusions => Some(container_to_xml("conclusions", pair, false)),
+        Rule::introduction => Some(container_to_xml("introduction", pair, true)),
+        Rule::background => Some(container_to_xml("background", pair, true)),
+        Rule::arguments if !pair.as_str().trim().is_empty() => {
+            Some(container_to_xml("arguments", pair, true))
+        }
+        Rule::remedies => Some(container_to_xml("remedies", pair, true)),
+        Rule::motivation => Some(container_to_xml("motivation", pair, true)),
+        Rule::decision => Some(container_to_xml("decision", pair, true)),
+        Rule::hier_element_block => Some(hier_to_xml(pair)),
+        Rule::p | Rule::line => Some(p_to_xml(pair)),
+        Rule::longtitle => Some(line_element_to_xml(pair, "longTitle")),
+        Rule::crossheading => Some(line_element_to_xml(pair, "crossHeading")),
+        Rule::blocks => Some(blocks_to_xml(pair)),
+        Rule::block_quote => Some(block_quote_to_xml(pair)),
+        Rule::block_list => Some(block_list_to_xml(pair)),
+        Rule::block_list_item => Some(block_list_item_to_xml(pair)),
+        Rule::bullet_list => Some(bullet_list_to_xml(pair)),
+        Rule::bullet_list_item => Some(bullet_list_item_to_xml(pair)),
+        Rule::table => Some(table_to_xml(pair)),
+        Rule::table_row => Some(table_row_to_xml(pair)),
+        Rule::table_cell => Some(table_cell_to_xml(pair)),
+        Rule::attachment => Some(attachment_to_xml(pair)),
+        Rule::attachments => Some(attachments_to_xml(pair)),
+        Rule::speech_block => Some(speech_block_to_xml(pair)),
+        Rule::speech_container => Some(speech_container_to_xml(pair)),
+        Rule::speech_group => Some(speech_group_to_xml(pair)),
+        _ => pair.into_inner().find_map(fragment_pair_to_xml),
+    }
 }
 
 fn root_name(root: DocumentRoot) -> &'static str {
@@ -361,6 +494,7 @@ fn root_name(root: DocumentRoot) -> &'static str {
         DocumentRoot::Doc => "doc",
         DocumentRoot::Judgment => "judgment",
         DocumentRoot::Statement => "statement",
+        _ => unreachable!("root_name only supports document roots"),
     }
 }
 

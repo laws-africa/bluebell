@@ -2,7 +2,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use bluebell_core::{parse_to_akn_xml_with_eid_prefix, DocumentRoot};
+use bluebell_core::{parse_to_xml_document_or_fragment_with_eid_prefix, DocumentRoot};
 
 mod support;
 use support::{python_path, repo_path, unparse};
@@ -46,9 +46,13 @@ fn income_tax_xml_roundtrip_parse_matches_python() {
 
 fn assert_case_matches_python(case: &ParityCase) {
     let text = case.input.read(&case.name);
-    let rust_xml =
-        parse_to_akn_xml_with_eid_prefix(&text, case.root, &case.frbr_uri, &case.eid_prefix)
-            .unwrap_or_else(|err| panic!("Rust failed to parse {}: {err}", case.name));
+    let rust_xml = parse_to_xml_document_or_fragment_with_eid_prefix(
+        &text,
+        case.root,
+        &case.frbr_uri,
+        &case.eid_prefix,
+    )
+    .unwrap_or_else(|err| panic!("Rust failed to parse {}: {err}", case.name));
     let python_xml = python_parse_to_xml(case, &text);
 
     let rust_c14n = python_canonicalize(&rust_xml, &case.name, "rust");
@@ -165,6 +169,7 @@ fn default_roundtrip_frbr_uri(root: DocumentRoot) -> String {
         DocumentRoot::Doc => "/akn/za/doc/2022/1",
         DocumentRoot::Judgment => "/akn/za/judgment/2022/1",
         DocumentRoot::Statement => "/akn/za/statement/2022/1",
+        _ => "/akn/za/act/2022/1",
     }
     .to_string()
 }
@@ -183,6 +188,210 @@ fn focused_cases() -> Vec<ParityCase> {
             "statement",
             "pref",
             "P intro\n\nSEC 1. - Heading\n  text with {{FOOTNOTE 1}}\n\nFOOTNOTE 1\n  note",
+        ),
+        text_case(
+            "fragment-hier-element",
+            DocumentRoot::HierElement,
+            "hier_element",
+            "CROSSHEADING Intro",
+        ),
+        text_case(
+            "fragment-hier-element-block",
+            DocumentRoot::HierElementBlock,
+            "hier_element_block",
+            "SEC 1. - Heading\n  text",
+        ),
+        text_case(
+            "fragment-hier-block-element",
+            DocumentRoot::HierBlockElement,
+            "hier_block_element",
+            "SEC 1. - Heading\n  text",
+        ),
+        text_case(
+            "fragment-hier-indent",
+            DocumentRoot::HierIndent,
+            "hier_indent",
+            "SEC 1. - Heading\n  text",
+        ),
+        text_case(
+            "fragment-hier-block-indent",
+            DocumentRoot::HierBlockIndent,
+            "hier_block_indent",
+            "SEC 1. - Heading\n  text",
+        ),
+        text_case(
+            "fragment-attachment",
+            DocumentRoot::Attachment,
+            "attachment",
+            "SCHEDULE Schedule\n  text",
+        ),
+        text_case(
+            "fragment-attachments",
+            DocumentRoot::Attachments,
+            "attachments",
+            "SCHEDULE One\n  one\nSCHEDULE Two\n  two",
+        ),
+        text_case(
+            "fragment-block-element",
+            DocumentRoot::BlockElement,
+            "block_element",
+            "ITEMS\n  ITEM (a)\n    text",
+        ),
+        text_case(
+            "fragment-block-elements",
+            DocumentRoot::BlockElements,
+            "block_elements",
+            "ITEMS\n  ITEM (a)\n    text",
+        ),
+        text_case(
+            "fragment-block-list",
+            DocumentRoot::BlockList,
+            "block_list",
+            "ITEMS\n  ITEM (a)\n    text",
+        ),
+        text_case(
+            "fragment-block-list-item",
+            DocumentRoot::BlockListItem,
+            "block_list_item",
+            "ITEM (a)\n  text",
+        ),
+        text_case(
+            "fragment-bullet-list",
+            DocumentRoot::BulletList,
+            "bullet_list",
+            "BULLETS\n  * text",
+        ),
+        text_case(
+            "fragment-bullet-list-item",
+            DocumentRoot::BulletListItem,
+            "bullet_list_item",
+            "* text",
+        ),
+        text_case(
+            "fragment-table",
+            DocumentRoot::Table,
+            "table",
+            "TABLE\n  TR\n    TC\n      text",
+        ),
+        text_case(
+            "fragment-table-row",
+            DocumentRoot::TableRow,
+            "table_row",
+            "TR\n  TC\n    text",
+        ),
+        text_case("fragment-table-cell", DocumentRoot::TableCell, "table_cell", "TC\n  text"),
+        text_case(
+            "fragment-speech-container",
+            DocumentRoot::SpeechContainer,
+            "speech_container",
+            "DEBATESECTION 1 - Debate\n  SPEECH\n    FROM Speaker\n    NARRATIVE Hello",
+        ),
+        text_case(
+            "fragment-speech-container-indent",
+            DocumentRoot::SpeechContainerIndent,
+            "speech_container_indent",
+            "DEBATESECTION 1 - Debate\n  SPEECH\n    FROM Speaker\n    NARRATIVE Hello",
+        ),
+        text_case(
+            "fragment-speech-group",
+            DocumentRoot::SpeechGroup,
+            "speech_group",
+            "SPEECH\n  FROM Speaker\n  NARRATIVE Hello",
+        ),
+        text_case(
+            "fragment-speech-hier-block-element",
+            DocumentRoot::SpeechHierBlockElement,
+            "speech_hier_block_element",
+            "SPEECH\n  FROM Speaker\n  NARRATIVE Hello",
+        ),
+        text_case(
+            "fragment-speech-block",
+            DocumentRoot::SpeechBlock,
+            "speech_block",
+            "NARRATIVE Hello",
+        ),
+        text_case("fragment-p", DocumentRoot::P, "p", "P Hello"),
+        text_case("fragment-line", DocumentRoot::Line, "line", "Hello"),
+        text_case(
+            "fragment-longtitle",
+            DocumentRoot::Longtitle,
+            "longtitle",
+            "LONGTITLE Long title",
+        ),
+        text_case(
+            "fragment-crossheading",
+            DocumentRoot::Crossheading,
+            "crossheading",
+            "CROSSHEADING Cross",
+        ),
+        text_case("fragment-blocks", DocumentRoot::Blocks, "blocks", "BLOCKS\n  text"),
+        text_case(
+            "fragment-block-quote",
+            DocumentRoot::BlockQuote,
+            "block_quote",
+            "QUOTE\n  text",
+        ),
+        text_case("fragment-preface", DocumentRoot::Preface, "preface", "PREFACE\nhello"),
+        text_case(
+            "fragment-preamble",
+            DocumentRoot::Preamble,
+            "preamble",
+            "PREAMBLE\nhello",
+        ),
+        text_case(
+            "fragment-body",
+            DocumentRoot::Body,
+            "body",
+            "BODY\nSEC 1. - Heading\n  text",
+        ),
+        text_case("fragment-main-body", DocumentRoot::MainBody, "mainBody", "BODY\ntext"),
+        text_case(
+            "fragment-debate-body",
+            DocumentRoot::DebateBody,
+            "debateBody",
+            "BODY\nDEBATESECTION 1 - Debate\n  SPEECH\n    FROM Speaker\n    NARRATIVE Hello",
+        ),
+        text_case(
+            "fragment-conclusions",
+            DocumentRoot::Conclusions,
+            "conclusions",
+            "CONCLUSIONS\nhello",
+        ),
+        text_case(
+            "fragment-introduction",
+            DocumentRoot::Introduction,
+            "introduction",
+            "INTRODUCTION\nhello",
+        ),
+        text_case(
+            "fragment-background",
+            DocumentRoot::Background,
+            "background",
+            "BACKGROUND\nhello",
+        ),
+        text_case(
+            "fragment-arguments",
+            DocumentRoot::Arguments,
+            "arguments",
+            "ARGUMENTS\nhello",
+        ),
+        text_case(
+            "fragment-remedies",
+            DocumentRoot::Remedies,
+            "remedies",
+            "REMEDIES\nhello",
+        ),
+        text_case(
+            "fragment-motivation",
+            DocumentRoot::Motivation,
+            "motivation",
+            "MOTIVATION\nhello",
+        ),
+        text_case(
+            "fragment-decision",
+            DocumentRoot::Decision,
+            "decision",
+            "DECISION\nhello",
         ),
         text_case(
             "inline-refs-images-remarks",
@@ -655,6 +864,7 @@ fn default_frbr_uri(root: DocumentRoot) -> &'static str {
         DocumentRoot::Doc => "/akn/za/doc/2009/10",
         DocumentRoot::Judgment => "/akn/za/judgment/2009/10",
         DocumentRoot::Statement => "/akn/za/statement/2009/10",
+        _ => "/akn/za/act/2009/10",
     }
 }
 

@@ -60,6 +60,52 @@ fn accepts_a_non_empty_eid_prefix_argument() {
 }
 
 #[wasm_bindgen_test]
+fn parses_a_hierarchy_fragment_root() {
+    let xml = bluebell_wasm::parse_to_xml(
+        "SEC 1. - Heading\n  Some content.",
+        "hier_element_block",
+        FRBR_URI,
+        None,
+    )
+    .expect("a hierarchy fragment should parse successfully");
+
+    assert!(
+        xml.starts_with("<section"),
+        "expected a fragment root, got: {xml}"
+    );
+    assert!(
+        !xml.contains("<akomaNtoso"),
+        "fragment roots should not be wrapped in akomaNtoso, got: {xml}"
+    );
+    assert!(
+        xml.contains("<p eId=\"sec_1__p_1\">Some content.</p>"),
+        "expected fragment descendant eIds, got: {xml}"
+    );
+}
+
+#[wasm_bindgen_test]
+fn parses_an_attachment_fragment_root_with_meta() {
+    let xml =
+        bluebell_wasm::parse_to_xml("SCHEDULE Schedule\n  text", "attachment", FRBR_URI, None)
+            .expect("an attachment fragment should parse successfully");
+
+    assert!(
+        xml.starts_with("<attachment"),
+        "expected an attachment fragment root, got: {xml}"
+    );
+    assert!(
+        xml.contains(r#"<FRBRthis value="/akn/za/act/2022/1/!schedule_1"/>"#),
+        "expected generated attachment metadata, got: {xml}"
+    );
+    assert!(
+        xml.contains("FRBRalias")
+            && xml.contains(r#"name="title""#)
+            && xml.contains(r#"value="Schedule""#),
+        "expected generated attachment title metadata, got: {xml}"
+    );
+}
+
+#[wasm_bindgen_test]
 fn rejects_an_unsupported_root() {
     let err = bluebell_wasm::parse_to_xml(ACT_TEXT, "not-a-real-root", FRBR_URI, None)
         .expect_err("an unrecognised root should raise an error");
