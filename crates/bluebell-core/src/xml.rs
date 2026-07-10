@@ -1,4 +1,5 @@
 use std::collections::{BTreeMap, HashMap, HashSet};
+#[cfg(not(target_arch = "wasm32"))]
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::eid::IdGenerator;
@@ -402,11 +403,26 @@ fn identification_meta(frbr_uri: &FrbrUri, title: &str) -> XmlElement {
     )
 }
 
+// `std::time::SystemTime::now()` has no working backend on
+// `wasm32-unknown-unknown` (it compiles but panics at runtime with "time not
+// implemented on this platform"). When targeting wasm32, use the JS `Date`
+// API instead via `js-sys`, which is only pulled in as a dependency for that
+// target (see `[target.'cfg(target_arch = "wasm32")'.dependencies]` in
+// Cargo.toml) so native builds are unaffected.
+#[cfg(not(target_arch = "wasm32"))]
 fn today_iso_date() -> String {
     let days = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|duration| (duration.as_secs() / 86_400) as i64)
         .unwrap_or(0);
+    let (year, month, day) = civil_from_days(days);
+    format!("{year:04}-{month:02}-{day:02}")
+}
+
+#[cfg(target_arch = "wasm32")]
+fn today_iso_date() -> String {
+    let millis = js_sys::Date::now();
+    let days = (millis / 86_400_000.0).floor() as i64;
     let (year, month, day) = civil_from_days(days);
     format!("{year:04}-{month:02}-{day:02}")
 }

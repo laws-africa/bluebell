@@ -19,6 +19,7 @@ Bluebell produces.
 - Rust parser and XML writer: `crates/bluebell-core/src/`.
 - Rust CLI: `crates/bluebell-cli/`.
 - Optional Python native extension: `crates/bluebell-python/`.
+- Browser/Node WebAssembly bindings: `crates/bluebell-wasm/`.
 - Rust parity coverage: `crates/bluebell-core/tests/python_xml_parity.rs`.
 - Rust schema fixtures and validation:
   `crates/bluebell-core/tests/schema_fixtures.rs` and
@@ -70,6 +71,14 @@ From the repository root:
 ```sh
 cargo test
 python -m unittest discover -s tests -t .
+```
+
+When a change touches `crates/bluebell-wasm` or the core parse path it exposes,
+also run the wasm binding tests (requires the `wasm32-unknown-unknown` rustup
+target, `wasm-pack`, and Node):
+
+```sh
+cd crates/bluebell-wasm && wasm-pack test --node
 ```
 
 To test the installed Python extension path locally, build it into the active
@@ -128,7 +137,8 @@ The Rust workspace version lives in the repository root `Cargo.toml` under
 
 For releases, bump both values in the same change and keep them identical. Do
 not make the installed Python package depend on reading `Cargo.toml`; wheels and
-other distribution formats should be self-contained.
+other distribution formats should be self-contained. The full release process
+is documented in `RELEASING.md`.
 
 ## Exact XML Parity Notes
 

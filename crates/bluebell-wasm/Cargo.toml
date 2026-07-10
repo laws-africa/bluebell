@@ -1,0 +1,20 @@
+[package]
+name = "bluebell-wasm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "WebAssembly bindings for the Bluebell Akoma Ntoso parser"
+repository = "https://github.com/laws-africa/bluebell"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+bluebell-core = { path = "../bluebell-core" }
+wasm-bindgen = "0.2"
+console_error_panic_hook = "0.1"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"
+js-sys = "0.3"

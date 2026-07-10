@@ -4,6 +4,7 @@ members = [
     "crates/bluebell-core",
     "crates/bluebell-cli",
     "crates/bluebell-python",
+    "crates/bluebell-wasm",
 ]
 
 [workspace.package]

@@ -13,6 +13,13 @@ pest_derive = "2.7"
 regex = "1"
 thiserror = "2.0"
 
+# `std::time::SystemTime` has no working backend on wasm32-unknown-unknown;
+# `today_iso_date()` in `xml.rs` uses the JS `Date` API instead when
+# targeting wasm32. This dependency is only pulled in for that target, so
+# native builds (CLI, Python extension) are unaffected.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+js-sys = "0.3"
+
 [dev-dependencies]
 libxml = "0.3.13"
 pretty_assertions = "1.4"
