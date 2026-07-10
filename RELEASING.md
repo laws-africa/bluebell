@@ -56,21 +56,6 @@ published).
   directly in the browser with no bundler, and it also works when consumed through a bundler (see
   `crates/bluebell-wasm/README.md`).
 
-## One-time setup
-
-These must exist before the first automated release:
-
-- **PyPI trusted publisher for `bluebell-akn-rs`**: on PyPI, add a trusted
-  publisher for the `bluebell-akn-rs` project pointing at this repository,
-  workflow `publish.yml`, environment `pypi-rs`. (The `bluebell-akn` publisher
-  with environment `pypi` already exists.)
-- **GitHub environments**: create the `pypi-rs` environment in the repo
-  settings (alongside the existing `pypi` one).
-- **npm**: the `lawsafrica` npm organisation must exist, and an automation
-  token with publish rights must be stored as the `NPM_TOKEN` repository
-  secret. The first publish of a scoped package must be public, which the
-  workflow's `--access public` flag handles.
-
 ## Manual fallback
 
 If the workflow is unavailable, each artifact can be published by hand:
