@@ -34,7 +34,7 @@ dynamic = ["version"]
 
 # the one set of extra dependencies for development, testing and CI
 [project.optional-dependencies]
-dev = ["build", "flake8", "maturin", "poethepoet"]
+dev = ["build", "flake8", "maturin", "mkdocs>=1.5", "mkdocs-material>=9.5", "poethepoet"]
 
 [project.scripts]
 bluebell = "bluebell.cli:main"
@@ -93,3 +93,11 @@ cmd = "wasm-pack build --release --target web --scope lawsafrica"
 [tool.poe.tasks.bench]
 help = "Benchmark Rust vs Python parse on the income tax act"
 cmd = "cargo run --release -p bluebell-rs -- bench-income-tax crates/bluebell-core/tests/fixtures/income-tax.xml"
+
+[tool.poe.tasks.docs]
+help = "Build the documentation site into ./site"
+cmd = "mkdocs build"
+
+[tool.poe.tasks.docs-serve]
+help = "Serve the docs locally with live reload (http://127.0.0.1:8000)"
+cmd = "mkdocs serve"

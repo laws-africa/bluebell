@@ -175,5 +175,5 @@ demo page with a `?local-wasm` query parameter and it loads the module from
 ```sh
 poe build-wasm   # builds --target web into crates/bluebell-wasm/pkg
 cp -r crates/bluebell-wasm/pkg docs/js/bluebell-wasm
-mkdocs serve     # then open http://127.0.0.1:8000/demo/?local-wasm
+mkdocs serve     # then open http://127.0.0.1:8000/bluebell/demo/?local-wasm
 ```

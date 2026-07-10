@@ -122,7 +122,6 @@ cargo run -p bluebell-rs -- to-akn-xml /akn/za/act/2022/1 act tests/roundtrip/ac
 
 For the current status, parity testing, and full command reference, see [crates/README.md](crates/README.md).
 
-
 ## Development
 
 1. We use a version of `canopy` from github, so clone it into the same directory as this directory: `git clone https://github.com/jcoglan/canopy.git`
@@ -132,8 +131,22 @@ For the current status, parity testing, and full command reference, see [crates/
 5. Run all the test suites (Python, Rust, WASM) with: `poe test`
 
 Common development commands are defined as [poe](https://poethepoet.natn.io/)
-tasks in `pyproject.toml`; run `poe` with no arguments to list them. The
-Python suite alone is just `python -m unittest`.
+tasks in `pyproject.toml`; run `poe` with no arguments to list them. The Python suite alone is just
+`python -m unittest`.
+
+### Building the docs
+
+Documentation from `docs/` is built with MkDocs. To build and serve locally:
+
+```
+poe docs-serve
+```
+
+To build the static site:
+
+```
+poe docs
+```
 
 ## Releasing a new version
 
