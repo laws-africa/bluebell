@@ -3,6 +3,7 @@
 //! Run with `wasm-pack test --node crates/bluebell-wasm` (or from inside the
 //! crate directory: `wasm-pack test --node`).
 
+use js_sys::{Object, Reflect};
 use wasm_bindgen::{JsError, JsValue};
 use wasm_bindgen_test::*;
 
@@ -12,7 +13,7 @@ const FRBR_URI: &str = "/akn/za/act/2022/1";
 
 #[wasm_bindgen_test]
 fn parses_a_small_act() {
-    let xml = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI, None)
+    let xml = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI, None, None)
         .expect("a minimal act should parse successfully");
 
     assert!(
@@ -35,7 +36,7 @@ fn parses_a_small_act() {
 
 #[wasm_bindgen_test]
 fn accepts_an_empty_eid_prefix_argument() {
-    let xml = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI, Some(String::new()))
+    let xml = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI, Some(String::new()), None)
         .expect("an empty eid_prefix should preserve the Python-compatible call signature");
 
     assert!(
@@ -46,8 +47,9 @@ fn accepts_an_empty_eid_prefix_argument() {
 
 #[wasm_bindgen_test]
 fn accepts_a_non_empty_eid_prefix_argument() {
-    let xml = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI, Some("pref".to_string()))
-        .expect("a non-empty eid_prefix should parse successfully");
+    let xml =
+        bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI, Some("pref".to_string()), None)
+            .expect("a non-empty eid_prefix should parse successfully");
 
     assert!(
         xml.contains("<section eId=\"pref__sec_1\">"),
@@ -65,6 +67,7 @@ fn parses_a_hierarchy_fragment_root() {
         "SEC 1. - Heading\n  Some content.",
         "hier_element_block",
         FRBR_URI,
+        None,
         None,
     )
     .expect("a hierarchy fragment should parse successfully");
@@ -85,9 +88,14 @@ fn parses_a_hierarchy_fragment_root() {
 
 #[wasm_bindgen_test]
 fn parses_an_attachment_fragment_root_with_meta() {
-    let xml =
-        bluebell_wasm::parse_to_xml("SCHEDULE Schedule\n  text", "attachment", FRBR_URI, None)
-            .expect("an attachment fragment should parse successfully");
+    let xml = bluebell_wasm::parse_to_xml(
+        "SCHEDULE Schedule\n  text",
+        "attachment",
+        FRBR_URI,
+        None,
+        None,
+    )
+    .expect("an attachment fragment should parse successfully");
 
     assert!(
         xml.starts_with("<attachment"),
@@ -106,8 +114,52 @@ fn parses_an_attachment_fragment_root_with_meta() {
 }
 
 #[wasm_bindgen_test]
+fn accepts_custom_metadata_source_for_document_roots() {
+    let xml = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI, None, Some(indigo_source()))
+        .expect("a custom source should parse successfully");
+
+    assert!(
+        xml.contains(r##"<identification source="#Indigo-Platform">"##),
+        "expected custom identification source, got: {xml}"
+    );
+    assert!(
+        xml.contains(r##"<references source="#Indigo-Platform">"##),
+        "expected custom references source, got: {xml}"
+    );
+    assert!(
+        xml.contains(r#"<TLCOrganization eId="Indigo-Platform" href="https://example.org" showAs="Indigo Platform"/>"#),
+        "expected custom TLCOrganization, got: {xml}"
+    );
+}
+
+#[wasm_bindgen_test]
+fn accepts_custom_metadata_source_for_attachment_fragments() {
+    let xml = bluebell_wasm::parse_to_xml(
+        "SCHEDULE Schedule\n  text",
+        "attachment",
+        FRBR_URI,
+        None,
+        Some(indigo_source()),
+    )
+    .expect("an attachment fragment should parse successfully");
+
+    assert!(
+        xml.starts_with("<attachment"),
+        "expected an attachment fragment root, got: {xml}"
+    );
+    assert!(
+        xml.contains(r##"<identification source="#Indigo-Platform">"##),
+        "expected custom attachment identification source, got: {xml}"
+    );
+    assert!(
+        !xml.contains(r##"<references source="#Indigo-Platform">"##),
+        "attachment component metadata should not add top-level references, got: {xml}"
+    );
+}
+
+#[wasm_bindgen_test]
 fn rejects_an_unsupported_root() {
-    let err = bluebell_wasm::parse_to_xml(ACT_TEXT, "not-a-real-root", FRBR_URI, None)
+    let err = bluebell_wasm::parse_to_xml(ACT_TEXT, "not-a-real-root", FRBR_URI, None, None)
         .expect_err("an unrecognised root should raise an error");
 
     let message = js_error_message(err);
@@ -130,7 +182,7 @@ fn rejects_an_unsupported_root() {
 // actually encounter in practice.
 #[wasm_bindgen_test]
 fn rejects_an_invalid_frbr_uri() {
-    let err = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", "not a valid frbr uri", None)
+    let err = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", "not a valid frbr uri", None, None)
         .expect_err("an invalid FRBR URI should raise an error");
 
     let message = js_error_message(err);
@@ -148,4 +200,27 @@ fn reports_the_crate_version() {
 
 fn js_error_message(err: JsError) -> String {
     js_sys::Error::from(JsValue::from(err)).message().into()
+}
+
+fn indigo_source() -> JsValue {
+    let source = Object::new();
+    Reflect::set(
+        &source,
+        &JsValue::from_str("showAs"),
+        &JsValue::from_str("Indigo Platform"),
+    )
+    .unwrap();
+    Reflect::set(
+        &source,
+        &JsValue::from_str("eid"),
+        &JsValue::from_str("Indigo-Platform"),
+    )
+    .unwrap();
+    Reflect::set(
+        &source,
+        &JsValue::from_str("href"),
+        &JsValue::from_str("https://example.org"),
+    )
+    .unwrap();
+    source.into()
 }

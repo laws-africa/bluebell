@@ -2,7 +2,10 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use bluebell_core::{parse_to_xml_document_or_fragment_with_eid_prefix, DocumentRoot};
+use bluebell_core::{
+    parse_to_xml_document_or_fragment_with_eid_prefix,
+    parse_to_xml_document_or_fragment_with_eid_prefix_and_source, DocumentRoot, MetadataSource,
+};
 
 mod support;
 use support::{python_path, repo_path, unparse};
@@ -27,6 +30,40 @@ fn parsed_bluebell_xml_matches_python() {
     for case in parity_cases() {
         assert_case_matches_python(&case);
     }
+}
+
+#[test]
+fn custom_metadata_source_matches_python_cobalt_override() {
+    let case = text_case(
+        "custom-metadata-source",
+        DocumentRoot::Act,
+        "act",
+        "BODY\nSEC 1. - Heading\n  Some text.\nSCHEDULE Schedule\n  text",
+    );
+    let source = MetadataSource::new("Indigo Platform", "Indigo-Platform", "https://example.org");
+    let text = case.input.read(&case.name);
+    let rust_xml = parse_to_xml_document_or_fragment_with_eid_prefix_and_source(
+        &text,
+        case.root,
+        &case.frbr_uri,
+        &case.eid_prefix,
+        &source,
+    )
+    .unwrap_or_else(|err| panic!("Rust failed to parse {}: {err}", case.name));
+    let python_xml = python_parse_to_xml_with_source(&case, &text, &source);
+
+    let rust_c14n = python_canonicalize(&rust_xml, &case.name, "rust");
+    let python_c14n = python_canonicalize(&python_xml, &case.name, "python");
+
+    if rust_c14n != python_c14n {
+        write_failure_artifacts(&case, &rust_xml, &python_xml);
+    }
+    assert!(
+        python_c14n == rust_c14n,
+        "XML parity failed for {}; artifacts written to {}",
+        case.name,
+        artifact_dir(&case.name).display()
+    );
 }
 
 #[test]
@@ -895,6 +932,25 @@ fn python_parse_to_xml(case: &ParityCase, text: &str) -> String {
         root = case.python_root,
     );
     run_python(&script, &case.name, "python parse_to_xml")
+}
+
+fn python_parse_to_xml_with_source(
+    case: &ParityCase,
+    text: &str,
+    source: &MetadataSource,
+) -> String {
+    let text_path = write_temp_file(&case.name, "input.txt", text);
+    let script = format!(
+        "from pathlib import Path\nfrom bluebell.parser import AkomaNtosoParser\nfrom cobalt import FrbrUri\nfrom cobalt.akn import AkomaNtosoDocument\nfrom lxml import etree\nold_source = AkomaNtosoDocument.source\nAkomaNtosoDocument.source = [{show_as:?}, {eid:?}, {href:?}]\ntry:\n    p=AkomaNtosoParser(FrbrUri.parse({uri:?}), {eid_prefix:?})\n    xml=p.parse_to_xml(Path({text:?}).read_bytes().decode('utf-8'), {root:?})\n    print(etree.tostring(xml, encoding='unicode'), end='')\nfinally:\n    AkomaNtosoDocument.source = old_source\n",
+        show_as = source.show_as,
+        eid = source.eid,
+        href = source.href,
+        uri = case.frbr_uri,
+        eid_prefix = case.eid_prefix,
+        text = text_path.display().to_string(),
+        root = case.python_root,
+    );
+    run_python(&script, &case.name, "python parse_to_xml with source")
 }
 
 fn python_canonicalize(xml: &str, name: &str, label: &str) -> String {
