@@ -1,4 +1,4 @@
-name: Publish to PyPI
+name: Publish release
 
 on:
   release:
@@ -14,7 +14,7 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -47,7 +47,7 @@ jobs:
           - runner: windows-latest
             target: x64
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -72,7 +72,7 @@ jobs:
     name: Build bluebell-akn-rs sdist
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Build sdist
       uses: PyO3/maturin-action@v1
@@ -114,13 +114,14 @@ jobs:
       contents: read
       id-token: write  # for npm --provenance
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Set up Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: "22"
+        node-version: "24"
         registry-url: https://registry.npmjs.org
+        package-manager-cache: false
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -149,5 +150,3 @@ jobs:
     - name: Publish to npm
       working-directory: crates/bluebell-wasm
       run: npm publish pkg/ --provenance --access public
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
