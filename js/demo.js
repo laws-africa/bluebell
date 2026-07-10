@@ -1,4 +1,21 @@
+// Live demo powered by @lawsafrica/bluebell-wasm (the Rust Bluebell parser
+// compiled to WebAssembly), loaded from jsDelivr and pinned to a major
+// version (see WASM_MODULE_CDN_URL below).
+//
+// Testing locally, before the npm package is published or to try local
+// changes: build a `--target web` package and copy it into
+// docs/js/bluebell-wasm/ (git-ignored), then load the demo page with a
+// `?local-wasm` query parameter to use that copy instead of the CDN.
+//
+//   poe build-wasm   # builds --target web into crates/bluebell-wasm/pkg
+//   cp -r crates/bluebell-wasm/pkg docs/js/bluebell-wasm
+//   mkdocs serve     # then open http://127.0.0.1:8000/bluebell/demo/?local-wasm
+//
 (function () {
+  // Pinned to the major version so the demo doesn't break on a breaking
+  // change to the package, but still picks up fixes/features.
+  const WASM_MODULE_CDN_URL = 'https://cdn.jsdelivr.net/npm/@lawsafrica/bluebell-wasm@4/bluebell_wasm.js';
+
   function init() {
     const input = document.getElementById('demo-input');
     const output = document.getElementById('demo-output');
@@ -14,14 +31,14 @@
     }
 
     const FRBR_URI = '/akn/za/act/2026/1';
+    const PARSE_ROOT = 'act';
     let parserReadyPromise;
     let parseFn;
-    let pyodideScriptPromise;
     let prettyPrintTransformPromise;
     let htmlXsltPromise;
     let latestXmlRaw = '';
     let latestXmlPretty = '';
-    let activeTab = 'xml';
+    let activeTab = 'html';
     const domParser = new DOMParser();
     const xmlSerializer = new XMLSerializer();
     let lawWidgetsPromise;
@@ -31,20 +48,12 @@
       statusEl.dataset.tone = tone;
     }
 
-    function ensurePyodideScript() {
-      if (window.loadPyodide) {
-        return Promise.resolve();
+    function wasmModuleUrl() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('local-wasm')) {
+        return new URL('../js/bluebell-wasm/bluebell_wasm.js', document.baseURI).toString();
       }
-      if (!pyodideScriptPromise) {
-        pyodideScriptPromise = new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js';
-          script.onload = () => resolve();
-          script.onerror = () => reject(new Error('Failed to load Pyodide.'));
-          document.head.appendChild(script);
-        });
-      }
-      return pyodideScriptPromise;
+      return WASM_MODULE_CDN_URL;
     }
 
     function setActiveTab(tab) {
@@ -128,7 +137,14 @@
         xmlPanel.classList.remove('is-active');
         htmlPanel.classList.add('is-active');
         if (!hasXml) {
-          htmlContainer.textContent = 'No XML available yet.';
+          // Write to the viewer, not the container: setting textContent on
+          // htmlContainer would remove the <la-akoma-ntoso> element that
+          // htmlViewer references, detaching it so later renders go nowhere.
+          if (htmlViewer) {
+            htmlViewer.textContent = 'No XML available yet.';
+          } else {
+            htmlContainer.textContent = 'No XML available yet.';
+          }
           return;
         }
         await ensureLawWidgets();
@@ -144,7 +160,12 @@
             htmlContainer.appendChild(fragment);
           }
         } catch (err) {
-          htmlContainer.textContent = `Failed to render HTML: ${err.message}`;
+          const message = `Failed to render HTML: ${err.message}`;
+          if (htmlViewer) {
+            htmlViewer.textContent = message;
+          } else {
+            htmlContainer.textContent = message;
+          }
         }
       }
     }
@@ -175,37 +196,13 @@
       }
 
       parserReadyPromise = (async () => {
-        setStatus('Initializing parser (downloading Pyodide)…', 'info');
-        await ensurePyodideScript();
-        const pyodide = await loadPyodide();
-        setStatus('Installing Bluebell dependencies…', 'info');
-        await pyodide.loadPackage('micropip');
-        const micropip = pyodide.pyimport('micropip');
-        await micropip.install('cobalt');
-        await micropip.install('bluebell-akn');
-        micropip.destroy();
-
-        const setupScript = `
-from bluebell.parser import AkomaNtosoParser, ParseError
-from cobalt import FrbrUri
-from lxml import etree
-
-def parse_bluebell_text(text, frbr_uri):
-    frbr_uri = FrbrUri.parse(frbr_uri)
-    frbr_uri.work_component = 'main'
-    root = frbr_uri.doctype
-    try:
-        parser = AkomaNtosoParser(frbr_uri)
-        xml = parser.parse_to_xml(text, root)
-    except ParseError as e:
-        return {"error": True, "result": str(e)}
-    xml = etree.tostring(xml, encoding='unicode')
-    return {"error": False, "result": xml}
-`;
-        await pyodide.runPythonAsync(setupScript);
-        parseFn = pyodide.globals.get('parse_bluebell_text');
+        setStatus('Initializing parser (downloading WebAssembly module)…', 'info');
+        const moduleUrl = wasmModuleUrl();
+        const wasmModule = await import(/* webpackIgnore: true */ moduleUrl);
+        await wasmModule.default();
+        parseFn = wasmModule.parseToXml;
         setStatus('Parser ready. Edit the text to see updates.', 'success');
-        return pyodide;
+        return wasmModule;
       })();
 
       return parserReadyPromise;
@@ -215,16 +212,18 @@ def parse_bluebell_text(text, frbr_uri):
       const text = input.value;
       try {
         await initParser();
-        setStatus('Parsing…', 'info');
-        const pyResult = parseFn(text, FRBR_URI);
-        const result = pyResult.toJs({ create_proxies: false });
-        pyResult.destroy();
-        if (result.error) {
-          setStatus('Parse error. See details below.', 'error');
-          clearOutput(result.result);
-        } else {
-          setStatus('Parsed successfully.', 'success');
-          latestXmlRaw = result.result;
+      } catch (err) {
+        console.error(err);
+        setStatus(`Failed to initialise parser: ${err.message}`, 'error');
+        clearOutput(`<!-- Failed to initialise parser: ${err.message} -->`);
+        return;
+      }
+
+      setStatus('Parsing…', 'info');
+      try {
+        const xml = parseFn(text, PARSE_ROOT, FRBR_URI);
+        setStatus('Parsed successfully.', 'success');
+        latestXmlRaw = xml;
         try {
           const printer = await getPrettyPrinter();
           const sourceDoc = domParser.parseFromString(latestXmlRaw, 'application/xml');
@@ -234,14 +233,12 @@ def parse_bluebell_text(text, frbr_uri):
           console.warn('Pretty-print failed', printerError);
           latestXmlPretty = latestXmlRaw;
         }
-          downloadBtn.disabled = false;
-          downloadBtn.dataset.xml = latestXmlRaw;
-          void renderActiveOutput();
-        }
+        downloadBtn.disabled = false;
+        downloadBtn.dataset.xml = latestXmlRaw;
+        void renderActiveOutput();
       } catch (err) {
-        console.error(err);
-        setStatus(`Failed to initialise parser: ${err.message}`, 'error');
-        clearOutput(`<!-- Failed to parse: ${err.message} -->`);
+        setStatus('Parse error. See details below.', 'error');
+        clearOutput(err.message);
       }
     }
 
