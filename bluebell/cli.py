@@ -31,7 +31,7 @@ def main():
         akn_parser = AkomaNtosoParser(frbr_uri)
         try:
             tree = akn_parser.parse(text, args.root)
-        except ParseError as e:
+        except ParseError:
             print_with_lines(text)
             raise
 
