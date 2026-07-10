@@ -1,0 +1,29 @@
+[build-system]
+requires = ["maturin>=1.8,<2"]
+build-backend = "maturin"
+
+[project]
+name = "bluebell-akn-rs"
+description = "Optional Rust parser extension for bluebell-akn"
+authors = [
+  { name = "Laws.Africa", email = "info@laws.africa" },
+]
+license = { text = "LGPLv3+" }
+requires-python = ">=3.12"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Topic :: Text Processing",
+  "Topic :: Text Processing :: Markup :: XML",
+  "Intended Audience :: Legal Industry",
+  "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+  "Programming Language :: Rust",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+dynamic = ["version"]
+
+[tool.maturin]
+bindings = "pyo3"
+module-name = "_bluebell_rs"

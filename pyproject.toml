@@ -32,8 +32,9 @@ dynamic = ["version"]
 "Homepage" = "https://github.com/laws-africa/bluebell"
 "Bug Tracker" = "https://github.com/laws-africa/bluebell/issues"
 
+# the one set of extra dependencies for development, testing and CI
 [project.optional-dependencies]
-test = ["flake8"]
+dev = ["build", "flake8", "maturin", "mkdocs>=1.5", "mkdocs-material>=9.5", "poethepoet"]
 
 [project.scripts]
 bluebell = "bluebell.cli:main"
@@ -46,3 +47,57 @@ namespaces = false
 [tool.setuptools.dynamic]
 version = {attr = "bluebell.__version__"}
 
+# Developer commands: run `poe` (pip install -e '.[dev]') to list them.
+# Tasks run from the repository root regardless of the current directory.
+[tool.poe.tasks]
+
+[tool.poe.tasks.test]
+help = "Run all test suites (Python, Rust, WASM)"
+sequence = ["test-py", "test-rust", "test-wasm"]
+
+[tool.poe.tasks.test-py]
+help = "Run the Python test suite"
+cmd = "python -m unittest discover -s tests -t ."
+
+[tool.poe.tasks.test-rust]
+help = "Run the Rust test suite (parity tests need this venv's python)"
+cmd = "cargo test"
+
+[tool.poe.tasks.test-wasm]
+help = "Run the WASM binding tests under Node"
+cwd = "crates/bluebell-wasm"
+cmd = "wasm-pack test --node"
+
+[tool.poe.tasks.test-parity]
+help = "Slow large-document Rust/Python parity test (~1-2 min)"
+cmd = "cargo test -p bluebell-core --test python_xml_parity income_tax_xml_roundtrip_parse_matches_python -- --ignored --nocapture"
+
+[tool.poe.tasks.lint]
+help = "Lint the Python package with flake8"
+cmd = "flake8 bluebell"
+
+[tool.poe.tasks.ext]
+help = "Build and install the Rust extension into the active venv"
+cwd = "crates/bluebell-python"
+cmd = "maturin develop --release"
+
+[tool.poe.tasks.ext-remove]
+help = "Uninstall the Rust extension (reverts to the pure-Python parser)"
+cmd = "pip uninstall -y bluebell-akn-rs"
+
+[tool.poe.tasks.build-wasm]
+help = "Build the @lawsafrica/bluebell-wasm npm package into crates/bluebell-wasm/pkg"
+cwd = "crates/bluebell-wasm"
+cmd = "wasm-pack build --release --target web --scope lawsafrica"
+
+[tool.poe.tasks.bench]
+help = "Benchmark Rust vs Python parse on the income tax act"
+cmd = "cargo run --release -p bluebell-rs -- bench-income-tax crates/bluebell-core/tests/fixtures/income-tax.xml"
+
+[tool.poe.tasks.docs]
+help = "Build the documentation site into ./site"
+cmd = "mkdocs build"
+
+[tool.poe.tasks.docs-serve]
+help = "Serve the docs locally with live reload (http://127.0.0.1:8000)"
+cmd = "mkdocs serve"

@@ -1,7 +1,7 @@
 # Bluebell Live Demo
 
-Experiment with Bluebell text by editing the box below. The XML and HTML is updated live as you type. This uses
- [Pyodide](https://pyodide.org/en/stable/) to run the Bluebell parser in the browser, and styling for the HTML is apply with the Laws.Africa
+Experiment with Bluebell text by editing the box below. The XML and HTML is updated live as you type. This runs
+ the Rust Bluebell parser compiled to WebAssembly directly in the browser, and styling for the HTML is applied with the Laws.Africa
 [Law Widgets](https://github.com/laws-africa/law-widgets) library.
 
 <div class="demo-container">
@@ -26,20 +26,20 @@ CHAPTER 1 - Preliminary
 
   <div class="demo-tab-bar">
     <div class="demo-tab-buttons">
-      <button type="button" class="md-button md-button--outlined demo-tab-button is-active" data-demo-tab="xml">XML</button>
-      <button type="button" class="md-button md-button--outlined demo-tab-button" data-demo-tab="html">HTML</button>
+      <button type="button" class="md-button md-button--outlined demo-tab-button is-active" data-demo-tab="html">HTML</button>
+      <button type="button" class="md-button md-button--outlined demo-tab-button" data-demo-tab="xml">XML</button>
     </div>
   </div>
-  <div id="demo-tab-xml" class="demo-tab-panel is-active">
+  <div id="demo-tab-html" class="demo-tab-panel is-active">
+    <div id="demo-html" class="demo-html">
+      <la-akoma-ntoso frbr-expression-uri="/akn/za/act/2026/1/eng@"></la-akoma-ntoso>
+    </div>
+  </div>
+  <div id="demo-tab-xml" class="demo-tab-panel" hidden>
     <div class="demo-download-bar">
       <button id="demo-download" class="md-button md-button--primary demo-download" type="button" disabled>Download XML</button>
     </div>
     <pre id="demo-output" class="demo-output">&lt;!-- XML output will appear here --&gt;</pre>
-  </div>
-  <div id="demo-tab-html" class="demo-tab-panel" hidden>
-    <div id="demo-html" class="demo-html">
-      <la-akoma-ntoso frbr-expression-uri="/akn/za/act/2026/1/eng@"></la-akoma-ntoso>
-    </div>
   </div>
 
 </div>

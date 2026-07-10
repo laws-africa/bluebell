@@ -1,1 +1,5 @@
-__version__ = "3.1.1"
+__version__ = "4.0.0"
+
+from .parser import parse_to_xml, parse_to_xml_bytes, parse_to_xml_str
+
+__all__ = ["parse_to_xml", "parse_to_xml_bytes", "parse_to_xml_str"]

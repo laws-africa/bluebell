@@ -102,3 +102,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# wasm-pack build output
+crates/bluebell-wasm/pkg/
+
+# locally built wasm package copied in for testing the docs demo
+docs/js/bluebell-wasm/

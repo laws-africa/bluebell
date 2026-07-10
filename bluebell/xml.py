@@ -1,5 +1,5 @@
 import re
-from itertools import groupby, chain
+from itertools import groupby
 
 from cobalt.akn import get_maker, StructuredDocument
 import lxml.etree as etree
@@ -380,7 +380,7 @@ class XmlGenerator:
     def get_attachment_name(self, item):
         parent = self.attachment_names[-1] if self.attachment_names else None
         name = item.get('attribs', {}).get('name', 'attachment')
-        num = self.ids.incr(f'__attachments', f'{parent}__{name}' if parent else name)
+        num = self.ids.incr('__attachments', f'{parent}__{name}' if parent else name)
         return f'{parent}/{name}_{num}' if parent else f'{name}_{num}'
 
     def kids_to_xml(self, parent=None, kids=None):

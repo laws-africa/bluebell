@@ -45,6 +45,12 @@ class IdGeneratorTestCase(ParserSupport, TestCase):
         # chinese 3
         self.assertEqual("三", self.generator.ids.clean_num("(三)"))
 
+        # unicode whitespace is whitespace, too
+        self.assertEqual("3bis", self.generator.ids.clean_num("3\xa0bis"))
+        self.assertEqual("3bis", self.generator.ids.clean_num("3\u2003bis"))
+        self.assertEqual("3", self.generator.ids.clean_num("(3\xa0)"))
+        self.assertEqual("1-2", self.generator.ids.clean_num("1.\xa02"))
+
     def test_eids_no_num(self):
         tree = self.parse("""
 PARA

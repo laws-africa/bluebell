@@ -1,10 +1,177 @@
+import sys
+import types
 from unittest import TestCase
+from unittest.mock import patch
 
+from cobalt import FrbrUri
+from lxml import etree
+
+import bluebell.parser
+from bluebell import parse_to_xml, parse_to_xml_bytes, parse_to_xml_str
 from .support import ParserSupport
 
 
 class ParserTestCase(ParserSupport, TestCase):
     maxDiff = None
+
+    def test_top_level_parse_to_xml_function(self):
+        xml = parse_to_xml("P hello", "statement", FrbrUri.parse("/akn/za/statement/2022/1"))
+
+        ns = {'a': 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'}
+        self.assertEqual('akomaNtoso', etree.QName(xml).localname)
+        self.assertEqual(
+            ['hello'],
+            xml.xpath('/a:akomaNtoso/a:statement/a:mainBody/a:p/text()', namespaces=ns),
+        )
+
+    def test_top_level_parse_to_xml_str_function(self):
+        xml = parse_to_xml_str("P hello", "statement", FrbrUri.parse("/akn/za/statement/2022/1"))
+
+        self.assertIsInstance(xml, str)
+        self.assertIn('<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">', xml)
+        self.assertIn('>hello</p>', xml)
+
+    def test_top_level_parse_to_xml_bytes_function(self):
+        xml = parse_to_xml_bytes("P hello", "statement", FrbrUri.parse("/akn/za/statement/2022/1"))
+
+        self.assertIsInstance(xml, bytes)
+        self.assertIn(b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">', xml)
+        self.assertIn(b'>hello</p>', xml)
+
+    def test_top_level_parse_to_xml_uses_rust_extension_when_available(self):
+        module = types.ModuleType("_bluebell_rs")
+        module.parse_to_xml = lambda text, root, frbr_uri, eid_prefix='': (
+            b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
+            b'<statement name="statement"><mainBody><p eId="p_1">rust</p></mainBody></statement>'
+            b'</akomaNtoso>'
+        )
+
+        with patch.dict(sys.modules, {"_bluebell_rs": module}):
+            xml = bluebell.parser.parse_to_xml(
+                "P ignored",
+                "statement",
+                FrbrUri.parse("/akn/za/statement/2022/1"),
+            )
+
+        self.assertEqual(["rust"], xml.xpath("//*[local-name()='p']/text()"))
+
+    def test_top_level_parse_to_xml_str_decodes_rust_extension_bytes(self):
+        module = types.ModuleType("_bluebell_rs")
+        module.parse_to_xml = lambda text, root, frbr_uri, eid_prefix='': (
+            b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
+            b'<statement name="statement"><mainBody><p eId="p_1">rust</p></mainBody></statement>'
+            b'</akomaNtoso>'
+        )
+
+        with patch.dict(sys.modules, {"_bluebell_rs": module}):
+            xml = bluebell.parser.parse_to_xml_str(
+                "P ignored",
+                "statement",
+                FrbrUri.parse("/akn/za/statement/2022/1"),
+            )
+
+        self.assertIsInstance(xml, str)
+        self.assertIn(">rust</p>", xml)
+
+    def test_top_level_parse_to_xml_bytes_uses_rust_extension_when_available(self):
+        module = types.ModuleType("_bluebell_rs")
+        module.parse_to_xml = lambda text, root, frbr_uri, eid_prefix='': (
+            b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
+            b'<statement name="statement"><mainBody><p eId="p_1">rust</p></mainBody></statement>'
+            b'</akomaNtoso>'
+        )
+
+        with patch.dict(sys.modules, {"_bluebell_rs": module}):
+            xml = bluebell.parser.parse_to_xml_bytes(
+                "P ignored",
+                "statement",
+                FrbrUri.parse("/akn/za/statement/2022/1"),
+            )
+
+        self.assertIsInstance(xml, bytes)
+        self.assertIn(b">rust</p>", xml)
+
+    def test_top_level_parse_to_xml_passes_eid_prefix_to_rust_extension(self):
+        module = types.ModuleType("_bluebell_rs")
+
+        def parse_to_xml(text, root, frbr_uri, eid_prefix=''):
+            self.assertEqual("pref", eid_prefix)
+            return (
+                b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
+                b'<statement name="statement"><mainBody><p eId="pref__p_1">prefixed</p></mainBody></statement>'
+                b'</akomaNtoso>'
+            )
+
+        module.parse_to_xml = parse_to_xml
+
+        with patch.dict(sys.modules, {"_bluebell_rs": module}):
+            xml = bluebell.parser.parse_to_xml(
+                "P prefixed",
+                "statement",
+                FrbrUri.parse("/akn/za/statement/2022/1"),
+                eid_prefix="pref",
+            )
+
+        self.assertEqual(["prefixed"], xml.xpath("//*[local-name()='p']/text()"))
+        self.assertEqual(["pref__p_1"], xml.xpath("//*[local-name()='p']/@eId"))
+
+    def test_top_level_functions_accept_string_frbr_uri_without_rust_extension(self):
+        # a string frbr_uri must work in the pure-Python fallback path, not
+        # just when the Rust extension is installed
+        with patch.dict(sys.modules, {"_bluebell_rs": None}):
+            xml = bluebell.parser.parse_to_xml_str(
+                "P hello",
+                "statement",
+                "/akn/za/statement/2022/1",
+            )
+
+        self.assertIn('<FRBRuri value="/akn/za/statement/2022/1"/>', xml)
+        self.assertIn('>hello</p>', xml)
+
+    def test_top_level_parse_to_xml_supports_fragment_roots_without_rust_extension(self):
+        cases = [
+            ("hier_element_block", "SEC 1. - Heading\n  text", "section"),
+            ("attachment", "SCHEDULE Schedule\n  text", "attachment"),
+            ("attachments", "SCHEDULE One\n  one\nSCHEDULE Two\n  two", "attachments"),
+            ("block_list_item", "ITEM (a)\n  text", "item"),
+            (
+                "speech_container",
+                "DEBATESECTION 1 - Debate\n  SPEECH\n    FROM Speaker\n    NARRATIVE Hello",
+                "debateSection",
+            ),
+            ("speech_group", "SPEECH\n  FROM Speaker\n  NARRATIVE Hello", "speech"),
+        ]
+
+        with patch.dict(sys.modules, {"_bluebell_rs": None}):
+            for root, text, expected_name in cases:
+                with self.subTest(root=root):
+                    xml = bluebell.parser.parse_to_xml(
+                        text,
+                        root,
+                        FrbrUri.parse("/akn/za/act/2009/10"),
+                    )
+
+                    self.assertEqual(expected_name, etree.QName(xml).localname)
+                    self.assertNotEqual("akomaNtoso", etree.QName(xml).localname)
+                    self.assertTrue(xml.xpath(".//@eId"))
+
+    def test_top_level_parse_to_xml_fragment_attachment_includes_meta_without_rust_extension(self):
+        with patch.dict(sys.modules, {"_bluebell_rs": None}):
+            xml = bluebell.parser.parse_to_xml(
+                "SCHEDULE Schedule\n  text",
+                "attachment",
+                FrbrUri.parse("/akn/za/act/2009/10"),
+            )
+
+        self.assertEqual("attachment", etree.QName(xml).localname)
+        self.assertEqual(
+            ["/akn/za/act/2009/10/!schedule_1"],
+            xml.xpath("//*[local-name()='FRBRWork']/*[local-name()='FRBRthis']/@value"),
+        )
+        self.assertEqual(
+            ["Schedule"],
+            xml.xpath("//*[local-name()='FRBRalias'][@name='title']/@value"),
+        )
 
     def test_pre_parse_empty(self):
         self.assertEqual(
@@ -125,6 +292,58 @@ SECTION 1.
   bar
     |}
 """))
+
+    def test_pre_parse_crlf_line_endings(self):
+        # \r is not a line separator and is preserved in the text
+        self.assertEqual(
+            "BODY\r\ntext\n",
+            self.parser.pre_parse("BODY\r\ntext\r\n"),
+        )
+        self.assertEqual(
+            "a\rb\n",
+            self.parser.pre_parse("a\rb"),
+        )
+        # trailing spaces are only stripped before a newline, not before a \r
+        self.assertEqual(
+            "a \r\nb\n",
+            self.parser.pre_parse("a \r\nb"),
+        )
+
+    def test_pre_parse_control_char_whitespace(self):
+        # \x0b, \x0c and \x1c-\x1f count as whitespace at the document edges
+        self.assertEqual("a\n", self.parser.pre_parse("\x1ca\x1f"))
+        self.assertEqual("a\n", self.parser.pre_parse("\x0ba\x0c"))
+        # but are preserved inside the document
+        self.assertEqual("a\x1cb\n", self.parser.pre_parse("a\x1cb"))
+
+    def test_pre_parse_unicode_whitespace(self):
+        # unicode whitespace is stripped at the document edges
+        self.assertEqual("a\n", self.parser.pre_parse("\xa0a\xa0"))
+        self.assertEqual("a\n", self.parser.pre_parse("\x85a"))
+        # but is not treated as indentation and is preserved in text
+        self.assertEqual("a\n\xa0 b\n", self.parser.pre_parse("a\n\xa0 b"))
+        self.assertEqual("a\n\u2003b\n", self.parser.pre_parse("a\n\u2003b"))
+
+    def test_parse_crlf_line_endings(self):
+        # \r is not a line separator: markers followed by \r are not recognised,
+        # and the \r stays in the text
+        xml = self.parser.parse_to_xml("BODY\r\nSEC 1. - Heading\r\n  Some text.\r\n", 'act')
+
+        self.assertEqual("""<body xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <hcontainer eId="hcontainer_1" name="hcontainer">
+    <content>
+      <p eId="hcontainer_1__p_1">BODY&#13;</p>
+    </content>
+  </hcontainer>
+  <section eId="sec_1">
+    <num>1.</num>
+    <heading>Heading&#13;</heading>
+    <content>
+      <p eId="sec_1__p_1">Some text.</p>
+    </content>
+  </section>
+</body>
+""", self.tostring(etree.tostring(xml.find('.//{*}body'), encoding='unicode')))
 
     def test_unparse_strip_newlines_and_whitespace(self):
         # strip newlines anywhere

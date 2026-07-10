@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/bluebell-core",
+    "crates/bluebell-cli",
+    "crates/bluebell-python",
+    "crates/bluebell-wasm",
+]
+
+[workspace.package]
+version = "4.0.0"
+edition = "2021"
+license = "LGPL-3.0-or-later"

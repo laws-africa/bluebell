@@ -1,0 +1,15 @@
+[package]
+name = "bluebell-python"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "_bluebell_rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+bluebell-core = { path = "../bluebell-core" }
+# abi3-py312 builds stable-ABI wheels: one wheel per platform covers
+# CPython 3.12+ instead of one wheel per Python version.
+pyo3 = { version = "0.23", features = ["extension-module", "abi3-py312"] }

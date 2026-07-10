@@ -1,8 +1,8 @@
 # Bluebell
 
 <div style="display: flex; gap: 2em; align-items: center;">
-  <img src="https://laws.africa/img/icons/bluebell.png" alt="Bluebell logo" style="height: 5em;">
-  <img src="https://laws.africa/img/logo.png" alt="Laws.Africa logo" style="height: 5em;">
+  <img src="https://laws.africa/static/img/icons/bluebell.svg" alt="Bluebell logo" style="height: 5em;">
+  <img src="https://laws.africa/static/img/logo-horizontal.png" alt="Laws.Africa logo" style="height: 5em;">
 </div>
 
 Bluebell is both a markup language format and a library for parsing that format into/from Akoma Ntoso XML. It is

@@ -5,7 +5,7 @@ import argparse
 from cobalt import FrbrUri
 from lxml import etree as ET
 
-from bluebell.parser import AkomaNtosoParser
+from bluebell.parser import AkomaNtosoParser, parse_to_xml
 from bluebell.akn import ParseError
 
 
@@ -25,18 +25,18 @@ def main():
     args = parser.parse_args()
 
     frbr_uri = FrbrUri.parse(args.frbr_uri)
-    akn_parser = AkomaNtosoParser(frbr_uri)
-
     text = open(args.input, "r").read()
-    try:
-        tree = akn_parser.parse(text, args.root)
-    except ParseError as e:
-        print_with_lines(text)
-        raise
 
     if args.json:
+        akn_parser = AkomaNtosoParser(frbr_uri)
+        try:
+            tree = akn_parser.parse(text, args.root)
+        except ParseError:
+            print_with_lines(text)
+            raise
+
         tree = tree.to_dict()
         print(json.dumps(tree))
     else:
-        xml = akn_parser.tree_to_xml(tree)
+        xml = parse_to_xml(text, args.root, frbr_uri)
         print(ET.tostring(xml, pretty_print=args.pretty, encoding='unicode'))

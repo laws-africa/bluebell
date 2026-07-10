@@ -1,7 +1,9 @@
 from datetime import date
 from unittest import TestCase
 
-from cobalt import datestring
+from cobalt import FrbrUri, datestring
+
+from bluebell.parser import AkomaNtosoParser
 from tests.support import ParserSupport
 
 
@@ -2560,3 +2562,29 @@ ANNEXURE a heading
   </attachment>
 </attachments>
 """, xml)
+
+    def test_attachment_frbr_uri_components(self):
+        # attachment component names must be appended to work, expression and
+        # manifestation URIs, including for URIs with a locality and subtype
+        parser = AkomaNtosoParser(FrbrUri.parse('/akn/za-cpt/act/by-law/2016/control'))
+        xml = parser.parse_to_xml("""BODY
+  text
+SCHEDULE First
+  one
+
+  SCHEDULE Nested
+
+    two
+""", 'act')
+
+        self.assertEqual([
+            '/akn/za-cpt/act/by-law/2016/control',
+            '/akn/za-cpt/act/by-law/2016/control/eng',
+            '/akn/za-cpt/act/by-law/2016/control/eng',
+            '/akn/za-cpt/act/by-law/2016/control/!schedule_1',
+            '/akn/za-cpt/act/by-law/2016/control/eng/!schedule_1',
+            '/akn/za-cpt/act/by-law/2016/control/eng/!schedule_1',
+            '/akn/za-cpt/act/by-law/2016/control/!schedule_1/schedule_1',
+            '/akn/za-cpt/act/by-law/2016/control/eng/!schedule_1/schedule_1',
+            '/akn/za-cpt/act/by-law/2016/control/eng/!schedule_1/schedule_1',
+        ], [el.get('value') for el in xml.iter('{*}FRBRthis')])
