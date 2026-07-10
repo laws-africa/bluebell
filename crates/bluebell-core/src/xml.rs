@@ -22,6 +22,37 @@ pub struct XmlElement {
     pub children: Vec<XmlNode>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct MetadataSource {
+    pub show_as: String,
+    pub eid: String,
+    pub href: String,
+}
+
+impl MetadataSource {
+    pub fn new(
+        show_as: impl Into<String>,
+        eid: impl Into<String>,
+        href: impl Into<String>,
+    ) -> Self {
+        Self {
+            show_as: show_as.into(),
+            eid: eid.into(),
+            href: href.into(),
+        }
+    }
+
+    fn source_ref(&self) -> String {
+        format!("#{}", self.eid)
+    }
+}
+
+impl Default for MetadataSource {
+    fn default() -> Self {
+        Self::new("cobalt", "cobalt", "https://github.com/laws-africa/cobalt")
+    }
+}
+
 impl XmlElement {
     pub fn new(name: impl Into<String>) -> Self {
         Self {
@@ -102,12 +133,29 @@ pub fn parse_to_xml_document_or_fragment_with_eid_prefix(
     frbr_uri: &str,
     eid_prefix: &str,
 ) -> Result<String, XmlError> {
+    parse_to_xml_document_or_fragment_with_eid_prefix_and_source(
+        text,
+        root,
+        frbr_uri,
+        eid_prefix,
+        &MetadataSource::default(),
+    )
+}
+
+pub fn parse_to_xml_document_or_fragment_with_eid_prefix_and_source(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+    eid_prefix: &str,
+    source: &MetadataSource,
+) -> Result<String, XmlError> {
     let preprocessed = pre_parse(text);
-    parse_preprocessed_to_xml_document_or_fragment_with_eid_prefix(
+    parse_preprocessed_to_xml_document_or_fragment_with_eid_prefix_and_source(
         &preprocessed,
         root,
         frbr_uri,
         eid_prefix,
+        source,
     )
 }
 
@@ -126,8 +174,30 @@ pub fn parse_to_akn_xml_with_eid_prefix(
     frbr_uri: &str,
     eid_prefix: &str,
 ) -> Result<String, XmlError> {
+    parse_to_akn_xml_with_eid_prefix_and_source(
+        text,
+        root,
+        frbr_uri,
+        eid_prefix,
+        &MetadataSource::default(),
+    )
+}
+
+pub fn parse_to_akn_xml_with_eid_prefix_and_source(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+    eid_prefix: &str,
+    source: &MetadataSource,
+) -> Result<String, XmlError> {
     let preprocessed = pre_parse(text);
-    parse_preprocessed_to_akn_xml_with_eid_prefix(&preprocessed, root, frbr_uri, eid_prefix)
+    parse_preprocessed_to_akn_xml_with_eid_prefix_and_source(
+        &preprocessed,
+        root,
+        frbr_uri,
+        eid_prefix,
+        source,
+    )
 }
 
 pub fn parse_preprocessed_to_akn_xml(
@@ -144,9 +214,25 @@ pub fn parse_preprocessed_to_akn_xml_with_eid_prefix(
     frbr_uri: &str,
     eid_prefix: &str,
 ) -> Result<String, XmlError> {
+    parse_preprocessed_to_akn_xml_with_eid_prefix_and_source(
+        text,
+        root,
+        frbr_uri,
+        eid_prefix,
+        &MetadataSource::default(),
+    )
+}
+
+pub fn parse_preprocessed_to_akn_xml_with_eid_prefix_and_source(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+    eid_prefix: &str,
+    source: &MetadataSource,
+) -> Result<String, XmlError> {
     if !root.is_document() {
-        return parse_preprocessed_to_xml_fragment_with_eid_prefix(
-            text, root, frbr_uri, eid_prefix,
+        return parse_preprocessed_to_xml_fragment_with_eid_prefix_and_source(
+            text, root, frbr_uri, eid_prefix, source,
         );
     }
 
@@ -156,10 +242,10 @@ pub fn parse_preprocessed_to_akn_xml_with_eid_prefix(
     doc_el.attrs.remove("xmlns");
     resolve_displaced_content(&mut doc_el);
     normalise_empty_elements(&mut doc_el);
-    add_attachment_doc_meta(&mut doc_el, &frbr_uri);
+    add_attachment_doc_meta(&mut doc_el, &frbr_uri, source);
     doc_el
         .children
-        .insert(0, XmlNode::Element(make_meta(&frbr_uri)));
+        .insert(0, XmlNode::Element(make_meta(&frbr_uri, source)));
     let mut akn = XmlElement::new("akomaNtoso").attr("xmlns", AKN_NS);
     akn.children.push(XmlNode::Element(doc_el));
     rewrite_all_eids(&mut akn, eid_prefix);
@@ -180,25 +266,46 @@ pub fn parse_preprocessed_to_xml_document_or_fragment_with_eid_prefix(
     frbr_uri: &str,
     eid_prefix: &str,
 ) -> Result<String, XmlError> {
-    if root.is_document() {
-        parse_preprocessed_to_akn_xml_with_eid_prefix(text, root, frbr_uri, eid_prefix)
-    } else {
-        parse_preprocessed_to_xml_fragment_with_eid_prefix(text, root, frbr_uri, eid_prefix)
-    }
+    parse_preprocessed_to_xml_document_or_fragment_with_eid_prefix_and_source(
+        text,
+        root,
+        frbr_uri,
+        eid_prefix,
+        &MetadataSource::default(),
+    )
 }
 
-fn parse_preprocessed_to_xml_fragment_with_eid_prefix(
+pub fn parse_preprocessed_to_xml_document_or_fragment_with_eid_prefix_and_source(
     text: &str,
     root: DocumentRoot,
     frbr_uri: &str,
     eid_prefix: &str,
+    source: &MetadataSource,
+) -> Result<String, XmlError> {
+    if root.is_document() {
+        parse_preprocessed_to_akn_xml_with_eid_prefix_and_source(
+            text, root, frbr_uri, eid_prefix, source,
+        )
+    } else {
+        parse_preprocessed_to_xml_fragment_with_eid_prefix_and_source(
+            text, root, frbr_uri, eid_prefix, source,
+        )
+    }
+}
+
+fn parse_preprocessed_to_xml_fragment_with_eid_prefix_and_source(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+    eid_prefix: &str,
+    source: &MetadataSource,
 ) -> Result<String, XmlError> {
     let frbr_uri = FrbrUri::parse(frbr_uri)?;
     let pairs = parse_pairs_preprocessed(text, root)?;
     let mut root_el = fragment_to_xml(pairs);
     resolve_displaced_content(&mut root_el);
     normalise_empty_elements(&mut root_el);
-    add_attachment_doc_meta(&mut root_el, &frbr_uri);
+    add_attachment_doc_meta(&mut root_el, &frbr_uri, source);
     rewrite_all_eids(&mut root_el, eid_prefix);
     root_el
         .attrs
@@ -206,23 +313,28 @@ fn parse_preprocessed_to_xml_fragment_with_eid_prefix(
     Ok(root_el.to_xml_string())
 }
 
-fn add_attachment_doc_meta(element: &mut XmlElement, frbr_uri: &FrbrUri) {
+fn add_attachment_doc_meta(element: &mut XmlElement, frbr_uri: &FrbrUri, source: &MetadataSource) {
     if element.name == "attachment" {
         if let Some((doc_name, title)) = attachment_doc_name_and_title(element) {
             let component = format!("{doc_name}_1");
-            insert_attachment_meta(element, frbr_uri, &component, &title);
+            insert_attachment_meta(element, frbr_uri, &component, &title, source);
             for child in &mut element.children {
                 if let XmlNode::Element(el) = child {
-                    add_attachment_doc_meta_scoped(el, frbr_uri, &component);
+                    add_attachment_doc_meta_scoped(el, frbr_uri, &component, source);
                 }
             }
             return;
         }
     }
-    add_attachment_doc_meta_scoped(element, frbr_uri, "");
+    add_attachment_doc_meta_scoped(element, frbr_uri, "", source);
 }
 
-fn add_attachment_doc_meta_scoped(element: &mut XmlElement, frbr_uri: &FrbrUri, parent: &str) {
+fn add_attachment_doc_meta_scoped(
+    element: &mut XmlElement,
+    frbr_uri: &FrbrUri,
+    parent: &str,
+    source: &MetadataSource,
+) {
     if element.name == "attachments" {
         let mut counts: HashMap<String, usize> = HashMap::new();
         for child in &mut element.children {
@@ -243,14 +355,14 @@ fn add_attachment_doc_meta_scoped(element: &mut XmlElement, frbr_uri: &FrbrUri, 
             } else {
                 format!("{parent}/{local}")
             };
-            insert_attachment_meta(attachment, frbr_uri, &component, &title);
-            add_attachment_doc_meta_scoped(attachment, frbr_uri, &component);
+            insert_attachment_meta(attachment, frbr_uri, &component, &title, source);
+            add_attachment_doc_meta_scoped(attachment, frbr_uri, &component, source);
         }
         return;
     }
     for child in &mut element.children {
         if let XmlNode::Element(el) = child {
-            add_attachment_doc_meta_scoped(el, frbr_uri, parent);
+            add_attachment_doc_meta_scoped(el, frbr_uri, parent, source);
         }
     }
 }
@@ -281,6 +393,7 @@ fn insert_attachment_meta(
     frbr_uri: &FrbrUri,
     component: &str,
     title: &str,
+    source: &MetadataSource,
 ) {
     for child in &mut attachment.children {
         if let XmlNode::Element(doc) = child {
@@ -292,7 +405,7 @@ fn insert_attachment_meta(
             {
                 doc.children.insert(
                     0,
-                    XmlNode::Element(make_attachment_meta(frbr_uri, component, title)),
+                    XmlNode::Element(make_attachment_meta(frbr_uri, component, title, source)),
                 );
             }
         }
@@ -498,30 +611,35 @@ fn root_name(root: DocumentRoot) -> &'static str {
     }
 }
 
-fn make_meta(frbr_uri: &FrbrUri) -> XmlElement {
-    identification_meta(frbr_uri, "Untitled").child(
+fn make_meta(frbr_uri: &FrbrUri, source: &MetadataSource) -> XmlElement {
+    identification_meta(frbr_uri, "Untitled", source).child(
         XmlElement::new("references")
-            .attr("source", "#cobalt")
+            .attr("source", source.source_ref())
             .child(
                 XmlElement::new("TLCOrganization")
-                    .attr("eId", "cobalt")
-                    .attr("href", "https://github.com/laws-africa/cobalt")
-                    .attr("showAs", "cobalt"),
+                    .attr("eId", source.eid.clone())
+                    .attr("href", source.href.clone())
+                    .attr("showAs", source.show_as.clone()),
             ),
     )
 }
 
-fn make_attachment_meta(frbr_uri: &FrbrUri, component: &str, title: &str) -> XmlElement {
+fn make_attachment_meta(
+    frbr_uri: &FrbrUri,
+    component: &str,
+    title: &str,
+    source: &MetadataSource,
+) -> XmlElement {
     let mut frbr_uri = frbr_uri.clone();
     frbr_uri.work_component = Some(component.to_string());
-    identification_meta(&frbr_uri, title)
+    identification_meta(&frbr_uri, title, source)
 }
 
-fn identification_meta(frbr_uri: &FrbrUri, title: &str) -> XmlElement {
+fn identification_meta(frbr_uri: &FrbrUri, title: &str, source: &MetadataSource) -> XmlElement {
     let today = today_iso_date();
     XmlElement::new("meta").child(
         XmlElement::new("identification")
-            .attr("source", "#cobalt")
+            .attr("source", source.source_ref())
             .child(
                 XmlElement::new("FRBRWork")
                     .child(XmlElement::new("FRBRthis").attr("value", frbr_uri.work_uri(true)))
@@ -2434,5 +2552,60 @@ mod tests {
         assert!(xml.starts_with("<akomaNtoso xmlns=\"http://docs.oasis-open.org/legaldocml/ns/akn/3.0\"><statement name=\"statement\"><meta>"));
         assert!(xml.contains("<FRBRuri value=\"/akn/za/statement/2022/1\"/>"));
         assert!(xml.contains("<mainBody><p eId=\"p_1\">Hello</p></mainBody>"));
+    }
+
+    #[test]
+    fn default_akn_metadata_source_is_cobalt() {
+        let xml = parse_to_akn_xml(
+            "P Hello",
+            DocumentRoot::Statement,
+            "/akn/za/statement/2022/1",
+        )
+        .unwrap();
+
+        assert!(xml.contains(r##"<identification source="#cobalt">"##));
+        assert!(xml.contains(r##"<references source="#cobalt">"##));
+        assert!(xml.contains(
+            r#"<TLCOrganization eId="cobalt" href="https://github.com/laws-africa/cobalt" showAs="cobalt"/>"#
+        ));
+    }
+
+    #[test]
+    fn custom_akn_metadata_source_is_used_for_root_meta() {
+        let source =
+            MetadataSource::new("Indigo Platform", "Indigo-Platform", "https://example.org");
+        let xml = parse_to_akn_xml_with_eid_prefix_and_source(
+            "P Hello",
+            DocumentRoot::Statement,
+            "/akn/za/statement/2022/1",
+            "",
+            &source,
+        )
+        .unwrap();
+
+        assert!(xml.contains(r##"<identification source="#Indigo-Platform">"##));
+        assert!(xml.contains(r##"<references source="#Indigo-Platform">"##));
+        assert!(xml.contains(
+            r#"<TLCOrganization eId="Indigo-Platform" href="https://example.org" showAs="Indigo Platform"/>"#
+        ));
+    }
+
+    #[test]
+    fn custom_akn_metadata_source_is_used_for_attachment_meta() {
+        let source =
+            MetadataSource::new("Indigo Platform", "Indigo-Platform", "https://example.org");
+        let xml = parse_to_xml_document_or_fragment_with_eid_prefix_and_source(
+            "SCHEDULE Schedule\n  text",
+            DocumentRoot::Attachment,
+            "/akn/za/act/2022/1",
+            "",
+            &source,
+        )
+        .unwrap();
+
+        assert!(xml.starts_with("<attachment"));
+        assert!(xml.contains(r##"<identification source="#Indigo-Platform">"##));
+        assert!(xml.contains(r#"<FRBRthis value="/akn/za/act/2022/1/!schedule_1"/>"#));
+        assert!(!xml.contains(r##"<references source="#Indigo-Platform">"##));
     }
 }

@@ -1,5 +1,6 @@
 import re
 import os.path
+from contextlib import contextmanager
 
 from cobalt.uri import FrbrUri
 from lxml import etree
@@ -186,17 +187,20 @@ class AkomaNtosoParser:
         return str(xslt(xml))
 
 
-def parse_to_xml(text, root, frbr_uri, eid_prefix=''):
+_MISSING = object()
+
+
+def parse_to_xml(text, root, frbr_uri, eid_prefix='', source=None):
     """Parse text for a particular root rule into an XML document."""
-    return etree.fromstring(parse_to_xml_bytes(text, root, frbr_uri, eid_prefix))
+    return etree.fromstring(parse_to_xml_bytes(text, root, frbr_uri, eid_prefix, source))
 
 
-def parse_to_xml_str(text, root, frbr_uri, eid_prefix='') -> str:
+def parse_to_xml_str(text, root, frbr_uri, eid_prefix='', source=None) -> str:
     """Parse text for a particular root rule into an XML string."""
-    return parse_to_xml_bytes(text, root, frbr_uri, eid_prefix).decode('utf-8')
+    return parse_to_xml_bytes(text, root, frbr_uri, eid_prefix, source).decode('utf-8')
 
 
-def parse_to_xml_bytes(text, root, frbr_uri, eid_prefix='') -> bytes:
+def parse_to_xml_bytes(text, root, frbr_uri, eid_prefix='', source=None) -> bytes:
     """Parse text for a particular root rule into UTF-8 encoded XML bytes.
 
     frbr_uri may be a cobalt FrbrUri instance or a string.
@@ -206,9 +210,73 @@ def parse_to_xml_bytes(text, root, frbr_uri, eid_prefix='') -> bytes:
     except ImportError:
         pass
     else:
-        return rust_parse_to_xml_bytes(text, root, str(frbr_uri), eid_prefix)
+        if source is None:
+            return rust_parse_to_xml_bytes(text, root, str(frbr_uri), eid_prefix)
+        return rust_parse_to_xml_bytes(text, root, str(frbr_uri), eid_prefix, source)
 
     if isinstance(frbr_uri, str):
         frbr_uri = FrbrUri.parse(frbr_uri)
-    xml = AkomaNtosoParser(frbr_uri, eid_prefix).parse_to_xml(text, root)
+    with metadata_source(source, frbr_uri):
+        xml = AkomaNtosoParser(frbr_uri, eid_prefix).parse_to_xml(text, root)
     return etree.tostring(xml, encoding='utf-8')
+
+
+def normalise_metadata_source(source):
+    if source is None:
+        return None
+
+    if isinstance(source, dict):
+        show_as = source.get('show_as', source.get('showAs', _MISSING))
+        eid = source.get('eid', _MISSING)
+        href = source.get('href', _MISSING)
+        missing = [
+            name for name, value in (
+                ('show_as or showAs', show_as),
+                ('eid', eid),
+                ('href', href),
+            )
+            if value is _MISSING
+        ]
+        if missing:
+            raise ValueError(f"source must include {', '.join(missing)}")
+    elif isinstance(source, (tuple, list)):
+        if len(source) != 3:
+            raise ValueError("source tuple/list must contain show_as, eid, and href")
+        show_as, eid, href = source
+    else:
+        raise ValueError("source must be None, a dict, or a 3-item tuple/list")
+
+    for name, value in (
+        ('show_as', show_as),
+        ('eid', eid),
+        ('href', href),
+    ):
+        if not isinstance(value, str):
+            raise ValueError(f"{name} must be a string")
+
+    return [show_as, eid, href]
+
+
+@contextmanager
+def metadata_source(source, frbr_uri):
+    source = normalise_metadata_source(source)
+    if source is None:
+        yield
+        return
+
+    from cobalt.akn import AkomaNtosoDocument, StructuredDocument
+
+    doc_cls = StructuredDocument.for_document_type(frbr_uri.doctype)
+    old_base_source = AkomaNtosoDocument.source
+    old_doc_cls_source = doc_cls.__dict__.get('source', _MISSING)
+
+    AkomaNtosoDocument.source = source
+    doc_cls.source = source
+    try:
+        yield
+    finally:
+        AkomaNtosoDocument.source = old_base_source
+        if old_doc_cls_source is _MISSING:
+            delattr(doc_cls, 'source')
+        else:
+            doc_cls.source = old_doc_cls_source

@@ -115,6 +115,43 @@ class ParserTestCase(ParserSupport, TestCase):
         self.assertEqual(["prefixed"], xml.xpath("//*[local-name()='p']/text()"))
         self.assertEqual(["pref__p_1"], xml.xpath("//*[local-name()='p']/@eId"))
 
+    def test_top_level_parse_to_xml_passes_source_to_rust_extension(self):
+        module = types.ModuleType("_bluebell_rs")
+        source = {
+            "show_as": "Indigo Platform",
+            "eid": "Indigo-Platform",
+            "href": "https://example.org",
+        }
+
+        def parse_to_xml(text, root, frbr_uri, eid_prefix='', source=None):
+            self.assertEqual("pref", eid_prefix)
+            self.assertEqual(
+                {
+                    "show_as": "Indigo Platform",
+                    "eid": "Indigo-Platform",
+                    "href": "https://example.org",
+                },
+                source,
+            )
+            return (
+                b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
+                b'<statement name="statement"><mainBody><p eId="pref__p_1">source</p></mainBody></statement>'
+                b'</akomaNtoso>'
+            )
+
+        module.parse_to_xml = parse_to_xml
+
+        with patch.dict(sys.modules, {"_bluebell_rs": module}):
+            xml = bluebell.parser.parse_to_xml(
+                "P source",
+                "statement",
+                FrbrUri.parse("/akn/za/statement/2022/1"),
+                eid_prefix="pref",
+                source=source,
+            )
+
+        self.assertEqual(["source"], xml.xpath("//*[local-name()='p']/text()"))
+
     def test_top_level_functions_accept_string_frbr_uri_without_rust_extension(self):
         # a string frbr_uri must work in the pure-Python fallback path, not
         # just when the Rust extension is installed
@@ -172,6 +209,52 @@ class ParserTestCase(ParserSupport, TestCase):
             ["Schedule"],
             xml.xpath("//*[local-name()='FRBRalias'][@name='title']/@value"),
         )
+
+    def test_top_level_parse_to_xml_uses_custom_source_without_rust_extension(self):
+        source = {
+            "showAs": "Indigo Platform",
+            "eid": "Indigo-Platform",
+            "href": "https://example.org",
+        }
+
+        with patch.dict(sys.modules, {"_bluebell_rs": None}):
+            xml = bluebell.parser.parse_to_xml_str(
+                "P hello",
+                "statement",
+                "/akn/za/statement/2022/1",
+                source=source,
+            )
+            default_xml = bluebell.parser.parse_to_xml_str(
+                "P hello",
+                "statement",
+                "/akn/za/statement/2022/1",
+            )
+
+        self.assertIn('<identification source="#Indigo-Platform">', xml)
+        self.assertIn('<references source="#Indigo-Platform">', xml)
+        self.assertIn(
+            '<TLCOrganization eId="Indigo-Platform" href="https://example.org" showAs="Indigo Platform"/>',
+            xml,
+        )
+        self.assertIn('<identification source="#cobalt">', default_xml)
+
+    def test_top_level_parse_to_xml_uses_custom_source_for_attachment_without_rust_extension(self):
+        source = ["Indigo Platform", "Indigo-Platform", "https://example.org"]
+
+        with patch.dict(sys.modules, {"_bluebell_rs": None}):
+            xml = bluebell.parser.parse_to_xml(
+                "SCHEDULE Schedule\n  text",
+                "attachment",
+                FrbrUri.parse("/akn/za/act/2009/10"),
+                source=source,
+            )
+
+        self.assertEqual("attachment", etree.QName(xml).localname)
+        self.assertEqual(
+            ["#Indigo-Platform"],
+            xml.xpath("//*[local-name()='identification']/@source"),
+        )
+        self.assertFalse(xml.xpath("//*[local-name()='references']"))
 
     def test_pre_parse_empty(self):
         self.assertEqual(
