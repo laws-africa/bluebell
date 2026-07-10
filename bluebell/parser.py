@@ -1,10 +1,12 @@
 import re
 import os.path
 
+from cobalt.uri import FrbrUri
+from lxml import etree
+
 from .akn import Parser as BaseParser, FAILURE, ParseError, format_error, TreeNode
 import bluebell.types as types
 from bluebell.xml import XmlGenerator
-from lxml import etree
 
 
 INDENT = '\x0E'  # ascii SHIFT-IN character
@@ -195,7 +197,10 @@ def parse_to_xml_str(text, root, frbr_uri, eid_prefix='') -> str:
 
 
 def parse_to_xml_bytes(text, root, frbr_uri, eid_prefix='') -> bytes:
-    """Parse text for a particular root rule into UTF-8 encoded XML bytes."""
+    """Parse text for a particular root rule into UTF-8 encoded XML bytes.
+
+    frbr_uri may be a cobalt FrbrUri instance or a string.
+    """
     if not eid_prefix:
         try:
             from _bluebell_rs import parse_to_xml as rust_parse_to_xml_bytes
@@ -204,5 +209,7 @@ def parse_to_xml_bytes(text, root, frbr_uri, eid_prefix='') -> bytes:
         else:
             return rust_parse_to_xml_bytes(text, root, str(frbr_uri))
 
+    if isinstance(frbr_uri, str):
+        frbr_uri = FrbrUri.parse(frbr_uri)
     xml = AkomaNtosoParser(frbr_uri, eid_prefix).parse_to_xml(text, root)
     return etree.tostring(xml, encoding='utf-8')

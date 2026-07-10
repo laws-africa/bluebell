@@ -88,7 +88,7 @@ cmd = "pip uninstall -y bluebell-akn-rs"
 [tool.poe.tasks.build-wasm]
 help = "Build the @lawsafrica/bluebell-wasm npm package into crates/bluebell-wasm/pkg"
 cwd = "crates/bluebell-wasm"
-cmd = "wasm-pack build --release --target bundler --scope lawsafrica"
+cmd = "wasm-pack build --release --target web --scope lawsafrica"
 
 [tool.poe.tasks.bench]
 help = "Benchmark Rust vs Python parse on the income tax act"

@@ -109,6 +109,19 @@ class ParserTestCase(ParserSupport, TestCase):
 
         self.assertEqual(["prefixed"], xml.xpath("//*[local-name()='p']/text()"))
 
+    def test_top_level_functions_accept_string_frbr_uri_without_rust_extension(self):
+        # a string frbr_uri must work in the pure-Python fallback path, not
+        # just when the Rust extension is installed
+        with patch.dict(sys.modules, {"_bluebell_rs": None}):
+            xml = bluebell.parser.parse_to_xml_str(
+                "P hello",
+                "statement",
+                "/akn/za/statement/2022/1",
+            )
+
+        self.assertIn('<FRBRuri value="/akn/za/statement/2022/1"/>', xml)
+        self.assertIn('>hello</p>', xml)
+
     def test_pre_parse_empty(self):
         self.assertEqual(
             "",

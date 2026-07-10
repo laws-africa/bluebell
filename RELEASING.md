@@ -45,17 +45,16 @@ published).
 
 ## What the workflow publishes
 
-- **`bluebell-akn`**: sdist + pure wheel via `python -m build`, uploaded with
-  PyPI trusted publishing (GitHub environment `pypi`).
-- **`bluebell-akn-rs`**: abi3 wheels for Linux (x86_64, aarch64 manylinux),
-  macOS (universal2), and Windows (x64), built with maturin. abi3 means one
-  wheel per platform covers CPython 3.12+, so new Python versions don't need
-  new wheels. An sdist is also uploaded so other platforms can compile from
-  source. Uploaded with PyPI trusted publishing (GitHub environment
-  `pypi-rs`).
-- **`@lawsafrica/bluebell-wasm`**: the wasm tests run first, then
-  `wasm-pack build --target bundler` produces the package and `npm publish`
-  uploads it with provenance.
+- **`bluebell-akn`**: sdist + pure wheel via `python -m build`, uploaded with PyPI trusted publishing (GitHub
+  environment `pypi`).
+- **`bluebell-akn-rs`**: abi3 wheels for Linux (x86_64, aarch64 manylinux), macOS (universal2), and Windows (x64), built
+  with maturin. abi3 means one wheel per platform covers CPython 3.12+, so new Python versions don't need new wheels. An
+  sdist is also uploaded so other platforms can compile from source. Uploaded with PyPI trusted publishing (GitHub
+  environment `pypi-rs`).
+- **`@lawsafrica/bluebell-wasm`**: the wasm tests run first, then `wasm-pack build --target web` produces the package
+  and `npm publish` uploads it with provenance. The `--target web` build is published because the docs site loads it
+  directly in the browser with no bundler, and it also works when consumed through a bundler (see
+  `crates/bluebell-wasm/README.md`).
 
 ## One-time setup
 
@@ -86,7 +85,7 @@ cd crates/bluebell-python && maturin build --release && maturin upload
 # @lawsafrica/bluebell-wasm
 cd crates/bluebell-wasm
 wasm-pack test --node
-wasm-pack build --release --target bundler --scope lawsafrica
+wasm-pack build --release --target web --scope lawsafrica
 npm publish pkg/ --access public
 ```
 
