@@ -78,6 +78,15 @@ pub fn parse_to_xml(text: &str, root: DocumentRoot) -> Result<String, XmlError> 
     parse_preprocessed_to_xml(&preprocessed, root)
 }
 
+pub fn parse_to_xml_with_eid_prefix(
+    text: &str,
+    root: DocumentRoot,
+    eid_prefix: &str,
+) -> Result<String, XmlError> {
+    let preprocessed = pre_parse(text);
+    parse_preprocessed_to_xml_with_eid_prefix(&preprocessed, root, eid_prefix)
+}
+
 pub fn parse_to_akn_xml(
     text: &str,
     root: DocumentRoot,
@@ -87,10 +96,29 @@ pub fn parse_to_akn_xml(
     parse_preprocessed_to_akn_xml(&preprocessed, root, frbr_uri)
 }
 
+pub fn parse_to_akn_xml_with_eid_prefix(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+    eid_prefix: &str,
+) -> Result<String, XmlError> {
+    let preprocessed = pre_parse(text);
+    parse_preprocessed_to_akn_xml_with_eid_prefix(&preprocessed, root, frbr_uri, eid_prefix)
+}
+
 pub fn parse_preprocessed_to_akn_xml(
     text: &str,
     root: DocumentRoot,
     frbr_uri: &str,
+) -> Result<String, XmlError> {
+    parse_preprocessed_to_akn_xml_with_eid_prefix(text, root, frbr_uri, "")
+}
+
+pub fn parse_preprocessed_to_akn_xml_with_eid_prefix(
+    text: &str,
+    root: DocumentRoot,
+    frbr_uri: &str,
+    eid_prefix: &str,
 ) -> Result<String, XmlError> {
     let frbr_uri = FrbrUri::parse(frbr_uri)?;
     let pairs = parse_pairs_preprocessed(text, root)?;
@@ -104,7 +132,7 @@ pub fn parse_preprocessed_to_akn_xml(
         .insert(0, XmlNode::Element(make_meta(&frbr_uri)));
     let mut akn = XmlElement::new("akomaNtoso").attr("xmlns", AKN_NS);
     akn.children.push(XmlNode::Element(doc_el));
-    rewrite_all_eids(&mut akn, "");
+    rewrite_all_eids(&mut akn, eid_prefix);
     Ok(akn.to_xml_string())
 }
 
@@ -190,11 +218,19 @@ fn insert_attachment_meta(
 }
 
 pub fn parse_preprocessed_to_xml(text: &str, root: DocumentRoot) -> Result<String, XmlError> {
+    parse_preprocessed_to_xml_with_eid_prefix(text, root, "")
+}
+
+pub fn parse_preprocessed_to_xml_with_eid_prefix(
+    text: &str,
+    root: DocumentRoot,
+    eid_prefix: &str,
+) -> Result<String, XmlError> {
     let pairs = parse_pairs_preprocessed(text, root)?;
     let mut root_el = document_to_xml(root, pairs);
     resolve_displaced_content(&mut root_el);
     normalise_empty_elements(&mut root_el);
-    rewrite_all_eids(&mut root_el, "");
+    rewrite_all_eids(&mut root_el, eid_prefix);
     root_el
         .attrs
         .insert("xmlns".to_string(), AKN_NS.to_string());
@@ -381,8 +417,7 @@ fn identification_meta(frbr_uri: &FrbrUri, title: &str) -> XmlElement {
                     )
                     .child(XmlElement::new("FRBRauthor").attr("href", ""))
                     .child(
-                        XmlElement::new("FRBRlanguage")
-                            .attr("language", frbr_uri.language.clone()),
+                        XmlElement::new("FRBRlanguage").attr("language", frbr_uri.language.clone()),
                     ),
             )
             .child(
@@ -1789,9 +1824,11 @@ fn remove_element_at_path(root: &mut XmlElement, path: &[usize]) {
 /// Don't lose unused displaced content: change it to a "FOOTNOTE <marker>" p
 /// tag and pull its children in as siblings, like Python.
 fn convert_leftover_displaced(root: &mut XmlElement) {
-    while let Some(path) = find_element_path(root, &mut Vec::new(), &|el: &XmlElement, _: &[usize]| {
-        el.name == "displaced"
-    }) {
+    while let Some(path) =
+        find_element_path(root, &mut Vec::new(), &|el: &XmlElement, _: &[usize]| {
+            el.name == "displaced"
+        })
+    {
         let Some((&idx, parent_path)) = path.split_last() else {
             return;
         };
@@ -2094,6 +2131,33 @@ mod tests {
         assert!(xml.contains("<chapter eId=\"chp_1\">"));
         assert!(xml.contains("<section eId=\"chp_1__sec_1\">"));
         assert!(xml.contains("<p eId=\"chp_1__sec_1__p_1\">Some text.</p>"));
+    }
+
+    #[test]
+    fn eid_prefix_is_applied_to_generated_eids() {
+        let xml = parse_to_xml_with_eid_prefix(
+            "P Intro\n\nSEC 1. - Heading\n  Some text.",
+            DocumentRoot::Statement,
+            "pref",
+        )
+        .unwrap();
+        assert!(xml.contains("<p eId=\"pref__p_1\">Intro</p>"));
+        assert!(xml.contains("<section eId=\"pref__sec_1\">"));
+        assert!(xml.contains("<p eId=\"pref__sec_1__p_1\">Some text.</p>"));
+    }
+
+    #[test]
+    fn akn_xml_eid_prefix_is_applied_after_meta_is_inserted() {
+        let xml = parse_to_akn_xml_with_eid_prefix(
+            "P Hello",
+            DocumentRoot::Statement,
+            "/akn/za/statement/2022/1",
+            "pref",
+        )
+        .unwrap();
+        assert!(xml.contains("<FRBRuri value=\"/akn/za/statement/2022/1\"/>"));
+        assert!(xml.contains("<p eId=\"pref__p_1\">Hello</p>"));
+        assert!(!xml.contains("<FRBRuri eId="));
     }
 
     #[test]

@@ -40,7 +40,7 @@ class ParserTestCase(ParserSupport, TestCase):
 
     def test_top_level_parse_to_xml_uses_rust_extension_when_available(self):
         module = types.ModuleType("_bluebell_rs")
-        module.parse_to_xml = lambda text, root, frbr_uri: (
+        module.parse_to_xml = lambda text, root, frbr_uri, eid_prefix='': (
             b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
             b'<statement name="statement"><mainBody><p eId="p_1">rust</p></mainBody></statement>'
             b'</akomaNtoso>'
@@ -57,7 +57,7 @@ class ParserTestCase(ParserSupport, TestCase):
 
     def test_top_level_parse_to_xml_str_decodes_rust_extension_bytes(self):
         module = types.ModuleType("_bluebell_rs")
-        module.parse_to_xml = lambda text, root, frbr_uri: (
+        module.parse_to_xml = lambda text, root, frbr_uri, eid_prefix='': (
             b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
             b'<statement name="statement"><mainBody><p eId="p_1">rust</p></mainBody></statement>'
             b'</akomaNtoso>'
@@ -75,7 +75,7 @@ class ParserTestCase(ParserSupport, TestCase):
 
     def test_top_level_parse_to_xml_bytes_uses_rust_extension_when_available(self):
         module = types.ModuleType("_bluebell_rs")
-        module.parse_to_xml = lambda text, root, frbr_uri: (
+        module.parse_to_xml = lambda text, root, frbr_uri, eid_prefix='': (
             b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
             b'<statement name="statement"><mainBody><p eId="p_1">rust</p></mainBody></statement>'
             b'</akomaNtoso>'
@@ -91,23 +91,29 @@ class ParserTestCase(ParserSupport, TestCase):
         self.assertIsInstance(xml, bytes)
         self.assertIn(b">rust</p>", xml)
 
-    def test_top_level_parse_to_xml_skips_rust_extension_for_eid_prefix(self):
+    def test_top_level_parse_to_xml_passes_eid_prefix_to_rust_extension(self):
         module = types.ModuleType("_bluebell_rs")
 
-        def fail(*args):
-            raise AssertionError("Rust extension should not be used for eid_prefix")
+        def parse_to_xml(text, root, frbr_uri, eid_prefix=''):
+            self.assertEqual("pref", eid_prefix)
+            return (
+                b'<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">'
+                b'<statement name="statement"><mainBody><p eId="pref__p_1">prefixed</p></mainBody></statement>'
+                b'</akomaNtoso>'
+            )
 
-        module.parse_to_xml = fail
+        module.parse_to_xml = parse_to_xml
 
         with patch.dict(sys.modules, {"_bluebell_rs": module}):
             xml = bluebell.parser.parse_to_xml(
                 "P prefixed",
                 "statement",
                 FrbrUri.parse("/akn/za/statement/2022/1"),
-                eid_prefix="pref_",
+                eid_prefix="pref",
             )
 
         self.assertEqual(["prefixed"], xml.xpath("//*[local-name()='p']/text()"))
+        self.assertEqual(["pref__p_1"], xml.xpath("//*[local-name()='p']/@eId"))
 
     def test_top_level_functions_accept_string_frbr_uri_without_rust_extension(self):
         # a string frbr_uri must work in the pure-Python fallback path, not

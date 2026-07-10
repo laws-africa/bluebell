@@ -201,13 +201,12 @@ def parse_to_xml_bytes(text, root, frbr_uri, eid_prefix='') -> bytes:
 
     frbr_uri may be a cobalt FrbrUri instance or a string.
     """
-    if not eid_prefix:
-        try:
-            from _bluebell_rs import parse_to_xml as rust_parse_to_xml_bytes
-        except ImportError:
-            pass
-        else:
-            return rust_parse_to_xml_bytes(text, root, str(frbr_uri))
+    try:
+        from _bluebell_rs import parse_to_xml as rust_parse_to_xml_bytes
+    except ImportError:
+        pass
+    else:
+        return rust_parse_to_xml_bytes(text, root, str(frbr_uri), eid_prefix)
 
     if isinstance(frbr_uri, str):
         frbr_uri = FrbrUri.parse(frbr_uri)

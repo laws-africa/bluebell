@@ -2,7 +2,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use bluebell_core::{parse_to_akn_xml, DocumentRoot};
+use bluebell_core::{parse_to_akn_xml_with_eid_prefix, DocumentRoot};
 
 mod support;
 use support::{python_path, repo_path, unparse};
@@ -12,6 +12,7 @@ struct ParityCase {
     root: DocumentRoot,
     python_root: &'static str,
     frbr_uri: String,
+    eid_prefix: String,
     input: CaseInput,
 }
 
@@ -45,8 +46,9 @@ fn income_tax_xml_roundtrip_parse_matches_python() {
 
 fn assert_case_matches_python(case: &ParityCase) {
     let text = case.input.read(&case.name);
-    let rust_xml = parse_to_akn_xml(&text, case.root, &case.frbr_uri)
-        .unwrap_or_else(|err| panic!("Rust failed to parse {}: {err}", case.name));
+    let rust_xml =
+        parse_to_akn_xml_with_eid_prefix(&text, case.root, &case.frbr_uri, &case.eid_prefix)
+            .unwrap_or_else(|err| panic!("Rust failed to parse {}: {err}", case.name));
     let python_xml = python_parse_to_xml(case, &text);
 
     let rust_c14n = python_canonicalize(&rust_xml, &case.name, "rust");
@@ -174,6 +176,13 @@ fn focused_cases() -> Vec<ParityCase> {
             DocumentRoot::Statement,
             "statement",
             "P Text with {{term{refersTo #foo}a term}} and {{abbr{title Laws.Africa}LA}} and {{em emphasized}} and {{inline{name x}named}}.",
+        ),
+        prefixed_text_case(
+            "eids-with-prefix",
+            DocumentRoot::Statement,
+            "statement",
+            "pref",
+            "P intro\n\nSEC 1. - Heading\n  text with {{FOOTNOTE 1}}\n\nFOOTNOTE 1\n  note",
         ),
         text_case(
             "inline-refs-images-remarks",
@@ -562,6 +571,7 @@ fn file_case(
         root,
         python_root,
         frbr_uri,
+        eid_prefix: String::new(),
         input: CaseInput::File(path),
     }
 }
@@ -578,6 +588,7 @@ fn xml_fixture_case(
         root,
         python_root,
         frbr_uri,
+        eid_prefix: String::new(),
         input: CaseInput::XmlFixture(path),
     }
 }
@@ -593,6 +604,24 @@ fn text_case(
         root,
         python_root,
         frbr_uri: default_frbr_uri(root).to_string(),
+        eid_prefix: String::new(),
+        input: CaseInput::Text(text),
+    }
+}
+
+fn prefixed_text_case(
+    name: &'static str,
+    root: DocumentRoot,
+    python_root: &'static str,
+    eid_prefix: &'static str,
+    text: &'static str,
+) -> ParityCase {
+    ParityCase {
+        name: name.to_string(),
+        root,
+        python_root,
+        frbr_uri: default_frbr_uri(root).to_string(),
+        eid_prefix: eid_prefix.to_string(),
         input: CaseInput::Text(text),
     }
 }
@@ -610,6 +639,7 @@ fn uri_text_case(
         root,
         python_root,
         frbr_uri: frbr_uri.to_string(),
+        eid_prefix: String::new(),
         input: CaseInput::Text(
             "BODY\nSEC 1. - Heading\n  Some text.\nSCHEDULE First Schedule\n  schedule text",
         ),
@@ -648,8 +678,9 @@ fn python_parse_to_xml(case: &ParityCase, text: &str) -> String {
     // read_bytes + decode: read_text would translate \r\n to \n (universal
     // newlines) and hide line-ending behaviour from the parity check
     let script = format!(
-        "from pathlib import Path\nfrom bluebell.parser import AkomaNtosoParser\nfrom cobalt import FrbrUri\nfrom lxml import etree\np=AkomaNtosoParser(FrbrUri.parse({uri:?}))\nxml=p.parse_to_xml(Path({text:?}).read_bytes().decode('utf-8'), {root:?})\nprint(etree.tostring(xml, encoding='unicode'), end='')\n",
+        "from pathlib import Path\nfrom bluebell.parser import AkomaNtosoParser\nfrom cobalt import FrbrUri\nfrom lxml import etree\np=AkomaNtosoParser(FrbrUri.parse({uri:?}), {eid_prefix:?})\nxml=p.parse_to_xml(Path({text:?}).read_bytes().decode('utf-8'), {root:?})\nprint(etree.tostring(xml, encoding='unicode'), end='')\n",
         uri = case.frbr_uri,
+        eid_prefix = case.eid_prefix,
         text = text_path.display().to_string(),
         root = case.python_root,
     );

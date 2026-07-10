@@ -8,7 +8,7 @@
 //! `bluebell-core` stays dependency-light and wasm-agnostic; all
 //! `wasm-bindgen` glue lives here.
 
-use bluebell_core::{parse_to_akn_xml, DocumentRoot};
+use bluebell_core::{parse_to_akn_xml_with_eid_prefix, DocumentRoot};
 use wasm_bindgen::prelude::*;
 
 /// Runs once when the wasm module is instantiated. Forwards Rust panics to
@@ -27,14 +27,21 @@ pub fn init() {
 ///   `"statement"`.
 /// - `frbr_uri`: the FRBR work URI for the document, e.g.
 ///   `"/akn/za/act/2022/1"`.
+/// - `eid_prefix`: optional `eId` prefix.
 ///
 /// Returns the generated `<akomaNtoso>` XML document as a string. Throws a
 /// JS exception (via `JsError`) if `root` is not recognised, if `frbr_uri`
 /// is not a valid FRBR URI, or if `text` fails to parse as Bluebell markup.
 #[wasm_bindgen(js_name = parseToXml)]
-pub fn parse_to_xml(text: &str, root: &str, frbr_uri: &str) -> Result<String, JsError> {
+pub fn parse_to_xml(
+    text: &str,
+    root: &str,
+    frbr_uri: &str,
+    eid_prefix: Option<String>,
+) -> Result<String, JsError> {
     let root = document_root(root)?;
-    parse_to_akn_xml(text, root, frbr_uri).map_err(|err| JsError::new(&err.to_string()))
+    parse_to_akn_xml_with_eid_prefix(text, root, frbr_uri, eid_prefix.as_deref().unwrap_or(""))
+        .map_err(|err| JsError::new(&err.to_string()))
 }
 
 /// Returns the crate version, e.g. `"4.0.0"`. Useful for confirming which

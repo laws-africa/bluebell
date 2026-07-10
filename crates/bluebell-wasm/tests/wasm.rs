@@ -6,12 +6,13 @@
 use wasm_bindgen::{JsError, JsValue};
 use wasm_bindgen_test::*;
 
-const ACT_TEXT: &str = "PREAMBLE\n\n  some preamble text\n\nBODY\n\nSEC 1. - Heading\n\n  Some content.\n";
+const ACT_TEXT: &str =
+    "PREAMBLE\n\n  some preamble text\n\nBODY\n\nSEC 1. - Heading\n\n  Some content.\n";
 const FRBR_URI: &str = "/akn/za/act/2022/1";
 
 #[wasm_bindgen_test]
 fn parses_a_small_act() {
-    let xml = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI)
+    let xml = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI, None)
         .expect("a minimal act should parse successfully");
 
     assert!(
@@ -33,8 +34,34 @@ fn parses_a_small_act() {
 }
 
 #[wasm_bindgen_test]
+fn accepts_an_empty_eid_prefix_argument() {
+    let xml = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI, Some(String::new()))
+        .expect("an empty eid_prefix should preserve the Python-compatible call signature");
+
+    assert!(
+        xml.contains("<section eId=\"sec_1\">"),
+        "expected output to contain the parsed section, got: {xml}"
+    );
+}
+
+#[wasm_bindgen_test]
+fn accepts_a_non_empty_eid_prefix_argument() {
+    let xml = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", FRBR_URI, Some("pref".to_string()))
+        .expect("a non-empty eid_prefix should parse successfully");
+
+    assert!(
+        xml.contains("<section eId=\"pref__sec_1\">"),
+        "expected output to contain the prefixed section eId, got: {xml}"
+    );
+    assert!(
+        xml.contains("<p eId=\"pref__sec_1__p_1\">Some content.</p>"),
+        "expected output to contain prefixed descendant eIds, got: {xml}"
+    );
+}
+
+#[wasm_bindgen_test]
 fn rejects_an_unsupported_root() {
-    let err = bluebell_wasm::parse_to_xml(ACT_TEXT, "not-a-real-root", FRBR_URI)
+    let err = bluebell_wasm::parse_to_xml(ACT_TEXT, "not-a-real-root", FRBR_URI, None)
         .expect_err("an unrecognised root should raise an error");
 
     let message = js_error_message(err);
@@ -57,7 +84,7 @@ fn rejects_an_unsupported_root() {
 // actually encounter in practice.
 #[wasm_bindgen_test]
 fn rejects_an_invalid_frbr_uri() {
-    let err = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", "not a valid frbr uri")
+    let err = bluebell_wasm::parse_to_xml(ACT_TEXT, "act", "not a valid frbr uri", None)
         .expect_err("an invalid FRBR URI should raise an error");
 
     let message = js_error_message(err);
