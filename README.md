@@ -76,15 +76,20 @@ xml_tree = parse_to_xml("P Hello", "statement", "/akn/za/statement/2024/1")
 1. We use a version of `canopy` from github, so clone it into the same directory as this directory: `git clone https://github.com/jcoglan/canopy.git`
 2. Build canopy: `cd canopy; npm install; make; cd ..`
 3. Build grammar changes with `make`, which runs our Makefile to compile the grammar
-4. Run tests with: `python -m unittest`
+4. Install the dev tools with `pip install -e '.[dev]'`
+5. Run all the test suites (Python, Rust, WASM) with: `poe test`
+
+Common development commands are defined as [poe](https://poethepoet.natn.io/)
+tasks in `pyproject.toml`; run `poe` with no arguments to list them. The
+Python suite alone is just `python -m unittest`.
 
 ## Releasing a new version
 
-1. Update the Python version in `bluebell/__init__.py` and the Rust workspace
-   version in the root `Cargo.toml` under `[workspace.package]`. They should
-   match for a release.
-2. Commit your changes and push to the main branch on GitHub
-3. Create a release in GitHub and it will automatically be pushed to PyPi
+See [RELEASING.md](RELEASING.md). In short: bump the version in both
+`bluebell/__init__.py` and the root `Cargo.toml` `[workspace.package]`
+(they must match), run `poe test`, then create a GitHub release, which
+publishes `bluebell-akn` and `bluebell-akn-rs` to PyPI and
+`@lawsafrica/bluebell-wasm` to npm.
 
 # License
 

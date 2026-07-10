@@ -21,8 +21,13 @@ jobs:
       with:
         python-version: "3.12"
 
+    - name: Install dependencies
+      run: |
+        pip install 'git+https://git@github.com/laws-africa/cobalt.git@master#egg=cobalt'
+        pip install -e '.[dev]'
+
     - name: Build distribution
-      run: python -m pip install build && python -m build
+      run: python -m build
 
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -117,19 +122,29 @@ jobs:
         node-version: "22"
         registry-url: https://registry.npmjs.org
 
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install dependencies
+      run: |
+        pip install 'git+https://git@github.com/laws-africa/cobalt.git@master#egg=cobalt'
+        pip install -e '.[dev]'
+
     - name: Install wasm32 target
       run: rustup target add wasm32-unknown-unknown
 
     - name: Install wasm-pack
       run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
+    # test-wasm and build-wasm are the same poe tasks developers run locally;
+    # build-wasm owns the wasm-pack flags (target, npm scope) in pyproject.toml
     - name: Run wasm tests
-      working-directory: crates/bluebell-wasm
-      run: wasm-pack test --node
+      run: poe test-wasm
 
     - name: Build npm package
-      working-directory: crates/bluebell-wasm
-      run: wasm-pack build --release --target bundler --scope lawsafrica
+      run: poe build-wasm
 
     - name: Publish to npm
       working-directory: crates/bluebell-wasm

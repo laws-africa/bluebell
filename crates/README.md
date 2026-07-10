@@ -82,7 +82,9 @@ is the source of truth for its dependencies.
 
 ## Useful Commands
 
-From the repository root:
+Most of these are wrapped as poe tasks in the root `pyproject.toml` (`poe`
+lists them; `poe test` runs the Python, Rust, and WASM suites). The raw
+commands, from the repository root:
 
 ```sh
 cargo test

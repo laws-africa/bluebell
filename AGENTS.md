@@ -73,6 +73,13 @@ cargo test
 python -m unittest discover -s tests -t .
 ```
 
+CI (`.github/workflows/test.yml`) runs these suites through the poe tasks
+defined in `pyproject.toml` (`poe test-py`, `poe test-rust`, `poe test-wasm`;
+`poe test` runs all three, and `poe` lists every task), so the task
+definitions are the source of truth for the exact invocations. The raw
+commands above are their equivalents for environments without `poe`
+installed; if a task definition changes, keep them in sync.
+
 When a change touches `crates/bluebell-wasm` or the core parse path it exposes,
 also run the wasm binding tests (requires the `wasm32-unknown-unknown` rustup
 target, `wasm-pack`, and Node):

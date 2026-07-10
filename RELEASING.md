@@ -19,7 +19,7 @@ published).
    - root `Cargo.toml` — `[workspace.package].version`
      (all Rust crates inherit it, and `cargo build` will refresh `Cargo.lock`)
 
-2. Run the full verification set:
+2. Run the full verification set (`poe test` runs all three):
 
    ```sh
    cargo test
