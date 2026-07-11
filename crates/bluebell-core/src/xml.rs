@@ -1823,7 +1823,12 @@ fn collect_block_attrs(
                 }
             }
             if let Some(name) = name {
-                attrs.insert(name, value);
+                // Bluebell attributes are namespace-free. Accept the XML 1.0
+                // (Fifth Edition) NCName production, so malformed pairs are
+                // discarded without preventing the rest of the block parsing.
+                if is_xml_ncname(&name) {
+                    attrs.insert(name, value);
+                }
             }
         }
         _ => {
@@ -1832,6 +1837,42 @@ fn collect_block_attrs(
             }
         }
     }
+}
+
+/// XML 1.0 (Fifth Edition) `NCName`: `Name` with `:` excluded because
+/// Bluebell has no syntax for binding attribute namespaces.
+fn is_xml_ncname(name: &str) -> bool {
+    let mut chars = name.chars();
+    matches!(chars.next(), Some(first) if is_xml_name_start_char(first))
+        && chars.all(is_xml_name_char)
+}
+
+fn is_xml_name_start_char(character: char) -> bool {
+    let codepoint = character as u32;
+    character == '_'
+        || character.is_ascii_alphabetic()
+        || (0xC0..=0xD6).contains(&codepoint)
+        || (0xD8..=0xF6).contains(&codepoint)
+        || (0xF8..=0x2FF).contains(&codepoint)
+        || (0x370..=0x37D).contains(&codepoint)
+        || (0x37F..=0x1FFF).contains(&codepoint)
+        || (0x200C..=0x200D).contains(&codepoint)
+        || (0x2070..=0x218F).contains(&codepoint)
+        || (0x2C00..=0x2FEF).contains(&codepoint)
+        || (0x3001..=0xD7FF).contains(&codepoint)
+        || (0xF900..=0xFDCF).contains(&codepoint)
+        || (0xFDF0..=0xFFFD).contains(&codepoint)
+        || (0x10000..=0xEFFFF).contains(&codepoint)
+}
+
+fn is_xml_name_char(character: char) -> bool {
+    let codepoint = character as u32;
+    is_xml_name_start_char(character)
+        || matches!(character, '-' | '.')
+        || character.is_ascii_digit()
+        || codepoint == 0xB7
+        || (0x0300..=0x036F).contains(&codepoint)
+        || (0x203F..=0x2040).contains(&codepoint)
 }
 
 fn collect_inline_text(pair: pest::iterators::Pair<'_, Rule>) -> String {
@@ -2423,6 +2464,38 @@ mod tests {
     fn paragraph_attrs_are_preserved() {
         let xml = parse_to_xml("P.rtl{foo bar} Text", DocumentRoot::Statement).unwrap();
         assert!(xml.contains("<p class=\"rtl\" eId=\"p_1\" foo=\"bar\">Text</p>"));
+    }
+
+    #[test]
+    fn invalid_attribute_names_are_dropped_individually() {
+        let xml = parse_to_xml(
+            "QUOTE{\" foo|@ bar|1baz qux|foo:bar namespace|boom bang|éclair oui|名 value|á accent|quote \"}\n  line one",
+            DocumentRoot::Statement,
+        )
+        .unwrap();
+
+        for attribute in [
+            "boom=\"bang\"",
+            "éclair=\"oui\"",
+            "名=\"value\"",
+            "á=\"accent\"",
+            "quote=\"&quot;\"",
+        ] {
+            assert!(xml.contains(attribute), "missing {attribute} in {xml}");
+        }
+        for invalid_name in ["foo:bar", "1baz=", "@="] {
+            assert!(!xml.contains(invalid_name), "found {invalid_name} in {xml}");
+        }
+    }
+
+    #[test]
+    fn xml_ncname_validation_uses_xml_1_0_unicode_ranges() {
+        for name in ["name", "_name", "éclair", "名", "á", "𐀀name"] {
+            assert!(is_xml_ncname(name), "expected {name:?} to be valid");
+        }
+        for name in ["", "1name", "foo:bar", "\"", "@"] {
+            assert!(!is_xml_ncname(name), "expected {name:?} to be invalid");
+        }
     }
 
     #[test]

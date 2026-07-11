@@ -1,6 +1,8 @@
 import re
 from itertools import groupby
 
+from bluebell.xml_names import is_xml_ncname
+
 
 def many_to_dict(items):
     kids = []
@@ -603,7 +605,13 @@ class BlockAttrs:
 
 class BlockAttr:
     def to_dict(self):
-        return {self.attr_name.text: self.value.text.strip()}
+        name = self.attr_name.text
+        # The grammar intentionally accepts malformed pairs so one bad pair
+        # does not make the whole block unparseable.  Drop only names that
+        # cannot be written as namespace-free XML attributes.
+        if not is_xml_ncname(name):
+            return {}
+        return {name: self.value.text.strip()}
 
 
 # ------------------------------------------------------------------------------
