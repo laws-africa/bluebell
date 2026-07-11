@@ -108,11 +108,14 @@ class Longtitle:
             # longtitles may be empty
             kids = []
 
-        return {
+        info = {
             'type': 'element',
             'name': 'longTitle',
             'children': kids,
         }
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+        return info
 
 
 class Crossheading:
@@ -240,6 +243,8 @@ class HierElement:
 
         if self.body.text and self.body.subheading.text:
             info['subheading'] = self.body.subheading.to_dict()
+            if self.body.subheading.attrs.text:
+                info['subheading_attribs'] = self.body.subheading.attrs.to_dict()
 
         if self.attrs.text:
             info['attribs'] = self.attrs.to_dict()
@@ -353,6 +358,8 @@ class Attachment(MainContentElement):
 
         if self.indented.text and self.indented.subheading.text:
             info['subheading'] = self.indented.subheading.to_dict()
+            if self.indented.subheading.attrs.text:
+                info['subheading_attribs'] = self.indented.subheading.attrs.to_dict()
 
         return info
 
@@ -463,6 +470,11 @@ class BlockListItem:
 
         if self.content.text and self.content.subheading.text:
             info['subheading'] = self.content.subheading.to_dict()
+            if self.content.subheading.attrs.text:
+                info['subheading_attribs'] = self.content.subheading.attrs.to_dict()
+
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
 
         return info
 
@@ -500,11 +512,14 @@ class BulletListItem:
                 else:
                     kids.extend(kid.to_children())
 
-        return {
+        info = {
             'type': 'element',
             'name': 'li',
             'children': kids,
         }
+        if self.marker.text and self.marker.attrs.text:
+            info['attribs'] = self.marker.attrs.to_dict()
+        return info
 
 
 class BlockContainer:
@@ -543,11 +558,14 @@ class Table:
 
 class TableRow:
     def to_dict(self):
-        return {
+        info = {
             'type': 'element',
             'name': 'tr',
             'children': [c.to_dict() for c in self.cells],
         }
+        if self.attrs.text:
+            info['attribs'] = self.attrs.to_dict()
+        return info
 
 
 class TableCell:
@@ -713,13 +731,15 @@ class Footnote:
     during post-processing.
     """
     def to_dict(self):
+        attrs = self.attrs.to_dict() if self.attrs.text else {}
+        attrs.update({
+            'marker': self.marker.text.strip(),
+            'name': 'footnote',
+        })
         return {
             'type': 'element',
             'name': 'displaced',
-            'attribs': {
-                'marker': self.marker.text.strip(),
-                'name': 'footnote',
-            },
+            'attribs': attrs,
             'children': many_to_dict(self.content),
         }
 

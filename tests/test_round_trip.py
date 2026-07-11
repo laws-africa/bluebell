@@ -65,6 +65,9 @@ class RoundTripTestCase(ParserSupport, TestCase):
     def test_act(self):
         self.roundtrip('act', 'act')
 
+    def test_act_attributes(self):
+        self.roundtrip('act-attributes', 'act')
+
     def test_judgment(self):
         self.roundtrip('judgment', 'judgment')
 

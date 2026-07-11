@@ -24,8 +24,38 @@ fn proviso_xslt_unparses_and_reparses() {
 }
 
 #[test]
+fn structure_marker_attributes_are_schema_valid_and_roundtrip() {
+    let source = "PREFACE\nLONGTITLE.longtitle{status editorial} Long title\n\nBODY\nSEC.section{status editorial} 1\n  SUBHEADING.subheading{status editorial} Structure attributes\n\n  ITEMS\n    ITEM.item{status editorial} (a)\n      item text\n\n  BULLETS\n    *.bullet{value 3} bullet text\n\n  TABLE\n    TR.row{status editorial}\n      TC\n        cell text\n\n  note ref {{FOOTNOTE 1}}\n\n  FOOTNOTE.note{placement bottom|status editorial} 1\n    note text";
+    let xml = parse_to_akn_xml(source, DocumentRoot::Act, "/akn/za/act/2022/1")
+        .expect("Rust failed to parse structure attributes");
+    assert_schema_valid(&xml, "structure marker attributes");
+
+    let unparsed = unparse(&xml).expect("XSLT failed to unparse structure attributes");
+    for marker in [
+        "SEC.section{status editorial}",
+        "SUBHEADING.subheading{status editorial}",
+        "LONGTITLE.longtitle{status editorial}",
+        "ITEM.item{status editorial}",
+        "*.bullet{value 3}",
+        "TR.row{status editorial}",
+        "FOOTNOTE.note{status editorial}",
+    ] {
+        assert!(unparsed.contains(marker), "missing {marker:?} in:\n{unparsed}");
+    }
+
+    let reparsed = parse_to_akn_xml(&unparsed, DocumentRoot::Act, "/akn/za/act/2022/1")
+        .expect("Rust failed to reparse structure attributes");
+    assert_schema_valid(&reparsed, "reparsed structure marker attributes");
+}
+
+#[test]
 fn roundtrip_text_fixtures_emit_schema_valid_akn() {
     let fixtures = [
+        (
+            DocumentRoot::Act,
+            "/akn/za/act/2022/1",
+            "tests/roundtrip/act-attributes.txt",
+        ),
         (
             DocumentRoot::Act,
             "/akn/za/act/2022/1",

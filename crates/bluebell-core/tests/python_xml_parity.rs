@@ -178,7 +178,9 @@ fn discovered_roundtrip_xml_cases() -> Vec<ParityCase> {
 
 fn roundtrip_fixture_root(stem: &str) -> (DocumentRoot, &'static str) {
     match stem {
-        "act" | "act-empty" | "act-escapes" | "act-footnotes" => (DocumentRoot::Act, "act"),
+        "act" | "act-attributes" | "act-empty" | "act-escapes" | "act-footnotes" => {
+            (DocumentRoot::Act, "act")
+        }
         "debate-report" => (DocumentRoot::DebateReport, "debateReport"),
         "eids" | "nested_attachments" => (DocumentRoot::Statement, "statement"),
         "hansard" => (DocumentRoot::Debate, "debate"),
@@ -213,6 +215,12 @@ fn default_roundtrip_frbr_uri(root: DocumentRoot) -> String {
 
 fn focused_cases() -> Vec<ParityCase> {
     vec![
+        text_case(
+            "structure-marker-attributes",
+            DocumentRoot::Act,
+            "act",
+            "PREFACE\nLONGTITLE.longtitle{status editorial} Long title\n\nBODY\nSEC.section{status editorial} 1\n  SUBHEADING.subheading{status editorial} Structure attributes\n\n  ITEMS\n    ITEM.item{status editorial} (a)\n      item text\n\n  BULLETS\n    *.bullet{value 3} bullet text\n\n  TABLE\n    TR.row{status editorial}\n      TC\n        cell text\n\n  note ref {{FOOTNOTE 1}}\n\n  FOOTNOTE.note{placement bottom|status editorial} 1\n    note text",
+        ),
         text_case(
             "inline-standard-elements",
             DocumentRoot::Statement,

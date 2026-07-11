@@ -644,7 +644,9 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>* </xsl:text>
+    <xsl:text>*</xsl:text>
+    <xsl:call-template name="block-attrs" />
+    <xsl:text> </xsl:text>
 
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent + 1" />
@@ -682,7 +684,9 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>FOOTNOTE </xsl:text>
+    <xsl:text>FOOTNOTE</xsl:text>
+    <xsl:call-template name="block-attrs" />
+    <xsl:text> </xsl:text>
     <xsl:value-of select="@marker"/>
     <xsl:text>&#10;</xsl:text>
 
@@ -731,7 +735,9 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>TR&#10;</xsl:text>
+    <xsl:text>TR</xsl:text>
+    <xsl:call-template name="block-attrs" />
+    <xsl:text>&#10;</xsl:text>
 
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent + 1" />
@@ -782,7 +788,9 @@
        -->
     <xsl:variable name="attrs" select="@*[local-name() != 'eId' and local-name() != 'class' and local-name() != 'by'
                   and (local-name() != 'name' or . != local-name(parent::a:*))
-                  and not(parent::a:inline and local-name() = 'name' and . = 'em')]" />
+                  and not(parent::a:inline and local-name() = 'name' and . = 'em')
+                  and not(parent::a:authorialNote and local-name() = 'marker')
+                  and not(parent::a:authorialNote and local-name() = 'placement' and . = 'bottom')]" />
     <xsl:if test="$attrs">
       <xsl:text>{</xsl:text>
       <xsl:for-each select="$attrs">
@@ -889,7 +897,9 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>SUBHEADING </xsl:text>
+    <xsl:text>SUBHEADING</xsl:text>
+    <xsl:call-template name="block-attrs" />
+    <xsl:text> </xsl:text>
     <xsl:apply-templates>
       <xsl:with-param name="indent" select="$indent" />
     </xsl:apply-templates>
@@ -954,7 +964,9 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="level" select="$indent" />
     </xsl:call-template>
-    <xsl:text>LONGTITLE </xsl:text>
+    <xsl:text>LONGTITLE</xsl:text>
+    <xsl:call-template name="block-attrs" />
+    <xsl:text> </xsl:text>
     <xsl:apply-templates/>
     <xsl:text>&#10;&#10;</xsl:text>
   </xsl:template>
