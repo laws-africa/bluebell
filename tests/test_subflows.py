@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from bluebell.akn import ParseError
+from bluebell.xml_names import is_xml_ncname
 from tests.support import ParserSupport
 
 
@@ -520,6 +521,50 @@ QUOTE{startQuote "}
   </embeddedStructure>
 </block>
 """, xml)
+
+    def test_quote_with_invalid_attribute_names(self):
+        tree = self.parse("""
+QUOTE{\" foo|@ bar|1baz qux|foo:bar namespace|boom bang|éclair oui|名 value|á accent|quote \"}
+  line one
+""", 'block_quote')
+
+        attrs = tree.to_dict()['children'][0]['attribs']
+        self.assertEqual({
+            'boom': 'bang',
+            'éclair': 'oui',
+            '名': 'value',
+            'á': 'accent',
+            'quote': '"',
+        }, attrs)
+
+        xml = self.tostring(self.generator.to_xml(tree))
+        self.assertIn('boom="bang"', xml)
+        self.assertIn('quote="&quot;"', xml)
+        self.assertIn('éclair="oui"', xml)
+        self.assertIn('名="value"', xml)
+        self.assertIn('á="accent"', xml)
+        self.assertNotIn('foo:bar', xml)
+        self.assertNotIn('1baz=', xml)
+
+    def test_invalid_quote_attributes_are_dropped_on_roundtrip(self):
+        source = '''QUOTE{" foo|@ bar|boom bang}
+  line one
+'''
+        xml = self.parser.parse_to_xml(source, 'block_quote')
+        unparsed = self.parser.unparse(xml)
+
+        self.assertEqual('''QUOTE{boom bang}
+  line one
+
+''', unparsed)
+        reparsed = self.parser.parse_to_xml(unparsed, 'block_quote')
+        self.assertEqual(self.tostring(xml), self.tostring(reparsed))
+
+    def test_xml_ncname_validation_uses_xml_1_0_unicode_ranges(self):
+        for name in ('name', '_name', 'éclair', '名', 'á', '𐀀name'):
+            self.assertTrue(is_xml_ncname(name), name)
+        for name in ('', '1name', 'foo:bar', '"', '@'):
+            self.assertFalse(is_xml_ncname(name), name)
 
     def test_quote_curlies(self):
         # shouldn't be able to parse this double opening curlies, since

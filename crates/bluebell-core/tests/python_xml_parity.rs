@@ -539,6 +539,12 @@ fn focused_cases() -> Vec<ParityCase> {
             "BLOCKS.cls{a b}\n  some block text\n  QUOTE{startQuote \"|endQuote \"}\n    quoted text",
         ),
         text_case(
+            "invalid-xml-attribute-names",
+            DocumentRoot::Statement,
+            "statement",
+            "QUOTE{\" foo|@ bar|1baz qux|foo:bar namespace|boom bang|éclair oui|名 value|á accent|quote \"}\n  quoted text",
+        ),
+        text_case(
             "block-container-generic",
             DocumentRoot::Act,
             "act",
