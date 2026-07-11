@@ -20,5 +20,5 @@ jobs:
               owner: 'laws-africa',
               repo: 'bluebell-monaco',
               workflow_id: 'update-xslt.yml',
-              ref: 'master'
+              ref: 'main'
             });
