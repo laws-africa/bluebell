@@ -6,6 +6,25 @@ from .support import ParserSupport
 class HierTestCase(ParserSupport, TestCase):
     maxDiff = None
 
+    def test_proviso_parse_and_unparse(self):
+        source = '''PROVISO 1 - Savings
+
+  This rule applies.
+
+'''
+        tree = self.parse(source, 'hier_element_block')
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual('''<proviso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" eId="proviso_1">
+  <num>1</num>
+  <heading>Savings</heading>
+  <content>
+    <p eId="proviso_1__p_1">This rule applies.</p>
+  </content>
+</proviso>
+''', xml)
+        self.assertEqual(source, self.parser.unparse(xml))
+
     def test_hier_plain(self):
         tree = self.parse("""
 hello

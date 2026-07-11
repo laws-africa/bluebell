@@ -239,6 +239,12 @@ fn focused_cases() -> Vec<ParityCase> {
             "SEC 1. - Heading\n  text",
         ),
         text_case(
+            "proviso-hier-element-block",
+            DocumentRoot::HierElementBlock,
+            "hier_element_block",
+            "PROVISO 1 - Savings\n  This rule applies.",
+        ),
+        text_case(
             "fragment-hier-block-element",
             DocumentRoot::HierBlockElement,
             "hier_block_element",

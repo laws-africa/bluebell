@@ -2,12 +2,26 @@ use std::fs;
 use std::path::Path;
 use std::process::Command;
 
-use bluebell_core::{parse, parse_to_akn_xml, DocumentRoot};
+use bluebell_core::{parse, parse_to_akn_xml, parse_to_xml, DocumentRoot};
 use libxml::parser::Parser;
 use libxml::schemas::{SchemaParserContext, SchemaValidationContext};
 
 mod support;
 use support::{python_path, repo_path, unparse};
+
+#[test]
+fn proviso_xslt_unparses_and_reparses() {
+    let source = "PROVISO 1 - Savings\n\n  This rule applies.\n\n";
+    let xml = parse_to_xml(source, DocumentRoot::HierElementBlock)
+        .expect("Rust failed to parse PROVISO");
+
+    let unparsed = unparse(&xml).expect("XSLT failed to unparse PROVISO");
+    assert_eq!(unparsed, source);
+
+    let reparsed = parse_to_xml(&unparsed, DocumentRoot::HierElementBlock)
+        .expect("Rust failed to reparse unparsed PROVISO");
+    assert_eq!(reparsed, xml);
+}
 
 #[test]
 fn roundtrip_text_fixtures_emit_schema_valid_akn() {

@@ -2578,6 +2578,24 @@ mod tests {
     }
 
     #[test]
+    fn proviso_xml() {
+        let xml = parse_to_xml(
+            "PROVISO 1 - Savings\n\n  This rule applies.",
+            DocumentRoot::HierElementBlock,
+        )
+        .unwrap();
+
+        assert!(
+            xml.starts_with(
+                "<proviso eId=\"proviso_1\" xmlns=\"http://docs.oasis-open.org/legaldocml/ns/akn/3.0\">"
+            ),
+            "{xml}"
+        );
+        assert!(xml.contains("<num>1</num><heading>Savings</heading>"));
+        assert!(xml.contains("<content><p eId=\"proviso_1__p_1\">This rule applies.</p></content>"));
+    }
+
+    #[test]
     fn footnote_content_is_resolved() {
         let xml = parse_to_xml(
             "P hello {{FOOTNOTE 1}} there\n\nFOOTNOTE 1\n  footnote text",
