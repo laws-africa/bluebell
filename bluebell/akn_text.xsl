@@ -98,10 +98,15 @@
   <xsl:template name="escape-inlines">
     <xsl:param name="text" />
 
-    <!-- This works from the inside out, first escaping backslash chars themselves, then escaping
-         the different types of inline markers -->
-    <xsl:call-template name="string-replace-all">
-      <xsl:with-param name="text">
+    <xsl:choose>
+      <!-- fast path: if the text contains none of the special characters, no escaping is needed -->
+      <xsl:when test="translate($text, '\*/_{}', '') = $text">
+        <!-- replace newlines with spaces -->
+        <xsl:value-of select="translate($text, '&#13;&#10;', '  ')" />
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- This works from the inside out, first escaping backslash chars themselves, then escaping
+             the different types of inline markers -->
         <xsl:call-template name="string-replace-all">
           <xsl:with-param name="text">
             <xsl:call-template name="string-replace-all">
@@ -111,31 +116,35 @@
                     <xsl:call-template name="string-replace-all">
                       <xsl:with-param name="text">
                         <xsl:call-template name="string-replace-all">
-                          <!-- replace newlines with spaces -->
-                          <xsl:with-param name="text" select="translate($text, '&#13;&#10;', '  ')" />
-                          <xsl:with-param name="value"><xsl:value-of select="'\'" /></xsl:with-param>
-                          <xsl:with-param name="replacement"><xsl:value-of select="'\\'" /></xsl:with-param>
+                          <xsl:with-param name="text">
+                            <xsl:call-template name="string-replace-all">
+                              <!-- replace newlines with spaces -->
+                              <xsl:with-param name="text" select="translate($text, '&#13;&#10;', '  ')" />
+                              <xsl:with-param name="value" select="'\'" />
+                              <xsl:with-param name="replacement" select="'\\'" />
+                            </xsl:call-template>
+                          </xsl:with-param>
+                          <xsl:with-param name="value" select="'**'" />
+                          <xsl:with-param name="replacement" select="'\*\*'" />
                         </xsl:call-template>
                       </xsl:with-param>
-                      <xsl:with-param name="value"><xsl:value-of select="'**'" /></xsl:with-param>
-                      <xsl:with-param name="replacement"><xsl:value-of select="'\*\*'" /></xsl:with-param>
+                      <xsl:with-param name="value" select="'//'" />
+                      <xsl:with-param name="replacement" select="'\/\/'" />
                     </xsl:call-template>
                   </xsl:with-param>
-                  <xsl:with-param name="value"><xsl:value-of select="'//'" /></xsl:with-param>
-                  <xsl:with-param name="replacement"><xsl:value-of select="'\/\/'" /></xsl:with-param>
+                  <xsl:with-param name="value" select="'__'" />
+                  <xsl:with-param name="replacement" select="'\_\_'" />
                 </xsl:call-template>
               </xsl:with-param>
-              <xsl:with-param name="value"><xsl:value-of select="'__'" /></xsl:with-param>
-              <xsl:with-param name="replacement"><xsl:value-of select="'\_\_'" /></xsl:with-param>
+              <xsl:with-param name="value" select="'{{'" />
+              <xsl:with-param name="replacement" select="'\{\{'" />
             </xsl:call-template>
           </xsl:with-param>
-          <xsl:with-param name="value"><xsl:value-of select="'{{'" /></xsl:with-param>
-          <xsl:with-param name="replacement"><xsl:value-of select="'\{\{'" /></xsl:with-param>
+          <xsl:with-param name="value" select="'}}'" />
+          <xsl:with-param name="replacement" select="'\}\}'" />
         </xsl:call-template>
-      </xsl:with-param>
-      <xsl:with-param name="value"><xsl:value-of select="'}}'" /></xsl:with-param>
-      <xsl:with-param name="replacement"><xsl:value-of select="'\}\}'" /></xsl:with-param>
-    </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- escape inlines, but also escape special chars when they are adjacent to the start or end of their inlines.
@@ -159,6 +168,27 @@
     <b>***</b> - either (but not both)
     -->
   <xsl:template name="escape-inlines-start-end">
+    <xsl:param name="text" />
+
+    <xsl:choose>
+      <!-- fast path: prefix/suffix escaping only applies when the text starts or ends with one of
+           the special characters, otherwise plain inline escaping is enough -->
+      <xsl:when test="string-length($text) = 0 or (
+                      not(contains('*/_', substring($text, 1, 1))) and
+                      not(contains('*/_', substring($text, string-length($text)))))">
+        <xsl:call-template name="escape-inlines">
+          <xsl:with-param name="text" select="$text" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="escape-inlines-start-end-slow">
+          <xsl:with-param name="text" select="$text" />
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="escape-inlines-start-end-slow">
     <xsl:param name="text" />
 
     <!-- the run of the same char at the start of the string -->
@@ -237,6 +267,22 @@
 
   <!-- Escape prefixes with a backslash -->
   <xsl:template name="escape-prefixes">
+    <xsl:param name="text" />
+
+    <xsl:choose>
+      <!-- fast path: all block element markers start with an uppercase letter -->
+      <xsl:when test="string-length($text) = 0 or not(contains($uppercase, substring($text, 1, 1)))">
+        <xsl:value-of select="$text" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="escape-prefixes-slow">
+          <xsl:with-param name="text" select="$text" />
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="escape-prefixes-slow">
     <xsl:param name="text" />
 
     <xsl:variable name="slash">
@@ -345,9 +391,9 @@
     <xsl:param name="text"/>
 
     <xsl:call-template name="string-replace-all">
-      <xsl:with-param name="text"><xsl:value-of select="$text" /></xsl:with-param>
-      <xsl:with-param name="value"><xsl:value-of select="'-'" /></xsl:with-param>
-      <xsl:with-param name="replacement"><xsl:value-of select="'\-'" /></xsl:with-param>
+      <xsl:with-param name="text" select="$text" />
+      <xsl:with-param name="value" select="'-'" />
+      <xsl:with-param name="replacement" select="'\-'" />
     </xsl:call-template>
   </xsl:template>
 
@@ -355,9 +401,9 @@
     <xsl:param name="text"/>
 
     <xsl:call-template name="string-replace-all">
-      <xsl:with-param name="text"><xsl:value-of select="$text" /></xsl:with-param>
-      <xsl:with-param name="value"><xsl:value-of select="'\'" /></xsl:with-param>
-      <xsl:with-param name="replacement"><xsl:value-of select="'\\'" /></xsl:with-param>
+      <xsl:with-param name="text" select="$text" />
+      <xsl:with-param name="value" select="'\'" />
+      <xsl:with-param name="replacement" select="'\\'" />
     </xsl:call-template>
   </xsl:template>
 
@@ -383,14 +429,32 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- a precomputed run of indent strings, so that indentation is a fast substring operation
+       rather than repeated string concatenation -->
+  <xsl:variable name="indentPadLevels" select="100" />
+  <xsl:variable name="indentPad">
+    <xsl:call-template name="repeat">
+      <xsl:with-param name="str" select="$indentStr" />
+      <xsl:with-param name="count" select="$indentPadLevels" />
+    </xsl:call-template>
+  </xsl:variable>
+
   <!-- indent with spaces -->
   <xsl:template name="indent">
     <xsl:param name="level" />
 
-    <xsl:call-template name="repeat">
-      <xsl:with-param name="str" select="$indentStr" />
-      <xsl:with-param name="count" select="$level" />
-    </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="$level &lt;= $indentPadLevels">
+        <xsl:value-of select="substring($indentPad, 1, $level * string-length($indentStr))" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$indentPad" />
+        <xsl:call-template name="repeat">
+          <xsl:with-param name="str" select="$indentStr" />
+          <xsl:with-param name="count" select="$level - $indentPadLevels" />
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- ...............................................................................
@@ -716,13 +780,12 @@
        - @name for elements that match the element name
        - @name for <inline name="em">
        -->
-    <xsl:if test="@*[local-name() != 'eId' and local-name() != 'class' and local-name() != 'by'
+    <xsl:variable name="attrs" select="@*[local-name() != 'eId' and local-name() != 'class' and local-name() != 'by'
                   and (local-name() != 'name' or . != local-name(parent::a:*))
-                  and not(parent::a:inline and local-name() = 'name' and . = 'em')]">
+                  and not(parent::a:inline and local-name() = 'name' and . = 'em')]" />
+    <xsl:if test="$attrs">
       <xsl:text>{</xsl:text>
-      <xsl:for-each select="@*[local-name() != 'eId' and local-name() != 'class' and local-name() != 'by'
-                  and (local-name() != 'name' or . != local-name(parent::a:*))
-                  and not(parent::a:inline and local-name() = 'name' and . = 'em')]">
+      <xsl:for-each select="$attrs">
         <xsl:apply-templates select="." mode="generic">
           <xsl:with-param name="index" select="position()"/>
         </xsl:apply-templates>
