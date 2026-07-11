@@ -960,7 +960,7 @@ fn attachment_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let mut marker_name = "attachment".to_string();
     let mut att_attrs = BTreeMap::new();
     let mut heading: Option<Vec<XmlNode>> = None;
-    let mut subheading: Option<Vec<XmlNode>> = None;
+    let mut subheading: Option<XmlElement> = None;
     let mut blocks = Vec::new();
     let mut nested = None;
 
@@ -974,7 +974,7 @@ fn attachment_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
                     heading = Some(nodes);
                 }
             }
-            Rule::subheading => subheading = Some(line_inline_nodes(child)),
+            Rule::subheading => subheading = Some(line_element_to_xml(child, "subheading")),
             Rule::attachments => nested = Some(attachments_to_xml(child)),
             _ => collect_block_descendants(child, &mut blocks),
         }
@@ -987,10 +987,8 @@ fn attachment_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
             XmlElement::new("heading").children_nodes(heading),
         ));
     }
-    if let Some(subheading) = subheading.filter(|subheading| !subheading.is_empty()) {
-        attachment.children.push(XmlNode::Element(
-            XmlElement::new("subheading").children_nodes(subheading),
-        ));
+    if let Some(subheading) = subheading.filter(|subheading| !subheading.children.is_empty()) {
+        attachment.children.push(XmlNode::Element(subheading));
     }
 
     let main_body = XmlElement::new("mainBody").children(if blocks.is_empty() {
@@ -1037,7 +1035,7 @@ fn speech_hier_to_xml(pair: pest::iterators::Pair<'_, Rule>, group: bool) -> Xml
                 num = n;
                 heading = h;
             }
-            Rule::subheading => subheading = Some(line_inline_nodes(child)),
+            Rule::subheading => subheading = Some(line_element_to_xml(child, "subheading")),
             Rule::speech_from => {
                 by = Some(
                     child
@@ -1080,10 +1078,8 @@ fn speech_hier_to_xml(pair: pest::iterators::Pair<'_, Rule>, group: bool) -> Xml
             XmlElement::new("heading").children_nodes(heading),
         ));
     }
-    if let Some(subheading) = subheading.filter(|subheading| !subheading.is_empty()) {
-        el.children.push(XmlNode::Element(
-            XmlElement::new("subheading").children_nodes(subheading),
-        ));
+    if let Some(subheading) = subheading.filter(|subheading| !subheading.children.is_empty()) {
+        el.children.push(XmlNode::Element(subheading));
     }
     if let Some(from) = from {
         el.children
@@ -1183,16 +1179,19 @@ fn blocks_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
 
 fn footnote_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let mut marker = String::new();
+    let mut attrs = BTreeMap::new();
     let mut blocks = Vec::new();
     for child in pair.into_inner() {
         match child.as_rule() {
             Rule::marker => marker = child.as_str().trim().to_string(),
+            Rule::block_attrs => attrs.extend(block_attrs_to_map(child)),
             _ => collect_block_descendants(child, &mut blocks),
         }
     }
-    let mut displaced = XmlElement::new("displaced")
-        .attr("marker", marker)
-        .attr("name", "footnote");
+    attrs.insert("marker".to_string(), marker);
+    attrs.insert("name".to_string(), "footnote".to_string());
+    let mut displaced = XmlElement::new("displaced");
+    displaced.attrs = attrs;
     displaced.children = blocks.into_iter().map(XmlNode::Element).collect();
     displaced
 }
@@ -1245,6 +1244,7 @@ fn block_list_item_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let mut subheading = None;
     for child in pair.into_inner() {
         match child.as_rule() {
+            Rule::block_attrs => item.attrs.extend(block_attrs_to_map(child)),
             Rule::hier_element_heading => {
                 let (num, heading) = parse_heading(child);
                 if let Some(num) = num.filter(|num| !num.is_empty()) {
@@ -1257,15 +1257,13 @@ fn block_list_item_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
                     ));
                 }
             }
-            Rule::subheading => subheading = Some(line_inline_nodes(child)),
+            Rule::subheading => subheading = Some(line_element_to_xml(child, "subheading")),
             Rule::block_element => collect_blocks(child, &mut blocks),
             _ => collect_block_descendants(child, &mut blocks),
         }
     }
-    if let Some(subheading) = subheading.filter(|subheading| !subheading.is_empty()) {
-        item.children.push(XmlNode::Element(
-            XmlElement::new("subheading").children_nodes(subheading),
-        ));
+    if let Some(subheading) = subheading.filter(|subheading| !subheading.children.is_empty()) {
+        item.children.push(XmlNode::Element(subheading));
     }
     if blocks.is_empty() {
         blocks.push(XmlElement::new("p"));
@@ -1291,9 +1289,17 @@ fn bullet_list_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
 
 fn bullet_list_item_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let starts_with_empty_paragraph = starts_with_empty_bullet_paragraph(pair.as_str());
+    let mut attrs = BTreeMap::new();
     let mut blocks = Vec::new();
     for child in pair.into_inner() {
         match child.as_rule() {
+            Rule::bullet_list_marker => {
+                for marker_child in child.into_inner() {
+                    if marker_child.as_rule() == Rule::block_attrs {
+                        attrs.extend(block_attrs_to_map(marker_child));
+                    }
+                }
+            }
             Rule::block_elements | Rule::block_element => collect_blocks(child, &mut blocks),
             _ => collect_block_descendants(child, &mut blocks),
         }
@@ -1303,7 +1309,9 @@ fn bullet_list_item_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement 
     } else if starts_with_empty_paragraph {
         blocks.insert(0, XmlElement::new("p"));
     }
-    XmlElement::new("li").children(blocks)
+    let mut li = XmlElement::new("li").children(blocks);
+    li.attrs = attrs;
+    li
 }
 
 fn starts_with_empty_bullet_paragraph(text: &str) -> bool {
@@ -1328,9 +1336,12 @@ fn table_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
 fn table_row_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let mut row = XmlElement::new("tr");
     for child in pair.into_inner() {
-        if child.as_rule() == Rule::table_cell {
-            row.children
-                .push(XmlNode::Element(table_cell_to_xml(child)));
+        match child.as_rule() {
+            Rule::block_attrs => row.attrs.extend(block_attrs_to_map(child)),
+            Rule::table_cell => row
+                .children
+                .push(XmlNode::Element(table_cell_to_xml(child))),
+            _ => {}
         }
     }
     row
@@ -1387,7 +1398,7 @@ fn hier_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
     let mut name = "hcontainer".to_string();
     let mut num = None;
     let mut heading: Option<Vec<XmlNode>> = None;
-    let mut subheading: Option<Vec<XmlNode>> = None;
+    let mut subheading: Option<XmlElement> = None;
     let mut attrs = BTreeMap::new();
     let mut content = Vec::new();
 
@@ -1400,7 +1411,7 @@ fn hier_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
                 num = n;
                 heading = h;
             }
-            Rule::subheading => subheading = Some(line_inline_nodes(child)),
+            Rule::subheading => subheading = Some(line_element_to_xml(child, "subheading")),
             Rule::line | Rule::p => content.push(p_to_xml(child)),
             Rule::hier_element_block => content.push(hier_to_xml(child)),
             _ => collect_hier_content(child, &mut content),
@@ -1420,10 +1431,8 @@ fn hier_to_xml(pair: pest::iterators::Pair<'_, Rule>) -> XmlElement {
             XmlElement::new("heading").children_nodes(heading),
         ));
     }
-    if let Some(subheading) = subheading.filter(|subheading| !subheading.is_empty()) {
-        el.children.push(XmlNode::Element(
-            XmlElement::new("subheading").children_nodes(subheading),
-        ));
+    if let Some(subheading) = subheading.filter(|subheading| !subheading.children.is_empty()) {
+        el.children.push(XmlNode::Element(subheading));
     }
     if content
         .iter()
@@ -2037,15 +2046,28 @@ fn resolve_displaced_content(root: &mut XmlElement) {
             }
         }
 
-        let children = match &found {
+        let (children, displaced_attrs) = match &found {
             Some(displaced_path) => element_mut_at_path(root, displaced_path)
-                .map(|el| std::mem::take(&mut el.children))
+                .map(|el| {
+                    (
+                        std::mem::take(&mut el.children),
+                        std::mem::take(&mut el.attrs),
+                    )
+                })
                 .unwrap_or_default(),
-            None => vec![XmlNode::Element(
-                XmlElement::new("p").text("(content missing)"),
-            )],
+            None => (
+                vec![XmlNode::Element(
+                    XmlElement::new("p").text("(content missing)"),
+                )],
+                BTreeMap::new(),
+            ),
         };
         if let Some(note) = element_mut_at_path(root, &note_path) {
+            for (name, value) in displaced_attrs {
+                if name != "marker" && name != "name" {
+                    note.attrs.insert(name, value);
+                }
+            }
             note.children.extend(children);
         }
         if let Some(displaced_path) = found {

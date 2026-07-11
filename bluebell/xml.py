@@ -364,7 +364,9 @@ class XmlGenerator:
             pre.append(m.heading(*(self.item_to_xml(k) for k in item['heading'])))
 
         if item.get('subheading'):
-            pre.append(m.subheading(*(self.item_to_xml(k) for k in item['subheading'])))
+            pre.append(m.subheading(
+                *(self.item_to_xml(k) for k in item['subheading']),
+                **item.get('subheading_attribs', {})))
 
         self.attachment_names.append(attachment_name)
         try:
@@ -396,7 +398,9 @@ class XmlGenerator:
             kids.append(m.heading(*(self.item_to_xml(k) for k in item['heading'])))
 
         if item.get('subheading'):
-            kids.append(m.subheading(*(self.item_to_xml(k) for k in item['subheading'])))
+            kids.append(m.subheading(
+                *(self.item_to_xml(k) for k in item['subheading']),
+                **item.get('subheading_attribs', {})))
 
     def post_process(self, xml):
         """ Post-processing of generated XML to make final changes.
@@ -425,6 +429,9 @@ class XmlGenerator:
 
             content = get_displaced_content(ref, name, ref.get('marker'))
             if content is not None:
+                for attr, value in content.attrib.items():
+                    if attr not in ('marker', 'name'):
+                        ref.set(attr, value)
                 # move children of the displaced element into the ref
                 for child in content:
                     ref.append(child)

@@ -380,6 +380,76 @@ PART A
 
 ''', actual)
 
+    def test_structure_marker_attrs(self):
+        source = '''SEC.section{status editorial} 1
+  SUBHEADING.subheading{status editorial} Structure attributes
+
+  LONGTITLE.longtitle{status editorial} Long title
+
+  ITEMS
+    ITEM.item{status editorial} (a)
+      item text
+
+  BULLETS
+    *.bullet{value 3} bullet text
+
+  TABLE
+    TR.row{status editorial}
+      TC
+        cell text
+
+  note ref {{FOOTNOTE 1}}
+
+  FOOTNOTE.note{placement bottom|status editorial} 1
+    note text
+'''
+        tree = self.parse(source, 'hier_element_block')
+        xml = self.tostring(self.to_xml(tree.to_dict()))
+
+        self.assertEqual('''<section xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" class="section" eId="sec_1" status="editorial">
+  <num>1</num>
+  <subheading class="subheading" status="editorial">Structure attributes</subheading>
+  <content>
+    <longTitle class="longtitle" eId="sec_1__longTitle_1" status="editorial">
+      <p eId="sec_1__longTitle_1__p_1">Long title</p>
+    </longTitle>
+    <blockList eId="sec_1__list_1">
+      <item class="item" eId="sec_1__list_1__item_a" status="editorial">
+        <num>(a)</num>
+        <p eId="sec_1__list_1__item_a__p_1">item text</p>
+      </item>
+    </blockList>
+    <ul eId="sec_1__ul_1">
+      <li class="bullet" eId="sec_1__ul_1__li_1" value="3">
+        <p eId="sec_1__ul_1__li_1__p_1">bullet text</p>
+      </li>
+    </ul>
+    <table eId="sec_1__table_1">
+      <tr class="row" status="editorial">
+        <td>
+          <p eId="sec_1__table_1__p_1">cell text</p>
+        </td>
+      </tr>
+    </table>
+    <p eId="sec_1__p_1">note ref <authorialNote class="note" eId="sec_1__p_1__authorialNote_1" marker="1" placement="bottom" status="editorial"><p eId="sec_1__p_1__authorialNote_1__p_1">note text</p></authorialNote></p>
+  </content>
+</section>
+''', xml)
+
+        unparsed = self.parser.unparse(xml)
+        for marker in (
+                'SEC.section{status editorial}',
+                'SUBHEADING.subheading{status editorial}',
+                'LONGTITLE.longtitle{status editorial}',
+                'ITEM.item{status editorial}',
+                '*.bullet{value 3}',
+                'TR.row{status editorial}',
+                'FOOTNOTE.note{status editorial}'):
+            self.assertIn(marker, unparsed)
+
+        reparsed = self.parser.parse_to_xml(unparsed, 'hier_element_block')
+        self.assertEqual(xml, self.tostring(reparsed))
+
     def test_longtitles(self):
         tree = self.parse("""
 PART A

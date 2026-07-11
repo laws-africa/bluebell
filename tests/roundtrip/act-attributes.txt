@@ -1,0 +1,28 @@
+PREFACE
+
+  LONGTITLE.long-title{status editorial} A long title
+
+
+
+BODY
+
+SEC.section{status editorial} 1
+  SUBHEADING.subheading{status editorial} Structure attributes
+
+  ITEMS
+    ITEM.item{status editorial} (a)
+      item text
+
+  BULLETS
+    *.bullet{value 3} bullet text
+
+  TABLE
+    TR.row{status editorial}
+      TC
+        cell text
+
+  note ref {{FOOTNOTE 1}}
+
+  FOOTNOTE.note{status editorial} 1
+    note text
+

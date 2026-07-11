@@ -137,8 +137,8 @@ speech_block_elements = { speech_block | block_list | bullet_list | table | foot
 speech_block = { speech_block_name ~ block_attrs? ~ space ~ inline+ ~ eol }
 speech_block_name = { "SCENE" | "NARRATIVE" | "SUMMARY" }
 
-longtitle = { "LONGTITLE" ~ (space ~ inline+)? ~ eol }
-subheading = { "SUBHEADING" ~ (space ~ inline+)? ~ eol }
+longtitle = { "LONGTITLE" ~ block_attrs? ~ (space ~ inline+)? ~ eol }
+subheading = { "SUBHEADING" ~ block_attrs? ~ (space ~ inline+)? ~ eol }
 crossheading = { "CROSSHEADING" ~ block_attrs? ~ (space ~ inline+)? ~ eol }
 p = { "P" ~ block_attrs? ~ space ~ inline+ ~ eol }
 line = { !dedent ~ inline+ ~ eol }
@@ -148,13 +148,14 @@ blocks = { "BLOCKS" ~ block_attrs? ~ eol ~ indent ~ block_element+ ~ dedent }
 block_list = { ("BLOCKLIST" | "ITEMS") ~ block_attrs? ~ eol ~ indent ~ block_list_intro? ~ block_list_item+ ~ block_list_wrapup? ~ dedent }
 block_list_intro = { !"ITEM" ~ line ~ footnote* }
 block_list_wrapup = { line ~ footnote* }
-block_list_item = { "ITEM" ~ hier_element_heading? ~ eol ~ (indent ~ subheading? ~ block_element+ ~ dedent)? }
+block_list_item = { "ITEM" ~ block_attrs? ~ hier_element_heading? ~ eol ~ (indent ~ subheading? ~ block_element+ ~ dedent)? }
 
 bullet_list = { "BULLETS" ~ block_attrs? ~ eol ~ indent ~ bullet_list_item+ ~ dedent }
-bullet_list_item = { ("*" ~ space?)? ~ (block_elements | eol) ~ (indent ~ block_element+ ~ dedent)? }
+bullet_list_item = { bullet_list_marker? ~ (block_elements | eol) ~ (indent ~ block_element+ ~ dedent)? }
+bullet_list_marker = { "*" ~ block_attrs? ~ space? }
 
 table = { "TABLE" ~ block_attrs? ~ eol ~ indent ~ table_row+ ~ dedent }
-table_row = { "TR" ~ eol ~ indent ~ table_cell+ ~ dedent }
+table_row = { "TR" ~ block_attrs? ~ eol ~ indent ~ table_cell+ ~ dedent }
 table_cell = { ("TH" | "TC") ~ block_attrs? ~ eol ~ (indent ~ block_element+ ~ dedent)? }
 
 block_attrs = { block_attr_class* ~ block_attr_pairs? }
@@ -166,7 +167,7 @@ attr_name = @{ (!(space | "\n" | "|" | "{" | "}") ~ ANY)+ }
 attr_value = @{ (!("\n" | "|" | "}") ~ ANY)* }
 
 block_quote = { "QUOTE" ~ block_attrs? ~ eol ~ indent ~ hier_block_element+ ~ dedent }
-footnote = { "FOOTNOTE" ~ space ~ marker ~ space? ~ eol ~ indent ~ hier_block_element+ ~ dedent }
+footnote = { "FOOTNOTE" ~ block_attrs? ~ space ~ marker ~ space? ~ eol ~ indent ~ hier_block_element+ ~ dedent }
 marker = @{ (!(" " | "\n") ~ ANY)+ }
 
 inline = { non_inline_start | escape | inline_marker | not_newline }

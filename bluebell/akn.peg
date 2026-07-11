@@ -277,9 +277,9 @@ grammar akn
   # Actual block elements
   # ------------------------------------------------------------------------------
 
-  longtitle         <- 'LONGTITLE' body:(space content:inline+)? eol <Longtitle>
+  longtitle         <- 'LONGTITLE' attrs:block_attrs? body:(space content:inline+)? eol <Longtitle>
 
-  subheading        <- 'SUBHEADING' body:(space content:inline+)? eol <Subheading>
+  subheading        <- 'SUBHEADING' attrs:block_attrs? body:(space content:inline+)? eol <Subheading>
 
   crossheading      <- 'CROSSHEADING' attrs:block_attrs? body:(space content:inline+)? eol <Crossheading>
 
@@ -340,7 +340,7 @@ grammar akn
 
   block_list_wrapup <- line footnotes:footnote* <BlockListWrapUp>
 
-  block_list_item   <- 'ITEM' heading:hier_element_heading? eol
+  block_list_item   <- 'ITEM' attrs:block_attrs? heading:hier_element_heading? eol
                        content:(indent
                          subheading:subheading?
                          children:block_element+
@@ -362,11 +362,13 @@ grammar akn
                          items:bullet_list_item+
                        dedent <BulletList>
 
-  bullet_list_item  <- ('*' space?)? initial:(block_elements / eol)
+  bullet_list_item  <- marker:bullet_list_marker? initial:(block_elements / eol)
                        content:(indent
                          siblings:block_element+
                        dedent)?
                        <BulletListItem>
+
+  bullet_list_marker <- '*' attrs:block_attrs? space?
 
   # ------------------------------------------------------------------------------
   # Tables
@@ -385,7 +387,7 @@ grammar akn
                          rows:table_row+
                        dedent <Table>
 
-  table_row         <- 'TR' eol
+  table_row         <- 'TR' attrs:block_attrs? eol
                        indent
                          cells:table_cell+
                        dedent <TableRow>
@@ -422,7 +424,7 @@ grammar akn
                         dedent
                         <BlockQuote>
 
-  footnote          <- 'FOOTNOTE' space marker:([^ \n]+) space? eol
+  footnote          <- 'FOOTNOTE' attrs:block_attrs? space marker:([^ \n]+) space? eol
                        indent
                          content:hier_block_element+
                        dedent

@@ -6,6 +6,7 @@ use support::repo_path;
 #[test]
 fn parses_roundtrip_text_fixtures() {
     let fixtures = [
+        (DocumentRoot::Act, "tests/roundtrip/act-attributes.txt"),
         (DocumentRoot::Act, "tests/roundtrip/act-empty.txt"),
         (DocumentRoot::Act, "tests/roundtrip/act-escapes.txt"),
         (DocumentRoot::Act, "tests/roundtrip/act-footnotes.txt"),
