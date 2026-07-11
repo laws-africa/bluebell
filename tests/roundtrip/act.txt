@@ -75,6 +75,10 @@ CHAP 1 - Heading
 
         tail
 
+  PROVISO 1 - Savings
+
+    This rule applies.
+
   text in the middle
 
   SEC 2
