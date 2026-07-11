@@ -69,16 +69,21 @@ change, or new language feature, update the Rust port by following this loop:
 From the repository root:
 
 ```sh
+poe lint
 cargo test
 python -m unittest discover -s tests -t .
 ```
 
+Run `poe lint` before declaring any Python change complete. This includes
+supporting modules and generated-code-adjacent helpers, not only parser files.
+
 CI (`.github/workflows/test.yml`) runs these suites through the poe tasks
 defined in `pyproject.toml` (`poe test-py`, `poe test-rust`, `poe test-wasm`;
 `poe test` runs all three, and `poe` lists every task), so the task
-definitions are the source of truth for the exact invocations. The raw
-commands above are their equivalents for environments without `poe`
-installed; if a task definition changes, keep them in sync.
+definitions are the source of truth for the exact invocations. The raw test
+commands above are their equivalents for environments without `poe` installed;
+run the configured linter separately in that case. If a task definition
+changes, keep these instructions in sync.
 
 When a change touches `crates/bluebell-wasm` or the core parse path it exposes,
 also run the wasm binding tests (requires the `wasm32-unknown-unknown` rustup
